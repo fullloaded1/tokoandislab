@@ -8,7 +8,7 @@ import { useState } from "react";
 import { formatRupiah, type Product } from "@/lib/products";
 
 interface ProductCardProps {
-  product: Product;
+  product: any;
   compact?: boolean;
 }
 

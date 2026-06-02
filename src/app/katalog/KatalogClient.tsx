@@ -19,7 +19,7 @@ const categories: { key: Category | "semua"; label: string }[] = [
 ];
 
 export default function KatalogClient({ initialProducts = [] }: { initialProducts: PrismaProduct[] }) {
-  const products = initialProducts as any;
+  const products: PrismaProduct[] = initialProducts;
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") || "";
 
