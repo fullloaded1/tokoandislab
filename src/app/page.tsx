@@ -1,65 +1,88 @@
-import Image from "next/image";
+import HeroSection from "@/components/HeroSection";
+import ProductCard from "@/components/ProductCard";
+import { products } from "@/lib/products";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
-export default function Home() {
+export default function HomePage() {
+  const featuredProducts = products.slice(0, 6);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <>
+      <HeroSection />
+
+      {/* Featured Products Section */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
+        <div className="flex items-end justify-between mb-10">
+          <div>
+            <p className="text-sm font-semibold text-cyan-600 uppercase tracking-wider mb-2">
+              Produk Unggulan
+            </p>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight">
+              Pilihan Terbaik untuk{" "}
+              <span className="gradient-text">Laboratorium Anda</span>
+            </h2>
+          </div>
+          <Link
+            href="/katalog"
+            className="hidden sm:inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:border-blue-300 hover:text-blue-700 hover:shadow-md transition-all duration-300"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            Lihat Semua
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
-      </main>
-    </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children">
+          {featuredProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+
+        <div className="sm:hidden mt-8 text-center">
+          <Link
+            href="/katalog"
+            className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-3 text-sm font-bold text-white shadow-lg"
+          >
+            Lihat Semua Produk
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-20">
+        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600 px-8 py-16 sm:px-16 sm:py-20 text-center">
+          {/* Decorative elements */}
+          <div className="absolute top-0 left-0 w-64 h-64 rounded-full bg-white/5 -translate-x-1/2 -translate-y-1/2" />
+          <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-white/5 translate-x-1/3 translate-y-1/3" />
+
+          <div className="relative">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
+              Butuh Penawaran Khusus?
+            </h2>
+            <p className="text-blue-100 text-lg max-w-xl mx-auto mb-8">
+              Tim sales kami siap membantu Anda mendapatkan harga terbaik untuk kebutuhan
+              laboratorium instansi maupun perusahaan Anda.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a
+                href="https://wa.me/6281234567890?text=Halo%20AndisLab%2C%20saya%20ingin%20minta%20penawaran%20khusus."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-2xl bg-white px-8 py-4 text-base font-bold text-blue-700 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-0.5"
+              >
+                Hubungi via WhatsApp
+              </a>
+              <Link
+                href="/katalog"
+                className="inline-flex items-center gap-2 rounded-2xl border-2 border-white/30 px-8 py-4 text-base font-bold text-white transition-all duration-300 hover:bg-white/10"
+              >
+                Lihat Katalog
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

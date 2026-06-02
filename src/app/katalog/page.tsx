@@ -1,0 +1,36 @@
+import { Suspense } from "react";
+import KatalogClient from "./KatalogClient";
+
+export const metadata = {
+  title: "Katalog Produk — AndisLab",
+  description:
+    "Jelajahi katalog lengkap alat laboratorium: instrumen analitik, furnitur lab, reagen, dan consumable berkualitas tinggi.",
+};
+
+function KatalogLoading() {
+  return (
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <div className="h-8 w-48 rounded-xl shimmer mb-6" />
+      <div className="h-12 w-full max-w-2xl rounded-2xl shimmer mb-4" />
+      <div className="h-10 w-96 rounded-2xl shimmer mb-8" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="rounded-3xl border border-slate-100 bg-white p-4">
+            <div className="aspect-[4/3] rounded-2xl shimmer mb-4" />
+            <div className="h-5 w-3/4 rounded-lg shimmer mb-2" />
+            <div className="h-4 w-full rounded-lg shimmer mb-4" />
+            <div className="h-11 w-full rounded-2xl shimmer" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function KatalogPage() {
+  return (
+    <Suspense fallback={<KatalogLoading />}>
+      <KatalogClient />
+    </Suspense>
+  );
+}
