@@ -32,7 +32,7 @@ export default function KatalogClient({ initialProducts = [] }: { initialProduct
   }, [initialQuery]);
 
   const filteredProducts = useMemo(() => {
-    return products.filter((p) => {
+    return products.filter((p: PrismaProduct) => {
       const matchesCategory =
         activeCategory === "semua" || p.category === activeCategory;
       const matchesSearch =
