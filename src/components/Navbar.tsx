@@ -69,7 +69,7 @@ export default function Navbar() {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 group">
-              <img src="/logo.png" alt="AndisLab Logo" className="h-10 w-auto" />
+              <img src="/logo.png" alt="AndisLab Logo" className="h-12 md:h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
             </Link>
 
             {/* Desktop Nav Links */}
