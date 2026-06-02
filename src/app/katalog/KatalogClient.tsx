@@ -4,8 +4,8 @@ import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { Search, SlidersHorizontal, X, ChevronRight } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
+import type { Product as PrismaProduct } from "@prisma/client";
 import {
-  products,
   CATEGORY_LABELS,
   type Category,
 } from "@/lib/products";
@@ -18,7 +18,8 @@ const categories: { key: Category | "semua"; label: string }[] = [
   })),
 ];
 
-export default function KatalogClient() {
+export default function KatalogClient({ initialProducts = [] }: { initialProducts: PrismaProduct[] }) {
+  const products = initialProducts as any;
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") || "";
 

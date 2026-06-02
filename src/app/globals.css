@@ -132,3 +132,9 @@ body {
 .stagger-children > *:nth-child(8) { animation-delay: 0.4s; }
 .stagger-children > *:nth-child(9) { animation-delay: 0.45s; }
 .stagger-children > *:nth-child(10) { animation-delay: 0.5s; }
+
+/* Progress Bar animation for Carousel */
+@keyframes progressBar {
+  from { width: 0%; }
+  to { width: 100%; }
+}

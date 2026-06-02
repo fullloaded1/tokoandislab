@@ -12,14 +12,16 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "AndisLab — Distributor Alat Laboratorium Indonesia",
   description:
-    "AndisLab adalah distributor terpercaya alat laboratorium, instrumen analitik, furnitur lab, reagen, dan consumable di Indonesia. Minta penawaran langsung via WhatsApp.",
+    "Andis Lab adalah distributor resmi peralatan laboratorium, furnitur lab custom, reagent, dan glassware terpercaya di Indonesia. Minta penawaran langsung via WhatsApp.",
   keywords: [
-    "alat laboratorium",
+    "peralatan laboratorium",
     "distributor lab",
-    "instrumen analitik",
-    "spektrofotometer",
-    "reagen HPLC",
-    "Indonesia",
+    "Lovibond",
+    "Daihan Labtech",
+    "Pyrex",
+    "furniture lab",
+    "andis lab",
+    "andislab",
   ],
   openGraph: {
     title: "AndisLab — Distributor Alat Laboratorium Indonesia",

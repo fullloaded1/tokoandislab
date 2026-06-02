@@ -4,7 +4,7 @@ import KatalogClient from "./KatalogClient";
 export const metadata = {
   title: "Katalog Produk — AndisLab",
   description:
-    "Jelajahi katalog lengkap alat laboratorium: instrumen analitik, furnitur lab, reagen, dan consumable berkualitas tinggi.",
+    "Jelajahi katalog lengkap peralatan laboratorium dari Lovibond, Daihan Labtech, Pyrex, dan furnitur lab custom Andis Lab.",
 };
 
 function KatalogLoading() {
@@ -27,10 +27,18 @@ function KatalogLoading() {
   );
 }
 
-export default function KatalogPage() {
+import { prisma } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
+
+export default async function KatalogPage() {
+  const products = await prisma.product.findMany({
+    include: { specs: true }
+  });
+
   return (
     <Suspense fallback={<KatalogLoading />}>
-      <KatalogClient />
+      <KatalogClient initialProducts={products as any} />
     </Suspense>
   );
 }

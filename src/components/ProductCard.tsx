@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { FileText, Check } from "lucide-react";
+import { ShoppingCart, Check } from "lucide-react";
 import { useRFQStore } from "@/store/useRFQStore";
 import { useState } from "react";
-import type { Product } from "@/lib/products";
+import { formatRupiah, type Product } from "@/lib/products";
 
 interface ProductCardProps {
   product: Product;
@@ -25,6 +25,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
       name: product.name,
       image: product.image,
       category: product.categoryLabel,
+      price: product.price,
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
@@ -50,8 +51,11 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
           <p className="text-xs font-medium text-cyan-600 mb-1">
             {product.categoryLabel}
           </p>
-          <p className="text-sm font-semibold text-slate-800 line-clamp-2 leading-snug">
+          <p className="text-sm font-semibold text-slate-800 line-clamp-2 leading-snug mb-1">
             {product.name}
+          </p>
+          <p className="text-xs font-bold text-blue-700">
+            {formatRupiah(product.price)}
           </p>
         </div>
       </Link>
@@ -87,9 +91,14 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
         <h3 className="text-base font-bold text-slate-800 group-hover:text-blue-700 transition-colors line-clamp-2 mb-2">
           {product.name}
         </h3>
-        <p className="text-sm text-slate-500 line-clamp-2 mb-4 flex-1 leading-relaxed">
+        <p className="text-sm text-slate-500 line-clamp-2 mb-3 flex-1 leading-relaxed">
           {product.description}
         </p>
+        <div className="mb-4">
+          <p className="text-lg font-black text-blue-700">
+            {formatRupiah(product.price)}
+          </p>
+        </div>
 
         {/* CTA */}
         <button
@@ -108,8 +117,8 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
             </>
           ) : (
             <>
-              <FileText className="h-4 w-4" />
-              Minta Penawaran
+              <ShoppingCart className="h-4 w-4" />
+              Tambah ke Keranjang
             </>
           )}
         </button>

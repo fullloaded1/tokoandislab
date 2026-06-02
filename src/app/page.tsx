@@ -1,22 +1,40 @@
 import HeroSection from "@/components/HeroSection";
 import ProductCard from "@/components/ProductCard";
-import { products } from "@/lib/products";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { prisma } from "@/lib/db";
 
-export default function HomePage() {
-  const featuredProducts = products.slice(0, 6);
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  const allProducts = await prisma.product.findMany();
+  
+  // Pick one from each category for the hero slider
+  const featuredSliderProducts = [
+    allProducts.find(p => p.category === "lovibond"),
+    allProducts.find(p => p.category === "daihan-labtech"),
+    allProducts.find(p => p.category === "andislab-custom"),
+    allProducts.find(p => p.category === "pyrex"),
+  ].filter(Boolean) as any[];
+
+  // Ambil 8 produk unggulan (2 dari setiap brand/kategori)
+  const featuredProducts = [
+    ...allProducts.filter(p => p.category === "lovibond").slice(0, 2),
+    ...allProducts.filter(p => p.category === "daihan-labtech").slice(0, 2),
+    ...allProducts.filter(p => p.category === "pyrex").slice(0, 2),
+    ...allProducts.filter(p => p.category === "andislab-custom").slice(0, 2),
+  ];
 
   return (
     <>
-      <HeroSection />
+      <HeroSection featuredProducts={featuredSliderProducts} />
 
       {/* Featured Products Section */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
         <div className="flex items-end justify-between mb-10">
           <div>
             <p className="text-sm font-semibold text-cyan-600 uppercase tracking-wider mb-2">
-              Produk Unggulan
+              Produk Unggulan Tiap Brand
             </p>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight">
               Pilihan Terbaik untuk{" "}
@@ -66,7 +84,7 @@ export default function HomePage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
-                href="https://wa.me/6281234567890?text=Halo%20AndisLab%2C%20saya%20ingin%20minta%20penawaran%20khusus."
+                href="https://wa.me/6282125523466?text=Halo%20AndisLab%2C%20saya%20ingin%20minta%20penawaran%20khusus."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-2xl bg-white px-8 py-4 text-base font-bold text-blue-700 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-0.5"

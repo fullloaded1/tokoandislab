@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { useRFQStore } from "@/store/useRFQStore";
 import ProductCard from "@/components/ProductCard";
-import type { Product } from "@/lib/products";
+import { formatRupiah, type Product } from "@/lib/products";
 
 interface ProductDetailClientProps {
   product: Product;
@@ -34,6 +34,7 @@ export default function ProductDetailClient({
       name: product.name,
       image: product.image,
       category: product.categoryLabel,
+      price: product.price,
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
@@ -94,9 +95,12 @@ export default function ProductDetailClient({
             <span className="inline-flex items-center rounded-lg bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-700 mb-3">
               {product.categoryLabel}
             </span>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight mb-4">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight mb-2">
               {product.name}
             </h1>
+            <p className="text-2xl font-black text-blue-700 mb-6">
+              {formatRupiah(product.price)}
+            </p>
             <p className="text-base text-slate-500 leading-relaxed">
               {product.description}
             </p>
@@ -121,13 +125,13 @@ export default function ProductDetailClient({
               ) : (
                 <>
                   <ShoppingCart className="h-5 w-5" />
-                  Tambah ke Keranjang RFQ
+                  Tambah ke Keranjang
                 </>
               )}
             </button>
             <a
-              href={`https://wa.me/6281234567890?text=${encodeURIComponent(
-                `Halo AndisLab, saya tertarik dengan produk: ${product.name}. Mohon info harga dan ketersediaan.`
+              href={`https://wa.me/6282125523466?text=${encodeURIComponent(
+                `Halo Andis Lab, saya tertarik dengan produk: ${product.name}. Mohon info harga dan ketersediaan.`
               )}`}
               target="_blank"
               rel="noopener noreferrer"

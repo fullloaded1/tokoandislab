@@ -1,17 +1,13 @@
 import { notFound } from "next/navigation";
-import { products, getProductBySlug, getRelatedProducts } from "@/lib/products";
+import { prisma } from "@/lib/db";
 import ProductDetailClient from "./ProductDetailClient";
 import type { Metadata } from "next";
-
-export function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
-}
 
 export async function generateMetadata(
   props: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   const { slug } = await props.params;
-  const product = getProductBySlug(slug);
+  const product = await prisma.product.findUnique({ where: { slug } });
   if (!product) return {};
   return {
     title: `${product.name} — AndisLab`,
@@ -23,15 +19,25 @@ export default async function ProductDetailPage(
   props: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await props.params;
-  const product = getProductBySlug(slug);
+  const product = await prisma.product.findUnique({
+    where: { slug },
+    include: { specs: true }
+  });
 
   if (!product) {
     notFound();
   }
 
-  const relatedProducts = getRelatedProducts(product.relatedSlugs);
+  // Fetch related products (same category, excluding current product)
+  const relatedProducts = await prisma.product.findMany({
+    where: { 
+      category: product.category,
+      NOT: { id: product.id }
+    },
+    take: 3,
+  });
 
   return (
-    <ProductDetailClient product={product} relatedProducts={relatedProducts} />
+    <ProductDetailClient product={product as any} relatedProducts={relatedProducts as any} />
   );
 }

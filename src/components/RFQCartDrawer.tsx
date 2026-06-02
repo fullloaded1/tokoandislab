@@ -3,6 +3,7 @@
 import { useRFQStore } from "@/store/useRFQStore";
 import { X, Trash2, Plus, Minus, MessageCircle, ShoppingCart } from "lucide-react";
 import Image from "next/image";
+import { formatRupiah } from "@/lib/products";
 
 interface RFQCartDrawerProps {
   open: boolean;
@@ -10,7 +11,7 @@ interface RFQCartDrawerProps {
 }
 
 export default function RFQCartDrawer({ open, onClose }: RFQCartDrawerProps) {
-  const { items, removeItem, updateQty, clearCart } = useRFQStore();
+  const { items, removeItem, updateQty, clearCart, totalPrice } = useRFQStore();
 
   const handleSendWhatsApp = () => {
     if (items.length === 0) return;
@@ -21,23 +22,26 @@ export default function RFQCartDrawer({ open, onClose }: RFQCartDrawerProps) {
       year: "numeric",
     });
 
-    let message = `📋 *PERMINTAAN PENAWARAN (RFQ)*\n`;
+    let message = `🛒 *PESANAN BARU (AndisLab Catalog)*\n`;
     message += `📅 Tanggal: ${date}\n`;
     message += `━━━━━━━━━━━━━━━━━━━━\n\n`;
 
     items.forEach((item, idx) => {
       message += `*${idx + 1}. ${item.name}*\n`;
       message += `   📁 Kategori: ${item.category}\n`;
-      message += `   📦 Jumlah: ${item.qty} unit\n\n`;
+      message += `   💰 Harga: ${formatRupiah(item.price)}\n`;
+      message += `   📦 Jumlah: ${item.qty} unit\n`;
+      message += `   💵 Subtotal: ${formatRupiah(item.price * item.qty)}\n\n`;
     });
 
     message += `━━━━━━━━━━━━━━━━━━━━\n`;
-    message += `📊 Total: ${items.length} produk, ${items.reduce((s, i) => s + i.qty, 0)} unit\n\n`;
-    message += `Mohon dikirimkan penawaran harga terbaik beserta informasi ketersediaan stok.\n\n`;
+    message += `📊 Total Item: ${items.reduce((s, i) => s + i.qty, 0)} unit\n`;
+    message += `🧾 *TOTAL HARGA: ${formatRupiah(totalPrice())}*\n\n`;
+    message += `Halo Admin AndisLab, saya ingin memproses pesanan di atas. Mohon info lebih lanjut untuk pembayaran dan pengiriman.\n\n`;
     message += `Terima kasih 🙏\n`;
     message += `— Dikirim dari AndisLab Catalog`;
 
-    const waNumber = "6281234567890";
+    const waNumber = "6282125523466";
     const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
     
     window.open(url, "_blank");
@@ -67,7 +71,7 @@ export default function RFQCartDrawer({ open, onClose }: RFQCartDrawerProps) {
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-800">
-                Keranjang RFQ
+                Keranjang Belanja
               </h2>
               <p className="text-xs text-slate-500">
                 {items.length} produk dipilih
@@ -104,23 +108,28 @@ export default function RFQCartDrawer({ open, onClose }: RFQCartDrawerProps) {
                   key={item.id}
                   className="flex gap-4 rounded-2xl border border-slate-100 bg-slate-50/50 p-3 transition-all hover:shadow-sm"
                 >
-                  <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-slate-100">
-                    <Image
-                      src={item.image}
-                      alt={item.name}
-                      fill
-                      className="object-cover"
-                      sizes="64px"
-                    />
+                  <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-slate-100 flex items-center justify-center">
+                    {item.image ? (
+                      <Image
+                        src={item.image}
+                        alt={item.name}
+                        fill
+                        className="object-cover"
+                        sizes="64px"
+                      />
+                    ) : (
+                      <span className="text-[10px] font-bold text-slate-400">NO IMG</span>
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-slate-800 truncate">
                       {item.name}
                     </p>
-                    <p className="text-xs text-slate-500 mt-0.5">
-                      {item.category}
+                    <p className="text-xs font-semibold text-blue-600 mt-1">
+                      {formatRupiah(item.price)}
                     </p>
-                    <div className="flex items-center gap-2 mt-2">
+                    <div className="flex items-center justify-between mt-2">
+                      <div className="flex items-center gap-2">
                       <button
                         onClick={() => updateQty(item.id, item.qty - 1)}
                         className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-200 text-slate-500 hover:border-blue-300 hover:text-blue-600 transition-colors"
@@ -137,6 +146,10 @@ export default function RFQCartDrawer({ open, onClose }: RFQCartDrawerProps) {
                       >
                         <Plus className="h-3 w-3" />
                       </button>
+                      </div>
+                      <p className="text-sm font-bold text-slate-800">
+                        {formatRupiah(item.price * item.qty)}
+                      </p>
                     </div>
                   </div>
                   <button
@@ -154,21 +167,27 @@ export default function RFQCartDrawer({ open, onClose }: RFQCartDrawerProps) {
 
         {/* Footer */}
         {items.length > 0 && (
-          <div className="border-t border-slate-100 px-6 py-4 space-y-3">
-            <button
-              onClick={handleSendWhatsApp}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-green-500/25 transition-all hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
-            >
-              <MessageCircle className="h-5 w-5" />
-              Kirim Permintaan via WhatsApp
-            </button>
-            <button
+          <div className="border-t border-slate-100 bg-slate-50 px-6 py-4">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-sm font-semibold text-slate-500">Total Belanja</span>
+              <span className="text-xl font-black text-slate-800">{formatRupiah(totalPrice())}</span>
+            </div>
+            <div className="space-y-3">
+              <button
+                onClick={handleSendWhatsApp}
+                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-green-500/25 transition-all hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
+              >
+                <MessageCircle className="h-5 w-5" />
+                Checkout via WhatsApp
+              </button>
+              <button
               onClick={clearCart}
               className="flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 py-3 text-sm font-medium text-slate-500 hover:text-red-500 hover:border-red-200 hover:bg-red-50 transition-all"
             >
               <Trash2 className="h-4 w-4" />
               Kosongkan Keranjang
             </button>
+            </div>
           </div>
         )}
       </div>

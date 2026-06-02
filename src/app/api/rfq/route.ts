@@ -6,6 +6,7 @@ interface RFQItemPayload {
   name: string;
   image: string;
   category: string;
+  price: number;
   qty: number;
 }
 
@@ -28,23 +29,33 @@ export async function POST(request: Request) {
       year: "numeric",
     });
 
-    let message = `📋 *PERMINTAAN PENAWARAN (RFQ)*\n`;
+    let message = `🛒 *PESANAN BARU (AndisLab Catalog)*\n`;
     message += `📅 Tanggal: ${date}\n`;
     message += `━━━━━━━━━━━━━━━━━━━━\n\n`;
 
     items.forEach((item, idx) => {
+      const formattedPrice = new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(item.price);
+      const formattedSub = new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(item.price * item.qty);
+      
       message += `*${idx + 1}. ${item.name}*\n`;
       message += `   📁 Kategori: ${item.category}\n`;
-      message += `   📦 Jumlah: ${item.qty} unit\n\n`;
+      message += `   💰 Harga: ${formattedPrice}\n`;
+      message += `   📦 Jumlah: ${item.qty} unit\n`;
+      message += `   💵 Subtotal: ${formattedSub}\n\n`;
     });
 
+    const totalQty = items.reduce((s, i) => s + i.qty, 0);
+    const totalPrice = items.reduce((s, i) => s + (i.price * i.qty), 0);
+    const formattedTotal = new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(totalPrice);
+
     message += `━━━━━━━━━━━━━━━━━━━━\n`;
-    message += `📊 Total: ${items.length} produk, ${items.reduce((s, i) => s + i.qty, 0)} unit\n\n`;
-    message += `Mohon dikirimkan penawaran harga terbaik beserta informasi ketersediaan stok.\n\n`;
+    message += `📊 Total Item: ${totalQty} unit\n`;
+    message += `🧾 *TOTAL HARGA: ${formattedTotal}*\n\n`;
+    message += `Halo Admin AndisLab, saya ingin memproses pesanan di atas. Mohon info lebih lanjut untuk pembayaran dan pengiriman.\n\n`;
     message += `Terima kasih 🙏\n`;
     message += `— Dikirim dari AndisLab Catalog`;
 
-    const waNumber = "6281234567890";
+    const waNumber = "6282125523466";
     const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
 
     return NextResponse.json({ url, message });

@@ -9,6 +9,7 @@ export interface RFQItem {
   name: string;
   image: string;
   category: string;
+  price: number;
   qty: number;
 }
 
@@ -19,6 +20,7 @@ interface RFQState {
   updateQty: (id: string, qty: number) => void;
   clearCart: () => void;
   totalItems: () => number;
+  totalPrice: () => number;
 }
 
 export const useRFQStore = create<RFQState>()(
@@ -53,6 +55,7 @@ export const useRFQStore = create<RFQState>()(
       clearCart: () => set({ items: [] }),
 
       totalItems: () => get().items.reduce((sum, i) => sum + i.qty, 0),
+      totalPrice: () => get().items.reduce((sum, i) => sum + i.price * i.qty, 0),
     }),
     {
       name: "andislab-rfq-cart",
