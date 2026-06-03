@@ -293,7 +293,7 @@ export const products: Product[] = [
     brand: "Pyrex®",
     model: "Pyrex 4980",
     subcategory: "Gelas Lab",
-    image: "/images/products/erlenmeyer-placeholder.png",
+    image: "/images/products/pyrex-erlenmeyer.jpeg",
     price: 150000,
     description:
       "Labu Erlenmeyer 250ml dari Pyrex®, desain klasik untuk titrasi dan pencampuran larutan kimia. Bentuk kerucut dengan leher sempit mencegah tumpahan dan penguapan berlebih. Material borosilicate glass tahan panas dan kimia. Tersedia dalam berbagai ukuran.",
@@ -339,7 +339,7 @@ export const products: Product[] = [
     brand: "Pyrex®",
     model: "Pyrex MC",
     subcategory: "Gelas Ukur",
-    image: "/images/products/silinder-ukur-placeholder.png",
+    image: "/images/products/pyrex-cylinder.jpeg",
     price: 180000,
     description:
       "Silinder Ukur (Measuring Cylinder) dari Pyrex® untuk pengukuran volume cairan rutin di laboratorium. Skala berskala presisi dengan graduation jelas, dasar heksagonal anti-roll, dan material borosilicate glass. Tersedia dalam berbagai kapasitas.",
@@ -387,7 +387,7 @@ export const products: Product[] = [
     brand: "Andis Lab",
     model: "ALC-Corrosive",
     subcategory: "Lemari Penyimpanan",
-    image: "/images/products/lemari-korosif-placeholder.png",
+    image: "/images/products/corrosive-storage.jpeg",
     price: 45000000,
     description:
       "Lemari Penyimpanan Korosif dari Andislab Custom, dirancang khusus untuk penyimpanan bahan kimia korosif seperti asam dan basa pekat. Material polypropylene (PP) tahan korosi, dilengkapi sistem ventilasi, perangkap tumpahan, dan kunci pengaman. Memenuhi standar keamanan internasional.",
@@ -410,7 +410,7 @@ export const products: Product[] = [
     brand: "Andis Lab",
     model: "ALC-Flammable",
     subcategory: "Lemari Penyimpanan",
-    image: "/images/products/lemari-flammable-placeholder.png",
+    image: "/images/products/flammable-storage.jpeg",
     price: 55000000,
     description:
       "Lemari Penyimpanan Mudah Terbakar dari Andislab Custom untuk menyimpan bahan kimia flammable secara aman. Konstruksi baja lapis ganda dengan isolasi tahan api, dilengkapi grounding wire, self-closing door, dan perangkap tumpahan. Memenuhi standar NFPA 30 dan OSHA.",
@@ -433,7 +433,7 @@ export const products: Product[] = [
     brand: "Andis Lab",
     model: "FB-4S",
     subcategory: "Peralatan Uji",
-    image: "/images/products/flokulator-placeholder.png",
+    image: "/images/products/flokulator.png",
     price: 12000000,
     description:
       "Flokulator Portabel FB-4S dari Andislab untuk simulasi jar test portabel di lapangan. Desain ringkas dan mudah dibawa, dilengkapi 4 paddle stirrer dengan kontrol kecepatan variabel. Ideal untuk pengujian kualitas air di lokasi proyek water treatment.",
@@ -456,7 +456,7 @@ export const products: Product[] = [
     brand: "Andis Lab",
     model: "FH Series",
     subcategory: "Fume Hood",
-    image: "/images/products/fume-hood-placeholder.png",
+    image: "/images/products/fume-hood.jpeg",
     price: 65000000,
     description:
       "Lemari Asam (Fume Hood) seri FH dari Andislab Custom dengan standar keamanan internasional. Dirancang untuk melindungi operator dari paparan uap kimia berbahaya. Dilengkapi sash kaca tempered, blower exhaust, baffle adjustable, dan workspace keramik tahan asam. Custom size tersedia.",
@@ -479,7 +479,7 @@ export const products: Product[] = [
     brand: "Andis Lab",
     model: "WS Series",
     subcategory: "Pengolahan Udara",
-    image: "/images/products/wet-scrubber-placeholder.png",
+    image: "/images/products/wet-scrubber.jpeg",
     price: 72000000,
     description:
       "Wet Scrubber Anti Pencemaran dari Andislab Custom untuk menangkap dan menetralisir gas buang berbahaya dari laboratorium. Menggunakan prinsip scrubbing air untuk menyerap partikulat dan gas korosif sebelum dibuang ke atmosfer. Material PP/PVC tahan korosi, efisiensi tinggi.",
