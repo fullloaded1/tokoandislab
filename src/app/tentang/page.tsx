@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ShieldCheck, Users, Award, Beaker } from "lucide-react";
+import { ShieldCheck, Users, Award, Beaker, MapPin, Phone, Mail, MessageCircle } from "lucide-react";
 import Image from "next/image";
 
 export const metadata: Metadata = {
@@ -140,6 +140,95 @@ export default function TentangPage() {
               </p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Contact Information */}
+      <section className="bg-slate-50 border-t border-slate-100 py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div>
+              <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">
+                Hubungi Kami
+              </p>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight mb-6">
+                Siap Membantu Kebutuhan <br className="hidden sm:block" />
+                Laboratorium Anda
+              </h2>
+              <p className="text-slate-500 leading-relaxed mb-8 max-w-lg">
+                Jangan ragu untuk menghubungi tim ahli kami untuk konsultasi produk, 
+                permintaan penawaran, atau dukungan teknis.
+              </p>
+
+              <div className="space-y-6">
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-2xl bg-white shadow-sm border border-slate-100 text-blue-600">
+                    <MapPin className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-base font-bold text-slate-800 mb-1">Kantor Pusat</h4>
+                    <p className="text-sm text-slate-500 leading-relaxed">
+                      Jl. Scientia Boulevard, Gading Serpong, <br />
+                      Tangerang, Banten 15810, Indonesia
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-2xl bg-white shadow-sm border border-slate-100 text-blue-600">
+                    <Phone className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-base font-bold text-slate-800 mb-1">Telepon</h4>
+                    <p className="text-sm text-slate-500 leading-relaxed">
+                      +62 21 555-0198
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-2xl bg-white shadow-sm border border-slate-100 text-blue-600">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-base font-bold text-slate-800 mb-1">Email</h4>
+                    <p className="text-sm text-slate-500 leading-relaxed">
+                      sales@andislabs.com
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-10">
+                <a
+                  href="https://wa.me/6282125523466?text=Halo%20AndisLab,%20saya%20ingin%20berkonsultasi..."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-2xl bg-[#25D366] px-6 py-4 text-base font-bold text-white shadow-lg shadow-[#25D366]/30 hover:shadow-xl hover:shadow-[#25D366]/40 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
+                >
+                  <MessageCircle className="h-5 w-5" />
+                  Chat via WhatsApp
+                </a>
+              </div>
+            </div>
+
+            {/* Map Placeholder */}
+            <div className="relative aspect-square sm:aspect-video lg:aspect-square rounded-[2rem] overflow-hidden shadow-xl border border-slate-100 bg-slate-200">
+              <Image 
+                src="https://picsum.photos/id/11/800/800" 
+                alt="Map Location" 
+                fill 
+                className="object-cover opacity-80"
+              />
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="bg-white/90 backdrop-blur px-6 py-4 rounded-2xl shadow-lg border border-slate-100 text-center">
+                  <MapPin className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+                  <p className="font-bold text-slate-800">AndisLab HQ</p>
+                  <p className="text-xs text-slate-500 mt-1">Gading Serpong, Tangerang</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>

@@ -12,6 +12,24 @@ export async function generateMetadata(
   return {
     title: `${product.name} — AndisLab`,
     description: product.description,
+    openGraph: {
+      title: `${product.name} — AndisLab`,
+      description: product.description,
+      images: [
+        {
+          url: product.image,
+          width: 800,
+          height: 800,
+          alt: product.name,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${product.name} — AndisLab`,
+      description: product.description,
+      images: [product.image],
+    },
   };
 }
 

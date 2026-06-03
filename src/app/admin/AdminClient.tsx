@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Plus, Edit, Trash2, X, Loader2, LogOut } from "lucide-react";
+import { Plus, Edit, Trash2, X, Loader2, LogOut, UploadCloud } from "lucide-react";
 import { formatRupiah } from "@/lib/products";
 import { deleteProduct, createProduct, updateProduct, logoutAction } from "./actions";
 import type { Product as PrismaProduct } from "@prisma/client";
@@ -12,6 +12,7 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   
   const [formData, setFormData] = useState<any>({
     id: "",
@@ -61,6 +62,30 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
       alert(res.error);
       // Revert if failed
       setProducts(initialProducts);
+    }
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const file = e.target.files[0];
+    
+    setIsUploading(true);
+    try {
+      const response = await fetch(`/api/upload?filename=${encodeURIComponent(file.name)}`, {
+        method: "POST",
+        body: file,
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setFormData({ ...formData, image: data.url });
+      } else {
+        alert("Upload gagal: " + data.error);
+      }
+    } catch (error) {
+      console.error("Upload failed", error);
+      alert("Gagal mengupload gambar.");
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -263,14 +288,45 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
                 </div>
 
                 <div className="space-y-1 sm:col-span-2">
-                  <label className="text-sm font-semibold text-slate-700">URL Gambar</label>
-                  <input 
-                    type="text" 
-                    value={formData.image}
-                    onChange={(e) => setFormData({...formData, image: e.target.value})}
-                    className="w-full border border-slate-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
-                    placeholder="https://..."
-                  />
+                  <label className="text-sm font-semibold text-slate-700">Gambar Produk</label>
+                  
+                  {formData.image && (
+                    <div className="mb-2 relative w-24 h-24 rounded-xl border border-slate-200 overflow-hidden bg-slate-50">
+                      <Image src={formData.image} alt="Preview" fill className="object-contain p-1" />
+                    </div>
+                  )}
+
+                  <div className="flex flex-col gap-3">
+                    <label className="flex items-center justify-center gap-2 w-full border-2 border-dashed border-slate-300 rounded-xl px-4 py-6 hover:bg-slate-50 hover:border-blue-400 cursor-pointer transition-colors">
+                      {isUploading ? (
+                        <>
+                          <Loader2 className="h-5 w-5 text-blue-500 animate-spin" />
+                          <span className="text-sm text-slate-500 font-medium">Mengupload...</span>
+                        </>
+                      ) : (
+                        <>
+                          <UploadCloud className="h-6 w-6 text-slate-400" />
+                          <span className="text-sm text-slate-600 font-medium">Upload File Gambar</span>
+                          <span className="text-xs text-slate-400">Atau masukkan URL di bawah</span>
+                        </>
+                      )}
+                      <input 
+                        type="file" 
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        disabled={isUploading}
+                        className="hidden"
+                      />
+                    </label>
+
+                    <input 
+                      type="text" 
+                      value={formData.image}
+                      onChange={(e) => setFormData({...formData, image: e.target.value})}
+                      className="w-full border border-slate-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 outline-none text-sm"
+                      placeholder="Atau paste URL gambar di sini (https://...)"
+                    />
+                  </div>
                 </div>
 
                 <div className="space-y-1 sm:col-span-2">

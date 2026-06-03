@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -10,6 +11,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://andislabs.com"),
   title: "AndisLab — Distributor Alat Laboratorium Indonesia",
   description:
     "Andis Lab adalah distributor resmi peralatan laboratorium, furnitur lab custom, reagent, dan glassware terpercaya di Indonesia. Minta penawaran langsung via WhatsApp.",
@@ -28,6 +30,21 @@ export const metadata: Metadata = {
     description:
       "Katalog lengkap alat laboratorium berkualitas. Minta penawaran langsung.",
     type: "website",
+    siteName: "AndisLab",
+    images: [
+      {
+        url: "/images/og-image.jpg", // Make sure you have this image in public/images
+        width: 1200,
+        height: 630,
+        alt: "AndisLab Banner",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AndisLab — Distributor Alat Laboratorium Indonesia",
+    description: "Katalog lengkap alat laboratorium berkualitas.",
+    images: ["/images/og-image.jpg"],
   },
 };
 
@@ -42,6 +59,7 @@ export default function RootLayout({
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
