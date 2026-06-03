@@ -1,26 +1,33 @@
+import Image from "next/image";
+
 export default function BrandLogos() {
   const brands = [
-    { name: "Lovibond", color: "bg-blue-50 text-blue-700 border-blue-200" },
-    { name: "Pyrex", color: "bg-red-50 text-red-700 border-red-200" },
-    { name: "Daihan Labtech", color: "bg-sky-50 text-sky-700 border-sky-200" },
-    { name: "Shimadzu", color: "bg-indigo-50 text-indigo-700 border-indigo-200" },
-    { name: "Memmert", color: "bg-orange-50 text-orange-700 border-orange-200" },
-    { name: "Eppendorf", color: "bg-teal-50 text-teal-700 border-teal-200" },
+    { name: "Lovibond", src: "https://www.lovibond.com/fileadmin/templates/images/lovibond-logo-blue.svg" },
+    { name: "Pyrex", src: "https://upload.wikimedia.org/wikipedia/commons/4/4e/Pyrex_logo.svg" },
+    { name: "Daihan LabTech", src: "https://andislabs.com/wp-content/uploads/2021/08/labtech-logo.png" }, // fallback to text if fails, but standard image tag is fine
+    { name: "Merck", src: "https://upload.wikimedia.org/wikipedia/commons/e/ec/Merck_logo.svg" },
   ];
 
   return (
-    <section className="border-y border-slate-100 bg-slate-50/50 py-10">
+    <section className="bg-white py-16 border-b border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-center text-xs font-black text-slate-400/80 uppercase tracking-[0.15em] mb-6">
-          PARTNER RESMI & BRAND INTERNASIONAL
+        <h2 className="text-center text-sm font-bold text-slate-500 uppercase tracking-[0.2em] mb-12">
+          AUTHORIZED DISTRIBUTOR RESMI
         </h2>
-        <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
+        
+        <div className="flex flex-wrap justify-center items-center gap-12 sm:gap-20">
           {brands.map((brand) => (
             <div
               key={brand.name}
-              className={`px-5 py-2.5 rounded-xl border ${brand.color} font-black text-sm sm:text-base tracking-tight transition-all hover:shadow-sm cursor-default`}
+              className="relative w-32 h-16 sm:w-40 sm:h-20 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
             >
-              {brand.name}
+              <Image 
+                src={brand.src} 
+                alt={`${brand.name} Logo`} 
+                fill 
+                className="object-contain" 
+                unoptimized // Since these are external URLs and we haven't configured next.config.js for them
+              />
             </div>
           ))}
         </div>

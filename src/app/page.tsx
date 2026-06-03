@@ -30,6 +30,7 @@ export default async function HomePage() {
   return (
     <>
       <HeroSection featuredProducts={featuredSliderProducts} />
+      <BrandLogos />
       <CategoryGrid />
 
       {/* Featured Products Section */}
@@ -69,8 +70,6 @@ export default async function HomePage() {
           </Link>
         </div>
       </section>
-
-      <BrandLogos />
 
       {/* CTA Section */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
