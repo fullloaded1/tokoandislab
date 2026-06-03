@@ -72,7 +72,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start gap-3 text-sm text-slate-400">
                 <MapPin className="h-4 w-4 shrink-0 mt-0.5 text-cyan-500" />
-                Jl. Raya Laboratorium No. 42, Jakarta Selatan 12345
+                Jl. Raya Mayor Oking Jaya Atmaja No.112, Cirimekar, Kec. Cibinong, Kabupaten Bogor, Jawa Barat 16918
               </li>
               <li className="flex items-center gap-3 text-sm text-slate-400">
                 <Phone className="h-4 w-4 shrink-0 text-cyan-500" />
