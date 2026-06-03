@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Plus, Edit, Trash2, X, Loader2, UploadCloud } from "lucide-react";
+import { Plus, Edit, Trash2, X, Loader2, UploadCloud, FileSpreadsheet, Download } from "lucide-react";
 import { formatRupiah } from "@/lib/products";
-import { deleteProduct, createProduct, updateProduct } from "./actions";
+import { deleteProduct, createProduct, updateProduct, bulkCreateProducts } from "./actions";
+import Papa from "papaparse";
 import type { Product as PrismaProduct } from "@prisma/client";
 
 export default function AdminClient({ initialProducts }: { initialProducts: PrismaProduct[] }) {
@@ -13,6 +14,8 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
+  const [bulkLoading, setBulkLoading] = useState(false);
   
   const [formData, setFormData] = useState<any>({
     id: "",
@@ -113,6 +116,55 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
     setIsLoading(false);
   };
 
+  const handleBulkUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const file = e.target.files[0];
+
+    setBulkLoading(true);
+
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: async (results) => {
+        try {
+          const res = await bulkCreateProducts(results.data);
+          if (res.success) {
+            alert(`Berhasil mengupload ${res.count} produk!`);
+            window.location.reload();
+          } else {
+            alert(res.error);
+          }
+        } catch (error) {
+          console.error(error);
+          alert("Gagal mengupload CSV");
+        } finally {
+          setBulkLoading(false);
+          setIsBulkModalOpen(false);
+        }
+      },
+      error: (error) => {
+        alert("Gagal membaca file CSV: " + error.message);
+        setBulkLoading(false);
+      }
+    });
+  };
+
+  const downloadTemplate = () => {
+    const template = [
+      ["name", "price", "category", "categoryLabel", "brand", "model", "subcategory", "description", "image"],
+      ["Photometer MD 100", "15000000", "lovibond", "Water Testing", "Lovibond", "MD100", "Photometer", "Alat uji kualitas air", "https://url-gambar.com/img.png"],
+    ];
+    const csv = Papa.unparse(template);
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "template_upload_produk.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
@@ -121,6 +173,13 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
           <p className="text-slate-500 mt-1">Kelola data produk Anda di sini.</p>
         </div>
         <div className="flex items-center gap-3 mt-4 sm:mt-0">
+          <button 
+            onClick={() => setIsBulkModalOpen(true)}
+            className="flex items-center justify-center gap-2 bg-blue-50 text-blue-700 px-4 py-2.5 rounded-lg font-semibold hover:bg-blue-100 transition-colors border border-blue-200"
+          >
+            <FileSpreadsheet className="h-5 w-5" />
+            Upload Massal
+          </button>
           <button 
             onClick={() => handleOpenModal()}
             className="flex items-center justify-center gap-2 bg-slate-900 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-slate-800 transition-colors"
@@ -349,6 +408,70 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {/* Bulk Upload Modal */}
+      {isBulkModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+              <h2 className="text-xl font-bold text-slate-800">Upload Massal (CSV)</h2>
+              <button 
+                onClick={() => setIsBulkModalOpen(false)}
+                className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            
+            <div className="p-6">
+              <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6">
+                <h3 className="text-sm font-bold text-blue-800 mb-2">Panduan Upload:</h3>
+                <ul className="text-xs text-blue-700 list-disc list-inside space-y-1">
+                  <li>Gunakan format file <strong>.csv</strong></li>
+                  <li>Pastikan header (baris pertama) sesuai dengan template</li>
+                  <li>Kolom wajib: name, price, category</li>
+                  <li>Pemisah kolom menggunakan koma (,)</li>
+                </ul>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                <button 
+                  onClick={downloadTemplate}
+                  className="flex items-center justify-center gap-2 w-full border border-slate-200 bg-white text-slate-700 px-4 py-3 rounded-xl font-semibold hover:bg-slate-50 transition-colors"
+                >
+                  <Download className="h-5 w-5" />
+                  Download Template CSV
+                </button>
+
+                <div className="relative">
+                  <input 
+                    type="file" 
+                    accept=".csv"
+                    onChange={handleBulkUpload}
+                    disabled={bulkLoading}
+                    id="csv-upload"
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
+                  />
+                  <div className={`flex flex-col items-center justify-center gap-2 w-full border-2 border-dashed ${bulkLoading ? 'border-slate-200 bg-slate-50' : 'border-blue-300 bg-blue-50/50 hover:bg-blue-50 hover:border-blue-400'} rounded-xl px-4 py-8 transition-colors`}>
+                    {bulkLoading ? (
+                      <>
+                        <Loader2 className="h-8 w-8 text-blue-500 animate-spin" />
+                        <span className="text-sm font-bold text-slate-600">Memproses Data...</span>
+                        <span className="text-xs text-slate-500">Mohon tunggu sebentar</span>
+                      </>
+                    ) : (
+                      <>
+                        <UploadCloud className="h-8 w-8 text-blue-600" />
+                        <span className="text-sm font-bold text-blue-700">Klik atau Drag file CSV ke sini</span>
+                        <span className="text-xs text-blue-500">Maksimal ukuran file: 5MB</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
