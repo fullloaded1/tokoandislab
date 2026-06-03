@@ -56,7 +56,7 @@ export const products: Product[] = [
     brand: "Lovibond",
     model: "BOD",
     subcategory: "Uji Kualitas Air",
-    image: "https://andislabs.com/images/products/bod_incubator_1780382189257.png",
+    image: "/images/products/lovibond-bod.jpeg",
     price: 35000000,
     description:
       "Kabinet Termostatik BOD dari Lovibond untuk keperluan pengeraman BOD (Biochemical Oxygen Demand) pada suhu presisi. Dirancang untuk pengujian kualitas air industri, laboratorium lingkungan, dan water treatment. Dilengkapi kontrol suhu digital presisi tinggi dan kapasitas besar untuk multiple sampel.",
@@ -79,7 +79,7 @@ export const products: Product[] = [
     brand: "Lovibond",
     model: "RD 125",
     subcategory: "Reaktor Termal",
-    image: "https://andislabs.com/images/products/thermoreactor_1780382212554.png",
+    image: "/images/products/lovibond-rd125.jpeg",
     price: 28000000,
     description:
       "Thermoreaktor RD 125 dari Lovibond untuk analisis COD (Chemical Oxygen Demand) air industri. Alat ini dirancang untuk pemanasan dan digesti sampel dengan suhu terkontrol. Dilengkapi blok pemanas aluminium dengan kapasitas 25 tabung reaksi dan kontrol temperatur digital.",
@@ -102,7 +102,7 @@ export const products: Product[] = [
     brand: "Lovibond",
     model: "SD Series",
     subcategory: "Portabel Meter",
-    image: "https://andislabs.com/images/products/handheld_meter_1780382231708.png",
+    image: "/images/products/lovibond-sd.jpeg",
     price: 8500000,
     description:
       "Meter portabel Seri Handheld SD dari Lovibond untuk pengukuran pH, DO (Dissolved Oxygen), dan Konduktivitas. Dirancang untuk penggunaan di lapangan maupun laboratorium. Desain ergonomis, tahan air (IP67), dan dilengkapi display LCD besar dengan backlighting.",
@@ -125,7 +125,7 @@ export const products: Product[] = [
     brand: "Lovibond",
     model: "ET 730",
     subcategory: "Flokulator",
-    image: "https://andislabs.com/images/products/floc_tester_1780382246017.png",
+    image: "/images/products/lovibond-et730.jpeg",
     price: 21000000,
     description:
       "Alat Jar Test Floc Tester ET 730 dari Lovibond. Dirancang untuk simulasi proses koagulasi dan flokulasi dalam pengolahan air. Dilengkapi 6 paddle stirrer dengan kontrol kecepatan independen, timer digital, dan pencahayaan LED untuk observasi flok.",
@@ -148,7 +148,7 @@ export const products: Product[] = [
     brand: "Lovibond",
     model: "Cooling Water",
     subcategory: "Test Kit",
-    image: "https://andislabs.com/images/products/test_kit_1780382258811.png",
+    image: "/images/products/lovibond-kit.jpeg",
     price: 1500000,
     description:
       "Perlengkapan komplit Kit Uji Air Pendingin dari Lovibond untuk pengujian cepat parameter air pendingin (cooling water). Termasuk reagen uji, tabung sampel, dan color comparator. Cocok untuk monitoring kualitas air di sistem HVAC, cooling tower, dan chiller industri.",
@@ -173,7 +173,7 @@ export const products: Product[] = [
     brand: "Daihan Labtech",
     model: "DO-150F",
     subcategory: "Oven & Incubator",
-    image: "https://andislabs.com/images/products/incubator_oven_1780381906452.png",
+    image: "/images/products/daihan-do150f.jpeg",
     price: 18000000,
     description:
       "Incubator Oven DO-150F dari Daihan Labtech berkualitas tinggi untuk keperluan laboratorium. Dilengkapi forced convection untuk distribusi panas merata, kontrol suhu PID digital, dan interior stainless steel. Ideal untuk pengeringan, sterilisasi, dan inkubasi sampel.",
@@ -197,7 +197,7 @@ export const products: Product[] = [
     brand: "Daihan Labtech",
     model: "CF-10",
     subcategory: "Centrifuge",
-    image: "https://andislabs.com/images/products/centrifuge_1780382108972.png",
+    image: "/images/products/daihan-cf10.jpeg",
     price: 22500000,
     description:
       "Centrifuge CF-10 dari Daihan Labtech, centrifuge handal untuk pemisahan sampel cair. Dilengkapi rotor sudut tetap, sistem keselamatan tutup otomatis, timer digital, dan kecepatan variabel. Cocok untuk laboratorium klinis, penelitian, dan industri.",
@@ -221,7 +221,7 @@ export const products: Product[] = [
     brand: "Daihan Labtech",
     model: "HP-300",
     subcategory: "Pemanas",
-    image: "https://andislabs.com/images/products/hotplate_1780382145396.png",
+    image: "/images/products/daihan-hp300.jpeg",
     price: 4200000,
     description:
       "Hotplate HP-300 dari Daihan Labtech, pemanas plat untuk berbagai preparasi laboratorium. Permukaan pemanas keramik berlapis anti korosi, kontrol suhu digital, dan desain kompak. Ideal untuk pemanasan sampel, penguapan pelarut, dan preparasi kimia.",
@@ -244,7 +244,7 @@ export const products: Product[] = [
     brand: "Daihan Labtech",
     model: "WB-22",
     subcategory: "Pemanas",
-    image: "https://andislabs.com/images/products/water_bath_1780382174865.png",
+    image: "/images/products/daihan-wb22.jpeg",
     price: 6500000,
     description:
       "Water Bath WB-22 dari Daihan Labtech, penangas air dengan pengaturan digital presisi. Interior stainless steel anti korosi, tutup berengsel dengan lubang ring, dan kontrol suhu PID. Cocok untuk inkubasi sampel, pencairan, dan reaksi enzimatis.",
