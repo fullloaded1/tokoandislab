@@ -1,9 +1,10 @@
 "use client";
 
 import { useRFQStore } from "@/store/useRFQStore";
-import { X, Trash2, Plus, Minus, MessageCircle, ShoppingCart } from "lucide-react";
+import { X, Trash2, Plus, Minus, ShoppingCart, FileText } from "lucide-react";
 import Image from "next/image";
 import { formatRupiah } from "@/lib/products";
+import { useRouter } from "next/navigation";
 
 interface RFQCartDrawerProps {
   open: boolean;
@@ -13,38 +14,12 @@ interface RFQCartDrawerProps {
 export default function RFQCartDrawer({ open, onClose }: RFQCartDrawerProps) {
   const { items, removeItem, updateQty, clearCart, totalPrice } = useRFQStore();
 
-  const handleSendWhatsApp = () => {
+  const router = useRouter();
+
+  const handleCheckout = () => {
     if (items.length === 0) return;
-
-    const date = new Date().toLocaleDateString("id-ID", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
-
-    let message = `🛒 *PESANAN BARU (AndisLab Catalog)*\n`;
-    message += `📅 Tanggal: ${date}\n`;
-    message += `━━━━━━━━━━━━━━━━━━━━\n\n`;
-
-    items.forEach((item, idx) => {
-      message += `*${idx + 1}. ${item.name}*\n`;
-      message += `   📁 Kategori: ${item.category}\n`;
-      message += `   💰 Harga: ${formatRupiah(item.price)}\n`;
-      message += `   📦 Jumlah: ${item.qty} unit\n`;
-      message += `   💵 Subtotal: ${formatRupiah(item.price * item.qty)}\n\n`;
-    });
-
-    message += `━━━━━━━━━━━━━━━━━━━━\n`;
-    message += `📊 Total Item: ${items.reduce((s, i) => s + i.qty, 0)} unit\n`;
-    message += `🧾 *TOTAL HARGA: ${formatRupiah(totalPrice())}*\n\n`;
-    message += `Halo Admin AndisLab, saya ingin memproses pesanan di atas. Mohon info lebih lanjut untuk pembayaran dan pengiriman.\n\n`;
-    message += `Terima kasih 🙏\n`;
-    message += `— Dikirim dari AndisLab Catalog`;
-
-    const waNumber = "6282125523466";
-    const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
-    
-    window.open(url, "_blank");
+    onClose();
+    router.push("/inquiry");
   };
 
   return (
@@ -174,11 +149,11 @@ export default function RFQCartDrawer({ open, onClose }: RFQCartDrawerProps) {
             </div>
             <div className="space-y-3">
               <button
-                onClick={handleSendWhatsApp}
-                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-green-500/25 transition-all hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
+                onClick={handleCheckout}
+                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition-all hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
               >
-                <MessageCircle className="h-5 w-5" />
-                Checkout via WhatsApp
+                <FileText className="h-5 w-5" />
+                Minta Penawaran (RFQ)
               </button>
               <button
               onClick={clearCart}

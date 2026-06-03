@@ -11,20 +11,25 @@ datasource db {
 }
 
 model Product {
-  id            String        @id @default(cuid())
-  slug          String        @unique
-  name          String
-  category      String
-  categoryLabel String
-  brand         String
-  model         String
-  subcategory   String
-  image         String
-  description   String
-  price         Float         @default(0)
-  specs         ProductSpec[]
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  id               String          @id @default(cuid())
+  slug             String          @unique
+  name             String
+  category         String
+  categoryLabel    String
+  brand            String
+  model            String
+  subcategory      String
+  image            String
+  description      String
+  price            Float           @default(0)
+  isRequestPricing Boolean         @default(false)
+  warrantyPeriod   String?
+  leadTime         String?
+  specs            ProductSpec[]
+  inquiryItems     InquiryItem[]
+  installedBases   InstalledBase[]
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
 }
 
 model ProductSpec {
@@ -33,4 +38,133 @@ model ProductSpec {
   value     String
   productId String
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Institution {
+  id             String          @id @default(cuid())
+  name           String          @unique
+  type           String
+  address        String          @db.Text
+  createdAt      DateTime        @default(now())
+  
+  contacts       Contact[]
+  inquiries      Inquiry[]
+  installedBases InstalledBase[]
+}
+
+model Contact {
+  id            String      @id @default(cuid())
+  institutionId String
+  name          String
+  position      String?
+  phone         String
+  email         String
+  
+  institution   Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+}
+
+model Inquiry {
+  id            String        @id @default(cuid())
+  inquiryNo     String        @unique
+  institutionId String
+  status        String        @default("NEW") // NEW, REVIEWING, QUOTED, WON, LOST
+  notes         String?       @db.Text
+  createdAt     DateTime      @default(now())
+  
+  institution   Institution   @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  items         InquiryItem[]
+  quotation     Quotation?
+  project       Project?
+}
+
+model InquiryItem {
+  id        String  @id @default(cuid())
+  inquiryId String
+  productId String
+  quantity  Int
+  notes     String? @db.Text
+  
+  inquiry   Inquiry @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Quotation {
+  id           String   @id @default(cuid())
+  inquiryId    String   @unique
+  quoteNo      String   @unique
+  subtotal     Float
+  tax          Float
+  shippingFee  Float    @default(0)
+  totalAmount  Float
+  validUntil   DateTime
+  paymentTerms String   @db.Text
+  leadTime     String
+  pdfUrl       String?
+  status       String   @default("SENT") // SENT, ACCEPTED, REJECTED
+  createdAt    DateTime @default(now())
+  
+  inquiry      Inquiry  @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+}
+
+model Project {
+  id         String     @id @default(cuid())
+  inquiryId  String     @unique
+  projectNo  String     @unique
+  poNumber   String
+  poDocument String?
+  status     String     @default("WAITING_DP") // WAITING_DP, IN_PRODUCTION, SHIPPED, INSTALLED, COMPLETED
+  createdAt  DateTime   @default(now())
+  
+  inquiry    Inquiry    @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  invoices   Invoice[]
+  deliveries Delivery[]
+}
+
+model Invoice {
+  id           String   @id @default(cuid())
+  projectId    String
+  invoiceNo    String   @unique
+  type         String
+  amount       Float
+  dueDate      DateTime
+  status       String   @default("UNPAID") // UNPAID, PARTIAL, PAID
+  paymentProof String?
+  
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Delivery {
+  id          String    @id @default(cuid())
+  projectId   String
+  deliveryNo  String    @unique
+  driverName  String?
+  trackingUrl String?
+  shippedDate DateTime?
+  status      String    @default("PREPARING") // PREPARING, ON_THE_WAY, DELIVERED
+  
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model InstalledBase {
+  id               String     @id @default(cuid())
+  institutionId    String
+  productId        String
+  serialNumber     String?
+  installationDate DateTime
+  warrantyExpiry   DateTime
+  lastMaintenance  DateTime?
+  
+  institution      Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  product          Product     @relation(fields: [productId], references: [id])
+  reminders        Reminder[]
+}
+
+model Reminder {
+  id              String        @id @default(cuid())
+  installedBaseId String
+  type            String
+  dueDate         DateTime
+  status          String        @default("PENDING") // PENDING, FOLLOWED_UP, DISMISSED
+  
+  installedBase   InstalledBase @relation(fields: [installedBaseId], references: [id], onDelete: Cascade)
 }

@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Plus, Edit, Trash2, X, Loader2, LogOut, UploadCloud } from "lucide-react";
+import { Plus, Edit, Trash2, X, Loader2, UploadCloud } from "lucide-react";
 import { formatRupiah } from "@/lib/products";
-import { deleteProduct, createProduct, updateProduct, logoutAction } from "./actions";
+import { deleteProduct, createProduct, updateProduct } from "./actions";
 import type { Product as PrismaProduct } from "@prisma/client";
 
 export default function AdminClient({ initialProducts }: { initialProducts: PrismaProduct[] }) {
@@ -128,15 +128,6 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
             <Plus className="h-5 w-5" />
             Tambah Produk
           </button>
-          <form action={logoutAction}>
-            <button 
-              type="submit"
-              className="flex items-center justify-center gap-2 border border-red-200 text-red-600 px-4 py-2.5 rounded-lg font-semibold hover:bg-red-50 transition-colors"
-            >
-              <LogOut className="h-4 w-4" />
-              Logout
-            </button>
-          </form>
         </div>
       </div>
 
