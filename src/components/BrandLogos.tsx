@@ -2,10 +2,10 @@ import Image from "next/image";
 
 export default function BrandLogos() {
   const brands = [
-    { name: "Lovibond", src: "https://www.lovibond.com/fileadmin/templates/images/lovibond-logo-blue.svg" },
-    { name: "Pyrex", src: "https://upload.wikimedia.org/wikipedia/commons/4/4e/Pyrex_logo.svg" },
-    { name: "Daihan LabTech", src: "https://andislabs.com/wp-content/uploads/2021/08/labtech-logo.png" }, // fallback to text if fails, but standard image tag is fine
-    { name: "Merck", src: "https://upload.wikimedia.org/wikipedia/commons/e/ec/Merck_logo.svg" },
+    { name: "Lovibond", src: "/images/lovibond-logo.png" },
+    { name: "Pyrex", src: "/images/pyrexlogo.PNG" },
+    { name: "Daihan LabTech", src: "/images/daihanlabtechlogo.png" },
+    { name: "Merck", src: "/images/Logo_Merck_KGaA_2015.svg.png" },
   ];
 
   return (
