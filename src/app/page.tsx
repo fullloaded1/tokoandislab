@@ -1,7 +1,9 @@
 import HeroSection from "@/components/HeroSection";
 import ProductCard from "@/components/ProductCard";
+import CategoryGrid from "@/components/CategoryGrid";
+import BrandLogos from "@/components/BrandLogos";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Flame } from "lucide-react";
 import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -28,17 +30,18 @@ export default async function HomePage() {
   return (
     <>
       <HeroSection featuredProducts={featuredSliderProducts} />
+      <CategoryGrid />
 
       {/* Featured Products Section */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
-        <div className="flex items-end justify-between mb-10">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+        <div className="flex items-end justify-between mb-8">
           <div>
-            <p className="text-sm font-semibold text-cyan-600 uppercase tracking-wider mb-2">
-              Produk Unggulan Tiap Brand
+            <p className="flex items-center gap-2 text-sm font-bold text-red-600 uppercase tracking-wider mb-2">
+              <Flame className="h-4 w-4" />
+              Flash Sale & Rekomendasi
             </p>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight">
-              Pilihan Terbaik untuk{" "}
-              <span className="gradient-text">Laboratorium Anda</span>
+              Pilihan Terbaik <span className="gradient-text">Bulan Ini</span>
             </h2>
           </div>
           <Link
@@ -67,8 +70,10 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <BrandLogos />
+
       {/* CTA Section */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-20">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
         <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600 px-8 py-16 sm:px-16 sm:py-20 text-center">
           {/* Decorative elements */}
           <div className="absolute top-0 left-0 w-64 h-64 rounded-full bg-white/5 -translate-x-1/2 -translate-y-1/2" />
