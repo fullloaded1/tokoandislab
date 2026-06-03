@@ -34,7 +34,9 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
   if (compact) {
     return (
       <Link
-        href={`/katalog/${product.slug}`}
+        href={`https://andislab.com/${product.category}/${product.slug}`}
+        target="_blank"
+        rel="noopener noreferrer"
         className="group flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-1"
       >
         <div className="relative aspect-square overflow-hidden bg-slate-100">
@@ -64,7 +66,9 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
 
   return (
     <Link
-      href={`/katalog/${product.slug}`}
+      href={`https://andislab.com/${product.category}/${product.slug}`}
+      target="_blank"
+      rel="noopener noreferrer"
       className="group flex flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1"
     >
       {/* Image */}

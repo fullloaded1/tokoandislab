@@ -104,7 +104,9 @@ export default function HeroSection({ featuredProducts = [] }: { featuredProduct
                       + Keranjang
                     </button>
                     <Link
-                      href={`/katalog/${product.slug}`}
+                      href={`https://andislab.com/${product.category}/${product.slug}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="flex items-center justify-center gap-2 font-bold text-sm px-6 py-3.5 rounded-xl bg-white text-slate-700 border border-slate-200 transition-all hover:bg-slate-50 hover:-translate-y-0.5"
                     >
                       Detail
