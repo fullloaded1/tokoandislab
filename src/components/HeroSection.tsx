@@ -78,9 +78,9 @@ export default function HeroSection({ featuredProducts = [] }: { featuredProduct
                     {product.name}
                   </h2>
                   
-                  <p className="text-xl sm:text-2xl font-black text-slate-800 mb-4">
-                    {formatRupiah(product.price)}
-                  </p>
+                  <span className="inline-flex items-center gap-2 rounded-full bg-white/60 backdrop-blur border border-amber-200 px-4 py-1.5 text-sm font-semibold text-amber-600 mb-4 w-fit">
+                    🔔 Harga Segera Hadir
+                  </span>
                   
                   <p className="text-slate-600 text-sm sm:text-base mb-8 line-clamp-2 max-w-md">
                     {product.description}
