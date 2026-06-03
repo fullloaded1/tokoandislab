@@ -3,7 +3,7 @@ import ProductCard from "@/components/ProductCard";
 import CategoryGrid from "@/components/CategoryGrid";
 import BrandLogos from "@/components/BrandLogos";
 import Link from "next/link";
-import { ArrowRight, Flame } from "lucide-react";
+import { ArrowRight, Star } from "lucide-react";
 import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -36,12 +36,12 @@ export default async function HomePage() {
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex items-end justify-between mb-8">
           <div>
-            <p className="flex items-center gap-2 text-sm font-bold text-red-600 uppercase tracking-wider mb-2">
-              <Flame className="h-4 w-4" />
-              Flash Sale & Rekomendasi
+            <p className="flex items-center gap-2 text-sm font-bold text-blue-600 uppercase tracking-wider mb-2">
+              <Star className="h-4 w-4" />
+              Katalog Rekomendasi
             </p>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight">
-              Pilihan Terbaik <span className="gradient-text">Bulan Ini</span>
+              Pilihan Terbaik <span className="gradient-text">Instansi Anda</span>
             </h2>
           </div>
           <Link

@@ -71,7 +71,7 @@ export default function HeroSection({ featuredProducts = [] }: { featuredProduct
                 {/* Content Left */}
                 <div className="w-full md:w-1/2 h-full flex flex-col justify-center px-8 sm:px-12 py-8 z-20">
                   <span className={`inline-block w-fit text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-white/60 backdrop-blur border border-white mb-4 ${styles.text}`}>
-                    Spesial Hari Ini • {product.categoryLabel}
+                    Produk Unggulan • {product.categoryLabel}
                   </span>
                   
                   <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 leading-tight mb-3">
