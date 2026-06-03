@@ -97,7 +97,6 @@ export async function bulkCreateProducts(products: any[]) {
 
     await prisma.product.createMany({
       data: dataToInsert,
-      skipDuplicates: true, // Prisma feature to skip unique constraint violations
     });
 
     revalidatePath("/admin");
@@ -114,4 +113,33 @@ export async function bulkCreateProducts(products: any[]) {
 export async function logoutAction() {
   await deleteSession();
   redirect("/admin/login");
+}
+
+// CRM Activity Logs
+export async function createActivityLog(data: { inquiryId?: string; institutionId?: string; action: string; description: string }) {
+  try {
+    await prisma.activityLog.create({
+      data,
+    });
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to add activity log:", error);
+    return { success: false, error: "Gagal menambahkan catatan CRM" };
+  }
+}
+
+export async function getActivityLogs(params: { inquiryId?: string; institutionId?: string }) {
+  try {
+    const logs = await prisma.activityLog.findMany({
+      where: params,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        institution: { select: { name: true } },
+      }
+    });
+    return { success: true, data: logs };
+  } catch (error) {
+    console.error("Failed to fetch activity logs:", error);
+    return { success: false, error: "Gagal mengambil data catatan CRM" };
+  }
 }

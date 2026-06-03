@@ -50,6 +50,7 @@ model Institution {
   contacts       Contact[]
   inquiries      Inquiry[]
   installedBases InstalledBase[]
+  activityLogs   ActivityLog[]
 }
 
 model Contact {
@@ -75,6 +76,7 @@ model Inquiry {
   items         InquiryItem[]
   quotation     Quotation?
   project       Project?
+  activityLogs  ActivityLog[]
 }
 
 model InquiryItem {
@@ -167,4 +169,16 @@ model Reminder {
   status          String        @default("PENDING") // PENDING, FOLLOWED_UP, DISMISSED
   
   installedBase   InstalledBase @relation(fields: [installedBaseId], references: [id], onDelete: Cascade)
+}
+
+model ActivityLog {
+  id            String       @id @default(cuid())
+  inquiryId     String?
+  institutionId String?
+  action        String       // e.g. "NOTE", "CALL", "EMAIL", "MEETING"
+  description   String       @db.Text
+  createdAt     DateTime     @default(now())
+  
+  inquiry       Inquiry?     @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  institution   Institution? @relation(fields: [institutionId], references: [id], onDelete: Cascade)
 }

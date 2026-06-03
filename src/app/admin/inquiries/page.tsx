@@ -86,9 +86,9 @@ export default async function InquiriesPage() {
                         {getStatusBadge(inq.status)}
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <button className="px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors">
+                        <Link href={`/admin/inquiries/${inq.id}`} className="inline-block px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors">
                           Buat Quotation
-                        </button>
+                        </Link>
                       </td>
                     </tr>
                   );

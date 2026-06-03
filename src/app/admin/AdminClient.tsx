@@ -6,6 +6,7 @@ import { Plus, Edit, Trash2, X, Loader2, UploadCloud, FileSpreadsheet, Download 
 import { formatRupiah } from "@/lib/products";
 import { deleteProduct, createProduct, updateProduct, bulkCreateProducts } from "./actions";
 import Papa from "papaparse";
+import * as XLSX from "xlsx";
 import type { Product as PrismaProduct } from "@prisma/client";
 
 export default function AdminClient({ initialProducts }: { initialProducts: PrismaProduct[] }) {
@@ -165,6 +166,28 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
     document.body.removeChild(link);
   };
 
+  const exportToExcel = () => {
+    // Format for E-Katalog LKPP
+    const excelData = products.map((p, index) => ({
+      "No": index + 1,
+      "Nama Produk": p.name,
+      "Merek": p.brand || "-",
+      "No. Produk Penyedia": p.model || "-",
+      "Unit Pengukuran": "Unit",
+      "Jenis Produk": "Impor",
+      "Harga Satuan": p.price,
+      "Stok": 100, // Dummy stock for LKPP requirement
+      "Deskripsi Produk": p.description || "-",
+      "Kategori": p.categoryLabel || "-",
+      "Link Gambar": p.image || "-"
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(excelData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Data_Produk_LKPP");
+    XLSX.writeFile(workbook, "Ekspor_Produk_EKatalog.xlsx");
+  };
+
   return (
     <>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
@@ -173,6 +196,13 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
           <p className="text-slate-500 mt-1">Kelola data produk Anda di sini.</p>
         </div>
         <div className="flex items-center gap-3 mt-4 sm:mt-0">
+          <button 
+            onClick={exportToExcel}
+            className="flex items-center justify-center gap-2 bg-green-50 text-green-700 px-4 py-2.5 rounded-lg font-semibold hover:bg-green-100 transition-colors border border-green-200"
+          >
+            <Download className="h-5 w-5" />
+            Export E-Katalog
+          </button>
           <button 
             onClick={() => setIsBulkModalOpen(true)}
             className="flex items-center justify-center gap-2 bg-blue-50 text-blue-700 px-4 py-2.5 rounded-lg font-semibold hover:bg-blue-100 transition-colors border border-blue-200"
