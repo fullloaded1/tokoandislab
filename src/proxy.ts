@@ -1,37 +1,45 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { jwtVerify } from "jose";
 
-export function proxy(req: NextRequest) {
-  // Hanya lindungi halaman yang dimulai dengan /admin
-  if (req.nextUrl.pathname.startsWith('/admin')) {
-    const basicAuth = req.headers.get('authorization');
+const secretKey = process.env.SESSION_SECRET;
+const encodedKey = new TextEncoder().encode(secretKey);
 
-    // Ganti ini dengan username & password yang Anda inginkan
-    const USERNAME = process.env.ADMIN_USERNAME || 'admin';
-    const PASSWORD = process.env.ADMIN_PASSWORD || 'andislab123';
-
-    if (basicAuth) {
-      const authValue = basicAuth.split(' ')[1];
-      // Decode base64
-      const [user, pwd] = atob(authValue).split(':');
-
-      if (user === USERNAME && pwd === PASSWORD) {
-        return NextResponse.next();
-      }
-    }
-
-    // Jika belum login atau password salah, minta login
-    return new NextResponse('Autentikasi Diperlukan.', {
-      status: 401,
-      headers: {
-        'WWW-Authenticate': 'Basic realm="Secure Admin Area"',
-      },
+async function verifySessionCookie(sessionValue: string) {
+  try {
+    const { payload } = await jwtVerify(sessionValue, encodedKey, {
+      algorithms: ["HS256"],
     });
+    return payload;
+  } catch {
+    return null;
+  }
+}
+
+export async function proxy(req: NextRequest) {
+  const path = req.nextUrl.pathname;
+
+  // Only protect /admin routes
+  if (!path.startsWith("/admin")) {
+    return NextResponse.next();
+  }
+
+  const sessionCookie = req.cookies.get("session")?.value;
+  const session = sessionCookie ? await verifySessionCookie(sessionCookie) : null;
+
+  // If going to login page and already authenticated, redirect to admin dashboard
+  if (path === "/admin/login" && session?.username) {
+    return NextResponse.redirect(new URL("/admin", req.nextUrl));
+  }
+
+  // If going to admin pages (not login) and NOT authenticated, redirect to login
+  if (path !== "/admin/login" && !session?.username) {
+    return NextResponse.redirect(new URL("/admin/login", req.nextUrl));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: ["/admin/:path*"],
 };

@@ -1,7 +1,9 @@
 "use server";
 
 import { prisma } from "@/lib/db";
+import { deleteSession } from "@/lib/session";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export async function deleteProduct(id: string) {
   try {
@@ -69,4 +71,9 @@ export async function updateProduct(id: string, data: any) {
     console.error("Failed to update product:", error);
     return { success: false, error: "Gagal mengupdate produk" };
   }
+}
+
+export async function logoutAction() {
+  await deleteSession();
+  redirect("/admin/login");
 }
