@@ -19,14 +19,14 @@ export default function BrandLogos() {
           {brands.map((brand) => (
             <div
               key={brand.name}
-              className="relative w-32 h-16 sm:w-40 sm:h-20 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+              className="relative w-36 h-20 sm:w-48 sm:h-24 hover:scale-105 transition-transform duration-300"
             >
               <Image 
                 src={brand.src} 
                 alt={`${brand.name} Logo`} 
                 fill 
                 className="object-contain" 
-                unoptimized // Since these are external URLs and we haven't configured next.config.js for them
+                unoptimized
               />
             </div>
           ))}
