@@ -33,7 +33,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
 
   if (compact) {
     return (
-      <Link
+      <a
         href={`https://andislab.com/${product.category}/${product.slug}`}
         target="_blank"
         rel="noopener noreferrer"
@@ -60,12 +60,12 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
             {formatRupiah(product.price)}
           </p>
         </div>
-      </Link>
+      </a>
     );
   }
 
   return (
-    <Link
+    <a
       href={`https://andislab.com/${product.category}/${product.slug}`}
       target="_blank"
       rel="noopener noreferrer"
@@ -127,6 +127,6 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
           )}
         </button>
       </div>
-    </Link>
+    </a>
   );
 }

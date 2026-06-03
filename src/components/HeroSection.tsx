@@ -103,7 +103,7 @@ export default function HeroSection({ featuredProducts = [] }: { featuredProduct
                       <ShoppingCart className="h-4 w-4" />
                       + Keranjang
                     </button>
-                    <Link
+                    <a
                       href={`https://andislab.com/${product.category}/${product.slug}`}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -111,7 +111,7 @@ export default function HeroSection({ featuredProducts = [] }: { featuredProduct
                     >
                       Detail
                       <ArrowRight className="h-4 w-4" />
-                    </Link>
+                    </a>
                   </div>
                 </div>
 
