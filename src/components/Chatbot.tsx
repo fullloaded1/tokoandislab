@@ -168,25 +168,26 @@ export default function Chatbot() {
                       : "bg-white border border-slate-200 text-slate-700 rounded-tl-none shadow-sm"
                   }`}
                 >
-                  <ReactMarkdown
-                    className="prose prose-sm max-w-none"
-                    components={{
-                      a: ({ node, ...props }) => (
-                        <a 
-                          {...props} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className={m.role === 'user' ? "text-blue-200 underline hover:text-white" : "text-blue-600 underline hover:text-blue-800"} 
-                        />
-                      ),
-                      p: ({ node, ...props }) => <p className="mb-2 last:mb-0" {...props} />,
-                      ul: ({ node, ...props }) => <ul className="list-disc ml-4 mb-2" {...props} />,
-                      ol: ({ node, ...props }) => <ol className="list-decimal ml-4 mb-2" {...props} />,
-                      li: ({ node, ...props }) => <li className="mb-1" {...props} />,
-                    }}
-                  >
-                    {m.parts?.filter((p: any) => p.type === 'text').map((p: any) => p.text).join('\n') || ''}
-                  </ReactMarkdown>
+                  <div className="prose prose-sm max-w-none">
+                    <ReactMarkdown
+                      components={{
+                        a: ({ node, ...props }) => (
+                          <a 
+                            {...props} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className={m.role === 'user' ? "text-blue-200 underline hover:text-white" : "text-blue-600 underline hover:text-blue-800"} 
+                          />
+                        ),
+                        p: ({ node, ...props }) => <p className="mb-2 last:mb-0" {...props} />,
+                        ul: ({ node, ...props }) => <ul className="list-disc ml-4 mb-2" {...props} />,
+                        ol: ({ node, ...props }) => <ol className="list-decimal ml-4 mb-2" {...props} />,
+                        li: ({ node, ...props }) => <li className="mb-1" {...props} />,
+                      }}
+                    >
+                      {m.parts?.filter((p: any) => p.type === 'text').map((p: any) => p.text).join('\n') || ''}
+                    </ReactMarkdown>
+                  </div>
                 </div>
               </div>
             ))
