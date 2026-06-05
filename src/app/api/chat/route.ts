@@ -27,7 +27,7 @@ export async function POST(req: Request) {
     let selectedModel = groq('llama-3.3-70b-versatile');
 
     if (agent === 'tech') {
-      selectedModel = google('gemini-1.5-flash');
+      selectedModel = google('gemini-2.5-flash');
       systemPrompt = `Kamu adalah AndisBot (Divisi Teknisi & Dukungan Teknis) di AndisLab.
 Tugas utamamu adalah membantu klien memahami spesifikasi teknis alat, membandingkan fitur, dan memberikan panduan teknis serta troubleshooting.
 
