@@ -2,12 +2,15 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useChat } from "@ai-sdk/react";
-import { MessageCircle, X, Send, User, Bot, Loader2, MinusCircle } from "lucide-react";
+import { MessageCircle, X, Send, User, Bot, Loader2, MinusCircle, Wrench, Sparkles, ChevronRight } from "lucide-react";
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
-  const { messages, sendMessage, status, error } = useChat();
+  const [agent, setAgent] = useState<'sales' | 'tech'>('sales');
+  const { messages, sendMessage, status, error, setMessages } = useChat({
+    body: { agent }
+  });
   const isLoading = status === "streaming" || status === "submitted";
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -54,18 +57,73 @@ export default function Chatbot() {
           </button>
         </div>
 
+        {/* Agent Selector */}
+        <div className="flex bg-white border-b border-slate-100 p-2 gap-2 shadow-sm relative z-10">
+          <button
+            onClick={() => { setAgent('sales'); setMessages([]); }}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-semibold transition-all ${
+              agent === 'sales'
+                ? 'bg-blue-50 text-blue-700 ring-1 ring-blue-200'
+                : 'text-slate-500 hover:bg-slate-50'
+            }`}
+          >
+            <Sparkles className="h-4 w-4" />
+            Sales & CS
+          </button>
+          <button
+            onClick={() => { setAgent('tech'); setMessages([]); }}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-semibold transition-all ${
+              agent === 'tech'
+                ? 'bg-cyan-50 text-cyan-700 ring-1 ring-cyan-200'
+                : 'text-slate-500 hover:bg-slate-50'
+            }`}
+          >
+            <Wrench className="h-4 w-4" />
+            Teknisi Lab
+          </button>
+        </div>
+
         {/* Messages Area */}
         <div className="flex-1 overflow-y-auto p-4 bg-slate-50 space-y-4 custom-scrollbar">
           {messages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-center space-y-3 opacity-70">
-              <div className="bg-white p-4 rounded-full shadow-sm">
-                <Bot className="h-8 w-8 text-blue-500" />
+            <div className="flex flex-col items-center h-full pt-8 pb-4 space-y-6">
+              <div className="flex flex-col items-center text-center space-y-3 opacity-90">
+                <div className={`p-4 rounded-full shadow-sm ${agent === 'sales' ? 'bg-blue-100' : 'bg-cyan-100'}`}>
+                  {agent === 'sales' ? <Bot className="h-8 w-8 text-blue-600" /> : <Wrench className="h-8 w-8 text-cyan-600" />}
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-800">
+                    Halo! Saya {agent === 'sales' ? 'Sales AndisBot 👋' : 'Teknisi AndisBot 🔧'}
+                  </p>
+                  <p className="text-sm text-slate-500 max-w-[250px] mt-1">
+                    {agent === 'sales' 
+                      ? 'Tanya apa saja tentang rekomendasi produk, stok, atau harga.' 
+                      : 'Tanya panduan penggunaan, spesifikasi teknis, atau troubleshooting.'}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="font-semibold text-slate-700">Halo! Saya AndisBot 👋</p>
-                <p className="text-sm text-slate-500 max-w-[250px] mt-1">
-                  Tanya apa saja tentang spesifikasi, rekomendasi, atau harga alat lab kami.
-                </p>
+
+              {/* Quick Actions */}
+              <div className="flex flex-col gap-2 w-full px-2 mt-auto">
+                <p className="text-xs font-medium text-slate-400 mb-1 ml-1">Coba tanyakan:</p>
+                {(agent === 'sales' ? [
+                  "Bantu carikan Incubator terbaik",
+                  "Bagaimana cara minta penawaran harga?",
+                  "Apakah ada Water Bath Daihan?"
+                ] : [
+                  "Apa bedanya spesifikasi Oven dan Incubator?",
+                  "Bagaimana cara kalibrasi alat ukur?",
+                  "Berapa lama garansi standar alat AndisLab?"
+                ]).map((suggestion, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => sendMessage({ role: 'user', parts: [{ type: 'text', text: suggestion }] })}
+                    className="flex items-center justify-between w-full text-left p-3 rounded-xl bg-white border border-slate-200 hover:border-blue-300 hover:shadow-sm transition-all group"
+                  >
+                    <span className="text-sm text-slate-700 group-hover:text-blue-700 transition-colors">{suggestion}</span>
+                    <ChevronRight className="h-4 w-4 text-slate-300 group-hover:text-blue-500" />
+                  </button>
+                ))}
               </div>
             </div>
           ) : (
@@ -87,7 +145,7 @@ export default function Chatbot() {
                   {m.role === "user" ? (
                     <User className="h-4 w-4" />
                   ) : (
-                    <Bot className="h-4 w-4" />
+                    agent === 'sales' ? <Bot className="h-4 w-4" /> : <Wrench className="h-4 w-4" />
                   )}
                 </div>
 
@@ -115,7 +173,7 @@ export default function Chatbot() {
           {isLoading && (
             <div className="flex gap-3 flex-row">
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full mt-1 bg-blue-100 text-blue-600">
-                <Bot className="h-4 w-4" />
+                {agent === 'sales' ? <Bot className="h-4 w-4" /> : <Wrench className="h-4 w-4" />}
               </div>
               <div className="max-w-[75%] rounded-2xl px-4 py-3 text-sm bg-white border border-slate-200 text-slate-700 rounded-tl-none shadow-sm flex items-center gap-2">
                 <Loader2 className="h-4 w-4 animate-spin text-blue-500" />

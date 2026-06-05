@@ -1,4 +1,5 @@
 import { groq } from '@ai-sdk/groq';
+import { google } from '@ai-sdk/google';
 import { streamText } from 'ai';
 import { prisma } from '@/lib/db';
 import { formatRupiah } from '@/lib/products';
@@ -9,7 +10,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     console.log("INCOMING CHAT REQUEST BODY:", JSON.stringify(body, null, 2));
-    const { messages } = body;
+    const { messages, agent = 'sales' } = body;
 
     // Fetch all products from database to use as context
     const products = await prisma.product.findMany({
@@ -22,8 +23,30 @@ export async function POST(req: Request) {
       return `- ${p.name} (Kategori: ${p.categoryLabel}, Brand: ${p.brand})\n  Harga: ${p.price > 0 ? formatRupiah(p.price) : 'Hubungi sales untuk penawaran'}\n  Deskripsi: ${p.description}\n  Spesifikasi: ${specStr}`;
     }).join('\n\n');
 
-    const systemPrompt = `Kamu adalah AndisBot, asisten penjualan dan customer service resmi untuk AndisLab (toko spesialis alat laboratorium B2B di Indonesia).
-Tugas utamamu adalah membantu klien memilih produk yang tepat, menjelaskan spesifikasi, dan mengarahkan mereka untuk meminta penawaran (RFQ) atau menghubungi sales via WhatsApp (082125523466).
+    let systemPrompt = "";
+    let selectedModel = groq('llama-3.3-70b-versatile');
+
+    if (agent === 'tech') {
+      selectedModel = google('gemini-1.5-flash');
+      systemPrompt = `Kamu adalah AndisBot (Divisi Teknisi & Dukungan Teknis) di AndisLab.
+Tugas utamamu adalah membantu klien memahami spesifikasi teknis alat, membandingkan fitur, dan memberikan panduan teknis serta troubleshooting.
+
+Gaya Bicaramu:
+- Profesional, sangat akurat secara teknis, solutif, dan sopan.
+- Gunakan bahasa Indonesia yang jelas dan mudah dipahami.
+- Jangan pernah berhalusinasi spesifikasi yang tidak ada di katalog.
+
+Informasi Katalog AndisLab:
+${catalogContext}
+
+Instruksi:
+- Fokuslah pada spesifikasi, performa, dimensi, dan fitur teknis.
+- Jika pengguna butuh perbaikan atau garansi, arahkan mereka untuk menghubungi tim support via WhatsApp (082125523466).
+- Gunakan format markdown agar mudah dibaca.`;
+    } else {
+      selectedModel = groq('llama-3.3-70b-versatile');
+      systemPrompt = `Kamu adalah AndisBot, asisten penjualan dan customer service resmi untuk AndisLab (toko spesialis alat laboratorium B2B di Indonesia).
+Tugas utamamu adalah membantu klien memilih produk yang tepat, menjelaskan secara singkat, dan mengarahkan mereka untuk meminta penawaran (RFQ) atau menghubungi sales via WhatsApp (082125523466).
 
 Gaya Bicaramu:
 - Ramah, profesional, sopan, dan sangat membantu.
@@ -36,8 +59,9 @@ ${catalogContext}
 Instruksi Tambahan:
 - Jika klien menanyakan harga dan harganya 0, beritahu bahwa harga menyesuaikan kebutuhan instansi dan arahkan mereka untuk klik "Tanya via WA" atau masukkan ke Keranjang RFQ untuk meminta penawaran.
 - Jika ditanya lokasi, AndisLab berlokasi di Bogor, melayani pengiriman seluruh Indonesia.
-- Jangan sebutkan ID produk atau detail teknis yang terlalu panjang kecuali diminta.
+- Jangan sebutkan ID produk atau detail teknis yang terlalu panjang kecuali diminta (arahkan ke teknisi jika perlu).
 - Gunakan format markdown (bullet points, bold) agar mudah dibaca.`;
+    }
 
     const coreMessages = messages.map((m: any) => {
       let content = '';
@@ -50,7 +74,7 @@ Instruksi Tambahan:
     });
 
     const result = streamText({
-      model: groq('llama-3.3-70b-versatile'), // Better model for indonesian reasoning than 8b
+      model: selectedModel,
       system: systemPrompt,
       messages: coreMessages,
       temperature: 0.3, // Keep it focused
