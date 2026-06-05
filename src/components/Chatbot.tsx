@@ -6,7 +6,9 @@ import { MessageCircle, X, Send, User, Bot, Loader2, MinusCircle } from "lucide-
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat();
+  const [input, setInput] = useState("");
+  const { messages, sendMessage, status } = useChat();
+  const isLoading = status === "streaming" || status === "submitted";
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto scroll to bottom when new messages arrive
@@ -98,7 +100,7 @@ export default function Chatbot() {
                   }`}
                 >
                   {/* Basic markdown parsing (very simple) */}
-                  {m.content.split("\n").map((line, i) => {
+                  {(m.parts?.filter((p: any) => p.type === 'text').map((p: any) => p.text).join('\n') || '').split("\n").map((line: string, i: number) => {
                     if (line.startsWith("- ")) {
                       return <li key={i} className="ml-4 list-disc">{line.substring(2)}</li>;
                     }
@@ -127,13 +129,18 @@ export default function Chatbot() {
         {/* Input Area */}
         <div className="p-4 bg-white border-t border-slate-100 rounded-b-3xl">
           <form
-            onSubmit={handleSubmit}
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (!input.trim() || isLoading) return;
+              sendMessage({ role: 'user', parts: [{ type: 'text', text: input }] });
+              setInput("");
+            }}
             className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-1 pr-2 focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100 transition-all"
           >
             <input
               type="text"
               value={input}
-              onChange={handleInputChange}
+              onChange={(e) => setInput(e.target.value)}
               placeholder="Tulis pesan..."
               className="flex-1 bg-transparent px-3 py-2 text-sm text-slate-800 outline-none placeholder:text-slate-400"
               disabled={isLoading}
