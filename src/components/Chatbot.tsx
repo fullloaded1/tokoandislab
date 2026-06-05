@@ -22,12 +22,19 @@ export default function Chatbot() {
       {/* Floating Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-xl shadow-blue-500/30 transition-transform duration-300 hover:scale-110 ${
+        className={`fixed bottom-6 right-6 z-50 flex h-14 items-center gap-2 px-5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-xl shadow-blue-500/30 transition-all duration-300 hover:scale-105 group origin-bottom-right ${
           isOpen ? "scale-0 opacity-0 pointer-events-none" : "scale-100 opacity-100"
         }`}
         aria-label="Tanya AndisBot"
       >
-        <MessageCircle className="h-6 w-6" />
+        <MessageCircle className="h-6 w-6 group-hover:animate-pulse" />
+        <span className="font-semibold text-sm">Tanya AI Assistant</span>
+        
+        {/* Pulsing indicator */}
+        <span className="absolute -top-1 -right-1 flex h-4 w-4">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-4 w-4 bg-red-500 border-2 border-white"></span>
+        </span>
       </button>
 
       {/* Chat Window */}
