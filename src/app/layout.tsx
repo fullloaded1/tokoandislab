@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { ToastProvider } from "@/components/Toast";
+import Chatbot from "@/components/Chatbot";
 import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({
@@ -59,8 +60,11 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <ToastProvider>
           <Navbar />
-          <main className="flex-1">{children}</main>
+          <main className="min-h-screen bg-white pt-24 pb-12">
+            {children}
+          </main>
           <Footer />
+          <Chatbot />
         </ToastProvider>
         <Analytics />
       </body>
