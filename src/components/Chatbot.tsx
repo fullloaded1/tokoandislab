@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useChat } from "@ai-sdk/react";
 import { MessageCircle, X, Send, User, Bot, Loader2, MinusCircle, Wrench, Sparkles, ChevronRight } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -167,14 +168,25 @@ export default function Chatbot() {
                       : "bg-white border border-slate-200 text-slate-700 rounded-tl-none shadow-sm"
                   }`}
                 >
-                  {/* Basic markdown parsing (very simple) */}
-                  {(m.parts?.filter((p: any) => p.type === 'text').map((p: any) => p.text).join('\n') || '').split("\n").map((line: string, i: number) => {
-                    if (line.startsWith("- ")) {
-                      return <li key={i} className="ml-4 list-disc">{line.substring(2)}</li>;
-                    }
-                    if (line.trim() === "") return <br key={i} />;
-                    return <p key={i}>{line}</p>;
-                  })}
+                  <ReactMarkdown
+                    className="prose prose-sm max-w-none"
+                    components={{
+                      a: ({ node, ...props }) => (
+                        <a 
+                          {...props} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className={m.role === 'user' ? "text-blue-200 underline hover:text-white" : "text-blue-600 underline hover:text-blue-800"} 
+                        />
+                      ),
+                      p: ({ node, ...props }) => <p className="mb-2 last:mb-0" {...props} />,
+                      ul: ({ node, ...props }) => <ul className="list-disc ml-4 mb-2" {...props} />,
+                      ol: ({ node, ...props }) => <ol className="list-decimal ml-4 mb-2" {...props} />,
+                      li: ({ node, ...props }) => <li className="mb-1" {...props} />,
+                    }}
+                  >
+                    {m.parts?.filter((p: any) => p.type === 'text').map((p: any) => p.text).join('\n') || ''}
+                  </ReactMarkdown>
                 </div>
               </div>
             ))
