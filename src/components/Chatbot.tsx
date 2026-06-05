@@ -205,8 +205,20 @@ export default function Chatbot() {
             </div>
           )}
           {error && (
-            <div className="text-red-500 text-sm text-center p-2 bg-red-50 rounded-lg border border-red-200 mt-2">
-              Terjadi kesalahan: {error.message || "Gagal menghubungi server"}
+            <div className="flex flex-col items-center text-center p-4 bg-orange-50 rounded-xl border border-orange-200 mt-4 mx-2">
+              <span className="text-orange-600 font-semibold mb-1">Sistem Sedang Sibuk</span>
+              <p className="text-orange-800 text-sm mb-3">
+                Mohon maaf, asisten AI kami sedang melayani banyak klien atau telah mencapai batas. 
+                Untuk respon yang lebih cepat, Anda bisa langsung terhubung dengan tim kami!
+              </p>
+              <a 
+                href="https://wa.me/6282125523466" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="bg-[#25D366] hover:bg-[#1ebd5b] text-white font-semibold py-2 px-5 rounded-full text-sm transition-colors shadow-sm"
+              >
+                Tanya via WhatsApp
+              </a>
             </div>
           )}
           <div ref={messagesEndRef} />
