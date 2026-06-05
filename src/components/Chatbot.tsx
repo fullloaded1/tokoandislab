@@ -7,7 +7,7 @@ import { MessageCircle, X, Send, User, Bot, Loader2, MinusCircle } from "lucide-
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
-  const { messages, sendMessage, status } = useChat();
+  const { messages, sendMessage, status, error } = useChat();
   const isLoading = status === "streaming" || status === "submitted";
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -121,6 +121,11 @@ export default function Chatbot() {
                 <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
                 AndisBot sedang mengetik...
               </div>
+            </div>
+          )}
+          {error && (
+            <div className="text-red-500 text-sm text-center p-2 bg-red-50 rounded-lg border border-red-200 mt-2">
+              Terjadi kesalahan: {error.message || "Gagal menghubungi server"}
             </div>
           )}
           <div ref={messagesEndRef} />
