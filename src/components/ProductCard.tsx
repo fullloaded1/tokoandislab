@@ -5,7 +5,8 @@ import Link from "next/link";
 import { ShoppingCart, Check } from "lucide-react";
 import { useRFQStore } from "@/store/useRFQStore";
 import { useState } from "react";
-import { formatRupiah, type Product } from "@/lib/products";
+import { formatRupiah } from "@/lib/products";
+import { useToast } from "@/components/Toast";
 
 interface ProductCardProps {
   product: any;
@@ -15,6 +16,13 @@ interface ProductCardProps {
 export default function ProductCard({ product, compact = false }: ProductCardProps) {
   const addItem = useRFQStore((s) => s.addItem);
   const [added, setAdded] = useState(false);
+
+  let toast: ReturnType<typeof useToast> | null = null;
+  try {
+    toast = useToast();
+  } catch {
+    // Toast provider may not be available in some contexts
+  }
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -28,23 +36,24 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
       price: product.price,
     });
     setAdded(true);
+    toast?.showToast(`${product.name} ditambahkan ke keranjang`, "success");
     setTimeout(() => setAdded(false), 1500);
   };
 
+  const hasPrice = product.price && product.price > 0;
+
   if (compact) {
     return (
-      <a
-        href={`https://andislab.com/${product.category}/${product.slug}`}
-        target="_blank"
-        rel="noopener noreferrer"
+      <Link
+        href={`/katalog/${product.slug}`}
         className="group flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-1"
       >
-        <div className="relative aspect-square overflow-hidden bg-slate-100">
+        <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100">
           <Image
             src={product.image}
             alt={product.name}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-110"
+            className="object-contain p-3 transition-transform duration-500 group-hover:scale-110"
             sizes="200px"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -56,21 +65,27 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
           <p className="text-sm font-semibold text-slate-800 line-clamp-2 leading-snug mb-1">
             {product.name}
           </p>
-          <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-xs font-semibold text-amber-600">
-            🔔 Harga Segera Hadir
-          </span>
+          {hasPrice ? (
+            <p className="text-sm font-bold text-blue-700">
+              {formatRupiah(product.price)}
+            </p>
+          ) : (
+            <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-xs font-semibold text-amber-600">
+              💬 Hubungi untuk Harga
+            </span>
+          )}
         </div>
-      </a>
+      </Link>
     );
   }
 
   return (
-    <div
-      onClick={() => window.open(`https://andislab.com/${product.category}/${product.slug}`, "_blank", "noopener,noreferrer")}
-      className="group flex flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1 cursor-pointer h-full"
+    <Link
+      href={`/katalog/${product.slug}`}
+      className="group flex flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1 h-full"
     >
       {/* Image */}
-      <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-slate-100">
+      <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100">
         <Image
           src={product.image}
           alt={product.name}
@@ -91,25 +106,24 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
       {/* Content */}
       <div className="flex flex-col flex-1 p-5">
         <h3 className="text-base font-bold text-slate-800 group-hover:text-blue-700 transition-colors line-clamp-2 min-h-[3rem] mb-2">
-          <a
-            href={`https://andislab.com/${product.category}/${product.slug}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="focus:outline-none"
-          >
-            {product.name}
-          </a>
+          {product.name}
         </h3>
         <p className="text-sm text-slate-500 line-clamp-2 min-h-[2.5rem] mb-4 leading-relaxed">
           {product.description}
         </p>
         
         <div className="mt-auto flex flex-col gap-4">
+          {/* Price */}
           <div>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-200 px-3 py-1 text-sm font-semibold text-amber-600">
-              🔔 Harga Segera Hadir
-            </span>
+            {hasPrice ? (
+              <p className="text-lg font-black text-blue-700">
+                {formatRupiah(product.price)}
+              </p>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-200 px-3 py-1 text-sm font-semibold text-amber-600">
+                💬 Hubungi untuk Harga
+              </span>
+            )}
           </div>
 
           {/* CTA */}
@@ -136,6 +150,6 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
           </button>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

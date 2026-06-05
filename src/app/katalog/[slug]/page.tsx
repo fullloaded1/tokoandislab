@@ -56,6 +56,38 @@ export default async function ProductDetailPage(
   });
 
   return (
-    <ProductDetailClient product={product as any} relatedProducts={relatedProducts as any} />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: product.name,
+            description: product.description,
+            image: product.image.startsWith("http")
+              ? product.image
+              : `https://andislabs.com${product.image}`,
+            brand: {
+              "@type": "Brand",
+              name: product.brand || product.categoryLabel,
+            },
+            sku: product.slug,
+            offers: {
+              "@type": "Offer",
+              url: `https://andislabs.com/katalog/${product.slug}`,
+              priceCurrency: "IDR",
+              price: product.price,
+              availability: "https://schema.org/InStock",
+              seller: {
+                "@type": "Organization",
+                name: "Andis Lab",
+              },
+            },
+          }),
+        }}
+      />
+      <ProductDetailClient product={product as any} relatedProducts={relatedProducts as any} />
+    </>
   );
 }

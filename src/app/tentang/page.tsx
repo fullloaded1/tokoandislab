@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { ShieldCheck, Users, Award, Beaker, MapPin, Phone, Mail, MessageCircle } from "lucide-react";
-import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Tentang Kami — AndisLab",
@@ -36,6 +35,13 @@ const values = [
     title: "Keahlian Teknis",
     desc: "Didukung oleh tim dengan latar belakang teknik dan sains untuk rekomendasi produk yang tepat.",
   },
+];
+
+const partners = [
+  { name: "Lovibond", desc: "Water Quality Analysis" },
+  { name: "Daihan Labtech", desc: "General Lab Equipment" },
+  { name: "Pyrex®", desc: "Lab Glassware" },
+  { name: "Andislab Custom", desc: "Custom Lab Furniture" },
 ];
 
 export default function TentangPage() {
@@ -95,22 +101,32 @@ export default function TentangPage() {
               AndisLab didirikan dengan misi menyediakan akses mudah dan
               terjangkau terhadap alat laboratorium berkualitas tinggi di
               Indonesia. Kami bermitra langsung dengan principal internasional
-              ternama seperti Shimadzu, Eppendorf, Memmert, Merck, dan Hanna
-              Instruments.
+              ternama seperti Lovibond, Daihan Labtech, dan Pyrex®.
             </p>
-            <p className="text-slate-500 leading-relaxed">
+            <p className="text-slate-500 leading-relaxed mb-6">
               Dengan sistem Request for Quotation (RFQ) yang sederhana,
               pelanggan dapat dengan mudah meminta penawaran harga untuk
               berbagai produk sekaligus, tanpa harus menghubungi satu per satu.
             </p>
+
+            {/* Brand Partners */}
+            <div className="grid grid-cols-2 gap-3">
+              {partners.map((p) => (
+                <div key={p.name} className="flex items-center gap-3 rounded-xl bg-slate-50 border border-slate-100 px-4 py-3">
+                  <div className="w-2 h-2 rounded-full bg-cyan-500 shrink-0" />
+                  <div>
+                    <p className="text-sm font-bold text-slate-800">{p.name}</p>
+                    <p className="text-xs text-slate-500">{p.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden shadow-2xl shadow-blue-500/10 border border-slate-100">
-            <Image
-              src="https://picsum.photos/id/3/800/600"
-              alt="Laboratorium modern"
-              fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
+          <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden shadow-2xl shadow-blue-500/10 border border-slate-100 bg-gradient-to-br from-blue-50 to-cyan-50 flex items-center justify-center">
+            <img
+              src="/logo-transparent.png"
+              alt="Andis Lab"
+              className="w-3/4 max-w-[300px] object-contain opacity-90"
             />
           </div>
         </div>
@@ -166,10 +182,11 @@ export default function TentangPage() {
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-base font-bold text-slate-800 mb-1">Kantor Pusat</h4>
+                    <h4 className="text-base font-bold text-slate-800 mb-1">Kantor</h4>
                     <p className="text-sm text-slate-500 leading-relaxed">
-                      Jl. Scientia Boulevard, Gading Serpong, <br />
-                      Tangerang, Banten 15810, Indonesia
+                      Jl. Raya Mayor Oking Jaya Atmaja No.112, <br />
+                      Cirimekar, Kec. Cibinong, Kab. Bogor, <br />
+                      Jawa Barat 16918
                     </p>
                   </div>
                 </div>
@@ -179,9 +196,9 @@ export default function TentangPage() {
                     <Phone className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-base font-bold text-slate-800 mb-1">Telepon</h4>
+                    <h4 className="text-base font-bold text-slate-800 mb-1">WhatsApp</h4>
                     <p className="text-sm text-slate-500 leading-relaxed">
-                      +62 21 555-0198
+                      0821-2552-3466
                     </p>
                   </div>
                 </div>
@@ -193,7 +210,7 @@ export default function TentangPage() {
                   <div>
                     <h4 className="text-base font-bold text-slate-800 mb-1">Email</h4>
                     <p className="text-sm text-slate-500 leading-relaxed">
-                      sales@andislabs.com
+                      info@andislab.com
                     </p>
                   </div>
                 </div>
@@ -212,21 +229,19 @@ export default function TentangPage() {
               </div>
             </div>
 
-            {/* Map Placeholder */}
-            <div className="relative aspect-square sm:aspect-video lg:aspect-square rounded-[2rem] overflow-hidden shadow-xl border border-slate-100 bg-slate-200">
-              <Image 
-                src="https://picsum.photos/id/11/800/800" 
-                alt="Map Location" 
-                fill 
-                className="object-cover opacity-80"
+            {/* Map Embed */}
+            <div className="relative aspect-square sm:aspect-video lg:aspect-square rounded-[2rem] overflow-hidden shadow-xl border border-slate-100">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.5!2d106.85!3d-6.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwMzAnMDAuMCJTIDEwNsKwNTEnMDAuMCJF!5e0!3m2!1sid!2sid!4v1600000000000"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Lokasi Andis Lab"
+                className="absolute inset-0"
               />
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="bg-white/90 backdrop-blur px-6 py-4 rounded-2xl shadow-lg border border-slate-100 text-center">
-                  <MapPin className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-                  <p className="font-bold text-slate-800">AndisLab HQ</p>
-                  <p className="text-xs text-slate-500 mt-1">Gading Serpong, Tangerang</p>
-                </div>
-              </div>
             </div>
           </div>
         </div>

@@ -70,12 +70,12 @@ export default function ProductDetailClient({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
         {/* Product Image */}
         <div className="relative">
-          <div className="relative aspect-square overflow-hidden rounded-[2rem] border border-slate-100 bg-white shadow-lg">
+          <div className="relative aspect-square overflow-hidden rounded-[2rem] border border-slate-100 bg-gradient-to-br from-slate-50 to-slate-100 shadow-lg">
             <Image
               src={product.image}
               alt={product.name}
               fill
-              className="object-cover"
+              className="object-contain p-6"
               sizes="(max-width: 1024px) 100vw, 50vw"
               priority
             />
@@ -101,9 +101,17 @@ export default function ProductDetailClient({
             <p className="text-2xl font-black text-blue-700 mb-6">
               {formatRupiah(product.price)}
             </p>
-            <p className="text-base text-slate-500 leading-relaxed">
+            <p className="text-base text-slate-500 leading-relaxed mb-4">
               {product.description}
             </p>
+            <a
+              href={`https://andislab.com/${product.category}/${product.slug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors"
+            >
+              Lihat di andislab.com →
+            </a>
           </div>
 
           {/* Add to RFQ */}

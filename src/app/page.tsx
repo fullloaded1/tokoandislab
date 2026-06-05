@@ -3,10 +3,20 @@ import ProductCard from "@/components/ProductCard";
 import CategoryGrid from "@/components/CategoryGrid";
 import BrandLogos from "@/components/BrandLogos";
 import Link from "next/link";
-import { ArrowRight, Star } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { prisma } from "@/lib/db";
+import { CATEGORY_LABELS, type Category } from "@/lib/products";
 
 export const dynamic = "force-dynamic";
+
+const categoryOrder: Category[] = ["lovibond", "daihan-labtech", "pyrex", "andislab-custom"];
+
+const categoryIcons: Record<Category, string> = {
+  "lovibond": "🔬",
+  "daihan-labtech": "🧪",
+  "pyrex": "🧫",
+  "andislab-custom": "🏗️",
+};
 
 export default async function HomePage() {
   const allProducts = await prisma.product.findMany();
@@ -19,13 +29,13 @@ export default async function HomePage() {
     allProducts.find(p => p.category === "pyrex"),
   ].filter(Boolean) as any[];
 
-  // Ambil 8 produk unggulan (2 dari setiap brand/kategori)
-  const featuredProducts = [
-    ...allProducts.filter(p => p.category === "lovibond").slice(0, 2),
-    ...allProducts.filter(p => p.category === "daihan-labtech").slice(0, 2),
-    ...allProducts.filter(p => p.category === "pyrex").slice(0, 2),
-    ...allProducts.filter(p => p.category === "andislab-custom").slice(0, 2),
-  ];
+  // Group all products by category
+  const productsByCategory = categoryOrder.map((cat) => ({
+    category: cat,
+    label: CATEGORY_LABELS[cat],
+    icon: categoryIcons[cat],
+    products: allProducts.filter((p) => p.category === cat),
+  }));
 
   return (
     <>
@@ -33,43 +43,37 @@ export default async function HomePage() {
       <BrandLogos />
       <CategoryGrid />
 
-      {/* Featured Products Section */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex items-end justify-between mb-8">
-          <div>
-            <p className="flex items-center gap-2 text-sm font-bold text-blue-600 uppercase tracking-wider mb-2">
-              <Star className="h-4 w-4" />
-              Katalog Rekomendasi
-            </p>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight">
-              Pilihan Terbaik <span className="gradient-text">Instansi Anda</span>
-            </h2>
+      {/* All Products Grouped by Category */}
+      {productsByCategory.map((group) => (
+        <section key={group.category} className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+          <div className="flex items-end justify-between mb-8">
+            <div>
+              <p className="flex items-center gap-2 text-sm font-bold text-blue-600 uppercase tracking-wider mb-2">
+                {group.icon} {group.label}
+              </p>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight">
+                Produk <span className="gradient-text">{group.label}</span>
+              </h2>
+              <p className="text-sm text-slate-500 mt-1">
+                {group.products.length} produk tersedia
+              </p>
+            </div>
+            <Link
+              href={`/katalog?category=${group.category}`}
+              className="hidden sm:inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:border-blue-300 hover:text-blue-700 hover:shadow-md transition-all duration-300"
+            >
+              Lihat Semua
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
-          <Link
-            href="/katalog"
-            className="hidden sm:inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:border-blue-300 hover:text-blue-700 hover:shadow-md transition-all duration-300"
-          >
-            Lihat Semua
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children">
-          {featuredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-
-        <div className="sm:hidden mt-8 text-center">
-          <Link
-            href="/katalog"
-            className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-3 text-sm font-bold text-white shadow-lg"
-          >
-            Lihat Semua Produk
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-      </section>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children">
+            {group.products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </section>
+      ))}
 
       {/* CTA Section */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">

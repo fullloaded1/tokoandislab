@@ -17,11 +17,27 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**",
+        hostname: "webicdn.com",
       },
       {
-        protocol: "http",
-        hostname: "**",
+        protocol: "https",
+        hostname: "indonesian.chemical-storagecabinet.com",
+      },
+      {
+        protocol: "https",
+        hostname: "image.mitrabatavia.com",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.phototourl.com",
+      },
+      {
+        protocol: "https",
+        hostname: "andislabs.com",
+      },
+      {
+        protocol: "https",
+        hostname: "picsum.photos",
       },
     ],
   },

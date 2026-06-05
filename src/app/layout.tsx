@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { ToastProvider } from "@/components/Toast";
 import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({
@@ -33,7 +34,7 @@ export const metadata: Metadata = {
     siteName: "AndisLab",
     images: [
       {
-        url: "/images/og-image.jpg", // Make sure you have this image in public/images
+        url: "/images/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "AndisLab Banner",
@@ -56,9 +57,11 @@ export default function RootLayout({
   return (
     <html lang="id" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <ToastProvider>
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </ToastProvider>
         <Analytics />
       </body>
     </html>

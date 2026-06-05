@@ -1,5 +1,12 @@
 import Link from "next/link";
-import { FlaskConical, Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
+
+const categories = [
+  { href: "/katalog?category=lovibond", label: "Lovibond" },
+  { href: "/katalog?category=daihan-labtech", label: "Daihan Labtech" },
+  { href: "/katalog?category=pyrex", label: "Pyrex®" },
+  { href: "/katalog?category=andislab-custom", label: "Andislab Custom" },
+];
 
 export default function Footer() {
   return (
@@ -43,21 +50,16 @@ export default function Footer() {
           {/* Categories */}
           <div>
             <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4">
-              Kategori
+              Katalog Produk
             </h4>
             <ul className="space-y-3">
-              {[
-                "Instrumen Analitik",
-                "Furnitur Laboratorium",
-                "Reagen & Bahan Kimia",
-                "Consumable & Aksesoris",
-              ].map((cat) => (
-                <li key={cat}>
+              {categories.map((cat) => (
+                <li key={cat.href}>
                   <Link
-                    href="/katalog"
+                    href={cat.href}
                     className="text-sm text-slate-400 hover:text-cyan-400 transition-colors"
                   >
-                    {cat}
+                    {cat.label}
                   </Link>
                 </li>
               ))}
@@ -76,11 +78,15 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3 text-sm text-slate-400">
                 <Phone className="h-4 w-4 shrink-0 text-cyan-500" />
-                +62 812-3456-7890
+                <a href="https://wa.me/6282125523466" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 transition-colors">
+                  0821-2552-3466
+                </a>
               </li>
               <li className="flex items-center gap-3 text-sm text-slate-400">
                 <Mail className="h-4 w-4 shrink-0 text-cyan-500" />
-                info@andislab.co.id
+                <a href="mailto:info@andislab.com" className="hover:text-cyan-400 transition-colors">
+                  info@andislab.com
+                </a>
               </li>
             </ul>
           </div>
@@ -96,7 +102,7 @@ export default function Footer() {
               Kebijakan Privasi
             </Link>
             <Link href="/tentang" className="text-sm text-slate-500 hover:text-slate-300 transition-colors">
-              Syarat & Ketentuan
+              Syarat &amp; Ketentuan
             </Link>
           </div>
         </div>

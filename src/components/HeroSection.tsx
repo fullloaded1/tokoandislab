@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ShoppingCart, ShieldCheck, Truck, Headphones } from "lucide-react";
-import { formatRupiah, Product } from "@/lib/products";
+import { formatRupiah } from "@/lib/products";
 import { useRFQStore } from "@/store/useRFQStore";
+import { useToast } from "@/components/Toast";
 import type { Product as PrismaProduct } from "@prisma/client";
 
 const features = [
@@ -40,6 +41,13 @@ export default function HeroSection({ featuredProducts = [] }: { featuredProduct
   const [currentSlide, setCurrentSlide] = useState(0);
   const addItem = useRFQStore((state) => state.addItem);
 
+  let toast: ReturnType<typeof useToast> | null = null;
+  try {
+    toast = useToast();
+  } catch {
+    // Toast provider may not be available
+  }
+
   // Auto-play
   useEffect(() => {
     if (featuredProducts.length === 0) return;
@@ -60,6 +68,7 @@ export default function HeroSection({ featuredProducts = [] }: { featuredProduct
           {featuredProducts.map((product, index) => {
             const isActive = index === currentSlide;
             const styles = getCategoryStyles(product.category);
+            const hasPrice = product.price && product.price > 0;
             
             return (
               <div
@@ -78,9 +87,15 @@ export default function HeroSection({ featuredProducts = [] }: { featuredProduct
                     {product.name}
                   </h2>
                   
-                  <span className="inline-flex items-center gap-2 rounded-full bg-white/60 backdrop-blur border border-amber-200 px-4 py-1.5 text-sm font-semibold text-amber-600 mb-4 w-fit">
-                    🔔 Harga Segera Hadir
-                  </span>
+                  {hasPrice ? (
+                    <p className="text-2xl font-black text-slate-800 mb-4">
+                      {formatRupiah(product.price)}
+                    </p>
+                  ) : (
+                    <span className="inline-flex items-center gap-2 rounded-full bg-white/60 backdrop-blur border border-amber-200 px-4 py-1.5 text-sm font-semibold text-amber-600 mb-4 w-fit">
+                      💬 Hubungi untuk Harga
+                    </span>
+                  )}
                   
                   <p className="text-slate-600 text-sm sm:text-base mb-8 line-clamp-2 max-w-md">
                     {product.description}
@@ -97,21 +112,20 @@ export default function HeroSection({ featuredProducts = [] }: { featuredProduct
                           category: product.categoryLabel,
                           price: product.price,
                         });
+                        toast?.showToast(`${product.name} ditambahkan ke keranjang`, "success");
                       }}
                       className={`flex items-center justify-center gap-2 text-white font-bold text-sm px-6 py-3.5 rounded-xl shadow-lg transition-all hover:-translate-y-0.5 ${styles.btn}`}
                     >
                       <ShoppingCart className="h-4 w-4" />
                       + Keranjang
                     </button>
-                    <a
-                      href={`https://andislab.com/${product.category}/${product.slug}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <Link
+                      href={`/katalog/${product.slug}`}
                       className="flex items-center justify-center gap-2 font-bold text-sm px-6 py-3.5 rounded-xl bg-white text-slate-700 border border-slate-200 transition-all hover:bg-slate-50 hover:-translate-y-0.5"
                     >
                       Detail
                       <ArrowRight className="h-4 w-4" />
-                    </a>
+                    </Link>
                   </div>
                 </div>
 
