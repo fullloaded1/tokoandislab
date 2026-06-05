@@ -7,7 +7,9 @@ export const maxDuration = 30;
 
 export async function POST(req: Request) {
   try {
-    const { messages } = await req.json();
+    const body = await req.json();
+    console.log("INCOMING CHAT REQUEST BODY:", JSON.stringify(body, null, 2));
+    const { messages } = body;
 
     // Fetch all products from database to use as context
     const products = await prisma.product.findMany({
@@ -37,10 +39,20 @@ Instruksi Tambahan:
 - Jangan sebutkan ID produk atau detail teknis yang terlalu panjang kecuali diminta.
 - Gunakan format markdown (bullet points, bold) agar mudah dibaca.`;
 
+    const coreMessages = messages.map((m: any) => {
+      let content = '';
+      if (m.parts) {
+        content = m.parts.map((p: any) => p.text).join('');
+      } else if (m.content) {
+        content = typeof m.content === 'string' ? m.content : '';
+      }
+      return { role: m.role, content };
+    });
+
     const result = streamText({
       model: groq('llama-3.3-70b-versatile'), // Better model for indonesian reasoning than 8b
       system: systemPrompt,
-      messages,
+      messages: coreMessages,
       temperature: 0.3, // Keep it focused
     });
 
