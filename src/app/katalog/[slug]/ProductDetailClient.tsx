@@ -98,9 +98,11 @@ export default function ProductDetailClient({
             <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight mb-2">
               {product.name}
             </h1>
-            <p className="text-2xl font-black text-blue-700 mb-6">
-              {formatRupiah(product.price)}
-            </p>
+            <div className="mb-6">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-200 px-3 py-1 text-sm font-semibold text-amber-600">
+                💬 Minta Penawaran Dulu
+              </span>
+            </div>
             <p className="text-base text-slate-500 leading-relaxed mb-4">
               {product.description}
             </p>

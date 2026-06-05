@@ -65,15 +65,9 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
           <p className="text-sm font-semibold text-slate-800 line-clamp-2 leading-snug mb-1">
             {product.name}
           </p>
-          {hasPrice ? (
-            <p className="text-sm font-bold text-blue-700">
-              {formatRupiah(product.price)}
-            </p>
-          ) : (
-            <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-xs font-semibold text-amber-600">
-              💬 Hubungi untuk Harga
-            </span>
-          )}
+          <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-xs font-semibold text-amber-600">
+            💬 Minta Penawaran Dulu
+          </span>
         </div>
       </Link>
     );
@@ -113,17 +107,10 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
         </p>
         
         <div className="mt-auto flex flex-col gap-4">
-          {/* Price */}
           <div>
-            {hasPrice ? (
-              <p className="text-lg font-black text-blue-700">
-                {formatRupiah(product.price)}
-              </p>
-            ) : (
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-200 px-3 py-1 text-sm font-semibold text-amber-600">
-                💬 Hubungi untuk Harga
-              </span>
-            )}
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-200 px-3 py-1 text-sm font-semibold text-amber-600">
+              💬 Minta Penawaran Dulu
+            </span>
           </div>
 
           {/* CTA */}
