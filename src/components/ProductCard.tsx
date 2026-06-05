@@ -65,22 +65,20 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
   }
 
   return (
-    <a
-      href={`https://andislab.com/${product.category}/${product.slug}`}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group flex flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1"
+    <div
+      onClick={() => window.open(`https://andislab.com/${product.category}/${product.slug}`, "_blank", "noopener,noreferrer")}
+      className="group flex flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1 cursor-pointer h-full"
     >
       {/* Image */}
-      <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
+      <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-slate-100">
         <Image
           src={product.image}
           alt={product.name}
           fill
-          className="object-cover transition-transform duration-700 group-hover:scale-110"
+          className="object-contain p-4 transition-transform duration-700 group-hover:scale-110"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
         {/* Category Badge */}
         <div className="absolute top-3 left-3">
@@ -92,41 +90,52 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
 
       {/* Content */}
       <div className="flex flex-col flex-1 p-5">
-        <h3 className="text-base font-bold text-slate-800 group-hover:text-blue-700 transition-colors line-clamp-2 mb-2">
-          {product.name}
+        <h3 className="text-base font-bold text-slate-800 group-hover:text-blue-700 transition-colors line-clamp-2 min-h-[3rem] mb-2">
+          <a
+            href={`https://andislab.com/${product.category}/${product.slug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="focus:outline-none"
+          >
+            {product.name}
+          </a>
         </h3>
-        <p className="text-sm text-slate-500 line-clamp-2 mb-3 flex-1 leading-relaxed">
+        <p className="text-sm text-slate-500 line-clamp-2 min-h-[2.5rem] mb-4 leading-relaxed">
           {product.description}
         </p>
-        <div className="mb-4">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-200 px-3 py-1 text-sm font-semibold text-amber-600">
-            🔔 Harga Segera Hadir
-          </span>
-        </div>
+        
+        <div className="mt-auto flex flex-col gap-4">
+          <div>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-200 px-3 py-1 text-sm font-semibold text-amber-600">
+              🔔 Harga Segera Hadir
+            </span>
+          </div>
 
-        {/* CTA */}
-        <button
-          onClick={handleAdd}
-          disabled={added}
-          className={`flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-sm font-semibold transition-all duration-300 ${
-            added
-              ? "bg-green-50 text-green-600 border border-green-200"
-              : "bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0"
-          }`}
-        >
-          {added ? (
-            <>
-              <Check className="h-4 w-4" />
-              Ditambahkan!
-            </>
-          ) : (
-            <>
-              <ShoppingCart className="h-4 w-4" />
-              Tambah ke Keranjang
-            </>
-          )}
-        </button>
+          {/* CTA */}
+          <button
+            onClick={handleAdd}
+            disabled={added}
+            className={`flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-sm font-semibold transition-all duration-300 ${
+              added
+                ? "bg-green-50 text-green-600 border border-green-200"
+                : "bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0"
+            }`}
+          >
+            {added ? (
+              <>
+                <Check className="h-4 w-4" />
+                Ditambahkan!
+              </>
+            ) : (
+              <>
+                <ShoppingCart className="h-4 w-4" />
+                Tambah ke Keranjang
+              </>
+            )}
+          </button>
+        </div>
       </div>
-    </a>
+    </div>
   );
 }
