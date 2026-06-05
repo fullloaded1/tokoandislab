@@ -16,6 +16,7 @@ export interface Product {
   model: string;
   subcategory: string;
   image: string;
+  brochureUrl?: string | null;
   description: string;
   specs: ProductSpec[];
   relatedSlugs: string[];

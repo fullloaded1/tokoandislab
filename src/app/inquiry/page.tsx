@@ -26,14 +26,27 @@ export default function InquiryPage() {
             Nomor Referensi: <span className="font-bold text-slate-800">{successQuoteNo}</span>
           </p>
           <p className="text-sm text-slate-500 mb-8 leading-relaxed">
-            Tim sales AndisLab telah menerima permintaan penawaran harga Anda. Kami akan segera mengirimkan Surat Penawaran resmi ke email/WhatsApp Anda.
+            Tim sales AndisLab telah menerima permintaan penawaran harga Anda. Silakan lanjutkan ke WhatsApp agar tim kami dapat segera merespon Anda.
           </p>
-          <button
-            onClick={() => router.push("/katalog")}
-            className="w-full py-3.5 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-colors"
-          >
-            Kembali ke Katalog
-          </button>
+          <div className="flex flex-col gap-3">
+            <a
+              href={`https://wa.me/6282125523466?text=${encodeURIComponent(
+                `Halo Tim AndisLab, saya baru saja mengajukan penawaran harga via website dengan Nomor Referensi *${successQuoteNo}*. Mohon segera diproses, terima kasih!`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-4 bg-[#25D366] text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-[#20bd5a] transition-all hover:-translate-y-0.5 shadow-lg shadow-[#25D366]/30"
+            >
+              <Phone className="h-5 w-5" />
+              Lanjutkan Chat ke WhatsApp
+            </a>
+            <button
+              onClick={() => router.push("/katalog")}
+              className="w-full py-4 border-2 border-slate-200 text-slate-600 rounded-xl font-bold hover:bg-slate-50 transition-colors"
+            >
+              Kembali ke Katalog
+            </button>
+          </div>
         </div>
       </div>
     );

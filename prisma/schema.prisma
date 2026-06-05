@@ -20,6 +20,7 @@ model Product {
   model            String
   subcategory      String
   image            String
+  brochureUrl      String?
   description      String
   price            Float           @default(0)
   isRequestPricing Boolean         @default(false)

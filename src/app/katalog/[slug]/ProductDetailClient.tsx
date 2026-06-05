@@ -10,6 +10,7 @@ import {
   ShoppingCart,
   ArrowLeft,
   Package,
+  Download,
 } from "lucide-react";
 import { useRFQStore } from "@/store/useRFQStore";
 import ProductCard from "@/components/ProductCard";
@@ -150,6 +151,33 @@ export default function ProductDetailClient({
               <FileText className="h-5 w-5" />
               Tanya via WA
             </a>
+          </div>
+
+          {/* Download Brochure */}
+          <div className="mb-10">
+            {product.brochureUrl ? (
+              <a
+                href={product.brochureUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-semibold text-slate-700 transition-all hover:bg-white hover:border-blue-300 hover:text-blue-700 hover:shadow-sm"
+              >
+                <Download className="h-4 w-4" />
+                Unduh Brosur / Datasheet (PDF)
+              </a>
+            ) : (
+              <a
+                href={`https://wa.me/6282125523466?text=${encodeURIComponent(
+                  `Halo Andis Lab, boleh minta brosur PDF atau datasheet teknis untuk produk: ${product.name}?`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-semibold text-slate-700 transition-all hover:bg-white hover:border-blue-300 hover:text-blue-700 hover:shadow-sm"
+              >
+                <Download className="h-4 w-4" />
+                Minta Brosur (PDF) via WA
+              </a>
+            )}
           </div>
 
           {/* Specifications Table */}
