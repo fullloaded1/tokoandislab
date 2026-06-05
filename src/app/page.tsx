@@ -2,6 +2,7 @@ import HeroSection from "@/components/HeroSection";
 import ProductCard from "@/components/ProductCard";
 import CategoryGrid from "@/components/CategoryGrid";
 import BrandLogos from "@/components/BrandLogos";
+import ClientLogos from "@/components/ClientLogos";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { prisma } from "@/lib/db";
@@ -76,6 +77,8 @@ export default async function HomePage() {
           </div>
         </section>
       ))}
+
+      <ClientLogos />
 
       {/* CTA Section */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
