@@ -8,9 +8,7 @@ export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const [agent, setAgent] = useState<'sales' | 'tech'>('sales');
-  const { messages, sendMessage, status, error, setMessages } = useChat({
-    body: { agent }
-  });
+  const { messages, sendMessage, status, error, setMessages } = useChat();
   const isLoading = status === "streaming" || status === "submitted";
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -117,7 +115,12 @@ export default function Chatbot() {
                 ]).map((suggestion, idx) => (
                   <button
                     key={idx}
-                    onClick={() => sendMessage({ role: 'user', parts: [{ type: 'text', text: suggestion }] })}
+                    onClick={() =>
+                      sendMessage(
+                        { role: 'user', parts: [{ type: 'text', text: suggestion }] },
+                        { body: { agent } }
+                      )
+                    }
                     className="flex items-center justify-between w-full text-left p-3 rounded-xl bg-white border border-slate-200 hover:border-blue-300 hover:shadow-sm transition-all group"
                   >
                     <span className="text-sm text-slate-700 group-hover:text-blue-700 transition-colors">{suggestion}</span>
@@ -195,7 +198,10 @@ export default function Chatbot() {
             onSubmit={(e) => {
               e.preventDefault();
               if (!input.trim() || isLoading) return;
-              sendMessage({ role: 'user', parts: [{ type: 'text', text: input }] });
+              sendMessage(
+                { role: 'user', parts: [{ type: 'text', text: input }] },
+                { body: { agent } }
+              );
               setInput("");
             }}
             className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-1 pr-2 focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100 transition-all"
