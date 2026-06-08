@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { ToastProvider } from "@/components/Toast";
-import Chatbot from "@/components/Chatbot";
 import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({
@@ -59,12 +56,7 @@ export default function RootLayout({
     <html lang="id" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <ToastProvider>
-          <Navbar />
-          <main className="min-h-screen bg-white pt-24 pb-12">
-            {children}
-          </main>
-          <Footer />
-          <Chatbot />
+          {children}
         </ToastProvider>
         <Analytics />
       </body>
