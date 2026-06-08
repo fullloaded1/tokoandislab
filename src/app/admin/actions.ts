@@ -145,3 +145,28 @@ export async function getActivityLogs(params: { inquiryId?: string; institutionI
     return { success: false, error: "Gagal mengambil data catatan CRM" };
   }
 }
+
+export async function updateInquiryStatus(inquiryId: string, status: string) {
+  try {
+    const inquiry = await prisma.inquiry.update({
+      where: { id: inquiryId },
+      data: { status },
+    });
+    
+    // Log activity
+    await prisma.activityLog.create({
+      data: {
+        inquiryId: inquiry.id,
+        institutionId: inquiry.institutionId,
+        action: "STATUS_UPDATE",
+        description: `Status diubah menjadi ${status}`,
+      }
+    });
+
+    revalidatePath("/admin/inquiries");
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to update inquiry status:", error);
+    return { success: false, error: "Gagal mengupdate status inquiry" };
+  }
+}
