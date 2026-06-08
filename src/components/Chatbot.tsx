@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import { useChat } from "@ai-sdk/react";
 import { MessageCircle, X, Send, User, Bot, Loader2, MinusCircle, Wrench, Sparkles, ChevronRight } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import Lottie from "lottie-react";
+import robotAnimation from "../../public/images/animas/animasi.json";
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,6 +38,11 @@ export default function Chatbot() {
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
           <span className="relative inline-flex rounded-full h-4 w-4 bg-red-500 border-2 border-white"></span>
         </span>
+        
+        {/* Floating Mascot */}
+        <div className="absolute -top-16 -left-4 w-20 h-20 pointer-events-none drop-shadow-xl animate-bounce">
+          <Lottie animationData={robotAnimation} loop={true} />
+        </div>
       </button>
 
       {/* Chat Window */}
@@ -47,8 +54,8 @@ export default function Chatbot() {
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-t-3xl">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
-              <Bot className="h-6 w-6 text-white" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm overflow-hidden p-1 shadow-inner">
+              <Lottie animationData={robotAnimation} loop={true} className="w-full h-full" />
             </div>
             <div>
               <h3 className="font-bold text-base leading-tight">AndisBot</h3>

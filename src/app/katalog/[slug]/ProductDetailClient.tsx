@@ -76,7 +76,7 @@ export default function ProductDetailClient({
               src={product.image}
               alt={product.name}
               fill
-              className="object-contain p-6"
+              className="object-contain p-6 mix-blend-multiply"
               sizes="(max-width: 1024px) 100vw, 50vw"
               priority
             />

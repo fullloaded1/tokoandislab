@@ -24,6 +24,7 @@ model Product {
   description      String
   price            Float           @default(0)
   isRequestPricing Boolean         @default(false)
+  isReadyStock     Boolean         @default(false)
   warrantyPeriod   String?
   leadTime         String?
   specs            ProductSpec[]

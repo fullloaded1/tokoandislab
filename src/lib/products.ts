@@ -1,4 +1,4 @@
-export type Category = "lovibond" | "daihan-labtech" | "pyrex" | "andislab-custom";
+export type Category = "lovibond" | "daihan-labtech" | "pyrex" | "andislab-custom" | "general-equipment";
 
 export interface ProductSpec {
   label: string;
@@ -27,6 +27,7 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   "daihan-labtech": "Daihan Labtech",
   "pyrex": "Pyrex®",
   "andislab-custom": "Andislab Custom",
+  "general-equipment": "General Equipment",
 };
 
 export const CATEGORY_DESCRIPTIONS: Record<Category, string> = {
@@ -34,6 +35,7 @@ export const CATEGORY_DESCRIPTIONS: Record<Category, string> = {
   "daihan-labtech": "General peralatan laboratorium umum yang sering dipakai. Magnetic stirrer, hotplate, sentrifuge, dan peralatan umum laboratorium.",
   "pyrex": "Peralatan kaca borosilicate berkualitas tinggi: beaker, Erlenmeyer, labu ukur, pipet, dan kelengkapan glassware lab.",
   "andislab-custom": "Custom lab dan furniture fabrikasi meja lab, lemari penyimpanan, fume hood, wet scrubber standar keamanan internasional.",
+  "general-equipment": "Peralatan umum laboratorium untuk mendukung berbagai kebutuhan operasional, riset, dan analisis harian.",
 };
 
 

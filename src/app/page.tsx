@@ -10,13 +10,14 @@ import { CATEGORY_LABELS, type Category } from "@/lib/products";
 
 export const dynamic = "force-dynamic";
 
-const categoryOrder: Category[] = ["lovibond", "daihan-labtech", "pyrex", "andislab-custom"];
+const categoryOrder: Category[] = ["lovibond", "daihan-labtech", "pyrex", "andislab-custom", "general-equipment"];
 
 const categoryLogos: Record<Category, string> = {
   "lovibond": "/images/lovibond-logo.png",
   "daihan-labtech": "/images/daihanlabtechlogo.png",
   "pyrex": "/images/pyrexlogo.PNG",
   "andislab-custom": "/logo.png",
+  "general-equipment": "/logo.png",
 };
 
 export default async function HomePage() {
@@ -29,6 +30,9 @@ export default async function HomePage() {
     allProducts.find(p => p.category === "andislab-custom"),
     allProducts.find(p => p.category === "pyrex"),
   ].filter(Boolean) as any[];
+
+  // Filter Ready Stock products
+  const readyStockProducts = allProducts.filter((p: any) => p.isReadyStock);
 
   // Group all products by category
   const productsByCategory = categoryOrder.map((cat) => ({
@@ -43,6 +47,36 @@ export default async function HomePage() {
       <HeroSection featuredProducts={featuredSliderProducts} />
       <BrandLogos />
       <CategoryGrid />
+
+      {/* Ready Stock Section */}
+      {readyStockProducts.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 mt-6" id="ready-stock">
+          <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-r from-teal-600 to-emerald-600 px-6 py-12 sm:px-12 shadow-xl mb-6">
+            <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/3 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+              <div>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-bold text-white mb-3 backdrop-blur-sm">
+                  🔥 Tersedia Sekarang
+                </span>
+                <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-2">
+                  Produk <span className="text-yellow-300">Ready Stock</span>
+                </h2>
+                <p className="text-teal-50 max-w-xl">
+                  Tidak perlu menunggu pre-order! Dapatkan alat laboratorium unggulan kami yang siap kirim hari ini.
+                </p>
+              </div>
+            </div>
+            
+            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {readyStockProducts.map((product) => (
+                <div key={product.id} className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all hover:-translate-y-1">
+                  <ProductCard product={product} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* All Products Grouped by Category */}
       {productsByCategory.map((group) => (

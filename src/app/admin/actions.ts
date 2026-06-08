@@ -35,6 +35,7 @@ export async function createProduct(data: any) {
         subcategory: data.subcategory || "",
         image: data.image || "",
         description: data.description || "",
+        isReadyStock: Boolean(data.isReadyStock),
       },
     });
     revalidatePath("/admin");
@@ -61,6 +62,7 @@ export async function updateProduct(id: string, data: any) {
         subcategory: data.subcategory || "",
         image: data.image || "",
         description: data.description || "",
+        isReadyStock: Boolean(data.isReadyStock),
       },
     });
     revalidatePath("/admin");

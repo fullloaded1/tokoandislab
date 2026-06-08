@@ -27,6 +27,7 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
     model: "",
     image: "",
     description: "",
+    isReadyStock: false,
   });
 
   const handleOpenModal = (product?: PrismaProduct) => {
@@ -46,6 +47,7 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
         model: "",
         image: "",
         description: "",
+        isReadyStock: false,
       });
     }
     setIsModalOpen(true);
@@ -417,6 +419,21 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
                     onChange={(e) => setFormData({...formData, description: e.target.value})}
                     className="w-full border border-slate-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
                   />
+                </div>
+
+                <div className="space-y-1 sm:col-span-2">
+                  <label className="flex items-center gap-3 cursor-pointer p-4 border border-slate-200 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors">
+                    <input 
+                      type="checkbox"
+                      checked={formData.isReadyStock || false}
+                      onChange={(e) => setFormData({...formData, isReadyStock: e.target.checked})}
+                      className="w-5 h-5 rounded text-blue-600 focus:ring-blue-500"
+                    />
+                    <div className="flex flex-col">
+                      <span className="text-sm font-bold text-slate-800">Tandai sebagai Ready Stock</span>
+                      <span className="text-xs text-slate-500">Produk ini akan muncul di Section Khusus halaman depan.</span>
+                    </div>
+                  </label>
                 </div>
               </div>
 
