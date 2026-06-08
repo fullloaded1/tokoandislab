@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LogOut, Package, FileText, Users, HardDrive } from "lucide-react";
+import { LogOut, Package, FileText, Users, HardDrive, Bot } from "lucide-react";
 import { logoutAction } from "./actions";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -33,6 +33,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link href="/admin/installed-base" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 hover:text-white transition-colors">
             <HardDrive className="h-5 w-5" />
             <span className="font-semibold text-sm">Alat Terpasang</span>
+          </Link>
+
+          <Link href="/admin/ai-analytics" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 hover:text-white transition-colors">
+            <Bot className="h-5 w-5" />
+            <span className="font-semibold text-sm">AI Analytics</span>
           </Link>
         </nav>
 

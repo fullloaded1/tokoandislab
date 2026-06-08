@@ -75,14 +75,36 @@ Instruksi Tambahan:
       return { role: m.role, content };
     });
 
+    const lastUserMessage = coreMessages.filter(m => m.role === 'user').pop();
+    const userText = lastUserMessage?.content || '';
+
+    // Create ChatLog placeholder
+    const chatLog = await prisma.chatLog.create({
+      data: {
+        sessionId: req.headers.get("x-forwarded-for") || "anonymous",
+        userMessage: userText,
+        agent: agent
+      }
+    });
+
     const result = streamText({
       model: selectedModel,
       system: systemPrompt,
       messages: coreMessages,
       temperature: 0.3, // Keep it focused
+      onFinish: async ({ text }) => {
+        try {
+          await prisma.chatLog.update({
+            where: { id: chatLog.id },
+            data: { aiResponse: text }
+          });
+        } catch (e) {
+          console.error("Failed to save AI response:", e);
+        }
+      }
     });
 
-    return result.toUIMessageStreamResponse();
+    return result.toDataStreamResponse();
   } catch (error) {
     console.error('Chat API Error:', error);
     return new Response('Internal Server Error', { status: 500 });

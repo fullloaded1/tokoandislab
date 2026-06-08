@@ -184,3 +184,12 @@ model ActivityLog {
   inquiry       Inquiry?     @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
   institution   Institution? @relation(fields: [institutionId], references: [id], onDelete: Cascade)
 }
+
+model ChatLog {
+  id          String   @id @default(cuid())
+  sessionId   String
+  userMessage String   @db.Text
+  aiResponse  String?  @db.Text
+  agent       String   @default("sales")
+  createdAt   DateTime @default(now())
+}
