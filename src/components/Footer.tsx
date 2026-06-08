@@ -85,10 +85,8 @@ export default function Footer() {
               <li className="flex items-start gap-3 text-sm text-slate-400">
                 <Mail className="h-4 w-4 shrink-0 text-cyan-500 mt-1" />
                 <div className="flex flex-col gap-1">
-                  <a href="mailto:info@andislabs.com" className="hover:text-cyan-400 transition-colors">info@andislabs.com</a>
                   <a href="mailto:cs@andislabs.com" className="hover:text-cyan-400 transition-colors">cs@andislabs.com</a>
-                  <a href="mailto:admin@andislabs.com" className="hover:text-cyan-400 transition-colors">admin@andislabs.com</a>
-                  <a href="mailto:cs.andislab@gmail.com" className="hover:text-cyan-400 transition-colors mt-1 pt-1 border-t border-slate-700">cs.andislab@gmail.com</a>
+                  <a href="mailto:cs.andislab@gmail.com" className="hover:text-cyan-400 transition-colors">cs.andislab@gmail.com</a>
                 </div>
               </li>
             </ul>
