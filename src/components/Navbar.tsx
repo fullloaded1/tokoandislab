@@ -17,6 +17,7 @@ import RFQCartDrawer from "./RFQCartDrawer";
 const navLinks = [
   { href: "/", label: "Beranda" },
   { href: "/katalog", label: "Katalog" },
+  { href: "/ready-stock", label: "Ready Stock" },
   { href: "/tentang", label: "Tentang Kami" },
 ];
 
