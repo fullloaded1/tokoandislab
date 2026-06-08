@@ -2,116 +2,126 @@
 
 import { useActionState } from "react";
 import { loginAction } from "./actions";
-import { Loader2, Lock, FlaskConical } from "lucide-react";
+import { Loader2, FlaskConical, ArrowRight, ShieldCheck } from "lucide-react";
 
 export default function AdminLoginPage() {
   const [state, action, pending] = useActionState(loginAction, undefined);
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* Animated gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900" />
-      <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-indigo-500/8 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }} />
+    <div className="min-h-screen bg-slate-50 flex">
+      {/* Left Panel - Branding (Hidden on mobile) */}
+      <div className="hidden lg:flex w-1/2 bg-slate-900 relative overflow-hidden flex-col justify-between p-12 text-white">
+        {/* Background Effects */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-slate-900 to-slate-900 z-0" />
+        <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-500/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl" />
+        
+        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 opacity-[0.05] z-0" style={{ backgroundImage: `linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)`, backgroundSize: "40px 40px" }} />
+
+        <div className="relative z-10 flex items-center gap-3">
+          <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+            <FlaskConical className="h-6 w-6 text-white" />
+          </div>
+          <span className="text-xl font-bold tracking-tight">AndisLab <span className="text-blue-400">ERP</span></span>
+        </div>
+
+        <div className="relative z-10 max-w-md">
+          <h2 className="text-4xl font-bold mb-4 leading-tight">Kelola Bisnis Laboratorium dengan Cerdas.</h2>
+          <p className="text-slate-400 text-lg leading-relaxed">
+            Akses dashboard terpusat untuk memantau inventaris produk, mengelola permintaan RFQ, dan menganalisis performa bisnis B2B Anda secara real-time.
+          </p>
+          
+          <div className="mt-8 flex items-center gap-4 text-sm font-medium text-slate-300">
+            <div className="flex -space-x-3">
+              {[1,2,3].map(i => (
+                <div key={i} className={`w-10 h-10 rounded-full border-2 border-slate-900 flex items-center justify-center ${i===1?'bg-emerald-500':i===2?'bg-purple-500':'bg-amber-500'}`}>
+                  <ShieldCheck className="h-4 w-4 text-white" />
+                </div>
+              ))}
+            </div>
+            <span>Dilengkapi keamanan enkripsi standar industri</span>
+          </div>
+        </div>
       </div>
 
-      {/* Grid pattern overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)`,
-          backgroundSize: "60px 60px",
-        }}
-      />
-
-      {/* Login Card */}
-      <div className="relative z-10 w-full max-w-md mx-4">
-        {/* Logo & Branding */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-400 shadow-xl shadow-blue-500/25 mb-4">
-            <FlaskConical className="w-8 h-8 text-white" />
+      {/* Right Panel - Login Form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 sm:p-12">
+        <div className="w-full max-w-md space-y-8">
+          <div className="text-center lg:text-left">
+            {/* Mobile Logo */}
+            <div className="lg:hidden flex justify-center mb-6">
+              <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                <FlaskConical className="h-7 w-7 text-white" />
+              </div>
+            </div>
+            <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Selamat Datang Kembali</h1>
+            <p className="text-slate-500 mt-2">Silakan masukkan kredensial admin Anda untuk melanjutkan.</p>
           </div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight">
-            AndisLab Admin
-          </h1>
-          <p className="text-blue-300/60 text-sm mt-1">
-            Masuk untuk mengelola produk
+
+          <div className="bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100">
+            {state?.error && (
+              <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 flex gap-3 items-start">
+                <div className="mt-0.5">
+                  <svg className="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-red-800">Login Gagal</h3>
+                  <p className="text-sm text-red-600 mt-1">{state.error}</p>
+                </div>
+              </div>
+            )}
+
+            <form action={action} className="space-y-5">
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-1.5" htmlFor="username">Username</label>
+                <input
+                  id="username"
+                  name="username"
+                  type="text"
+                  required
+                  autoComplete="username"
+                  placeholder="Masukkan username"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-1.5" htmlFor="password">Password</label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  autoComplete="current-password"
+                  placeholder="••••••••"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={pending}
+                className="w-full mt-2 py-3.5 px-4 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-all disabled:opacity-70 disabled:cursor-not-allowed shadow-lg shadow-slate-900/20"
+              >
+                {pending ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <>
+                    Masuk Dashboard
+                    <ArrowRight className="w-5 h-5" />
+                  </>
+                )}
+              </button>
+            </form>
+          </div>
+          
+          <p className="text-center text-sm text-slate-500 font-medium">
+            Sistem Internal Terenkripsi &bull; AndisLab ERP
           </p>
         </div>
-
-        {/* Glass Card */}
-        <div className="backdrop-blur-xl bg-white/[0.07] border border-white/[0.1] rounded-3xl p-8 shadow-2xl">
-          <div className="flex items-center gap-2 mb-6">
-            <Lock className="w-4 h-4 text-blue-400" />
-            <span className="text-sm font-semibold text-blue-300/80">
-              Area Terlindungi
-            </span>
-          </div>
-
-          {/* Error Message */}
-          {state?.error && (
-            <div className="mb-6 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-300 text-sm font-medium flex items-center gap-2">
-              <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              {state.error}
-            </div>
-          )}
-
-          <form action={action} className="space-y-5">
-            <div className="space-y-1.5">
-              <label htmlFor="username" className="text-sm font-semibold text-slate-300">
-                Username
-              </label>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                required
-                autoComplete="username"
-                placeholder="Masukkan username"
-                className="w-full px-4 py-3 rounded-xl bg-white/[0.06] border border-white/[0.1] text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <label htmlFor="password" className="text-sm font-semibold text-slate-300">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                autoComplete="current-password"
-                placeholder="Masukkan password"
-                className="w-full px-4 py-3 rounded-xl bg-white/[0.06] border border-white/[0.1] text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={pending}
-              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold text-sm shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-lg"
-            >
-              {pending ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Memproses...
-                </>
-              ) : (
-                "Masuk ke Dashboard"
-              )}
-            </button>
-          </form>
-        </div>
-
-        {/* Footer */}
-        <p className="text-center text-slate-500 text-xs mt-6">
-          © {new Date().getFullYear()} AndisLab — Distributor Alat Laboratorium
-        </p>
       </div>
     </div>
   );
