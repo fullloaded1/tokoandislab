@@ -65,15 +65,34 @@ export default async function HomePage() {
                   Tidak perlu menunggu pre-order! Dapatkan alat laboratorium unggulan kami yang siap kirim hari ini.
                 </p>
               </div>
+              <Link
+                href="/ready-stock"
+                className="hidden sm:inline-flex items-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-bold text-emerald-700 hover:bg-emerald-50 hover:shadow-lg transition-all duration-300 shrink-0"
+              >
+                Lihat Semua
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
             
             <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {readyStockProducts.map((product) => (
+              {readyStockProducts.slice(0, 4).map((product) => (
                 <div key={product.id} className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all hover:-translate-y-1">
                   <ProductCard product={product} />
                 </div>
               ))}
             </div>
+            
+            {readyStockProducts.length > 4 && (
+              <div className="mt-8 flex justify-center sm:hidden">
+                <Link
+                  href="/ready-stock"
+                  className="inline-flex items-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-bold text-emerald-700 hover:bg-emerald-50 transition-colors"
+                >
+                  Lihat Semua Ready Stock
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            )}
           </div>
         </section>
       )}

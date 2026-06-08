@@ -30,7 +30,9 @@ export default function Chatbot() {
         }`}
         aria-label="Tanya AndisBot"
       >
-        <MessageCircle className="h-6 w-6 group-hover:animate-pulse" />
+        <div className="w-8 h-8 -ml-2 drop-shadow-md">
+          <Lottie animationData={robotAnimation} loop={true} />
+        </div>
         <span className="font-semibold text-sm">Tanya AI Assistant</span>
         
         {/* Pulsing indicator */}
@@ -38,11 +40,6 @@ export default function Chatbot() {
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
           <span className="relative inline-flex rounded-full h-4 w-4 bg-red-500 border-2 border-white"></span>
         </span>
-        
-        {/* Floating Mascot */}
-        <div className="absolute -top-16 -left-4 w-20 h-20 pointer-events-none drop-shadow-xl animate-bounce">
-          <Lottie animationData={robotAnimation} loop={true} />
-        </div>
       </button>
 
       {/* Chat Window */}
