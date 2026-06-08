@@ -1,6 +1,6 @@
 import { groq } from '@ai-sdk/groq';
 import { google } from '@ai-sdk/google';
-import { streamText } from 'ai';
+import { streamText, embed } from 'ai';
 import { prisma } from '@/lib/db';
 import { formatRupiah } from '@/lib/products';
 
@@ -75,8 +75,36 @@ Instruksi Tambahan:
       return { role: m.role, content };
     });
 
-    const lastUserMessage = coreMessages.filter(m => m.role === 'user').pop();
+    const lastUserMessage = coreMessages.filter((m: any) => m.role === 'user').pop();
     const userText = lastUserMessage?.content || '';
+
+    // RAG Semantic Search
+    let ragContext = "";
+    try {
+      if (userText && userText.trim() !== '') {
+        const { embedding } = await embed({
+          model: google.textEmbeddingModel('text-embedding-004'),
+          value: userText,
+        });
+
+        // Prisma query for vector search. Note: pgvector <-> is distance, we order by distance
+        // Cast embedding array to vector string
+        const embeddingString = `[${embedding.join(',')}]`;
+        const documents: any[] = await prisma.$queryRaw`
+          SELECT title, content, 1 - (embedding <=> ${embeddingString}::vector) as similarity
+          FROM "DocumentKnowledge"
+          ORDER BY embedding <=> ${embeddingString}::vector
+          LIMIT 3
+        `;
+
+        if (documents && documents.length > 0 && documents[0].similarity > 0.5) {
+          ragContext = "\n\nInformasi Tambahan dari Manual Book & Brosur (RAG):\n" + documents.map(d => `--- [${d.title}] ---\n${d.content}`).join('\n\n');
+          systemPrompt += ragContext;
+        }
+      }
+    } catch (e) {
+      console.error("Vector search error (RAG):", e);
+    }
 
     // Create ChatLog placeholder
     const chatLog = await prisma.chatLog.create({
@@ -104,7 +132,7 @@ Instruksi Tambahan:
       }
     });
 
-    return result.toDataStreamResponse();
+    return result.toUIMessageStreamResponse();
   } catch (error) {
     console.error('Chat API Error:', error);
     return new Response('Internal Server Error', { status: 500 });

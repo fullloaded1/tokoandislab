@@ -97,7 +97,7 @@ export default async function AIAnalyticsPage() {
                   </td>
                 </tr>
               ) : (
-                chatLogs.map((log) => (
+                chatLogs.map((log: any) => (
                   <tr key={log.id} className="hover:bg-slate-50 transition-colors">
                     <td className="px-6 py-4 align-top">
                       <div className="text-xs text-slate-500 mb-1">
