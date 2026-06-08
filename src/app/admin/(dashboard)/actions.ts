@@ -170,3 +170,23 @@ export async function updateInquiryStatus(inquiryId: string, status: string) {
     return { success: false, error: "Gagal mengupdate status inquiry" };
   }
 }
+
+export async function getInquiries() {
+  try {
+    const inquiries = await prisma.inquiry.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: {
+        institution: {
+          include: { contacts: true }
+        },
+        items: {
+          include: { product: true }
+        }
+      }
+    });
+    return { success: true, data: inquiries };
+  } catch (error) {
+    console.error("Failed to fetch inquiries:", error);
+    return { success: false, error: "Gagal mengambil data inquiry" };
+  }
+}

@@ -3,13 +3,15 @@
 import { useState } from "react";
 import { FileText, Building, Calendar, FileDown, MessageCircle, Send, CheckCircle } from "lucide-react";
 import { formatRupiah } from "@/lib/products";
-import { createActivityLog } from "../../actions";
+import { createActivityLog, updateInquiryStatus } from "../../actions";
 import { useRouter } from "next/navigation";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { useToast } from "@/components/Toast";
 
 export default function InquiryDetailClient({ initialData }: { initialData: any }) {
   const router = useRouter();
+  const { showToast } = useToast();
   const [logAction, setLogAction] = useState("CALL");
   const [logDesc, setLogDesc] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -32,7 +34,7 @@ export default function InquiryDetailClient({ initialData }: { initialData: any 
     router.refresh();
   };
 
-  const generatePDF = () => {
+  const generatePDF = async () => {
     const doc = new jsPDF();
     
     // Header
@@ -91,6 +93,15 @@ export default function InquiryDetailClient({ initialData }: { initialData: any 
     doc.text("PT. AndisLab Indonesia", 14, finalY + 65);
 
     doc.save(`Quotation_${initialData.inquiryNo}.pdf`);
+
+    // Automasi: Ubah status ke QUOTED setelah mencetak PDF
+    if (initialData.status !== "QUOTED" && initialData.status !== "WON") {
+      await updateInquiryStatus(initialData.id, "QUOTED");
+      showToast("PDF Quotation berhasil diunduh. Status otomatis diubah menjadi Quotation Sent.", "success");
+      router.refresh();
+    } else {
+      showToast("PDF Quotation berhasil diunduh.", "success");
+    }
   };
 
   const getWaLink = () => {

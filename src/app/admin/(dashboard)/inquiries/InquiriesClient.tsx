@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
-import { updateInquiryStatus } from "../actions";
+import { updateInquiryStatus, getInquiries } from "../actions";
 import { Calendar, Building, FileText, CheckCircle, Clock, XCircle, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { formatRupiah } from "@/lib/products";
+import { useToast } from "@/components/Toast";
 
 const COLUMNS = [
   { id: "NEW", title: "New Lead", icon: AlertCircle, color: "border-yellow-200 bg-yellow-50", headerBg: "bg-yellow-100 text-yellow-800" },
@@ -18,12 +19,30 @@ const COLUMNS = [
 export default function InquiriesClient({ initialInquiries }: { initialInquiries: any[] }) {
   const [inquiries, setInquiries] = useState(initialInquiries);
   const [isMounted, setIsMounted] = useState(false);
+  const isDraggingRef = useRef(false);
+  const { showToast } = useToast();
 
   useEffect(() => {
     setIsMounted(true);
+
+    // Polling every 15 seconds to get new leads
+    const interval = setInterval(async () => {
+      if (isDraggingRef.current) return; // Do not update state while user is dragging
+      const res = await getInquiries();
+      if (res.success && res.data && !isDraggingRef.current) {
+        setInquiries(res.data);
+      }
+    }, 15000);
+
+    return () => clearInterval(interval);
   }, []);
 
+  const onDragStart = () => {
+    isDraggingRef.current = true;
+  };
+
   const onDragEnd = async (result: DropResult) => {
+    isDraggingRef.current = false;
     const { destination, source, draggableId } = result;
 
     if (!destination) return;
@@ -48,6 +67,10 @@ export default function InquiriesClient({ initialInquiries }: { initialInquiries
     updatedInquiries[draggedInquiryIndex].status = newStatus;
     setInquiries(updatedInquiries);
 
+    if (newStatus === "REVIEWING") {
+      showToast("Kartu digeser ke Follow Up. Jangan lupa hubungi klien via WhatsApp/Email!", "info");
+    }
+
     // Call server action
     try {
       const res = await updateInquiryStatus(draggableId, newStatus);
@@ -55,7 +78,7 @@ export default function InquiriesClient({ initialInquiries }: { initialInquiries
         // Revert on error
         updatedInquiries[draggedInquiryIndex].status = oldStatus;
         setInquiries([...updatedInquiries]);
-        alert(res.error || "Gagal mengupdate status");
+        showToast(res.error || "Gagal mengupdate status", "error");
       }
     } catch (error) {
       console.error(error);
@@ -74,14 +97,14 @@ export default function InquiriesClient({ initialInquiries }: { initialInquiries
   if (!isMounted) return null; // Prevent hydration errors for DragDropContext
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div className="flex gap-6 overflow-x-auto pb-8 h-[calc(100vh-140px)] items-start">
+    <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
+      <div className="flex gap-4 overflow-x-auto pb-8 h-[calc(100vh-140px)] items-start snap-x snap-mandatory">
         {COLUMNS.map(column => {
           const colInquiries = getInquiriesByStatus(column.id);
           const Icon = column.icon;
 
           return (
-            <div key={column.id} className={`flex-shrink-0 w-80 rounded-2xl border ${column.color} flex flex-col h-full overflow-hidden shadow-sm`}>
+            <div key={column.id} className={`flex-shrink-0 w-[280px] xl:w-auto xl:flex-1 snap-center rounded-2xl border ${column.color} flex flex-col h-full overflow-hidden shadow-sm`}>
               <div className={`px-4 py-3 border-b ${column.color} ${column.headerBg} flex items-center justify-between`}>
                 <div className="flex items-center gap-2 font-bold">
                   <Icon className="h-4 w-4" />
