@@ -6,6 +6,7 @@ export default function BrandLogos() {
     { name: "Pyrex", src: "/images/pyrexlogo.PNG" },
     { name: "Daihan LabTech", src: "/images/daihanlabtechlogo.png" },
     { name: "Merck", src: "/images/Logo_Merck_KGaA_2015.svg.png" },
+    { name: "Yuasa Battery", src: "/images/logos/yuasa_battery_cropped.jpg" },
   ];
 
   return (
@@ -15,7 +16,7 @@ export default function BrandLogos() {
           AUTHORIZED DISTRIBUTOR RESMI
         </h2>
         
-        <div className="flex flex-wrap justify-center items-center gap-12 sm:gap-20">
+        <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-12 lg:gap-16">
           {brands.map((brand) => (
             <div
               key={brand.name}
