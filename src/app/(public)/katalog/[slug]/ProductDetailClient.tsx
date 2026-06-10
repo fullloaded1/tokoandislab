@@ -71,22 +71,15 @@ export default function ProductDetailClient({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
         {/* Product Image */}
         <div className="relative">
-          <div className="relative aspect-square overflow-hidden rounded-[2rem] border border-slate-100 bg-gradient-to-br from-slate-50 to-slate-100 shadow-lg">
+          <div className="relative aspect-square overflow-hidden rounded-[2rem] border border-slate-100 bg-white shadow-lg">
             <Image
               src={product.image}
               alt={product.name}
               fill
-              className="object-contain p-6 mix-blend-multiply"
+              className="object-contain p-6"
               sizes="(max-width: 1024px) 100vw, 50vw"
               priority
             />
-          </div>
-          {/* Category Badge */}
-          <div className="absolute top-4 left-4">
-            <span className="inline-flex items-center gap-1.5 rounded-xl bg-white/90 backdrop-blur px-4 py-2 text-sm font-semibold text-blue-700 shadow-lg">
-              <Package className="h-4 w-4" />
-              {product.categoryLabel}
-            </span>
           </div>
         </div>
 

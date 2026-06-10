@@ -5,7 +5,7 @@ import { ChevronRight } from "lucide-react";
 
 export const metadata = {
   title: "Produk Ready Stock — AndisLab",
-  description: "Daftar produk peralatan laboratorium unggulan yang tersedia (ready stock) dan siap dikirim hari ini.",
+  description: "STOCK Terbatas! Segera pre-ORDER hubungi kami barang siap kirim ke instansi/perusahaan Anda.Dapatkan diskon khusus jika beli hari ini.",
 };
 
 export const dynamic = "force-dynamic";
@@ -41,7 +41,7 @@ export default async function ReadyStockPage() {
           Produk <span className="text-emerald-600">Ready Stock</span>
         </h1>
         <p className="text-base text-slate-500 max-w-2xl">
-          Tidak perlu menunggu pre-order! Berikut adalah daftar peralatan laboratorium kami yang siap dikirim ke instansi Anda hari ini juga.
+          STOCK Terbatas! Segera pre-ORDER hubungi kami barang siap kirim ke instansi/perusahaan Anda.Dapatkan diskon khusus jika beli hari ini.
         </p>
       </div>
 

@@ -48,15 +48,14 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
         href={`/katalog/${product.slug}`}
         className="group flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-1"
       >
-        <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100">
+        <div className="relative aspect-square overflow-hidden bg-white border-b border-slate-100">
           <Image
             src={product.image}
             alt={product.name}
             fill
-            className="object-contain p-3 transition-transform duration-500 group-hover:scale-110 mix-blend-multiply"
+            className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
             sizes="200px"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
         <div className="p-3">
           <p className="text-xs font-medium text-cyan-600 mb-1">
@@ -79,22 +78,14 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
       className="group flex flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1 h-full"
     >
       {/* Image */}
-      <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-white border-b border-slate-100">
         <Image
           src={product.image}
           alt={product.name}
           fill
-          className="object-contain p-4 transition-transform duration-700 group-hover:scale-110 mix-blend-multiply"
+          className="object-contain p-6 transition-transform duration-500 group-hover:scale-105"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-        {/* Category Badge */}
-        <div className="absolute top-3 left-3">
-          <span className="inline-flex items-center rounded-xl bg-white/90 backdrop-blur-sm px-3 py-1 text-xs font-semibold text-blue-700 shadow-sm">
-            {product.categoryLabel}
-          </span>
-        </div>
       </div>
 
       {/* Content */}

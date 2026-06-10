@@ -62,7 +62,7 @@ export default async function HomePage() {
                   Produk <span className="text-yellow-300">Ready Stock</span>
                 </h2>
                 <p className="text-teal-50 max-w-xl">
-                  Tidak perlu menunggu pre-order! Dapatkan alat laboratorium unggulan kami yang siap kirim hari ini.
+                  STOCK Terbatas! Segera pre-ORDER hubungi kami barang siap kirim ke instansi/perusahaan Anda.Dapatkan diskon khusus jika beli hari ini.
                 </p>
               </div>
               <Link

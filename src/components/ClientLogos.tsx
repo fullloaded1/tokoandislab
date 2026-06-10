@@ -29,7 +29,7 @@ export default function ClientLogos() {
           {clients.map((client, idx) => (
             <div
               key={idx}
-              className="relative w-24 h-24 sm:w-32 sm:h-32 flex items-center justify-center mix-blend-multiply grayscale hover:grayscale-0 transition-all duration-500 hover:scale-110"
+              className="relative w-24 h-24 sm:w-32 sm:h-32 flex items-center justify-center transition-all duration-500 hover:scale-110"
               title={client.name}
             >
               <Image

@@ -124,13 +124,13 @@ export default function HeroSection({ featuredProducts = [] }: { featuredProduct
                 </div>
 
                 {/* Image Right */}
-                <div className="absolute right-0 bottom-0 md:relative w-full md:w-1/2 h-full flex items-center justify-end md:justify-center p-8 opacity-30 md:opacity-100 z-10">
+                <div className="absolute right-0 bottom-0 md:relative w-full md:w-1/2 h-full flex items-center justify-end md:justify-center p-8 opacity-20 md:opacity-100 z-10">
                   <div className="relative w-64 h-64 sm:w-80 sm:h-80 lg:w-[400px] lg:h-[400px]">
                     <Image
                       src={product.image}
                       alt={product.name}
                       fill
-                      className="object-contain filter drop-shadow-2xl mix-blend-multiply"
+                      className="object-contain drop-shadow-lg"
                       priority={index === 0}
                       sizes="(max-width: 768px) 256px, 400px"
                     />
