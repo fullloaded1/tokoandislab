@@ -3,32 +3,45 @@ import { prisma } from "@/lib/db";
 import ProductDetailClient from "./ProductDetailClient";
 import type { Metadata } from "next";
 
+import { cache } from "react";
+
+// Memoize the product fetch so it's only executed once per request
+const getProduct = cache(async (slug: string) => {
+  return await prisma.product.findUnique({
+    where: { slug },
+    include: { specs: true }
+  });
+});
+
 export async function generateMetadata(
   props: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   const { slug } = await props.params;
-  const product = await prisma.product.findUnique({ where: { slug } });
+  const product = await getProduct(slug);
   if (!product) return {};
   return {
-    title: `${product.name} — AndisLab`,
+    title: `${product.name} | Jual Alat Laboratorium — AndisLab`,
     description: product.description,
     openGraph: {
-      title: `${product.name} — AndisLab`,
+      title: `${product.name} | Jual Alat Laboratorium — AndisLab`,
       description: product.description,
       images: [
         {
           url: product.image,
           width: 800,
           height: 800,
-          alt: product.name,
+          alt: `${product.name} - AndisLab`,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${product.name} — AndisLab`,
+      title: `${product.name} | Jual Alat Laboratorium — AndisLab`,
       description: product.description,
       images: [product.image],
+    },
+    alternates: {
+      canonical: `https://andislabs.com/katalog/${product.slug}`,
     },
   };
 }
@@ -37,23 +50,56 @@ export default async function ProductDetailPage(
   props: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await props.params;
-  const product = await prisma.product.findUnique({
-    where: { slug },
-    include: { specs: true }
-  });
+  const product = await getProduct(slug);
 
   if (!product) {
     notFound();
   }
 
-  // Fetch related products (same category, excluding current product)
-  const relatedProducts = await prisma.product.findMany({
-    where: { 
-      category: product.category,
-      NOT: { id: product.id }
-    },
-    take: 3,
-  });
+  // Fetch variants concurrently with related products
+  const [variants, relatedProductsBase] = await Promise.all([
+    prisma.product.findMany({
+      where: {
+        name: product.name,
+        brand: product.brand,
+      },
+      select: {
+        id: true,
+        slug: true,
+        model: true,
+        subcategory: true,
+      },
+      orderBy: {
+        model: 'asc'
+      }
+    }),
+    prisma.product.findMany({
+      where: { 
+        category: product.category,
+        subcategory: product.subcategory,
+        NOT: { id: product.id }
+      },
+      take: 3,
+    })
+  ]);
+
+  let relatedProducts = relatedProductsBase;
+
+  // If we don't have enough from the same subcategory, fallback to the same category
+  if (relatedProducts.length < 3) {
+    const additionalProducts = await prisma.product.findMany({
+      where: {
+        category: product.category,
+        NOT: {
+          id: {
+            in: [product.id, ...relatedProducts.map(p => p.id)]
+          }
+        }
+      },
+      take: 3 - relatedProducts.length,
+    });
+    relatedProducts = [...relatedProducts, ...additionalProducts];
+  }
 
   return (
     <>
@@ -87,7 +133,11 @@ export default async function ProductDetailPage(
           }),
         }}
       />
-      <ProductDetailClient product={product as any} relatedProducts={relatedProducts as any} />
+      <ProductDetailClient 
+        product={product as any} 
+        relatedProducts={relatedProducts as any}
+        variants={variants}
+      />
     </>
   );
 }

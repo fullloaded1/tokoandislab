@@ -175,14 +175,27 @@ export default function Chatbot() {
                   <div className="prose prose-sm max-w-none">
                     <ReactMarkdown
                       components={{
-                        a: ({ node, ...props }) => (
-                          <a 
-                            {...props} 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            className={m.role === 'user' ? "text-blue-200 underline hover:text-white" : "text-blue-600 underline hover:text-blue-800"} 
-                          />
-                        ),
+                        a: ({ node, href, ...props }) => {
+                          let finalHref = href || "";
+                          if (finalHref.includes("wa.me")) {
+                            try {
+                              const urlObj = new URL(finalHref);
+                              const text = urlObj.searchParams.get("text") || "";
+                              finalHref = `/api/wa-redirect?source=chatbot&text=${encodeURIComponent(text)}`;
+                            } catch {
+                              finalHref = `/api/wa-redirect?source=chatbot`;
+                            }
+                          }
+                          return (
+                            <a 
+                              {...props} 
+                              href={finalHref}
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className={m.role === 'user' ? "text-blue-200 underline hover:text-white" : "text-blue-600 underline hover:text-blue-800"} 
+                            />
+                          );
+                        },
                         p: ({ node, ...props }) => <p className="mb-2 last:mb-0" {...props} />,
                         ul: ({ node, ...props }) => <ul className="list-disc ml-4 mb-2" {...props} />,
                         ol: ({ node, ...props }) => <ol className="list-decimal ml-4 mb-2" {...props} />,
@@ -216,7 +229,7 @@ export default function Chatbot() {
                 Untuk respon yang lebih cepat, Anda bisa langsung terhubung dengan tim kami!
               </p>
               <a 
-                href="https://wa.me/6282125523466" 
+                href="/api/wa-redirect?source=chatbot_error&text=Halo%20AndisLab%2C%20saya%20butuh%20bantuan%20karena%20sistem%20sedang%20sibuk." 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="bg-[#25D366] hover:bg-[#1ebd5b] text-white font-semibold py-2 px-5 rounded-full text-sm transition-colors shadow-sm"

@@ -2,9 +2,9 @@ import { Suspense } from "react";
 import KatalogClient from "./KatalogClient";
 
 export const metadata = {
-  title: "Katalog Produk — AndisLab",
+  title: "Katalog Alat Laboratorium & Reagen Terlengkap — AndisLab",
   description:
-    "Jelajahi katalog lengkap peralatan laboratorium dari Lovibond, Daihan Labtech, Pyrex, dan furnitur lab custom Andis Lab.",
+    "Jelajahi katalog harga alat laboratorium, bahan kimia lab, reagen air Lovibond, inkubator Daihan Labtech, glassware Pyrex original, dan furnitur lab custom dari distributor resmi AndisLab.",
 };
 
 function KatalogLoading() {
@@ -29,7 +29,8 @@ function KatalogLoading() {
 
 import { prisma } from "@/lib/db";
 
-export const dynamic = "force-dynamic";
+// ISR: revalidate setiap 60 detik
+export const revalidate = 60;
 
 export default async function KatalogPage() {
   const products = await prisma.product.findMany({

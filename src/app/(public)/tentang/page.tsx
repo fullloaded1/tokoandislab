@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { ShieldCheck, Users, Award, Beaker, MapPin, Phone, Mail, MessageCircle } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Tentang Kami — AndisLab",
+  title: "Tentang Kami: Distributor Alat Laboratorium Resmi — AndisLab",
   description:
-    "AndisLab adalah distributor alat laboratorium terpercaya di Indonesia sejak 2010.",
+    "AndisLab adalah distributor resmi alat laboratorium terpercaya di Indonesia sejak 2010. Menyediakan bahan kimia, reagen, dan furniture lab custom berkualitas.",
 };
 
 const stats = [
@@ -56,7 +56,7 @@ export default function TentangPage() {
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
           <div className="max-w-3xl">
             <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-6">
-              Tentang AndisLab
+              Tentang AndisLab: Distributor Alat Laboratorium Resmi
             </h1>
             <p className="text-lg sm:text-xl text-blue-100 leading-relaxed">
               Kami adalah distributor alat laboratorium terpercaya yang melayani
@@ -218,7 +218,7 @@ export default function TentangPage() {
 
               <div className="mt-10">
                 <a
-                  href="https://wa.me/6282125523466?text=Halo%20AndisLab,%20saya%20ingin%20berkonsultasi..."
+                  href="?wa=open&source=about_page&text=Halo%20AndisLab,%20saya%20ingin%20berkonsultasi..."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-2xl bg-[#25D366] px-6 py-4 text-base font-bold text-white shadow-lg shadow-[#25D366]/30 hover:shadow-xl hover:shadow-[#25D366]/40 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"

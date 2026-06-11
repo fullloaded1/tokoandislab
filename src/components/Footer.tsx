@@ -6,6 +6,7 @@ const categories = [
   { href: "/katalog?category=daihan-labtech", label: "Daihan Labtech" },
   { href: "/katalog?category=pyrex", label: "Pyrex®" },
   { href: "/katalog?category=andislab-custom", label: "Andislab Custom" },
+  { href: "/katalog?category=yuasa-battery", label: "Yuasa Battery" },
 ];
 
 export default function Footer() {
@@ -78,7 +79,12 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3 text-sm text-slate-400">
                 <Phone className="h-4 w-4 shrink-0 text-cyan-500" />
-                <a href="https://wa.me/6282125523466" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 transition-colors">
+                <a 
+                  href="?wa=open&source=footer&text=Halo%20AndisLab%2C%20saya%20ingin%20konsultasi%20produk." 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="hover:text-cyan-400 transition-colors"
+                >
                   0821-2552-3466
                 </a>
               </li>

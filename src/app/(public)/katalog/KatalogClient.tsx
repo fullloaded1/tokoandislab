@@ -8,6 +8,7 @@ import type { Product as PrismaProduct } from "@prisma/client";
 import {
   CATEGORY_LABELS,
   type Category,
+  getGroupedProducts
 } from "@/lib/products";
 
 const categories: { key: Category | "semua"; label: string }[] = [
@@ -19,13 +20,14 @@ const categories: { key: Category | "semua"; label: string }[] = [
 ];
 
 export default function KatalogClient({ initialProducts = [] }: { initialProducts: PrismaProduct[] }) {
-  const products: PrismaProduct[] = initialProducts;
+  const products = useMemo(() => getGroupedProducts(initialProducts), [initialProducts]);
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") || "";
 
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [activeCategory, setActiveCategory] = useState<Category | "semua">("semua");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showOnlyReadyStock, setShowOnlyReadyStock] = useState(false);
 
   useEffect(() => {
     setSearchQuery(initialQuery);
@@ -40,9 +42,11 @@ export default function KatalogClient({ initialProducts = [] }: { initialProduct
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.categoryLabel.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCategory && matchesSearch;
+      const matchesReadyStock = !showOnlyReadyStock || p.isReadyStock;
+      
+      return matchesCategory && matchesSearch && matchesReadyStock;
     });
-  }, [activeCategory, searchQuery]);
+  }, [activeCategory, searchQuery, showOnlyReadyStock, products]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
@@ -189,26 +193,53 @@ export default function KatalogClient({ initialProducts = [] }: { initialProduct
 
         {/* Product Grid */}
         <div className="flex-1">
+          {/* Status Filter Tabs (Semua vs Ready Stock) */}
+          <div className="mb-6 flex items-center justify-between flex-wrap gap-4">
+            <div className="flex bg-slate-100/80 p-1.5 rounded-2xl">
+              <button
+                onClick={() => setShowOnlyReadyStock(false)}
+                className={`px-5 py-2 text-sm font-bold rounded-xl transition-all ${
+                  !showOnlyReadyStock
+                    ? "bg-white text-slate-800 shadow-sm"
+                    : "text-slate-500 hover:text-slate-700"
+                }`}
+              >
+                Semua Produk
+              </button>
+              <button
+                onClick={() => setShowOnlyReadyStock(true)}
+                className={`px-5 py-2 text-sm font-bold rounded-xl transition-all flex items-center gap-2 ${
+                  showOnlyReadyStock
+                    ? "bg-emerald-100 text-emerald-800 shadow-sm ring-1 ring-emerald-200"
+                    : "text-slate-500 hover:text-emerald-700"
+                }`}
+              >
+                🔥 Ready Stock
+              </button>
+            </div>
+            
+            <p className="text-sm text-slate-500">
+              Menampilkan{" "}
+              <span className="font-semibold text-slate-700">
+                {filteredProducts.length}
+              </span>{" "}
+              produk
+              {searchQuery && (
+                <>
+                  {" "}
+                  untuk &ldquo;
+                  <span className="font-semibold text-blue-600">
+                    {searchQuery}
+                  </span>
+                  &rdquo;
+                </>
+              )}
+            </p>
+          </div>
+
           {filteredProducts.length > 0 ? (
             <>
-              <p className="text-sm text-slate-500 mb-6">
-                Menampilkan{" "}
-                <span className="font-semibold text-slate-700">
-                  {filteredProducts.length}
-                </span>{" "}
-                produk
-                {searchQuery && (
-                  <>
-                    {" "}
-                    untuk &ldquo;
-                    <span className="font-semibold text-blue-600">
-                      {searchQuery}
-                    </span>
-                    &rdquo;
-                  </>
-                )}
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 stagger-children">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 stagger-children">
                 {filteredProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}

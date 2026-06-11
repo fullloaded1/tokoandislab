@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCart, Check } from "lucide-react";
+import { ShoppingCart, Check, FileText } from "lucide-react";
 import { useRFQStore } from "@/store/useRFQStore";
 import { useState } from "react";
 import { formatRupiah } from "@/lib/products";
@@ -24,49 +24,54 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
     // Toast provider may not be available in some contexts
   }
 
+  const displayName = product.isReadyStock && product.model ? `${product.name} - ${product.model}` : product.name;
+
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     addItem({
       id: product.id,
       slug: product.slug,
-      name: product.name,
+      name: displayName,
       image: product.image,
       category: product.categoryLabel,
       price: product.price,
     });
     setAdded(true);
-    toast?.showToast(`${product.name} ditambahkan ke keranjang`, "success");
+    toast?.showToast(`${displayName} ditambahkan ke keranjang`, "success");
     setTimeout(() => setAdded(false), 1500);
   };
-
-  const hasPrice = product.price && product.price > 0;
 
   if (compact) {
     return (
       <Link
         href={`/katalog/${product.slug}`}
-        className="group flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-1"
+        className="group flex flex-col overflow-hidden rounded-[1.5rem] bg-white transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1"
       >
-        <div className="relative aspect-square overflow-hidden bg-white border-b border-slate-100">
+        <div className="relative aspect-square overflow-hidden bg-[#f8f9fa] rounded-[1.5rem] p-4 flex items-center justify-center transition-colors group-hover:bg-slate-100/80">
           <Image
             src={product.image}
-            alt={product.name}
+            alt={displayName}
             fill
-            className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+            className="object-contain p-6 transition-transform duration-500 group-hover:scale-110 drop-shadow-md"
             sizes="200px"
           />
+          {product.variantCount > 1 && (
+            <div className="absolute top-3 right-3 z-10">
+              <span className="inline-flex items-center rounded-full bg-white/90 backdrop-blur-md px-2.5 py-1 text-[10px] font-bold text-slate-800 shadow-sm border border-slate-100/50">
+                {product.variantCount} Tipe
+              </span>
+            </div>
+          )}
         </div>
-        <div className="p-3">
-          <p className="text-xs font-medium text-cyan-600 mb-1">
-            {product.categoryLabel}
+        <div className="px-2 pt-4 pb-2">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">
+            {product.brand || product.categoryLabel}
           </p>
-          <p className="text-sm font-semibold text-slate-800 line-clamp-2 leading-snug mb-1">
-            {product.name}
+          <p className="text-sm font-extrabold text-slate-900 line-clamp-2 leading-snug mb-1">
+            {displayName}
           </p>
-          <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-xs font-semibold text-amber-600">
-            💬 Minta Penawaran Dulu
-          </span>
+
         </div>
       </Link>
     );
@@ -75,56 +80,61 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
   return (
     <Link
       href={`/katalog/${product.slug}`}
-      className="group flex flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1 h-full"
+      className="group flex flex-col overflow-hidden rounded-[2rem] bg-white transition-all duration-300 hover:shadow-2xl hover:shadow-slate-200/50 hover:-translate-y-1 h-full"
     >
-      {/* Image */}
-      <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-white border-b border-slate-100">
+      {/* Image Area - Studio Look */}
+      <div className="relative aspect-square w-full shrink-0 overflow-hidden bg-[#f8f9fa] rounded-[2rem] transition-colors group-hover:bg-[#f1f3f5]">
         <Image
           src={product.image}
-          alt={product.name}
+          alt={displayName}
           fill
-          className="object-contain p-6 transition-transform duration-500 group-hover:scale-105"
+          className="object-contain p-8 transition-transform duration-700 group-hover:scale-110 drop-shadow-xl"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
-      </div>
-
-      {/* Content */}
-      <div className="flex flex-col flex-1 p-5">
-        <h3 className="text-base font-bold text-slate-800 group-hover:text-blue-700 transition-colors line-clamp-2 min-h-[3rem] mb-2">
-          {product.name}
-        </h3>
-        <p className="text-sm text-slate-500 line-clamp-2 min-h-[2.5rem] mb-4 leading-relaxed">
-          {product.description}
-        </p>
         
-        <div className="mt-auto flex flex-col gap-4">
-          <div>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-200 px-3 py-1 text-sm font-semibold text-amber-600">
-              💬 Minta Penawaran Dulu
+        {/* Floating Badges inside Image Area */}
+        {product.variantCount > 1 && (
+          <div className="absolute top-4 right-4 z-10">
+            <span className="inline-flex items-center rounded-2xl bg-white/90 backdrop-blur-sm px-3 py-1.5 text-xs font-bold text-slate-800 shadow-sm">
+              {product.variantCount} Varian
             </span>
           </div>
+        )}
+      </div>
 
-          {/* CTA */}
+      {/* Content Area - Minimalist */}
+      <div className="flex flex-col flex-1 px-4 pt-5 pb-5">
+        <div className="mb-4">
+           <p className="text-xs font-bold uppercase tracking-[0.15em] text-slate-400 mb-2 truncate">
+             {product.brand || product.categoryLabel}
+           </p>
+           <h3 className="text-lg font-black text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2 leading-tight">
+             {displayName}
+           </h3>
+
+        </div>
+        
+        {/* Price and CTA */}
+        <div className="mt-auto flex items-center justify-between gap-3 pt-2">
+          {/* Price or Tag */}
+          <div className="flex-1">
+             <span className="text-sm font-bold text-slate-600">
+               Minta Penawaran
+             </span>
+          </div>
+
+          {/* Quick Action Button - Minimalist Circular or Sleek Pill */}
           <button
             onClick={handleAdd}
             disabled={added}
-            className={`flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-sm font-semibold transition-all duration-300 ${
+            className={`flex items-center justify-center h-11 px-4 rounded-2xl text-sm font-bold transition-all duration-300 ${
               added
-                ? "bg-green-50 text-green-600 border border-green-200"
-                : "bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0"
+                ? "bg-emerald-50 text-emerald-600"
+                : "bg-slate-900 text-white hover:bg-blue-600 hover:shadow-lg hover:shadow-blue-600/20"
             }`}
           >
-            {added ? (
-              <>
-                <Check className="h-4 w-4" />
-                Ditambahkan!
-              </>
-            ) : (
-              <>
-                <ShoppingCart className="h-4 w-4" />
-                Tambah ke Keranjang
-              </>
-            )}
+            {added ? <Check className="h-4 w-4 mr-2" /> : <ShoppingCart className="h-4 w-4 lg:mr-2" />}
+            <span className="hidden lg:inline">{added ? "Dimasukkan" : "Tambah"}</span>
           </button>
         </div>
       </div>

@@ -30,7 +30,7 @@ export default function InquiryPage() {
           </p>
           <div className="flex flex-col gap-3">
             <a
-              href={`https://wa.me/6282125523466?text=${encodeURIComponent(
+              href={`/api/wa-redirect?source=rfq_success&inquiryNo=${encodeURIComponent(successQuoteNo)}&text=${encodeURIComponent(
                 `Halo Tim AndisLab, saya baru saja mengajukan penawaran harga via website dengan Nomor Referensi *${successQuoteNo}*. Mohon segera diproses, terima kasih!`
               )}`}
               target="_blank"

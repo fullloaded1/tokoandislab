@@ -33,6 +33,7 @@ model Product {
   inquiryItems     InquiryItem[]
   installedBases   InstalledBase[]
   documentKnowledges DocumentKnowledge[]
+  whatsAppLogs     WhatsAppLog[]
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
 }
@@ -206,4 +207,20 @@ model DocumentKnowledge {
   createdAt DateTime @default(now())
 
   product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model WhatsAppLog {
+  id              String   @id @default(cuid())
+  source          String
+  productName     String?
+  productId       String?
+  inquiryNo       String?
+  messageText     String?  @db.Text
+  leadName        String?
+  leadInstitution String?
+  leadPhone       String?
+  status          String   @default("NEW") // NEW, CONTACTED, OFFERS, WON, LOST
+  createdAt       DateTime @default(now())
+
+  product     Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
 }

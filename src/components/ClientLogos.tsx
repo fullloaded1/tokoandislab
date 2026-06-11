@@ -1,44 +1,73 @@
 import Image from "next/image";
 
-export default function ClientLogos() {
-  const clients = [
-    { name: "Institut Teknologi Bandung", src: "/images/logos/ITB.png" },
-    { name: "Universitas Indonesia", src: "/images/logos/UI.png" },
-    { name: "Institut Pertanian Bogor", src: "/images/logos/ipb.png" },
-    { name: "Universitas Sumatera Utara", src: "/images/logos/usu.png" },
-    { name: "Universitas Jenderal Achmad Yani", src: "/images/logos/Logo_Unjani.png" },
-    { name: "Japfa", src: "/images/logos/japfa.png" },
-    { name: "Sari Roti", src: "/images/logos/sari roti.png" },
-    { name: "Sego Lab", src: "/images/logos/sego lab.jpg" },
-    { name: "Vicma Lab", src: "/images/logos/vicmalab.png" },
-    { name: "Client 1", src: "/images/logos/images.jpg" },
-    { name: "Client 2", src: "/images/logos/images.png" },
-  ];
+const clientGroups = [
+  {
+    label: "Instansi Pemerintah & BUMN",
+    clients: [
+      { name: "Kementerian Kesehatan RI", src: "/images/logos/images.png" },
+      { name: "PLN", src: "/images/logos/pln.png" },
+      { name: "PLN Icon+", src: "/images/logos/pln icon plus.png" },
+      { name: "BRIN", src: "/images/logos/logo brin.png" },
+      { name: "PDAM Tirtawening", src: "/images/logos/pdam logo.png" },
+      { name: "LPKL Tirtawening", src: "/images/logos/lplk logo.jpg" },
+    ],
+  },
+  {
+    label: "Institusi Pendidikan",
+    clients: [
+      { name: "Institut Teknologi Bandung", src: "/images/logos/ITB.png" },
+      { name: "Universitas Indonesia", src: "/images/logos/UI.png" },
+      { name: "Institut Pertanian Bogor", src: "/images/logos/ipb.png" },
+      { name: "Universitas Sumatera Utara", src: "/images/logos/usu.png" },
+      { name: "Universitas Jenderal Achmad Yani", src: "/images/logos/Logo_Unjani.png" },
+    ],
+  },
+  {
+    label: "Perusahaan & Laboratorium",
+    clients: [
+      { name: "Bayer", src: "/images/logos/images.jpg" },
+      { name: "Japfa", src: "/images/logos/japfa.png" },
+      { name: "Sari Roti", src: "/images/logos/sari roti.png" },
+      { name: "Sego Lab", src: "/images/logos/sego lab.jpg" },
+      { name: "Vicma Lab", src: "/images/logos/vicmalab.png" },
+    ],
+  },
+];
 
+export default function ClientLogos() {
   return (
-    <section className="bg-slate-50 py-20 border-y border-slate-200">
+    <section className="bg-gradient-to-b from-slate-50 to-white py-20 border-y border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-2xl font-extrabold text-slate-800 tracking-tight mb-2">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight mb-2">
           Telah Dipercaya Oleh
         </h2>
-        <p className="text-slate-500 mb-12">
-          Ratusan instansi pendidikan, rumah sakit, dan perusahaan terkemuka di Indonesia
+        <p className="text-slate-500 mb-14 max-w-2xl mx-auto">
+          Ratusan instansi pemerintah, universitas, rumah sakit, dan perusahaan terkemuka di Indonesia
         </p>
 
-        <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-12 lg:gap-16">
-          {clients.map((client, idx) => (
-            <div
-              key={idx}
-              className="relative w-24 h-24 sm:w-32 sm:h-32 flex items-center justify-center transition-all duration-500 hover:scale-110"
-              title={client.name}
-            >
-              <Image
-                src={client.src}
-                alt={client.name}
-                fill
-                className="object-contain"
-                sizes="(max-width: 640px) 96px, 128px"
-              />
+        <div className="space-y-12">
+          {clientGroups.map((group) => (
+            <div key={group.label}>
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-6">
+                {group.label}
+              </p>
+              <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 gap-4 sm:gap-6 max-w-4xl mx-auto">
+                {group.clients.map((client, idx) => (
+                  <div
+                    key={idx}
+                    className="group relative flex items-center justify-center rounded-2xl border border-slate-100 bg-white p-4 sm:p-5 h-20 sm:h-24 shadow-sm hover:shadow-md hover:border-slate-200 transition-all duration-300"
+                    title={client.name}
+                  >
+                    <Image
+                      src={client.src}
+                      alt={client.name}
+                      fill
+                      className="object-contain p-3 sm:p-4 group-hover:scale-105 transition-transform duration-300"
+                      sizes="(max-width: 640px) 100px, 140px"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
         </div>

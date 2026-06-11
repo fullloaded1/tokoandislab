@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LogOut, Package, FileText, Users, HardDrive, Bot, BookOpen } from "lucide-react";
+import { LogOut, Package, FileText, Users, HardDrive, Bot, BookOpen, MessageCircle } from "lucide-react";
 import { logoutAction } from "./actions";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -23,6 +23,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link href="/admin/inquiries" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 hover:text-white transition-colors">
             <FileText className="h-5 w-5" />
             <span className="font-semibold text-sm">Permintaan (RFQ)</span>
+          </Link>
+
+          <Link href="/admin/whatsapp-leads" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 hover:text-white transition-colors">
+            <MessageCircle className="h-5 w-5" />
+            <span className="font-semibold text-sm">Laporan WA</span>
           </Link>
 
           <Link href="/admin/institutions" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 hover:text-white transition-colors">

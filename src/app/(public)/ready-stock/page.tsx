@@ -8,10 +8,12 @@ export const metadata = {
   description: "STOCK Terbatas! Segera pre-ORDER hubungi kami barang siap kirim ke instansi/perusahaan Anda.Dapatkan diskon khusus jika beli hari ini.",
 };
 
+import { getGroupedProducts } from "@/lib/products";
+
 export const dynamic = "force-dynamic";
 
 export default async function ReadyStockPage() {
-  const products = await prisma.product.findMany({
+  const allProducts = await prisma.product.findMany({
     where: {
       isReadyStock: true,
     },
@@ -19,6 +21,8 @@ export default async function ReadyStockPage() {
       createdAt: "desc",
     },
   });
+
+  const products = getGroupedProducts(allProducts);
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">

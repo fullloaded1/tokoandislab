@@ -6,9 +6,10 @@ import ClientLogos from "@/components/ClientLogos";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { prisma } from "@/lib/db";
-import { CATEGORY_LABELS, type Category } from "@/lib/products";
+import { CATEGORY_LABELS, type Category, getGroupedProducts } from "@/lib/products";
 
-export const dynamic = "force-dynamic";
+// ISR: revalidate setiap 60 detik — jauh lebih cepat dari force-dynamic
+export const revalidate = 60;
 
 const categoryOrder: Category[] = ["lovibond", "daihan-labtech", "pyrex", "andislab-custom", "general-equipment"];
 
@@ -21,7 +22,23 @@ const categoryLogos: Record<Category, string> = {
 };
 
 export default async function HomePage() {
-  const allProducts = await prisma.product.findMany();
+  const allProducts = await prisma.product.findMany({
+    select: {
+      id: true,
+      slug: true,
+      name: true,
+      category: true,
+      categoryLabel: true,
+      brand: true,
+      model: true,
+      subcategory: true,
+      image: true,
+      description: true,
+      price: true,
+      isReadyStock: true,
+      isRequestPricing: true,
+    },
+  });
   
   // Pick one from each category for the hero slider
   const featuredSliderProducts = [
@@ -31,19 +48,23 @@ export default async function HomePage() {
     allProducts.find(p => p.category === "pyrex"),
   ].filter(Boolean) as any[];
 
-  // Filter Ready Stock products
-  const readyStockProducts = allProducts.filter((p: any) => p.isReadyStock);
+  // Filter Ready Stock products and group them
+  const readyStockProducts = getGroupedProducts(allProducts.filter((p: any) => p.isReadyStock));
 
-  // Group all products by category
-  const productsByCategory = categoryOrder.map((cat) => ({
-    category: cat,
-    label: CATEGORY_LABELS[cat],
-    logo: categoryLogos[cat],
-    products: allProducts.filter((p) => p.category === cat),
-  }));
+  // Group all products by category, then group duplicates
+  const productsByCategory = categoryOrder.map((cat) => {
+    const grouped = getGroupedProducts(allProducts.filter((p) => p.category === cat));
+    return {
+      category: cat,
+      label: CATEGORY_LABELS[cat],
+      logo: categoryLogos[cat],
+      products: grouped,
+    };
+  });
 
   return (
     <>
+      <h1 className="sr-only">AndisLab: Pusat Distributor Alat Laboratorium, Reagen, dan Furniture Lab Terpercaya di Indonesia</h1>
       <HeroSection featuredProducts={featuredSliderProducts} />
       <BrandLogos />
       <CategoryGrid />
@@ -51,49 +72,46 @@ export default async function HomePage() {
       {/* Ready Stock Section */}
       {readyStockProducts.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 mt-6" id="ready-stock">
-          <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-r from-teal-600 to-emerald-600 px-6 py-12 sm:px-12 shadow-xl mb-6">
-            <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/3 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-              <div>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-bold text-white mb-3 backdrop-blur-sm">
+          <div className="flex items-end justify-between mb-8">
+            <div>
+              <div className="flex items-center gap-3 mb-3">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700">
                   🔥 Tersedia Sekarang
                 </span>
-                <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-2">
-                  Produk <span className="text-yellow-300">Ready Stock</span>
-                </h2>
-                <p className="text-teal-50 max-w-xl">
-                  STOCK Terbatas! Segera pre-ORDER hubungi kami barang siap kirim ke instansi/perusahaan Anda.Dapatkan diskon khusus jika beli hari ini.
-                </p>
               </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight">
+                Alat Laboratorium <span className="text-emerald-600">Ready Stock</span>
+              </h2>
+              <p className="text-sm text-slate-500 mt-1 max-w-xl">
+                STOCK Terbatas! Barang siap kirim ke instansi/perusahaan Anda. Dapatkan diskon khusus hari ini.
+              </p>
+            </div>
+            <Link
+              href="/ready-stock"
+              className="hidden sm:inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:border-emerald-300 hover:text-emerald-700 hover:shadow-md transition-all duration-300 shrink-0"
+            >
+              Lihat Semua
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 stagger-children">
+            {readyStockProducts.slice(0, 8).map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+          
+          {readyStockProducts.length > 8 && (
+            <div className="mt-8 flex justify-center sm:hidden">
               <Link
                 href="/ready-stock"
-                className="hidden sm:inline-flex items-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-bold text-emerald-700 hover:bg-emerald-50 hover:shadow-lg transition-all duration-300 shrink-0"
+                className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-700 hover:text-emerald-700 hover:border-emerald-300 transition-colors"
               >
-                Lihat Semua
+                Lihat Semua Ready Stock
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
-            
-            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {readyStockProducts.slice(0, 4).map((product) => (
-                <div key={product.id} className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all hover:-translate-y-1">
-                  <ProductCard product={product} />
-                </div>
-              ))}
-            </div>
-            
-            {readyStockProducts.length > 4 && (
-              <div className="mt-8 flex justify-center sm:hidden">
-                <Link
-                  href="/ready-stock"
-                  className="inline-flex items-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-bold text-emerald-700 hover:bg-emerald-50 transition-colors"
-                >
-                  Lihat Semua Ready Stock
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
-            )}
-          </div>
+          )}
         </section>
       )}
 
@@ -108,7 +126,7 @@ export default async function HomePage() {
                 </div>
               </div>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight">
-                Produk <span className="gradient-text">{group.label}</span>
+                Jual Alat Lab & Produk <span className="gradient-text">{group.label}</span>
               </h2>
               <p className="text-sm text-slate-500 mt-1">
                 {group.products.length} produk tersedia
@@ -123,8 +141,8 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children">
-            {group.products.slice(0, 6).map((product) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 stagger-children">
+            {group.products.slice(0, 8).map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
@@ -150,7 +168,7 @@ export default async function HomePage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
-                href="https://wa.me/6282125523466?text=Halo%20AndisLab%2C%20saya%20ingin%20minta%20penawaran%20khusus."
+                href="?wa=open&source=homepage_cta&text=Halo%20AndisLab%2C%20saya%20ingin%20minta%20penawaran%20khusus."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-2xl bg-white px-8 py-4 text-base font-bold text-blue-700 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-0.5"

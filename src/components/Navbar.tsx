@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   Search,
@@ -13,6 +14,7 @@ import {
 } from "lucide-react";
 import { useRFQStore } from "@/store/useRFQStore";
 import RFQCartDrawer from "./RFQCartDrawer";
+import { useWhatsAppLeadStore } from "@/store/useWhatsAppLeadStore";
 
 const navLinks = [
   { href: "/", label: "Beranda" },
@@ -30,6 +32,7 @@ export default function Navbar() {
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const items = useRFQStore((s) => s.items);
+  const openWaModal = useWhatsAppLeadStore((s) => s.openModal);
 
   useEffect(() => {
     setMounted(true);
@@ -70,7 +73,7 @@ export default function Navbar() {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 group">
-              <img src="/logo.png" alt="AndisLab Logo" className="h-12 md:h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
+              <Image src="/logo.png" alt="AndisLab Logo" width={160} height={56} className="h-12 md:h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105" priority />
             </Link>
 
             {/* Desktop Nav Links */}
@@ -117,9 +120,14 @@ export default function Navbar() {
 
               {/* CTA */}
               <a
-                href="https://wa.me/6282125523466?text=Halo%20AndisLab%2C%20saya%20ingin%20konsultasi%20produk."
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  openWaModal({
+                    source: "navbar_desktop",
+                    text: "Halo AndisLab, saya ingin konsultasi produk."
+                  });
+                }}
                 className="ml-2 inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0"
               >
                 <Phone className="h-4 w-4" />
@@ -203,9 +211,14 @@ export default function Navbar() {
               </Link>
             ))}
             <a
-              href="https://wa.me/6282125523466?text=Halo%20AndisLab%2C%20saya%20ingin%20konsultasi%20produk."
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                openWaModal({
+                  source: "navbar_mobile",
+                  text: "Halo AndisLab, saya ingin konsultasi produk."
+                });
+              }}
               className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-4 py-3 text-sm font-semibold text-white mt-2"
             >
               <Phone className="h-4 w-4" />
