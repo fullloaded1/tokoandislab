@@ -45,7 +45,7 @@ interface LogItem {
   } | null;
 }
 
-const SOURCE_DETAILS: Record<string, { label: string; bg: string; text: string; border: string }> = {
+const SOURCE_DETAILS: Record<string, { label: string; bg: string }> = {
   rfq_success: { label: "Checkout RFQ", bg: "bg-emerald-50 text-emerald-700 border-emerald-250" },
   product_detail: { label: "Tanya Produk", bg: "bg-blue-50 text-blue-700 border-blue-250" },
   product_brochure: { label: "Minta Brosur", bg: "bg-violet-50 text-violet-700 border-violet-250" },
