@@ -34,6 +34,7 @@ model Product {
   installedBases   InstalledBase[]
   documentKnowledges DocumentKnowledge[]
   whatsAppLogs     WhatsAppLog[]
+  articles         Article[]
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
 }
@@ -223,4 +224,18 @@ model WhatsAppLog {
   createdAt       DateTime @default(now())
 
   product     Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+}
+
+model Article {
+  id        String    @id @default(cuid())
+  slug      String    @unique
+  title     String
+  content   String    @db.Text
+  excerpt   String?   @db.Text
+  image     String?
+  category  String    @default("edukasi-lab")
+  published Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  products  Product[]
 }

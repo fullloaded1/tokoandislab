@@ -1,4 +1,4 @@
-export type Category = "lovibond" | "daihan-labtech" | "pyrex" | "andislab-custom" | "general-equipment";
+export type Category = "lovibond" | "daihan-labtech" | "pyrex" | "andislab-custom" | "general-equipment" | "aczet" | "aelab" | "labex" | "milwaukee" | "taitec" | "yamato";
 
 export interface ProductSpec {
   label: string;
@@ -32,14 +32,26 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   "pyrex": "Pyrex®",
   "andislab-custom": "Andislab Custom",
   "general-equipment": "General Equipment",
+  "aczet": "Aczet",
+  "aelab": "Aelab",
+  "labex": "Labex",
+  "milwaukee": "Milwaukee Instruments",
+  "taitec": "Taitec",
+  "yamato": "Yamato Scientific",
 };
 
 export const CATEGORY_DESCRIPTIONS: Record<Category, string> = {
   "lovibond": "Kebutuhan pengujian kualitas air industri, laboratorium, lingkungan, dan water treatment berkualitas dari Lovibond®.",
   "daihan-labtech": "General peralatan laboratorium umum yang sering dipakai. Magnetic stirrer, hotplate, sentrifuge, dan peralatan umum laboratorium.",
   "pyrex": "Peralatan kaca borosilicate berkualitas tinggi: beaker, Erlenmeyer, labu ukur, pipet, dan kelengkapan glassware lab.",
-  "andislab-custom": "Custom lab dan furniture fabrikasi meja lab, lemari penyimpanan, fume hood, wet scrubber standar keamanan internasional.",
+  "andislab-custom": "Custom lab dan furniture fabrikasi meja lab, lemari penyimpanan, fume hood, wet scrubber standar keselamatan internasional.",
   "general-equipment": "Peralatan umum laboratorium untuk mendukung berbagai kebutuhan operasional, riset, dan analisis harian.",
+  "aczet": "Timbangan analitik dan presisi berkualitas tinggi dari Aczet untuk kebutuhan penimbangan akurat di laboratorium.",
+  "aelab": "Peralatan laboratorium presisi dari Aelab: micropipette, PCR cabinet, orbital shaker, dan instrumen riset molekuler.",
+  "labex": "Mikroskop dan instrumen optik berkualitas dari Labex untuk kebutuhan riset biologi, patologi, dan pendidikan.",
+  "milwaukee": "Instrumen pengukuran portabel Milwaukee untuk pH, konduktivitas, dan parameter kualitas air di lapangan.",
+  "taitec": "Peralatan laboratorium Jepang presisi tinggi dari Taitec: inkubator, shaker, vortex mixer, dan block heater.",
+  "yamato": "Instrumen laboratorium premium Yamato Scientific: inkubator, oven, autoklaf, dan peralatan riset Jepang.",
 };
 
 

@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   console.log('Seed script is disabled. Database is managed manually or already seeded.');
-  
+
   // for (const product of products) {
   //   const existing = await prisma.product.findUnique({
   //     where: { slug: product.slug }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRFQStore } from "@/store/useRFQStore";
-import { formatRupiah } from "@/lib/products";
+
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FileText, Loader2, Building, User, Phone, Mail, MapPin, CheckCircle } from "lucide-react";
@@ -9,7 +9,7 @@ import Image from "next/image";
 import { submitInquiry } from "./actions";
 
 export default function InquiryPage() {
-  const { items, totalPrice, clearCart } = useRFQStore();
+  const { items, clearCart } = useRFQStore();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [successQuoteNo, setSuccessQuoteNo] = useState<string | null>(null);
@@ -198,7 +198,7 @@ export default function InquiryPage() {
                   </div>
                   <div className="flex-1">
                     <p className="text-sm font-bold text-slate-800 line-clamp-2">{item.name}</p>
-                    <p className="text-xs text-slate-500 mt-1">{item.qty} unit x {formatRupiah(item.price)}</p>
+                    <p className="text-xs text-slate-500 mt-1">Jumlah: {item.qty} unit</p>
                   </div>
                 </div>
               ))}
@@ -209,12 +209,12 @@ export default function InquiryPage() {
                 <span>Total Item</span>
                 <span className="font-semibold text-slate-800">{items.reduce((s, i) => s + i.qty, 0)}</span>
               </div>
-              <div className="flex justify-between items-end mt-2">
-                <span className="text-sm font-bold text-slate-800">Estimasi Subtotal</span>
-                <span className="text-2xl font-black text-blue-600">{formatRupiah(totalPrice())}</span>
+              <div className="flex justify-between items-center mt-2 bg-blue-50 rounded-xl px-4 py-3">
+                <span className="text-sm font-bold text-blue-800">Harga Penawaran</span>
+                <span className="text-sm font-bold text-blue-600">Akan dikirim via email</span>
               </div>
               <p className="text-xs text-slate-500 text-right mt-1">
-                *Harga sebelum PPN & Ongkir
+                *Tim sales akan mengirimkan surat penawaran resmi
               </p>
             </div>
           </div>

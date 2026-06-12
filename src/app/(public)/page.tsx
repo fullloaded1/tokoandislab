@@ -4,14 +4,17 @@ import CategoryGrid from "@/components/CategoryGrid";
 import BrandLogos from "@/components/BrandLogos";
 import ClientLogos from "@/components/ClientLogos";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, BookOpen } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { CATEGORY_LABELS, type Category, getGroupedProducts } from "@/lib/products";
 
 // ISR: revalidate setiap 60 detik — jauh lebih cepat dari force-dynamic
 export const revalidate = 60;
 
-const categoryOrder: Category[] = ["lovibond", "daihan-labtech", "pyrex", "andislab-custom", "general-equipment"];
+const categoryOrder: Category[] = [
+  "lovibond", "daihan-labtech", "pyrex", "andislab-custom", "general-equipment",
+  "aczet", "aelab", "labex", "milwaukee", "taitec", "yamato"
+];
 
 const categoryLogos: Record<Category, string> = {
   "lovibond": "/images/lovibond-logo.png",
@@ -19,6 +22,12 @@ const categoryLogos: Record<Category, string> = {
   "pyrex": "/images/pyrexlogo.PNG",
   "andislab-custom": "/logo.png",
   "general-equipment": "/logo.png",
+  "aczet": "/logo.png",
+  "aelab": "/logo.png",
+  "labex": "/logo.png",
+  "milwaukee": "/logo.png",
+  "taitec": "/logo.png",
+  "yamato": "/logo.png",
 };
 
 export default async function HomePage() {
@@ -39,6 +48,12 @@ export default async function HomePage() {
       isRequestPricing: true,
     },
   });
+
+  const latestArticles = await (prisma as any).article.findMany({
+    where: { published: true },
+    orderBy: { createdAt: "desc" },
+    take: 3,
+  });
   
   // Pick one from each category for the hero slider
   const featuredSliderProducts = [
@@ -48,11 +63,17 @@ export default async function HomePage() {
     allProducts.find(p => p.category === "pyrex"),
   ].filter(Boolean) as any[];
 
-  // Filter Ready Stock products and group them
-  const readyStockProducts = getGroupedProducts(allProducts.filter((p: any) => p.isReadyStock));
+  // Filter Ready Stock products and group them, then shuffle them randomly
+  const readyStockProducts = getGroupedProducts(allProducts.filter((p: any) => p.isReadyStock))
+    .sort(() => Math.random() - 0.5);
 
-  // Group all products by category, then group duplicates
-  const productsByCategory = categoryOrder.map((cat) => {
+  // Only show the 5 exclusive categories on the homepage
+  const exclusiveCategories: Category[] = [
+    "lovibond", "daihan-labtech", "pyrex", "andislab-custom", "general-equipment"
+  ];
+
+  // Group exclusive products by category
+  const productsByCategory = exclusiveCategories.map((cat) => {
     const grouped = getGroupedProducts(allProducts.filter((p) => p.category === cat));
     return {
       category: cat,
@@ -60,7 +81,7 @@ export default async function HomePage() {
       logo: categoryLogos[cat],
       products: grouped,
     };
-  });
+  }).filter(group => group.products.length > 0);
 
   return (
     <>
@@ -115,7 +136,7 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* All Products Grouped by Category */}
+      {/* Exclusive Products Grouped by Category */}
       {productsByCategory.map((group) => (
         <section key={group.category} className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
           <div className="flex items-end justify-between mb-8">
@@ -148,6 +169,81 @@ export default async function HomePage() {
           </div>
         </section>
       ))}
+
+      {/* Article & Guides Section */}
+      {latestArticles.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 border-t border-slate-100">
+          <div className="flex items-end justify-between mb-10">
+            <div>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-1 text-xs font-bold text-blue-700 mb-2 border border-blue-100">
+                📚 Edukasi & Informasi
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight animate-fade-in">
+                Artikel & Panduan Terbaru
+              </h2>
+              <p className="text-sm text-slate-500 mt-1">
+                Ikuti tips penggunaan, spesifikasi teknis mendalam, dan berita seputar alat laboratorium.
+              </p>
+            </div>
+            <Link
+              href="/artikel"
+              className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:border-blue-300 hover:text-blue-700 hover:shadow-md transition-all duration-300 shrink-0 animate-fade-in"
+            >
+              Lihat Semua
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {latestArticles.map((article: any) => (
+              <article
+                key={article.id}
+                className="group flex flex-col bg-white rounded-3xl border border-slate-100 hover:shadow-xl hover:border-blue-100 transition-all duration-300 overflow-hidden"
+              >
+                <Link href={`/artikel/${article.slug}`} className="relative aspect-video w-full bg-slate-100 overflow-hidden block">
+                  {article.image ? (
+                    <img
+                      src={article.image}
+                      alt={article.title}
+                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center bg-slate-50">
+                      <BookOpen className="h-10 w-10 text-slate-300" />
+                    </div>
+                  )}
+                </Link>
+                <div className="p-6 flex flex-col flex-grow">
+                  <span className="text-xs text-slate-400 font-semibold mb-2 block">
+                    {new Date(article.createdAt).toLocaleDateString("id-ID", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </span>
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2 leading-snug">
+                    <Link href={`/artikel/${article.slug}`}>{article.title}</Link>
+                  </h3>
+                  {article.excerpt && (
+                    <p className="text-xs sm:text-sm text-slate-500 line-clamp-2 mt-2 leading-relaxed">
+                      {article.excerpt}
+                    </p>
+                  )}
+                  <div className="mt-4 pt-4 border-t border-slate-100/50">
+                    <Link
+                      href={`/artikel/${article.slug}`}
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors"
+                    >
+                      Baca Selengkapnya
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
 
       <ClientLogos />
 

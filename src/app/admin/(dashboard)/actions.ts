@@ -114,6 +114,7 @@ export async function bulkCreateProducts(products: any[]) {
 
 export async function logoutAction() {
   await deleteSession();
+  revalidatePath("/", "layout");
   redirect("/admin/login");
 }
 

@@ -20,13 +20,13 @@ export default function BrandLogos() {
           {brands.map((brand) => (
             <div
               key={brand.name}
-              className="relative w-36 h-20 sm:w-48 sm:h-24 hover:scale-105 transition-transform duration-300"
+              className="relative w-36 h-20 sm:w-48 sm:h-24 hover:scale-105 transition-all duration-300 opacity-70 hover:opacity-100 grayscale hover:grayscale-0"
             >
               <Image 
                 src={brand.src} 
                 alt={`${brand.name} Logo`} 
                 fill 
-                className="object-contain"
+                className="object-contain mix-blend-multiply"
                 sizes="(max-width: 640px) 144px, 192px"
               />
             </div>

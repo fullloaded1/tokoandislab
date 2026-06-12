@@ -1,8 +1,15 @@
 import Link from "next/link";
-import { LogOut, Package, FileText, Users, HardDrive, Bot, BookOpen, MessageCircle } from "lucide-react";
+import { LogOut, Package, FileText, Users, HardDrive, Bot, BookOpen, MessageCircle, Newspaper } from "lucide-react";
 import { logoutAction } from "./actions";
+import { verifySession } from "@/lib/session";
+import { redirect } from "next/navigation";
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const session = await verifySession();
+
+  if (!session) {
+    redirect("/admin/login");
+  }
   return (
     <div className="min-h-screen bg-slate-50 flex">
       {/* Sidebar */}
@@ -48,6 +55,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link href="/admin/knowledge" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 hover:text-white transition-colors">
             <BookOpen className="h-5 w-5" />
             <span className="font-semibold text-sm">AI Knowledge</span>
+          </Link>
+
+          <Link href="/admin/articles" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 hover:text-white transition-colors">
+            <Newspaper className="h-5 w-5" />
+            <span className="font-semibold text-sm">Artikel SEO</span>
           </Link>
         </nav>
 

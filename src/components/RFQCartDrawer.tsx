@@ -3,7 +3,6 @@
 import { useRFQStore } from "@/store/useRFQStore";
 import { X, Trash2, Plus, Minus, ShoppingCart, FileText } from "lucide-react";
 import Image from "next/image";
-import { formatRupiah } from "@/lib/products";
 import { useRouter } from "next/navigation";
 
 interface RFQCartDrawerProps {
@@ -12,7 +11,7 @@ interface RFQCartDrawerProps {
 }
 
 export default function RFQCartDrawer({ open, onClose }: RFQCartDrawerProps) {
-  const { items, removeItem, updateQty, clearCart, totalPrice } = useRFQStore();
+  const { items, removeItem, updateQty, clearCart, totalItems } = useRFQStore();
 
   const router = useRouter();
 
@@ -100,8 +99,8 @@ export default function RFQCartDrawer({ open, onClose }: RFQCartDrawerProps) {
                     <p className="text-sm font-semibold text-slate-800 truncate">
                       {item.name}
                     </p>
-                    <p className="text-xs font-semibold text-blue-600 mt-1">
-                      {formatRupiah(item.price)}
+                    <p className="text-xs font-medium text-slate-400 mt-1">
+                      {item.category}
                     </p>
                     <div className="flex items-center justify-between mt-2">
                       <div className="flex items-center gap-2">
@@ -122,8 +121,8 @@ export default function RFQCartDrawer({ open, onClose }: RFQCartDrawerProps) {
                         <Plus className="h-3 w-3" />
                       </button>
                       </div>
-                      <p className="text-sm font-bold text-slate-800">
-                        {formatRupiah(item.price * item.qty)}
+                      <p className="text-xs font-semibold text-slate-500">
+                        {item.qty} unit
                       </p>
                     </div>
                   </div>
@@ -144,8 +143,8 @@ export default function RFQCartDrawer({ open, onClose }: RFQCartDrawerProps) {
         {items.length > 0 && (
           <div className="border-t border-slate-100 bg-slate-50 px-6 py-4">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-sm font-semibold text-slate-500">Total Belanja</span>
-              <span className="text-xl font-black text-slate-800">{formatRupiah(totalPrice())}</span>
+              <span className="text-sm font-semibold text-slate-500">Total Produk</span>
+              <span className="text-xl font-black text-slate-800">{totalItems()} unit</span>
             </div>
             <div className="space-y-3">
               <button
