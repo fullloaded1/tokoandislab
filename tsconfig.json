@@ -30,5 +30,13 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "fix_descriptions.ts",
+    "sync_daihan_data.ts",
+    "remove_bg_script.ts",
+    "test.ts",
+    "scripts",
+    "scratch"
+  ]
 }
