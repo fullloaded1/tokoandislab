@@ -59,12 +59,5 @@ export async function verifySession() {
 export async function deleteSession() {
   const cookieStore = await cookies();
   cookieStore.delete("session");
-  // Also explicitly set maxAge: 0 with path: "/" to be absolutely sure the cookie is deleted on all path levels
-  cookieStore.set("session", "", {
-    httpOnly: true,
-    secure: true,
-    maxAge: 0,
-    path: "/",
-  });
 }
 
