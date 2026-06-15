@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Plus, Edit, Trash2, X, Loader2, UploadCloud, FileSpreadsheet, Download } from "lucide-react";
-import { formatRupiah } from "@/lib/products";
+import Link from "next/link";
+import { Plus, Edit, Trash2, X, Loader2, UploadCloud, FileSpreadsheet, Download, Layers } from "lucide-react";
+import { money } from "@/lib/money";
 import { deleteProduct, createProduct, updateProduct, bulkCreateProducts } from "./actions";
 import Papa from "papaparse";
 import * as XLSX from "xlsx";
@@ -270,10 +271,17 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
                       </span>
                     </td>
                     <td className="px-6 py-4 font-semibold text-slate-900">
-                      {formatRupiah(product.price)}
+                      {money.formatIDR(product.price)}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
+                        <Link 
+                          href={`/admin/products/${product.id}/variants`}
+                          className="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors flex items-center gap-1"
+                          title="Kelola Varian & Stok"
+                        >
+                          <Layers className="h-4 w-4" /> <span className="text-xs font-bold hidden sm:inline">Varian/Stok</span>
+                        </Link>
                         <button 
                           onClick={() => handleOpenModal(product)}
                           className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"

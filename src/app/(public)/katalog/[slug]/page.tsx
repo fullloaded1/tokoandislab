@@ -4,13 +4,15 @@ import ProductDetailClient from "./ProductDetailClient";
 import type { Metadata } from "next";
 
 import { cache } from "react";
+import { serializeProductDecimals } from "@/lib/products";
 
 // Memoize the product fetch so it's only executed once per request
 const getProduct = cache(async (slug: string) => {
-  return await prisma.product.findUnique({
+  const product = await prisma.product.findUnique({
     where: { slug },
-    include: { specs: true }
+    include: { specs: true, variants: true }
   });
+  return serializeProductDecimals(product);
 });
 
 export async function generateMetadata(
@@ -79,15 +81,16 @@ export default async function ProductDetailPage(
         subcategory: product.subcategory,
         NOT: { id: product.id }
       },
+      include: { variants: true },
       take: 3,
-    })
+    }).then(prods => prods.map(serializeProductDecimals))
   ]);
 
   let relatedProducts = relatedProductsBase;
 
   // If we don't have enough from the same subcategory, fallback to the same category
   if (relatedProducts.length < 3) {
-    const additionalProducts = await prisma.product.findMany({
+    const additionalProducts = (await prisma.product.findMany({
       where: {
         category: product.category,
         NOT: {
@@ -96,8 +99,9 @@ export default async function ProductDetailPage(
           }
         }
       },
+      include: { variants: true },
       take: 3 - relatedProducts.length,
-    });
+    })).map(serializeProductDecimals);
     relatedProducts = [...relatedProducts, ...additionalProducts];
   }
 

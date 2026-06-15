@@ -6,7 +6,7 @@ import ClientLogos from "@/components/ClientLogos";
 import Link from "next/link";
 import { ArrowRight, BookOpen } from "lucide-react";
 import { prisma } from "@/lib/db";
-import { CATEGORY_LABELS, type Category, getGroupedProducts } from "@/lib/products";
+import { CATEGORY_LABELS, type Category, getGroupedProducts, serializeProductDecimals } from "@/lib/products";
 
 // ISR: revalidate setiap 60 detik — jauh lebih cepat dari force-dynamic
 export const revalidate = 60;
@@ -31,7 +31,7 @@ const categoryLogos: Record<Category, string> = {
 };
 
 export default async function HomePage() {
-  const allProducts = await prisma.product.findMany({
+  const allProducts = (await prisma.product.findMany({
     select: {
       id: true,
       slug: true,
@@ -46,8 +46,9 @@ export default async function HomePage() {
       price: true,
       isReadyStock: true,
       isRequestPricing: true,
+      variants: true,
     },
-  });
+  })).map(serializeProductDecimals);
 
   const latestArticles = await (prisma as any).article.findMany({
     where: { published: true },
@@ -57,10 +58,10 @@ export default async function HomePage() {
   
   // Pick one from each category for the hero slider
   const featuredSliderProducts = [
-    allProducts.find(p => p.category === "lovibond"),
-    allProducts.find(p => p.category === "daihan-labtech"),
-    allProducts.find(p => p.category === "andislab-custom"),
-    allProducts.find(p => p.category === "pyrex"),
+    allProducts.find((p: any) => p.category === "lovibond"),
+    allProducts.find((p: any) => p.category === "daihan-labtech"),
+    allProducts.find((p: any) => p.category === "andislab-custom"),
+    allProducts.find((p: any) => p.category === "pyrex"),
   ].filter(Boolean) as any[];
 
   // Filter Ready Stock products and group them, then shuffle them randomly

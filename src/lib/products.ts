@@ -64,6 +64,21 @@ export function formatRupiah(value: number): string {
   }).format(value);
 }
 
+export function serializeProductDecimals(product: any): any {
+  if (!product) return product;
+  const serialized = { ...product };
+  if (serialized.price && typeof serialized.price.toString === "function") {
+    serialized.price = serialized.price.toString();
+  }
+  if (Array.isArray(serialized.variants)) {
+    serialized.variants = serialized.variants.map((v: any) => ({
+      ...v,
+      price: v.price && typeof v.price.toString === "function" ? v.price.toString() : v.price
+    }));
+  }
+  return serialized;
+}
+
 export function getGroupedProducts(products: any[]): any[] {
   const map = new Map<string, any>();
   

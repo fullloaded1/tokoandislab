@@ -3,7 +3,9 @@
 import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
-export async function updateLeadStatus(id: string, status: string) {
+import { WhatsAppLogStatus } from "@prisma/client";
+
+export async function updateLeadStatus(id: string, status: WhatsAppLogStatus) {
   try {
     await prisma.whatsAppLog.update({
       where: { id },

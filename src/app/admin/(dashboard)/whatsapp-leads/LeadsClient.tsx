@@ -26,6 +26,7 @@ import {
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import * as XLSX from "xlsx";
 import { updateLeadStatus } from "./actions";
+import { WhatsAppLogStatus } from "@prisma/client";
 
 interface LogItem {
   id: string;
@@ -160,7 +161,7 @@ export default function LeadsClient({ initialLogs }: { initialLogs: LogItem[] })
 
     // Hit server action
     try {
-      const res = await updateLeadStatus(draggableId, destination.droppableId);
+      const res = await updateLeadStatus(draggableId, destination.droppableId as WhatsAppLogStatus);
       if (!res.success) {
         alert(res.error || "Gagal mengupdate status lead");
         setLogs(initialLogs); // Revert on failure

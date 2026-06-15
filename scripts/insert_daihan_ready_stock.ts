@@ -26,14 +26,37 @@ const products = [
   { model: "LLF-403SR", name: "LABORATORY FREEZER", price: 63900000 }
 ];
 
+const DEFAULT_VARIANT_STOCK = 5;
+
+async function upsertDefaultVariant(productId: string, model: string, price: number) {
+  const sku = `DH-${model}`;
+  await prisma.productVariant.upsert({
+    where: { sku },
+    create: {
+      productId,
+      sku,
+      name: "Default",
+      price,
+      stock: DEFAULT_VARIANT_STOCK,
+      reservedStock: 0,
+    },
+    update: {
+      price,
+      // Jangan reset stock kalau sudah ada riwayat — cuma sync harga.
+    },
+  });
+}
+
 async function main() {
   for (const p of products) {
-    let slug = `daihan-${p.model.toLowerCase()}-${p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
-    
+    const slug = `daihan-${p.model.toLowerCase()}-${p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+
     // check if it already exists by model
     const existing = await prisma.product.findFirst({
         where: { model: p.model }
     });
+
+    let productId: string;
 
     if (existing) {
         console.log(`Product ${p.model} already exists. Updating to ready stock...`);
@@ -41,9 +64,10 @@ async function main() {
             where: { id: existing.id },
             data: { isReadyStock: true, price: p.price }
         });
+        productId = existing.id;
     } else {
         console.log(`Creating product ${p.model}...`);
-        
+
         // Ensure slug is unique
         let isUnique = false;
         let counter = 1;
@@ -58,7 +82,7 @@ async function main() {
             }
         }
 
-        await prisma.product.create({
+        const created = await prisma.product.create({
             data: {
                 slug: currentSlug,
                 name: p.name,
@@ -74,9 +98,13 @@ async function main() {
                 isReadyStock: true
             }
         });
+        productId = created.id;
     }
+
+    // T3.1: pastikan ada minimal 1 varian "Default" supaya tampil sbg ready-stock available
+    await upsertDefaultVariant(productId, p.model, p.price);
   }
-  console.log("Done inserting ready stock products.");
+  console.log("Done inserting ready stock products + default variants.");
 }
 
 main()

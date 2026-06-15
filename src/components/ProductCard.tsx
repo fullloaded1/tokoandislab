@@ -2,10 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCart, Check, FileText } from "lucide-react";
+import { ShoppingCart, Check, AlertCircle } from "lucide-react";
 import { useRFQStore } from "@/store/useRFQStore";
 import { useState } from "react";
-import { formatRupiah } from "@/lib/products";
+import { money } from "@/lib/money";
+import { getReadyStockSummary } from "@/lib/readyStock";
 import { useToast } from "@/components/Toast";
 
 interface ProductCardProps {
@@ -26,17 +27,67 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
 
   const displayName = product.isReadyStock && product.model ? `${product.name} - ${product.model}` : product.name;
 
+  // TODO: HIDE_PRICES_TEMPORARILY di-set true karena user menunggu pengiriman harga terbaru. 
+  // Ubah ke false untuk mengaktifkan kembali Direct Purchase & Ready Stock.
+  const HIDE_PRICES_TEMPORARILY = true;
+
+  const summary = getReadyStockSummary(product);
+  const isReadyToBuy = HIDE_PRICES_TEMPORARILY ? false : summary.state === "available";
+  const isSoldOut = HIDE_PRICES_TEMPORARILY ? false : summary.state === "sold_out";
+
+  // TODO[T3.3]: render harga sesuai Order.priceDisplayMode (include/exclude PPN)
+  let priceDisplay: string = "Minta Penawaran";
+  if (isReadyToBuy) {
+    priceDisplay = summary.hasPriceRange
+      ? `Mulai ${money.formatIDR(summary.minPrice)}`
+      : money.formatIDR(summary.minPrice);
+  } else if (isSoldOut) {
+    priceDisplay = "Stok Habis";
+  }
+
+  const availableVariant = summary.firstAvailable;
+
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    addItem({
-      id: product.id,
-      slug: product.slug,
-      name: displayName,
-      image: product.image,
-      category: product.categoryLabel,
-      price: product.price,
-    });
+    
+    if (isReadyToBuy && availableVariant) {
+      // Masuk ke keranjang Direct Purchase
+      const res = addItem({
+        id: availableVariant.id,
+        productId: product.id,
+        variantId: availableVariant.id,
+        slug: product.slug,
+        name: `${displayName} (${availableVariant.name ?? "Default"})`,
+        image: product.image,
+        category: product.categoryLabel,
+        price: money.toDecimal(availableVariant.price).toNumber(),
+        type: "DIRECT"
+      });
+
+      if (res?.success === false) {
+        toast?.showToast(res.error || "Gagal", "error");
+        return;
+      }
+    } else {
+      // Masuk ke keranjang RFQ
+      const res = addItem({
+        id: product.id,
+        productId: product.id,
+        slug: product.slug,
+        name: displayName,
+        image: product.image,
+        category: product.categoryLabel,
+        price: money.toDecimal(product.price).toNumber(),
+        type: "RFQ"
+      });
+
+      if (res?.success === false) {
+        toast?.showToast(res.error || "Gagal", "error");
+        return;
+      }
+    }
+    
     setAdded(true);
     toast?.showToast(`${displayName} ditambahkan ke keranjang`, "success");
     setTimeout(() => setAdded(false), 1500);
@@ -100,6 +151,13 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
             </span>
           </div>
         )}
+        {isSoldOut && (
+          <div className="absolute top-4 left-4 z-10">
+            <span className="inline-flex items-center gap-1 rounded-2xl bg-red-500/95 backdrop-blur-sm px-3 py-1.5 text-xs font-bold text-white shadow-sm">
+              <AlertCircle className="h-3 w-3" /> Habis
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Content Area - Minimalist */}
@@ -118,8 +176,8 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
         <div className="mt-auto flex items-center justify-between gap-3 pt-2">
           {/* Price or Tag */}
           <div className="flex-1">
-             <span className="text-sm font-bold text-slate-600">
-               Minta Penawaran
+             <span className={`text-sm font-bold ${isReadyToBuy ? "text-emerald-600" : isSoldOut ? "text-red-500" : "text-slate-600"}`}>
+               {priceDisplay}
              </span>
           </div>
 
@@ -130,11 +188,13 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
             className={`flex items-center justify-center h-11 px-4 rounded-2xl text-sm font-bold transition-all duration-300 ${
               added
                 ? "bg-emerald-50 text-emerald-600"
-                : "bg-slate-900 text-white hover:bg-blue-600 hover:shadow-lg hover:shadow-blue-600/20"
+                : isReadyToBuy 
+                  ? "bg-emerald-600 text-white hover:bg-emerald-700 hover:shadow-lg hover:shadow-emerald-600/20"
+                  : "bg-slate-900 text-white hover:bg-blue-600 hover:shadow-lg hover:shadow-blue-600/20"
             }`}
           >
             {added ? <Check className="h-4 w-4 mr-2" /> : <ShoppingCart className="h-4 w-4 lg:mr-2" />}
-            <span className="hidden lg:inline">{added ? "Dimasukkan" : "Tambah"}</span>
+            <span className="hidden lg:inline">{added ? "Ditambahkan" : isReadyToBuy ? "Beli Sekarang" : "Minta Penawaran"}</span>
           </button>
         </div>
       </div>

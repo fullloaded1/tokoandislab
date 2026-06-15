@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["postgresqlExtensions"]
@@ -10,6 +7,123 @@ datasource db {
   provider   = "postgresql"
   url        = env("DATABASE_URL")
   extensions = [vector]
+}
+
+enum InquiryStatus {
+  NEW
+  REVIEWING
+  QUOTED
+  WON
+  LOST
+}
+
+enum QuotationStatus {
+  SENT
+  ACCEPTED
+  REJECTED
+}
+
+enum ProjectStatus {
+  WAITING_DP
+  IN_PRODUCTION
+  SHIPPED
+  INSTALLED
+  COMPLETED
+}
+
+enum InvoiceType {
+  DP
+  TERMIN
+  PELUNASAN
+  FULL
+}
+
+enum InvoiceStatus {
+  UNPAID
+  PARTIAL
+  PAID
+}
+
+enum DeliveryStatus {
+  PREPARING
+  ON_THE_WAY
+  DELIVERED
+}
+
+enum ReminderStatus {
+  PENDING
+  FOLLOWED_UP
+  DISMISSED
+}
+
+enum ReminderType {
+  MAINTENANCE
+  CALIBRATION
+  WARRANTY
+  OTHER
+}
+
+enum ActivityAction {
+  NOTE
+  CALL
+  EMAIL
+  MEETING
+  VISIT
+  OTHER
+}
+
+enum InstitutionType {
+  HOSPITAL
+  UNIVERSITY
+  LABORATORY
+  COMPANY
+  GOVERNMENT
+  OTHER
+}
+
+enum WhatsAppLogStatus {
+  NEW
+  CONTACTED
+  OFFERS
+  WON
+  LOST
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  PARTIAL_PAID
+  PAID
+  PROCESSING
+  SHIPPED
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentTermStatus {
+  UNPAID
+  WAITING_VERIFICATION
+  PAID
+}
+
+enum StockLogType {
+  IN
+  OUT
+  ADJUST
+}
+
+enum OrderType {
+  DIRECT
+  RFQ
+}
+
+enum CustomerStatus {
+  GUEST
+  REGISTERED
+}
+
+enum PriceDisplayMode {
+  EXCLUDE_PPN
+  INCLUDE_PPN
 }
 
 model Product {
@@ -24,40 +138,105 @@ model Product {
   image            String
   brochureUrl      String?
   description      String
-  price            Float           @default(0)
+  price            Decimal         @default(0) @db.Decimal(16,2)
   isRequestPricing Boolean         @default(false)
   isReadyStock     Boolean         @default(false)
   warrantyPeriod   String?
   leadTime         String?
+  
+  variants         ProductVariant[]
   specs            ProductSpec[]
   inquiryItems     InquiryItem[]
   installedBases   InstalledBase[]
   documentKnowledges DocumentKnowledge[]
   whatsAppLogs     WhatsAppLog[]
   articles         Article[]
+  
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
 }
 
-model ProductSpec {
-  id        String   @id @default(cuid())
-  label     String
-  value     String
-  productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+model ProductVariant {
+  id          String   @id @default(cuid())
+  productId   String
+  sku         String   @unique
+  name        String
+  price       Decimal  @default(0) @db.Decimal(16,2)
+  stock       Int      @default(0)
+  reservedStock Int    @default(0)
+  
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  stockLogs   StockLog[]
+  reservations StockReservation[]
+  orderItems  OrderItem[]
+  quotationItems QuotationItem[]
+
+  @@index([sku])
+  @@index([productId])
+}
+
+model StockLog {
+  id          String       @id @default(cuid())
+  variantId   String
+  type        StockLogType
+  quantity    Int
+  notes       String?      @db.Text
+  actorId     String?      
+  createdAt   DateTime     @default(now())
+
+  variant     ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  
+  @@index([variantId])
+}
+
+model StockReservation {
+  id          String   @id @default(cuid())
+  variantId   String
+  orderId     String?
+  quantity    Int
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+
+  variant     ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  order       Order?         @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  
+  @@index([variantId])
+  @@index([expiresAt])
+}
+
+model Customer {
+  id            String      @id @default(cuid())
+  email         String      @unique
+  password      String?     // Hashed; nullable utk GUEST checkout (K2)
+  status        CustomerStatus @default(GUEST)
+  name          String
+  phone         String?
+  institutionId String?
+  
+  institution   Institution? @relation(fields: [institutionId], references: [id])
+  orders        Order[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  
+  @@index([email])
 }
 
 model Institution {
   id             String          @id @default(cuid())
   name           String          @unique
-  type           String
+  type           InstitutionType @default(OTHER)
+  npwp           String?
+  phone          String?
   address        String          @db.Text
   createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt @default(now())
   
   contacts       Contact[]
   inquiries      Inquiry[]
   installedBases InstalledBase[]
   activityLogs   ActivityLog[]
+  customers      Customer[]
 }
 
 model Contact {
@@ -69,21 +248,27 @@ model Contact {
   email         String
   
   institution   Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  
+  @@index([institutionId])
 }
 
 model Inquiry {
   id            String        @id @default(cuid())
   inquiryNo     String        @unique
   institutionId String
-  status        String        @default("NEW") // NEW, REVIEWING, QUOTED, WON, LOST
+  status        InquiryStatus @default(NEW)
   notes         String?       @db.Text
   createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt @default(now())
   
   institution   Institution   @relation(fields: [institutionId], references: [id], onDelete: Cascade)
   items         InquiryItem[]
   quotation     Quotation?
   project       Project?
   activityLogs  ActivityLog[]
+  
+  @@index([institutionId])
+  @@index([inquiryNo])
 }
 
 model InquiryItem {
@@ -95,24 +280,45 @@ model InquiryItem {
   
   inquiry   Inquiry @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
   product   Product @relation(fields: [productId], references: [id])
+  
+  @@index([inquiryId])
 }
 
 model Quotation {
-  id           String   @id @default(cuid())
-  inquiryId    String   @unique
-  quoteNo      String   @unique
-  subtotal     Float
-  tax          Float
-  shippingFee  Float    @default(0)
-  totalAmount  Float
+  id           String          @id @default(cuid())
+  inquiryId    String          @unique
+  quoteNo      String          @unique
+  subtotal     Decimal         @db.Decimal(16,2)
+  tax          Decimal         @db.Decimal(16,2)
+  shippingFee  Decimal         @default(0) @db.Decimal(16,2)
+  totalAmount  Decimal         @db.Decimal(16,2)
   validUntil   DateTime
-  paymentTerms String   @db.Text
+  paymentTerms String          @db.Text
   leadTime     String
   pdfUrl       String?
-  status       String   @default("SENT") // SENT, ACCEPTED, REJECTED
-  createdAt    DateTime @default(now())
+  status       QuotationStatus @default(SENT)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt @default(now())
   
-  inquiry      Inquiry  @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  inquiry      Inquiry         @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  items        QuotationItem[]
+  
+  @@index([quoteNo])
+}
+
+model QuotationItem {
+  id          String   @id @default(cuid())
+  quotationId String
+  variantId   String?
+  productId   String?  // Made optional because snapshot is what matters, but keeping relation if exists
+  name        String   // Snapshot
+  price       Decimal  @db.Decimal(16,2) // Snapshot
+  quantity    Int
+  
+  quotation   Quotation @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  variant     ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+  
+  @@index([quotationId])
 }
 
 model Project {
@@ -121,41 +327,55 @@ model Project {
   projectNo  String     @unique
   poNumber   String
   poDocument String?
-  status     String     @default("WAITING_DP") // WAITING_DP, IN_PRODUCTION, SHIPPED, INSTALLED, COMPLETED
+  status     ProjectStatus @default(WAITING_DP)
   createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt @default(now())
   
   inquiry    Inquiry    @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
   invoices   Invoice[]
   deliveries Delivery[]
+  
+  @@index([projectNo])
 }
 
 model Invoice {
-  id           String   @id @default(cuid())
+  id           String        @id @default(cuid())
   projectId    String
-  invoiceNo    String   @unique
-  type         String
-  amount       Float
+  invoiceNo    String        @unique
+  type         InvoiceType   @default(FULL)
+  amount       Decimal       @db.Decimal(16,2)
+  paidAmount   Decimal       @default(0) @db.Decimal(16,2)
   dueDate      DateTime
-  status       String   @default("UNPAID") // UNPAID, PARTIAL, PAID
+  paidAt       DateTime?
+  status       InvoiceStatus @default(UNPAID)
   paymentProof String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt @default(now())
   
-  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project      Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  @@index([projectId])
+  @@index([invoiceNo])
 }
 
 model Delivery {
-  id          String    @id @default(cuid())
+  id          String         @id @default(cuid())
   projectId   String
-  deliveryNo  String    @unique
+  deliveryNo  String         @unique
   driverName  String?
   trackingUrl String?
   shippedDate DateTime?
-  status      String    @default("PREPARING") // PREPARING, ON_THE_WAY, DELIVERED
+  status      DeliveryStatus @default(PREPARING)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt @default(now())
   
-  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project     Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  @@index([projectId])
 }
 
 model InstalledBase {
-  id               String     @id @default(cuid())
+  id               String      @id @default(cuid())
   institutionId    String
   productId        String
   serialNumber     String?
@@ -166,28 +386,36 @@ model InstalledBase {
   institution      Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
   product          Product     @relation(fields: [productId], references: [id])
   reminders        Reminder[]
+  
+  @@index([institutionId])
+  @@index([productId])
 }
 
 model Reminder {
-  id              String        @id @default(cuid())
+  id              String         @id @default(cuid())
   installedBaseId String
-  type            String
+  type            ReminderType   @default(OTHER)
   dueDate         DateTime
-  status          String        @default("PENDING") // PENDING, FOLLOWED_UP, DISMISSED
+  status          ReminderStatus @default(PENDING)
   
-  installedBase   InstalledBase @relation(fields: [installedBaseId], references: [id], onDelete: Cascade)
+  installedBase   InstalledBase  @relation(fields: [installedBaseId], references: [id], onDelete: Cascade)
+  
+  @@index([installedBaseId])
 }
 
 model ActivityLog {
-  id            String       @id @default(cuid())
+  id            String         @id @default(cuid())
   inquiryId     String?
   institutionId String?
-  action        String       // e.g. "NOTE", "CALL", "EMAIL", "MEETING"
-  description   String       @db.Text
-  createdAt     DateTime     @default(now())
+  action        ActivityAction @default(OTHER)
+  description   String         @db.Text
+  createdAt     DateTime       @default(now())
   
-  inquiry       Inquiry?     @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
-  institution   Institution? @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  inquiry       Inquiry?       @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  institution   Institution?   @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  
+  @@index([inquiryId])
+  @@index([institutionId])
 }
 
 model ChatLog {
@@ -206,22 +434,23 @@ model DocumentKnowledge {
   content   String   @db.Text
   embedding Unsupported("vector(768)")?
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
 
   product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model WhatsAppLog {
-  id              String   @id @default(cuid())
+  id              String            @id @default(cuid())
   source          String
   productName     String?
   productId       String?
   inquiryNo       String?
-  messageText     String?  @db.Text
+  messageText     String?           @db.Text
   leadName        String?
   leadInstitution String?
   leadPhone       String?
-  status          String   @default("NEW") // NEW, CONTACTED, OFFERS, WON, LOST
-  createdAt       DateTime @default(now())
+  status          WhatsAppLogStatus @default(NEW)
+  createdAt       DateTime          @default(now())
 
   product     Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
 }
@@ -238,4 +467,91 @@ model Article {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   products  Product[]
+}
+
+model Order {
+  id               String             @id @default(cuid())
+  orderNo          String             @unique
+  orderType        OrderType          @default(DIRECT)
+  customerId       String
+  status           OrderStatus        @default(PENDING_PAYMENT)
+  subtotal         Decimal            @db.Decimal(16,2)
+  taxAmount        Decimal            @db.Decimal(16,2)
+  shippingFee      Decimal            @default(0) @db.Decimal(16,2)
+  totalAmount      Decimal            @db.Decimal(16,2)
+  paidAmount       Decimal            @default(0) @db.Decimal(16,2)
+  paymentMethod    String             // "PAYMENT_GATEWAY", "MANUAL_TRANSFER", "TERM_OF_PAYMENT"
+  paymentUrl       String?
+  poDocumentUrl    String?
+  taxInvoiceNo     String?
+  shippingAddress  String             @db.Text
+  shippingRegion   String?            // Key region untuk lookup ongkir (mis. JABODETABEK / LUAR_JABODETABEK)
+  guestAccessToken String?            @unique // Token akses status order utk guest (K2)
+  priceDisplayMode PriceDisplayMode   @default(EXCLUDE_PPN) // Snapshot mode tampil PPN saat order dibuat (K1)
+  trackingNumber   String?            // Nomor resi/AWB diisi admin saat status SHIPPED (T3.7)
+  shippedAt        DateTime?          // Timestamp saat admin mark SHIPPED
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  customer         Customer           @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  items            OrderItem[]
+  paymentTerms     PaymentTerm[]
+  reservations     StockReservation[]
+
+  @@index([customerId])
+  @@index([orderNo])
+}
+
+model OrderItem {
+  id          String          @id @default(cuid())
+  orderId     String
+  variantId   String?
+  name        String          // Snapshot nama produk/varian
+  sku         String?         // Snapshot SKU
+  price       Decimal         @db.Decimal(16,2) // Snapshot harga
+  quantity    Int
+  
+  order       Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  variant     ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+  
+  @@index([orderId])
+}
+
+model PaymentTerm {
+  id          String            @id @default(cuid())
+  orderId     String
+  name        String            // e.g. "DP 50%"
+  amount      Decimal           @db.Decimal(16,2)
+  dueDate     DateTime?
+  status      PaymentTermStatus @default(UNPAID)
+  proofUrl    String?
+  verifiedAt  DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  
+  order       Order             @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  @@index([orderId])
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  action      String   // e.g. "VERIFY_PAYMENT", "ADJUST_STOCK", "EDIT_TERMIN"
+  entityType  String   // e.g. "PaymentTerm", "StockLog", "Order"
+  entityId    String
+  actorId     String   // Siapa yang mengubah
+  oldValue    String?  @db.Text // Format JSON string
+  newValue    String?  @db.Text // Format JSON string
+  notes       String?  @db.Text
+  createdAt   DateTime @default(now())
+  
+  @@index([entityType, entityId])
+}
+
+model ProductSpec {
+  id        String   @id @default(cuid())
+  label     String
+  value     String
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 }

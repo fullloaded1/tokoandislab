@@ -3,9 +3,10 @@
 import { useState, useEffect, useRef } from "react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import { updateInquiryStatus, getInquiries } from "../actions";
+import { InquiryStatus } from "@prisma/client";
 import { Calendar, Building, FileText, CheckCircle, Clock, XCircle, AlertCircle } from "lucide-react";
 import Link from "next/link";
-import { formatRupiah } from "@/lib/products";
+import { money } from "@/lib/money";
 import { useToast } from "@/components/Toast";
 
 const COLUMNS = [
@@ -73,7 +74,7 @@ export default function InquiriesClient({ initialInquiries }: { initialInquiries
 
     // Call server action
     try {
-      const res = await updateInquiryStatus(draggableId, newStatus);
+      const res = await updateInquiryStatus(draggableId, newStatus as InquiryStatus);
       if (!res.success) {
         // Revert on error
         updatedInquiries[draggedInquiryIndex].status = oldStatus;
@@ -123,7 +124,7 @@ export default function InquiriesClient({ initialInquiries }: { initialInquiries
                     className={`flex-1 p-3 overflow-y-auto transition-colors ${snapshot.isDraggingOver ? "bg-black/5" : ""}`}
                   >
                     {colInquiries.map((inq, index) => {
-                      const totalEst = inq.items.reduce((sum: number, item: any) => sum + ((item.product?.price || 0) * item.quantity), 0);
+                      const totalEst = inq.items.reduce((sum: number, item: any) => sum + (money.toDecimal(item.product?.price).toNumber() * item.quantity), 0);
 
                       return (
                         <Draggable key={inq.id} draggableId={inq.id} index={index}>
@@ -156,7 +157,7 @@ export default function InquiriesClient({ initialInquiries }: { initialInquiries
                               <div className="pt-3 border-t border-slate-100 flex justify-between items-center">
                                 <div>
                                   <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Estimasi</div>
-                                  <div className="text-sm font-bold text-blue-600">{formatRupiah(totalEst)}</div>
+                                  <div className="text-sm font-bold text-blue-600">{money.formatIDR(totalEst)}</div>
                                 </div>
                                 <Link 
                                   href={`/admin/inquiries/${inq.id}`}

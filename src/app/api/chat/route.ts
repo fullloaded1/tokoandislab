@@ -2,7 +2,7 @@ import { groq } from '@ai-sdk/groq';
 import { google } from '@ai-sdk/google';
 import { streamText, embed } from 'ai';
 import { prisma } from '@/lib/db';
-import { formatRupiah } from '@/lib/products';
+import { money } from '@/lib/money';
 
 export const maxDuration = 30;
 
@@ -19,8 +19,8 @@ export async function POST(req: Request) {
 
     // Build the catalog context
     const catalogContext = products.map(p => {
-      let specStr = p.specs.map(s => `${s.label}: ${s.value}`).join(', ');
-      return `- ${p.name} (Kategori: ${p.categoryLabel}, Brand: ${p.brand})\n  Harga: ${p.price > 0 ? formatRupiah(p.price) : 'Hubungi sales untuk penawaran'}\n  Deskripsi: ${p.description}\n  Spesifikasi: ${specStr}`;
+      const specStr = p.specs.map(s => `${s.label}: ${s.value}`).join(', ');
+      return `- ${p.name} (Kategori: ${p.categoryLabel}, Brand: ${p.brand})\n  Harga: ${p.price.toNumber() > 0 ? money.formatIDR(p.price) : 'Hubungi sales untuk penawaran'}\n  Deskripsi: ${p.description}\n  Spesifikasi: ${specStr}`;
     }).join('\n\n');
 
     let systemPrompt = "";

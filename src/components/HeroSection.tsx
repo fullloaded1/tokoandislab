@@ -4,10 +4,9 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ShoppingCart, ShieldCheck, Truck, Headphones } from "lucide-react";
-import { formatRupiah } from "@/lib/products";
+import { money } from "@/lib/money";
 import { useRFQStore } from "@/store/useRFQStore";
 import { useToast } from "@/components/Toast";
-import type { Product as PrismaProduct } from "@prisma/client";
 
 const features = [
   {
@@ -37,7 +36,7 @@ const getCategoryStyles = (category: string) => {
   }
 };
 
-export default function HeroSection({ featuredProducts = [] }: { featuredProducts: PrismaProduct[] }) {
+export default function HeroSection({ featuredProducts = [] }: { featuredProducts: any[] }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const addItem = useRFQStore((state) => state.addItem);
 
@@ -68,7 +67,10 @@ export default function HeroSection({ featuredProducts = [] }: { featuredProduct
           {featuredProducts.map((product, index) => {
             const isActive = index === currentSlide;
             const styles = getCategoryStyles(product.category);
-            const hasPrice = product.price && product.price > 0;
+            const productAny = product as any;
+            const availableVariant = productAny.variants?.find((v: any) => v.stock - v.reservedStock > 0 && money.toDecimal(v.price).toNumber() > 0);
+            const isReadyToBuy = productAny.isReadyStock && availableVariant;
+            const readyStockPrice = isReadyToBuy ? money.toDecimal(availableVariant.price).toNumber() : 0;
             
             return (
               <div
@@ -87,9 +89,15 @@ export default function HeroSection({ featuredProducts = [] }: { featuredProduct
                     {product.name}
                   </h2>
                   
-                  <span className="inline-flex items-center gap-2 rounded-full bg-white/60 backdrop-blur border border-amber-200 px-4 py-1.5 text-sm font-semibold text-amber-600 mb-4 w-fit">
-                    💬 Minta Penawaran Dulu
-                  </span>
+                  {isReadyToBuy ? (
+                    <span className="inline-flex items-center gap-2 rounded-full bg-white/80 backdrop-blur border border-emerald-300 px-4 py-1.5 text-sm font-bold text-emerald-700 mb-4 w-fit shadow-sm">
+                      🔥 Stok Tersedia • {money.formatIDR(readyStockPrice)}
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-2 rounded-full bg-white/60 backdrop-blur border border-amber-200 px-4 py-1.5 text-sm font-semibold text-amber-600 mb-4 w-fit">
+                      💬 Minta Penawaran Dulu
+                    </span>
+                  )}
                   
                   <p className="text-slate-600 text-sm sm:text-base mb-8 line-clamp-2 max-w-md">
                     {product.description}
@@ -98,20 +106,46 @@ export default function HeroSection({ featuredProducts = [] }: { featuredProduct
                   <div className="flex flex-wrap items-center gap-3">
                     <button
                       onClick={() => {
-                        addItem({
-                          id: product.id,
-                          slug: product.slug,
-                          name: product.name,
-                          image: product.image,
-                          category: product.categoryLabel,
-                          price: product.price,
-                        });
+                        if (isReadyToBuy && availableVariant) {
+                          const res = addItem({
+                            id: availableVariant.id,
+                            productId: product.id,
+                            variantId: availableVariant.id,
+                            slug: product.slug,
+                            name: `${product.name} (${availableVariant.name})`,
+                            image: product.image,
+                            category: product.categoryLabel,
+                            price: readyStockPrice,
+                            type: "DIRECT"
+                          });
+                          if (res?.success === false) {
+                            toast?.showToast(res.error || "Gagal", "error");
+                            return;
+                          }
+                        } else {
+                          const res = addItem({
+                            id: product.id,
+                            productId: product.id,
+                            slug: product.slug,
+                            name: product.name,
+                            image: product.image,
+                            category: product.categoryLabel,
+                            price: money.toDecimal(product.price as any).toNumber(),
+                            type: "RFQ"
+                          });
+                          if (res?.success === false) {
+                            toast?.showToast(res.error || "Gagal", "error");
+                            return;
+                          }
+                        }
                         toast?.showToast(`${product.name} ditambahkan ke keranjang`, "success");
                       }}
-                      className={`flex items-center justify-center gap-2 text-white font-bold text-sm px-6 py-3.5 rounded-xl shadow-lg transition-all hover:-translate-y-0.5 ${styles.btn}`}
+                      className={`flex items-center justify-center gap-2 text-white font-bold text-sm px-6 py-3.5 rounded-xl shadow-lg transition-all hover:-translate-y-0.5 ${
+                        isReadyToBuy ? "bg-emerald-600 hover:bg-emerald-700 shadow-emerald-600/30" : styles.btn
+                      }`}
                     >
                       <ShoppingCart className="h-4 w-4" />
-                      + Keranjang
+                      {isReadyToBuy ? "Beli Langsung" : "+ Keranjang"}
                     </button>
                     <Link
                       href={`/katalog/${product.slug}`}

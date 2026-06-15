@@ -11,14 +11,18 @@ interface RFQCartDrawerProps {
 }
 
 export default function RFQCartDrawer({ open, onClose }: RFQCartDrawerProps) {
-  const { items, removeItem, updateQty, clearCart, totalItems } = useRFQStore();
+  const { cartType, items, removeItem, updateQty, clearCart, totalItems, totalPrice } = useRFQStore();
 
   const router = useRouter();
 
   const handleCheckout = () => {
     if (items.length === 0) return;
     onClose();
-    router.push("/inquiry");
+    if (cartType === 'DIRECT') {
+      router.push("/checkout");
+    } else {
+      router.push("/inquiry");
+    }
   };
 
   return (
@@ -45,7 +49,7 @@ export default function RFQCartDrawer({ open, onClose }: RFQCartDrawerProps) {
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-800">
-                Keranjang Belanja
+                {cartType === 'DIRECT' ? 'Keranjang Belanja' : 'Daftar Penawaran'}
               </h2>
               <p className="text-xs text-slate-500">
                 {items.length} produk dipilih
@@ -146,13 +150,32 @@ export default function RFQCartDrawer({ open, onClose }: RFQCartDrawerProps) {
               <span className="text-sm font-semibold text-slate-500">Total Produk</span>
               <span className="text-xl font-black text-slate-800">{totalItems()} unit</span>
             </div>
+            {cartType === 'DIRECT' && (
+              <div className="flex items-center justify-between mb-4 mt-2 bg-blue-50 p-3 rounded-xl border border-blue-100">
+                <span className="text-sm font-bold text-blue-800">Total Harga</span>
+                <span className="text-lg font-black text-blue-700">Rp {totalPrice().toLocaleString('id-ID')}</span>
+              </div>
+            )}
             <div className="space-y-3">
               <button
                 onClick={handleCheckout}
-                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition-all hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
+                className={`flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-bold text-white shadow-lg transition-all hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 ${
+                  cartType === 'DIRECT' 
+                    ? "bg-emerald-600 shadow-emerald-500/25 hover:bg-emerald-700" 
+                    : "bg-gradient-to-r from-blue-600 to-cyan-600 shadow-blue-500/25"
+                }`}
               >
-                <FileText className="h-5 w-5" />
-                Minta Penawaran (RFQ)
+                {cartType === 'DIRECT' ? (
+                  <>
+                    <ShoppingCart className="h-5 w-5" />
+                    Checkout Sekarang
+                  </>
+                ) : (
+                  <>
+                    <FileText className="h-5 w-5" />
+                    Minta Penawaran (RFQ)
+                  </>
+                )}
               </button>
               <button
               onClick={clearCart}

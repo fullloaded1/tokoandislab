@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { FileText, Building, Calendar, FileDown, MessageCircle, Send, CheckCircle } from "lucide-react";
-import { formatRupiah } from "@/lib/products";
+import { money } from "@/lib/money";
 import { createActivityLog, updateInquiryStatus } from "../../actions";
+import { ActivityAction } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -16,7 +17,7 @@ export default function InquiryDetailClient({ initialData }: { initialData: any 
   const [logDesc, setLogDesc] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const totalEst = initialData.items.reduce((sum: number, item: any) => sum + (item.product.price * item.quantity), 0);
+  const totalEst = initialData.items.reduce((sum: number, item: any) => sum + (money.toDecimal(item.product.price).toNumber() * item.quantity), 0);
   const ppn = totalEst * 0.11;
   const grandTotal = totalEst + ppn;
 
@@ -26,7 +27,7 @@ export default function InquiryDetailClient({ initialData }: { initialData: any 
     await createActivityLog({
       inquiryId: initialData.id,
       institutionId: initialData.institutionId,
-      action: logAction,
+      action: logAction as ActivityAction,
       description: logDesc
     });
     setLogDesc("");
@@ -58,8 +59,8 @@ export default function InquiryDetailClient({ initialData }: { initialData: any 
       index + 1,
       `${item.product.name}\nBrand: ${item.product.brand}`,
       item.quantity,
-      formatRupiah(item.product.price),
-      formatRupiah(item.product.price * item.quantity)
+      money.formatIDR(item.product.price),
+      money.formatIDR(money.toDecimal(item.product.price).toNumber() * item.quantity)
     ]);
 
     autoTable(doc, {
@@ -80,13 +81,13 @@ export default function InquiryDetailClient({ initialData }: { initialData: any 
     
     doc.setFont("helvetica", "bold");
     doc.text("Subtotal:", 130, finalY + 10);
-    doc.text(formatRupiah(totalEst), 195, finalY + 10, { align: "right" });
+    doc.text(money.formatIDR(totalEst), 195, finalY + 10, { align: "right" });
     
     doc.text("PPN (11%):", 130, finalY + 16);
-    doc.text(formatRupiah(ppn), 195, finalY + 16, { align: "right" });
+    doc.text(money.formatIDR(ppn), 195, finalY + 16, { align: "right" });
     
     doc.text("Total:", 130, finalY + 22);
-    doc.text(formatRupiah(grandTotal), 195, finalY + 22, { align: "right" });
+    doc.text(money.formatIDR(grandTotal), 195, finalY + 22, { align: "right" });
 
     // Signature
     doc.text("Hormat Kami,", 14, finalY + 40);
@@ -158,17 +159,17 @@ export default function InquiryDetailClient({ initialData }: { initialData: any 
                   </div>
                   <div className="text-right">
                     <div className="font-bold text-lg text-slate-800">{item.quantity} Unit</div>
-                    <div className="text-sm text-slate-500">@ {formatRupiah(item.product.price)}</div>
-                    <div className="font-bold text-blue-600 mt-1">{formatRupiah(item.product.price * item.quantity)}</div>
+                    <div className="text-sm text-slate-500">@ {money.formatIDR(item.product.price)}</div>
+                    <div className="font-bold text-blue-600 mt-1">{money.formatIDR(money.toDecimal(item.product.price).toNumber() * item.quantity)}</div>
                   </div>
                 </div>
               ))}
             </div>
             
             <div className="mt-6 border-t border-slate-100 pt-4 text-right">
-              <div className="text-sm text-slate-500">Subtotal: {formatRupiah(totalEst)}</div>
-              <div className="text-sm text-slate-500">PPN 11%: {formatRupiah(ppn)}</div>
-              <div className="text-xl font-black text-slate-900 mt-2">Total: {formatRupiah(grandTotal)}</div>
+              <div className="text-sm text-slate-500">Subtotal: {money.formatIDR(totalEst)}</div>
+              <div className="text-sm text-slate-500">PPN 11%: {money.formatIDR(ppn)}</div>
+              <div className="text-xl font-black text-slate-900 mt-2">Total: {money.formatIDR(grandTotal)}</div>
             </div>
           </div>
         </div>

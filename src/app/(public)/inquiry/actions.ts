@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/db";
+import { InstitutionType } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 export async function submitInquiry(formData: FormData) {
@@ -30,7 +31,7 @@ export async function submitInquiry(formData: FormData) {
       institution = await prisma.institution.create({
         data: {
           name: institutionName,
-          type: type,
+          type: type as InstitutionType,
           address: address,
         }
       });
@@ -68,7 +69,7 @@ export async function submitInquiry(formData: FormData) {
         notes: notes ? `PIC: ${contactName} (${phone} / ${email})\nCatatan: ${notes}` : `PIC: ${contactName} (${phone} / ${email})`,
         items: {
           create: items.map(item => ({
-            productId: item.id,
+            productId: item.productId,
             quantity: item.qty
           }))
         }

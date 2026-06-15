@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LogOut, Package, FileText, Users, HardDrive, Bot, BookOpen, MessageCircle, Newspaper } from "lucide-react";
+import { LogOut, Package, FileText, Users, HardDrive, Bot, BookOpen, MessageCircle, Newspaper, ShoppingBag } from "lucide-react";
 import { logoutAction } from "./actions";
 import { verifySession } from "@/lib/session";
 import { redirect } from "next/navigation";
@@ -27,6 +27,11 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <span className="font-semibold text-sm">Katalog Produk</span>
           </Link>
           
+          <Link href="/admin/orders" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 hover:text-white transition-colors">
+            <ShoppingBag className="h-5 w-5" />
+            <span className="font-semibold text-sm">Pesanan</span>
+          </Link>
+
           <Link href="/admin/inquiries" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 hover:text-white transition-colors">
             <FileText className="h-5 w-5" />
             <span className="font-semibold text-sm">Permintaan (RFQ)</span>

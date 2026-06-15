@@ -28,14 +28,15 @@ function KatalogLoading() {
 }
 
 import { prisma } from "@/lib/db";
+import { serializeProductDecimals } from "@/lib/products";
 
 // ISR: revalidate setiap 60 detik
 export const revalidate = 60;
 
 export default async function KatalogPage() {
-  const products = await prisma.product.findMany({
-    include: { specs: true }
-  });
+  const products = (await prisma.product.findMany({
+    include: { specs: true, variants: true }
+  })).map(serializeProductDecimals);
 
   return (
     <Suspense fallback={<KatalogLoading />}>

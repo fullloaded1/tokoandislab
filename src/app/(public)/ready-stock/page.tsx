@@ -8,19 +8,22 @@ export const metadata = {
   description: "STOCK Terbatas! Segera pre-ORDER hubungi kami barang siap kirim ke instansi/perusahaan Anda.Dapatkan diskon khusus jika beli hari ini.",
 };
 
-import { getGroupedProducts } from "@/lib/products";
+import { getGroupedProducts, serializeProductDecimals } from "@/lib/products";
 
 export const dynamic = "force-dynamic";
 
 export default async function ReadyStockPage() {
-  const allProducts = await prisma.product.findMany({
+  const allProducts = (await prisma.product.findMany({
     where: {
       isReadyStock: true,
+    },
+    include: {
+      variants: true,
     },
     orderBy: {
       createdAt: "desc",
     },
-  });
+  })).map(serializeProductDecimals);
 
   const products = getGroupedProducts(allProducts);
 

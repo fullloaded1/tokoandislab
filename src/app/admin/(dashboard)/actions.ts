@@ -1,6 +1,8 @@
 "use server";
 
 import { prisma } from "@/lib/db";
+import { money } from "@/lib/money";
+import { ActivityAction, InquiryStatus } from "@prisma/client";
 import { deleteSession } from "@/lib/session";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -27,7 +29,7 @@ export async function createProduct(data: any) {
       data: {
         name: data.name,
         slug: slug,
-        price: parseFloat(data.price),
+        price: money.toDecimal(data.price),
         category: data.category,
         categoryLabel: data.categoryLabel,
         brand: data.brand || "",
@@ -54,7 +56,7 @@ export async function updateProduct(id: string, data: any) {
       where: { id },
       data: {
         name: data.name,
-        price: parseFloat(data.price),
+        price: money.toDecimal(data.price),
         category: data.category,
         categoryLabel: data.categoryLabel,
         brand: data.brand || "",
@@ -86,7 +88,7 @@ export async function bulkCreateProducts(products: any[]) {
       return {
         name: p.name,
         slug: `${baseSlug}-${randomStr}`, // Prevent duplicate slugs in bulk
-        price: parseFloat(p.price) || 0,
+        price: money.toDecimal(p.price),
         category: p.category || "other",
         categoryLabel: p.categoryLabel || "Lainnya",
         brand: p.brand || "",
@@ -119,7 +121,7 @@ export async function logoutAction() {
 }
 
 // CRM Activity Logs
-export async function createActivityLog(data: { inquiryId?: string; institutionId?: string; action: string; description: string }) {
+export async function createActivityLog(data: { inquiryId?: string; institutionId?: string; action: ActivityAction; description: string }) {
   try {
     await prisma.activityLog.create({
       data,
@@ -147,7 +149,7 @@ export async function getActivityLogs(params: { inquiryId?: string; institutionI
   }
 }
 
-export async function updateInquiryStatus(inquiryId: string, status: string) {
+export async function updateInquiryStatus(inquiryId: string, status: InquiryStatus) {
   try {
     const inquiry = await prisma.inquiry.update({
       where: { id: inquiryId },
@@ -159,7 +161,7 @@ export async function updateInquiryStatus(inquiryId: string, status: string) {
       data: {
         inquiryId: inquiry.id,
         institutionId: inquiry.institutionId,
-        action: "STATUS_UPDATE",
+        action: ActivityAction.OTHER,
         description: `Status diubah menjadi ${status}`,
       }
     });

@@ -17,7 +17,7 @@ import {
 import { useRFQStore } from "@/store/useRFQStore";
 import { useWhatsAppLeadStore } from "@/store/useWhatsAppLeadStore";
 import ProductCard from "@/components/ProductCard";
-import { formatRupiah, type Product } from "@/lib/products";
+import { type Product } from "@/lib/products";
 
 interface ProductVariant {
   id: string;
@@ -32,6 +32,10 @@ interface ProductDetailClientProps {
   variants?: ProductVariant[];
 }
 
+import { useToast } from "@/components/Toast";
+import { money } from "@/lib/money";
+import { getReadyStockSummary } from "@/lib/readyStock";
+
 export default function ProductDetailClient({
   product,
   relatedProducts,
@@ -41,20 +45,62 @@ export default function ProductDetailClient({
   const [added, setAdded] = useState(false);
   const openWaModal = useWhatsAppLeadStore((s) => s.openModal);
   const [activeTab, setActiveTab] = useState<"deskripsi" | "spesifikasi" | "dokumen">("deskripsi");
+  
+  let toast: ReturnType<typeof useToast> | null = null;
+  try { toast = useToast(); } catch {}
 
-  // Jika produk adalah Ready Stock dan memiliki model, tampilkan nama + model
+  const productVariants = (product as any).variants || [];
+
+  const summary = getReadyStockSummary(product as any);
+
+  // Pilih varian pertama yang tersedia, atau varian pertama, atau null
+  const initialVariant = summary.firstAvailable ?? productVariants[0] ?? null;
+  const [selectedVariant, setSelectedVariant] = useState<any | null>(initialVariant);
+
   const displayName = product.isReadyStock && product.model ? `${product.name} - ${product.model}` : product.name;
 
+  // TODO: HIDE_PRICES_TEMPORARILY di-set true karena user menunggu pengiriman harga terbaru.
+  const HIDE_PRICES_TEMPORARILY = true;
+
+  const isReadyToBuy = HIDE_PRICES_TEMPORARILY ? false : !!(product.isReadyStock && selectedVariant && (selectedVariant.stock - selectedVariant.reservedStock > 0) && money.toDecimal(selectedVariant.price).toNumber() > 0);
+  const readyStockPrice = isReadyToBuy ? money.toDecimal(selectedVariant.price).toNumber() : 0;
+
   const handleAdd = () => {
-    addItem({
-      id: product.id,
-      slug: product.slug,
-      name: displayName,
-      image: product.image,
-      category: product.categoryLabel,
-      price: product.price,
-    });
+    if (isReadyToBuy && selectedVariant) {
+      const res = addItem({
+        id: selectedVariant.id,
+        productId: product.id,
+        variantId: selectedVariant.id,
+        slug: product.slug,
+        name: `${displayName} (${selectedVariant.name})`,
+        image: product.image,
+        category: product.categoryLabel,
+        price: readyStockPrice,
+        type: "DIRECT"
+      });
+      if (res?.success === false) {
+        toast?.showToast(res.error || "Gagal", "error");
+        return;
+      }
+    } else {
+      const res = addItem({
+        id: product.id,
+        productId: product.id,
+        slug: product.slug,
+        name: displayName,
+        image: product.image,
+        category: product.categoryLabel,
+        price: money.toDecimal(product.price).toNumber(),
+        type: "RFQ"
+      });
+      if (res?.success === false) {
+        toast?.showToast(res.error || "Gagal", "error");
+        return;
+      }
+    }
+    
     setAdded(true);
+    toast?.showToast(`${displayName} ditambahkan ke keranjang`, "success");
     setTimeout(() => setAdded(false), 2000);
   };
 
@@ -119,17 +165,86 @@ export default function ProductDetailClient({
             
             {/* Price or Request Quote Tag */}
             <div className="mb-8">
-               <span className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-5 py-2.5 text-sm font-bold text-white shadow-md">
-                 Minta Penawaran Harga
-               </span>
+              {isReadyToBuy ? (
+                <div className="flex flex-col">
+                  {summary.hasPriceRange && (
+                    <span className="text-xs font-semibold uppercase tracking-wider text-emerald-500/80 mb-1">
+                      Mulai dari {money.formatIDR(summary.minPrice)} · pilih varian
+                    </span>
+                  )}
+                  {/* TODO[T3.3]: Check Order.priceDisplayMode or system setting to decide if this price should include PPN */}
+                  <span className="text-3xl font-black text-emerald-600 tracking-tight">
+                    {money.formatIDR(readyStockPrice)}
+                  </span>
+                  <span className="text-sm font-semibold text-emerald-700 mt-1 flex items-center gap-1.5">
+                    <Check className="h-4 w-4" /> Stok Tersedia ({selectedVariant.stock - selectedVariant.reservedStock} unit)
+                  </span>
+                </div>
+              ) : product.isReadyStock && selectedVariant && !HIDE_PRICES_TEMPORARILY ? (
+                <div className="flex flex-col">
+                  {/* TODO[T3.3]: Check Order.priceDisplayMode to show PPN/DPP correctly */}
+                  <span className="text-3xl font-black text-slate-400 tracking-tight line-through">
+                    {money.toDecimal(selectedVariant.price).toNumber() > 0 
+                      ? money.formatIDR(money.toDecimal(selectedVariant.price).toNumber()) 
+                      : "Harga Tidak Tersedia"}
+                  </span>
+                  <span className="text-sm font-semibold text-red-500 mt-1 flex items-center gap-1.5">
+                    <Check className="h-4 w-4" /> Stok Habis - Silakan Minta Penawaran
+                  </span>
+                </div>
+              ) : (
+                <span className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-5 py-2.5 text-sm font-bold text-white shadow-md">
+                  Minta Penawaran Harga
+                </span>
+              )}
             </div>
 
-            {/* VARIANT SELECTOR */}
+            {/* PRODUCT VARIANT SELECTOR */}
+            {productVariants.length > 0 && (
+              <div className="mb-8">
+                <div className="flex items-center justify-between mb-3">
+                   <h3 className="text-sm font-bold text-slate-800">Pilih Varian:</h3>
+                </div>
+                <div className="flex flex-wrap gap-2.5">
+                  {productVariants.map((v: any) => {
+                    const isActive = selectedVariant?.id === v.id;
+                    const available = v.stock - v.reservedStock;
+                    const variantPrice = money.toDecimal(v.price).toNumber();
+
+                    return (
+                      <button
+                        key={v.id}
+                        onClick={() => setSelectedVariant(v)}
+                        className={`rounded-xl border-2 px-5 py-2.5 text-sm font-bold transition-all text-left ${
+                          isActive
+                            ? "border-emerald-600 bg-emerald-50 text-emerald-700 shadow-sm"
+                            : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"
+                        }`}
+                      >
+                        <div className="block">{v.name}</div>
+                        {product.isReadyStock && variantPrice > 0 && !HIDE_PRICES_TEMPORARILY && (
+                          <div className={`text-xs mt-1 font-semibold ${isActive ? "text-emerald-700" : "text-slate-700"}`}>
+                            {/* TODO[T3.3]: apply Order.priceDisplayMode */}
+                            {money.formatIDR(variantPrice)}
+                          </div>
+                        )}
+                        {product.isReadyStock && !HIDE_PRICES_TEMPORARILY && (
+                          <div className={`text-xs mt-0.5 ${available > 0 ? "text-emerald-600" : "text-red-500"}`}>
+                            {available > 0 ? `Sisa ${available}` : "Habis"}
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* SIBLING PRODUCTS SELECTOR (Model Lain) */}
             {variants.length > 1 && (
               <div className="mb-10">
                 <div className="flex items-center justify-between mb-3">
-                   <h3 className="text-sm font-bold text-slate-800">Tipe / Model:</h3>
-                   <span className="text-xs font-semibold text-slate-400">{variants.length} Varian</span>
+                   <h3 className="text-sm font-bold text-slate-800">Tipe / Model Lainnya:</h3>
                 </div>
                 <div className="flex flex-wrap gap-2.5">
                   {variants.map((v) => {
@@ -168,7 +283,9 @@ export default function ProductDetailClient({
                 className={`w-full flex items-center justify-center gap-2 rounded-2xl py-4 text-base font-bold transition-all duration-300 ${
                   added
                     ? "bg-emerald-50 text-emerald-600 border-2 border-emerald-200"
-                    : "bg-blue-600 text-white shadow-xl shadow-blue-600/20 hover:bg-blue-700 hover:shadow-blue-600/30 hover:-translate-y-0.5"
+                    : isReadyToBuy
+                      ? "bg-emerald-600 text-white shadow-xl shadow-emerald-600/20 hover:bg-emerald-700 hover:-translate-y-0.5"
+                      : "bg-blue-600 text-white shadow-xl shadow-blue-600/20 hover:bg-blue-700 hover:-translate-y-0.5"
                 }`}
               >
                 {added ? (
@@ -176,10 +293,16 @@ export default function ProductDetailClient({
                     <Check className="h-5 w-5" />
                     Berhasil Ditambahkan!
                   </>
+                ) : isReadyToBuy ? (
+                  <>
+                    <ShoppingCart className="h-5 w-5" />
+                    {/* TODO[T3.3]: Apply priceDisplayMode here */}
+                    Beli Sekarang ({money.formatIDR(readyStockPrice)})
+                  </>
                 ) : (
                   <>
                     <ShoppingCart className="h-5 w-5" />
-                    Tambah ke Keranjang RFQ
+                    Minta Penawaran
                   </>
                 )}
               </button>

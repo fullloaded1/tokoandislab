@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AndisLab V2.1 - B2B E-Commerce & RFQ Portal
 
-## Getting Started
+AndisLab adalah platform distributor resmi untuk peralatan laboratorium, bahan kimia, dan furniture lab custom. Versi V2.1 memadukan kemampuan *Request For Quotation* (RFQ) B2B skala besar dengan transaksi langsung (E-Commerce) untuk *Ready Stock*.
 
-First, run the development server:
+## Teknologi Utama
+- **Framework:** Next.js 16 (App Router) + React 19
+- **Bahasa:** TypeScript
+- **Database:** PostgreSQL (Vercel/Neon) + Prisma ORM 6 (ekstensi `vector`)
+- **Styling:** Tailwind CSS 4
+- **State Management:** Zustand
+- **PDF Generation:** jsPDF + jsPDF-Autotable
+- **Storage:** Vercel Blob
+- **Auth (Admin):** `jose` (JWT HTTP-Only)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Environment Variables (.env)
+Pastikan Anda memiliki variabel berikut di file `.env` lokal Anda:
+
+```env
+# Database
+DATABASE_URL="postgresql://user:password@host/dbname?sslmode=require"
+
+# Vercel Blob
+BLOB_READ_WRITE_TOKEN="vercel_blob_rw_xxx"
+
+# AI SDK (Opsional untuk Chatbot / RAG)
+GROQ_API_KEY="gsk_xxx"
+GOOGLE_GENERATIVE_AI_API_KEY="AIzaSy..."
+
+# Admin Auth (Default jika tidak ada database admin)
+ADMIN_USERNAME="admin"
+ADMIN_PASSWORD="password_rahasia"
+JWT_SECRET="secret_panjang_sekali"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Setup & Instalasi Lokal
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Instal dependensi:
+   ```bash
+   npm install
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Migrasi Database:
+   ```bash
+   # Gunakan environment staging jika akan melakukan uji skema baru
+   npx prisma db pull
+   npx prisma generate
+   ```
 
-## Learn More
+3. Jalankan Development Server:
+   ```bash
+   npm run dev
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+## Aturan Agen (Antigravity)
+Semua instruksi pengembangan otomatis berbasis agen tunduk pada aturan di file `AGENTS.md`. Aturan utama mencakup:
+- Selalu gunakan `Decimal` untuk data finansial (Uang).
+- Pengurangan/penambahan stok wajib berjalan di dalam *DB Transaction*.
+- Jangan pernah mengubah logika inti dari alur `Inquiry -> Quotation -> Project -> Invoice` yang sudah berjalan.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Testing
+Sistem diuji menggunakan `Vitest`. Untuk menjalankan test:
+```bash
+npx vitest run
+```
