@@ -138,7 +138,7 @@ export default function ProductDetailClient({
               src={product.image}
               alt={displayName}
               fill
-              className="object-contain transition-transform duration-700 hover:scale-105 p-8"
+              className="object-contain mix-blend-multiply transition-transform duration-700 hover:scale-105 p-8"
               sizes="(max-width: 1024px) 100vw, 60vw"
               priority
             />

@@ -99,7 +99,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
             src={product.image}
             alt={displayName}
             fill
-            className="object-contain p-6 transition-transform duration-500 group-hover:scale-110"
+            className="object-contain mix-blend-multiply p-6 transition-transform duration-500 group-hover:scale-110"
             sizes="200px"
           />
           {product.variantCount > 1 && (
@@ -134,7 +134,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
           src={product.image}
           alt={displayName}
           fill
-          className="object-contain p-8 transition-transform duration-700 group-hover:scale-110"
+          className="object-contain mix-blend-multiply p-8 transition-transform duration-700 group-hover:scale-110"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
         
