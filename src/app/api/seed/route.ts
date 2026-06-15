@@ -2,84 +2,41 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
 export async function GET() {
+  const toDelete = [
+    "andislab-chemical-storage",
+    "andislab-anti-vibration-table"
+  ];
+
+  await prisma.product.deleteMany({
+    where: { slug: { in: toDelete } }
+  });
+
   const newProducts = [
     {
-      name: "Lovibond MD 100 Photometer",
-      slug: "lovibond-md-100-photometer",
-      category: "lovibond",
-      categoryLabel: "Lovibond",
-      brand: "Lovibond",
-      description: "Photometer portabel untuk pengujian air dengan presisi tinggi.",
-      isReadyStock: true,
-      price: 15000000,
-      image: "/images/lovibond-logo.png",
-      model: "MD 100",
-      subcategory: "Photometer"
-    },
-    {
-      name: "Lovibond SensoDirect 150",
-      slug: "lovibond-sensodirect-150",
-      category: "lovibond",
-      categoryLabel: "Lovibond",
-      brand: "Lovibond",
-      description: "Alat pengukur multi-parameter untuk pH, ORP, Konduktivitas, dan Oksigen Terlarut.",
-      isReadyStock: true,
-      price: 12500000,
-      image: "/images/lovibond-logo.png",
-      model: "SD 150",
-      subcategory: "Meter"
-    },
-    {
-      name: "Pyrex Buret dengan Stopcock",
-      slug: "pyrex-buret-stopcock",
-      category: "pyrex",
-      categoryLabel: "Pyrex",
-      brand: "Pyrex",
-      description: "Buret kaca Pyrex berkualitas tinggi dengan PTFE stopcock.",
-      isReadyStock: true,
-      price: 1500000,
-      image: "/images/pyrexlogo.PNG",
-      model: "50ml Stopcock",
-      subcategory: "Glassware"
-    },
-    {
-      name: "Pyrex Cawan Petri Kaca",
-      slug: "pyrex-cawan-petri",
-      category: "pyrex",
-      categoryLabel: "Pyrex",
-      brand: "Pyrex",
-      description: "Cawan petri kaca Pyrex yang dapat disterilisasi ulang.",
-      isReadyStock: true,
-      price: 450000,
-      image: "/images/pyrexlogo.PNG",
-      model: "100mm",
-      subcategory: "Glassware"
-    },
-    {
-      name: "AndisLab Custom Lemari Penyimpanan Kimia",
-      slug: "andislab-chemical-storage",
+      name: "Corrosive Storage Cabinet",
+      slug: "corrosive-storage-cabinet",
       category: "andislab-custom",
       categoryLabel: "AndisLab Custom",
       brand: "AndisLab",
-      description: "Lemari penyimpanan bahan kimia dengan sistem ventilasi khusus.",
+      model: "CS Series",
+      subcategory: "Lemari Penyimpanan",
+      description: "Lemari penyimpanan bahan korosif terbuat dari Polypropylene (PP) yang tahan korosi jangka panjang. Ideal untuk penyimpanan asam kuat, basa kuat, dan bahan pengoksidasi.",
       isReadyStock: false,
       price: 0,
-      image: "/logo.png",
-      model: "Chemical Storage",
-      subcategory: "Furniture"
+      image: "/logo.png"
     },
     {
-      name: "AndisLab Custom Meja Timbang Anti Getar",
-      slug: "andislab-anti-vibration-table",
+      name: "Meja Laboratorium (Island Bench)",
+      slug: "meja-laboratorium-island-bench",
       category: "andislab-custom",
       categoryLabel: "AndisLab Custom",
       brand: "AndisLab",
-      description: "Meja khusus untuk timbangan analitik dengan peredam getaran maksimal.",
+      model: "Island Bench Custom",
+      subcategory: "Furniture",
+      description: "Meja laboratorium tengah (Island Bench) berbahan Phenolic Resin yang sangat tahan bahan kimia dan goresan. Dilengkapi dengan rak reagen, wastafel PP, dan stop kontak.",
       isReadyStock: false,
       price: 0,
-      image: "/logo.png",
-      model: "Anti Vibration Table",
-      subcategory: "Furniture"
+      image: "/logo.png"
     }
   ];
 
@@ -92,5 +49,5 @@ export async function GET() {
     }
   }
 
-  return NextResponse.json({ success: true, added });
+  return NextResponse.json({ success: true, deleted: toDelete.length, added });
 }
