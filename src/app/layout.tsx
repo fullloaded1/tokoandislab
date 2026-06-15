@@ -4,6 +4,7 @@ import "./globals.css";
 import { ToastProvider } from "@/components/Toast";
 import { Analytics } from "@vercel/analytics/react";
 import WhatsAppLeadModal from "@/components/WhatsAppLeadModal";
+import Script from "next/script";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -66,6 +67,48 @@ export default function RootLayout({
   return (
     <html lang="id" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){window.dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+              `}
+            </Script>
+          </>
+        )}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "AndisLab",
+              url: "https://andislabs.com",
+              logo: "https://andislabs.com/images/logo.png",
+              description: "Distributor Alat Laboratorium, Bahan Kimia & Furniture Lab",
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "Jl. Raya Mayor Oking Jaya Atmaja No.112, Cirimekar",
+                addressLocality: "Cibinong, Kabupaten Bogor",
+                addressRegion: "Jawa Barat",
+                postalCode: "16918",
+                addressCountry: "ID"
+              },
+              contactPoint: {
+                "@type": "ContactPoint",
+                telephone: "+62-821-2552-3466",
+                contactType: "customer service"
+              }
+            })
+          }}
+        />
         <ToastProvider>
           {children}
           <WhatsAppLeadModal />
