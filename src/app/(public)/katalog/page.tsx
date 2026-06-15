@@ -34,9 +34,14 @@ import { serializeProductDecimals } from "@/lib/products";
 export const revalidate = 60;
 
 export default async function KatalogPage() {
-  const products = (await prisma.product.findMany({
-    include: { specs: true, variants: true }
-  })).map(serializeProductDecimals);
+  let products: any[] = [];
+  try {
+    products = (await prisma.product.findMany({
+      include: { specs: true, variants: true }
+    })).map(serializeProductDecimals);
+  } catch (error) {
+    console.error("KatalogPage: Failed to fetch products", error);
+  }
 
   return (
     <Suspense fallback={<KatalogLoading />}>

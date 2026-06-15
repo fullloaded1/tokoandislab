@@ -31,30 +31,37 @@ const categoryLogos: Record<Category, string> = {
 };
 
 export default async function HomePage() {
-  const allProducts = (await prisma.product.findMany({
-    select: {
-      id: true,
-      slug: true,
-      name: true,
-      category: true,
-      categoryLabel: true,
-      brand: true,
-      model: true,
-      subcategory: true,
-      image: true,
-      description: true,
-      price: true,
-      isReadyStock: true,
-      isRequestPricing: true,
-      variants: true,
-    },
-  })).map(serializeProductDecimals);
+  let allProducts: any[] = [];
+  let latestArticles: any[] = [];
 
-  const latestArticles = await (prisma as any).article.findMany({
-    where: { published: true },
-    orderBy: { createdAt: "desc" },
-    take: 3,
-  });
+  try {
+    allProducts = (await prisma.product.findMany({
+      select: {
+        id: true,
+        slug: true,
+        name: true,
+        category: true,
+        categoryLabel: true,
+        brand: true,
+        model: true,
+        subcategory: true,
+        image: true,
+        description: true,
+        price: true,
+        isReadyStock: true,
+        isRequestPricing: true,
+        variants: true,
+      },
+    })).map(serializeProductDecimals);
+
+    latestArticles = await (prisma as any).article.findMany({
+      where: { published: true },
+      orderBy: { createdAt: "desc" },
+      take: 3,
+    });
+  } catch (error) {
+    console.error("HomePage: Failed to fetch data from database", error);
+  }
   
   // Pick one from each category for the hero slider
   const featuredSliderProducts = [

@@ -38,10 +38,6 @@ const nextConfig: NextConfig = {
       ],
     };
   },
-  experimental: {
-    workerThreads: false,
-    cpus: 2,
-  },
   images: {
     remotePatterns: [
       {

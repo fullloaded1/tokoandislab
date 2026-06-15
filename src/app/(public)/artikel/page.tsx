@@ -17,14 +17,19 @@ export const metadata: Metadata = {
 };
 
 export default async function ArticlesIndexPage() {
-  const articles = await (prisma as any).article.findMany({
-    where: {
-      published: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  let articles: any[] = [];
+  try {
+    articles = await (prisma as any).article.findMany({
+      where: {
+        published: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  } catch (error) {
+    console.error("ArticlesIndexPage: Failed to fetch articles", error);
+  }
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
