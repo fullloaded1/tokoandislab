@@ -18,6 +18,14 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
   const [isUploading, setIsUploading] = useState(false);
   const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
   const [bulkLoading, setBulkLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  
+  const filteredProducts = products.filter(p => 
+    p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    (p.model && p.model.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (p.categoryLabel && p.categoryLabel.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (p.brand && p.brand.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
   
   const [formData, setFormData] = useState<any>({
     id: "",
@@ -223,8 +231,24 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
         </div>
       </div>
 
-      {/* Table */}
+      {/* Search and Table */}
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className="p-4 border-b border-slate-200 bg-slate-50">
+          <div className="relative w-full max-w-md">
+            <input 
+              type="text"
+              placeholder="Cari nama produk, model, atau kategori..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-sm font-medium text-slate-800"
+            />
+            <div className="absolute left-3.5 top-3 text-slate-400">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm text-slate-600">
             <thead className="bg-slate-50 text-slate-800 font-semibold border-b border-slate-200">
@@ -236,14 +260,14 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {products.length === 0 ? (
+              {filteredProducts.length === 0 ? (
                 <tr>
                   <td colSpan={4} className="px-6 py-8 text-center text-slate-500">
-                    Belum ada produk di database.
+                    {searchQuery ? "Tidak ada produk yang cocok dengan pencarian." : "Belum ada produk di database."}
                   </td>
                 </tr>
               ) : (
-                products.map((product) => (
+                filteredProducts.map((product) => (
                   <tr key={product.id} className="hover:bg-slate-50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-4">
