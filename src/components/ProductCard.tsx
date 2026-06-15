@@ -18,12 +18,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
   const addItem = useRFQStore((s) => s.addItem);
   const [added, setAdded] = useState(false);
 
-  let toast: ReturnType<typeof useToast> | null = null;
-  try {
-    toast = useToast();
-  } catch {
-    // Toast provider may not be available in some contexts
-  }
+  const toast = useToast();
 
   const displayName = product.isReadyStock && product.model ? `${product.name} - ${product.model}` : product.name;
 
@@ -104,7 +99,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
             src={product.image}
             alt={displayName}
             fill
-            className="object-contain p-6 transition-transform duration-500 group-hover:scale-110 drop-shadow-md"
+            className="object-contain p-6 transition-transform duration-500 group-hover:scale-110"
             sizes="200px"
           />
           {product.variantCount > 1 && (
@@ -139,7 +134,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
           src={product.image}
           alt={displayName}
           fill
-          className="object-contain p-8 transition-transform duration-700 group-hover:scale-110 drop-shadow-xl"
+          className="object-contain p-8 transition-transform duration-700 group-hover:scale-110"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
         

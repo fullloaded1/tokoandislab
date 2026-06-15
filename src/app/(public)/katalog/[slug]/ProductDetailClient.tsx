@@ -46,8 +46,7 @@ export default function ProductDetailClient({
   const openWaModal = useWhatsAppLeadStore((s) => s.openModal);
   const [activeTab, setActiveTab] = useState<"deskripsi" | "spesifikasi" | "dokumen">("deskripsi");
   
-  let toast: ReturnType<typeof useToast> | null = null;
-  try { toast = useToast(); } catch {}
+  const toast = useToast();
 
   const productVariants = (product as any).variants || [];
 
@@ -139,7 +138,7 @@ export default function ProductDetailClient({
               src={product.image}
               alt={displayName}
               fill
-              className="object-contain drop-shadow-2xl transition-transform duration-700 hover:scale-105 p-8"
+              className="object-contain transition-transform duration-700 hover:scale-105 p-8"
               sizes="(max-width: 1024px) 100vw, 60vw"
               priority
             />
@@ -147,7 +146,7 @@ export default function ProductDetailClient({
           {/* Mockup Thumbnails for future gallery support */}
           <div className="flex gap-4 mt-4 overflow-x-auto hide-scrollbar pb-2">
             <div className="w-20 h-20 rounded-2xl border-2 border-blue-600 bg-[#f8f9fa] flex items-center justify-center relative overflow-hidden shrink-0 cursor-pointer">
-              <Image src={product.image} fill className="object-contain p-2 mix-blend-multiply" alt="thumb 1" />
+              <Image src={product.image} fill className="object-contain p-2" alt="thumb 1" />
             </div>
             {/* You can map actual gallery images here later */}
           </div>

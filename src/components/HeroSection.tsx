@@ -39,13 +39,7 @@ const getCategoryStyles = (category: string) => {
 export default function HeroSection({ featuredProducts = [] }: { featuredProducts: any[] }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const addItem = useRFQStore((state) => state.addItem);
-
-  let toast: ReturnType<typeof useToast> | null = null;
-  try {
-    toast = useToast();
-  } catch {
-    // Toast provider may not be available
-  }
+  const toast = useToast();
 
   // Auto-play
   useEffect(() => {

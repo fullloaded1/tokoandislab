@@ -4,9 +4,11 @@ import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
-export default async function ProductVariantsPage({ params }: { params: { id: string } }) {
+export default async function ProductVariantsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+
   const product = await prisma.product.findUnique({
-    where: { id: params.id },
+    where: { id },
     select: { id: true, name: true, brand: true, model: true }
   });
 
@@ -15,7 +17,7 @@ export default async function ProductVariantsPage({ params }: { params: { id: st
   }
 
   const variants = await prisma.productVariant.findMany({
-    where: { productId: params.id },
+    where: { productId: id },
     orderBy: { name: "asc" },
     include: {
       stockLogs: {
@@ -25,11 +27,21 @@ export default async function ProductVariantsPage({ params }: { params: { id: st
     }
   });
 
+  // Serialize Decimal fields before passing to client
+  const serializedVariants = variants.map((v) => ({
+    ...v,
+    price: v.price?.toString() ?? "0",
+    stockLogs: v.stockLogs.map((log) => ({
+      ...log,
+    })),
+  }));
+
   return (
     <div className="min-h-screen bg-slate-50 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <VariantsClient initialVariants={variants as any} product={product} />
+        <VariantsClient initialVariants={serializedVariants as any} product={product} />
       </div>
     </div>
   );
 }
+
