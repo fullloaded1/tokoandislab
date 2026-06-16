@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ChatbotLazy from "@/components/ChatbotLazy";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 
 export default function PublicLayout({
   children,
@@ -15,6 +16,7 @@ export default function PublicLayout({
       </main>
       <Footer />
       <ChatbotLazy />
+      <FloatingWhatsApp />
     </>
   );
 }

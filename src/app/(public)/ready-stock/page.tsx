@@ -21,11 +21,11 @@ export default async function ReadyStockPage() {
       variants: true,
     },
     orderBy: {
-      createdAt: "desc",
+      price: "asc",
     },
   })).map(serializeProductDecimals);
 
-  const products = getGroupedProducts(allProducts);
+  const products = getGroupedProducts(allProducts).sort((a, b) => Number(a.price) - Number(b.price));
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">

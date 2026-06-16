@@ -34,7 +34,7 @@ export default function KatalogClient({ initialProducts = [] }: { initialProduct
   }, [initialQuery]);
 
   const filteredProducts = useMemo(() => {
-    return products.filter((p: PrismaProduct) => {
+    let result = products.filter((p: PrismaProduct) => {
       const matchesCategory =
         activeCategory === "semua" || p.category === activeCategory;
       const matchesSearch =
@@ -43,9 +43,14 @@ export default function KatalogClient({ initialProducts = [] }: { initialProduct
         p.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.categoryLabel.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesReadyStock = !showOnlyReadyStock || p.isReadyStock;
-      
       return matchesCategory && matchesSearch && matchesReadyStock;
     });
+
+    if (showOnlyReadyStock) {
+      result = result.sort((a, b) => Number(a.price) - Number(b.price));
+    }
+
+    return result;
   }, [activeCategory, searchQuery, showOnlyReadyStock, products]);
 
   return (
