@@ -168,9 +168,9 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
         </div>
         
         {/* Price and CTA */}
-        <div className="mt-auto flex items-center justify-between gap-3 pt-2">
+        <div className="mt-auto flex flex-col gap-3 pt-3 border-t border-slate-100">
           {/* Price or Tag */}
-          <div className="flex-1">
+          <div>
              <span className={`text-sm font-bold ${isReadyToBuy ? "text-emerald-600" : isSoldOut ? "text-red-500" : "text-slate-600"}`}>
                {priceDisplay}
              </span>
@@ -180,7 +180,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
           <button
             onClick={handleAdd}
             disabled={added}
-            className={`flex items-center justify-center h-11 px-4 rounded-2xl text-sm font-bold transition-all duration-300 ${
+            className={`w-full flex items-center justify-center h-10 px-4 rounded-xl text-sm font-bold transition-all duration-300 ${
               added
                 ? "bg-emerald-50 text-emerald-600"
                 : isReadyToBuy 
@@ -188,8 +188,8 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
                   : "bg-slate-900 text-white hover:bg-blue-600 hover:shadow-lg hover:shadow-blue-600/20"
             }`}
           >
-            {added ? <Check className="h-4 w-4 mr-2" /> : <ShoppingCart className="h-4 w-4 lg:mr-2" />}
-            <span className="hidden lg:inline">{added ? "Ditambahkan" : isReadyToBuy ? "Beli Sekarang" : "Minta Penawaran"}</span>
+            {added ? <Check className="h-4 w-4 mr-2" /> : <ShoppingCart className="h-4 w-4 mr-2" />}
+            <span>{added ? "Ditambahkan" : isReadyToBuy ? "Beli Sekarang" : "Minta Penawaran"}</span>
           </button>
         </div>
       </div>
