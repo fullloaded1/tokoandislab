@@ -14,6 +14,28 @@ ALTER TABLE "PaymentTerm" DROP CONSTRAINT "PaymentTerm_orderId_fkey";
 ALTER TABLE "Invoice" ADD COLUMN     "orderId" TEXT,
 ALTER COLUMN "projectId" DROP NOT NULL;
 
+-- Migrate Data from PaymentTerm to Invoice BEFORE dropping
+INSERT INTO "Invoice" (
+  "id", "orderId", "invoiceNo", "amount", "dueDate", "status", "type", "paymentProof", "createdAt", "updatedAt"
+)
+SELECT 
+  "id",
+  "orderId",
+  'INV-MIG-' || "id",
+  "amount",
+  "dueDate",
+  CASE 
+    WHEN "status" = 'PENDING' THEN 'UNPAID'::"InvoiceStatus"
+    WHEN "status" = 'PAID' THEN 'PAID'::"InvoiceStatus"
+    WHEN "status" = 'OVERDUE' THEN 'OVERDUE'::"InvoiceStatus"
+    ELSE 'UNPAID'::"InvoiceStatus"
+  END,
+  'TERMIN'::"InvoiceType",
+  "proofUrl",
+  "createdAt",
+  "updatedAt"
+FROM "PaymentTerm";
+
 -- DropTable
 DROP TABLE "PaymentTerm";
 
