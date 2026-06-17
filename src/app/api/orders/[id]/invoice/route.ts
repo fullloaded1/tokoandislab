@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { verifySession } from "@/lib/session";
+import { verifyGuestOrderAccess } from "@/lib/guestAccess";
 import { buildInvoicePdfBytes } from "@/lib/commercialInvoice";
 import { OrderStatus } from "@prisma/client";
 
@@ -33,7 +34,7 @@ export async function GET(
 
   // Auth: admin session OR guestAccessToken match
   const session = await verifySession();
-  const tokenMatches = !!token && order.guestAccessToken === token;
+  const tokenMatches = verifyGuestOrderAccess(order, token);
   if (!session && !tokenMatches) {
     return new NextResponse("Unauthorized", { status: 401 });
   }

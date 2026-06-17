@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { verifySession } from "@/lib/session";
+import { verifyGuestOrderAccess } from "@/lib/guestAccess";
 import { Prisma } from "@prisma/client";
 
 const TYPE_MAP = {
@@ -59,10 +60,8 @@ export async function GET(request: Request, props: { params: Promise<{ type: str
 
   // Guest Token Check for Orders
   if (!isAuthorized && docInfo.type === "order" && "order" in docInfo && docInfo.order) {
-    if (guestToken && docInfo.order.guestAccessToken === guestToken) {
-      if (!docInfo.order.guestAccessTokenExpiresAt || new Date() <= docInfo.order.guestAccessTokenExpiresAt) {
-        isAuthorized = true;
-      }
+    if (verifyGuestOrderAccess(docInfo.order, guestToken)) {
+      isAuthorized = true;
     }
     // Also, if customer is logged in and owns the order (future-proofing)
     // currently auth doesn't distinguish customers vs admin well here without more logic, 
