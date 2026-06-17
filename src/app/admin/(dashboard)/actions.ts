@@ -83,7 +83,7 @@ export async function bulkCreateProducts(products: any[]) {
       // Ensure unique slug, even if there are duplicates we can add a random string or just rely on standard.
       // For a simple implementation, we just slugify the name. If it fails due to unique constraint, we can append a random string.
       const baseSlug = (p.name || "unnamed").toLowerCase().replace(/[^a-z0-9]+/g, "-");
-      const randomStr = Math.random().toString(36).substring(2, 7);
+      const randomStr = crypto.randomUUID().substring(0, 5);
       
       return {
         name: p.name,

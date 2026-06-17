@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/db";
 import { verifySession } from "@/lib/session";
 import { canTransition, requiresTracking } from "@/lib/orderState";
+import { generateGuestAccessToken, generateOrderNo } from "@/lib/orderCodes";
 import { sendOrderNotification, type OrderNotificationKind } from "@/lib/orderNotification";
 import { OrderStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
@@ -141,9 +142,8 @@ export async function createRFQOrder(payload: { quotationId: string }) {
     // Import the functions here or use a simple fallback if not imported at top
     // Since we don't want to mess up imports at the top right now, we can inline or assume it exists if we imported it. 
     // Wait, let's just use `generateOrderNo` properly by adding it to imports or implementing inline.
-    // I'll implement inline to be safe.
-    const orderNo = `ORD-${Date.now().toString().slice(-6)}-RFQ`;
-    const guestAccessToken = Math.random().toString(36).substring(2, 15);
+    const orderNo = `${generateOrderNo()}-RFQ`;
+    const guestAccessToken = generateGuestAccessToken();
     const guestAccessTokenExpiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
     const order = await prisma.order.create({

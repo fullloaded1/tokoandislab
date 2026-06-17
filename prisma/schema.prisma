@@ -9,6 +9,425 @@ datasource db {
   extensions = [vector]
 }
 
+model Product {
+  id                 String              @id @default(cuid())
+  slug               String              @unique
+  name               String
+  category           String
+  categoryLabel      String
+  brand              String
+  model              String
+  subcategory        String
+  image              String
+  description        String
+  price              Decimal             @default(0) @db.Decimal(16, 2)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  isRequestPricing   Boolean             @default(false)
+  leadTime           String?
+  warrantyPeriod     String?
+  brochureUrl        String?
+  isReadyStock       Boolean             @default(false)
+  documentKnowledges DocumentKnowledge[]
+  inquiryItems       InquiryItem[]
+  installedBases     InstalledBase[]
+  specs              ProductSpec[]
+  variants           ProductVariant[]
+  whatsAppLogs       WhatsAppLog[]
+  articles           Article[]           @relation("ArticleToProduct")
+}
+
+model ProductVariant {
+  id             String             @id @default(cuid())
+  productId      String
+  sku            String             @unique
+  name           String
+  price          Decimal            @default(0) @db.Decimal(16, 2)
+  stock          Int                @default(0)
+  reservedStock  Int                @default(0)
+  sortOrder      Int                @default(0)
+  orderItems     OrderItem[]
+  product        Product            @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quotationItems QuotationItem[]
+  stockLogs      StockLog[]
+  reservations   StockReservation[]
+
+  @@index([sku])
+  @@index([productId])
+}
+
+model StockLog {
+  id        String         @id @default(cuid())
+  variantId String
+  type      StockLogType
+  quantity  Int
+  notes     String?
+  actorId   String?
+  createdAt DateTime       @default(now())
+  actor     AdminUser?     @relation(fields: [actorId], references: [id])
+  variant   ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@index([variantId])
+  @@index([actorId])
+}
+
+model StockReservation {
+  id        String         @id @default(cuid())
+  variantId String
+  orderId   String?
+  quantity  Int
+  expiresAt DateTime
+  createdAt DateTime       @default(now())
+  order     Order?         @relation(fields: [orderId], references: [id])
+  variant   ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@index([variantId])
+  @@index([expiresAt])
+}
+
+model Customer {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  password      String?
+  name          String
+  phone         String?
+  institutionId String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  status        CustomerStatus @default(GUEST)
+  institution   Institution?   @relation(fields: [institutionId], references: [id])
+  orders        Order[]
+
+  @@index([email])
+}
+
+model Institution {
+  id             String          @id @default(cuid())
+  name           String          @unique
+  address        String
+  createdAt      DateTime        @default(now())
+  npwp           String?
+  phone          String?
+  updatedAt      DateTime        @default(now()) @updatedAt
+  type           InstitutionType @default(OTHER)
+  activityLogs   ActivityLog[]
+  contacts       Contact[]
+  customers      Customer[]
+  inquiries      Inquiry[]
+  installedBases InstalledBase[]
+}
+
+model Contact {
+  id            String      @id @default(cuid())
+  institutionId String
+  name          String
+  position      String?
+  phone         String
+  email         String
+  institution   Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+
+  @@index([institutionId])
+}
+
+model Inquiry {
+  id            String        @id @default(cuid())
+  inquiryNo     String        @unique
+  institutionId String
+  notes         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @default(now()) @updatedAt
+  status        InquiryStatus @default(NEW)
+  activityLogs  ActivityLog[]
+  institution   Institution   @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  items         InquiryItem[]
+  project       Project?
+  quotation     Quotation?
+
+  @@index([institutionId])
+  @@index([inquiryNo])
+}
+
+model InquiryItem {
+  id        String  @id @default(cuid())
+  inquiryId String
+  productId String
+  quantity  Int
+  notes     String?
+  inquiry   Inquiry @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@index([inquiryId])
+}
+
+model Quotation {
+  id           String          @id @default(cuid())
+  inquiryId    String          @unique
+  quoteNo      String          @unique
+  subtotal     Decimal         @db.Decimal(16, 2)
+  tax          Decimal         @db.Decimal(16, 2)
+  shippingFee  Decimal         @default(0) @db.Decimal(16, 2)
+  totalAmount  Decimal         @db.Decimal(16, 2)
+  validUntil   DateTime
+  paymentTerms String
+  leadTime     String
+  pdfUrl       String?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @default(now()) @updatedAt
+  status       QuotationStatus @default(SENT)
+  orders       Order[]
+  inquiry      Inquiry         @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  items        QuotationItem[]
+
+  @@index([quoteNo])
+}
+
+model QuotationItem {
+  id          String          @id @default(cuid())
+  quotationId String
+  variantId   String?
+  productId   String?
+  name        String
+  price       Decimal         @db.Decimal(16, 2)
+  quantity    Int
+  quotation   Quotation       @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  variant     ProductVariant? @relation(fields: [variantId], references: [id])
+
+  @@index([quotationId])
+}
+
+model Project {
+  id         String        @id @default(cuid())
+  inquiryId  String        @unique
+  projectNo  String        @unique
+  poNumber   String
+  poDocument String?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @default(now()) @updatedAt
+  status     ProjectStatus @default(WAITING_DP)
+  deliveries Delivery[]
+  invoices   Invoice[]
+  inquiry    Inquiry       @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+
+  @@index([projectNo])
+}
+
+model Invoice {
+  id           String        @id @default(cuid())
+  projectId    String?
+  invoiceNo    String        @unique
+  amount       Decimal       @db.Decimal(16, 2)
+  dueDate      DateTime
+  paymentProof String?
+  createdAt    DateTime      @default(now())
+  paidAmount   Decimal       @default(0) @db.Decimal(16, 2)
+  paidAt       DateTime?
+  updatedAt    DateTime      @default(now()) @updatedAt
+  type         InvoiceType   @default(FULL)
+  status       InvoiceStatus @default(UNPAID)
+  taxInvoiceNo String?
+  taxRate      Decimal       @default(11) @db.Decimal(5, 2)
+  orderId      String?
+  order        Order?        @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  project      Project?      @relation(fields: [projectId], references: [id])
+
+  @@index([projectId])
+  @@index([orderId])
+  @@index([invoiceNo])
+  @@index([status])
+}
+
+model Delivery {
+  id          String         @id @default(cuid())
+  projectId   String
+  deliveryNo  String         @unique
+  driverName  String?
+  trackingUrl String?
+  shippedDate DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @default(now()) @updatedAt
+  status      DeliveryStatus @default(PREPARING)
+  project     Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
+
+model InstalledBase {
+  id               String      @id @default(cuid())
+  institutionId    String
+  productId        String
+  serialNumber     String?
+  installationDate DateTime
+  warrantyExpiry   DateTime
+  lastMaintenance  DateTime?
+  institution      Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  product          Product     @relation(fields: [productId], references: [id])
+  reminders        Reminder[]
+
+  @@index([institutionId])
+  @@index([productId])
+}
+
+model Reminder {
+  id              String         @id @default(cuid())
+  installedBaseId String
+  dueDate         DateTime
+  type            ReminderType   @default(OTHER)
+  status          ReminderStatus @default(PENDING)
+  installedBase   InstalledBase  @relation(fields: [installedBaseId], references: [id], onDelete: Cascade)
+
+  @@index([installedBaseId])
+}
+
+model ActivityLog {
+  id            String         @id @default(cuid())
+  inquiryId     String?
+  institutionId String?
+  description   String
+  createdAt     DateTime       @default(now())
+  action        ActivityAction @default(OTHER)
+  inquiry       Inquiry?       @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  institution   Institution?   @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+
+  @@index([inquiryId])
+  @@index([institutionId])
+}
+
+model ChatLog {
+  id          String   @id @default(cuid())
+  sessionId   String
+  userMessage String
+  aiResponse  String?
+  agent       String   @default("sales")
+  createdAt   DateTime @default(now())
+}
+
+model DocumentKnowledge {
+  id        String                 @id @default(cuid())
+  productId String?
+  title     String
+  content   String
+  embedding Unsupported("vector")?
+  createdAt DateTime               @default(now())
+  updatedAt DateTime               @default(now()) @updatedAt
+  product   Product?               @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model WhatsAppLog {
+  id              String            @id @default(cuid())
+  source          String
+  productName     String?
+  productId       String?
+  inquiryNo       String?
+  messageText     String?
+  createdAt       DateTime          @default(now())
+  leadInstitution String?
+  leadName        String?
+  leadPhone       String?
+  status          WhatsAppLogStatus @default(NEW)
+  product         Product?          @relation(fields: [productId], references: [id])
+}
+
+model Article {
+  id        String    @id @default(cuid())
+  slug      String    @unique
+  title     String
+  content   String
+  excerpt   String?
+  image     String?
+  published Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  category  String    @default("edukasi-lab")
+  products  Product[] @relation("ArticleToProduct")
+}
+
+model Order {
+  id                        String             @id @default(cuid())
+  orderNo                   String             @unique
+  orderType                 OrderType          @default(DIRECT)
+  customerId                String
+  status                    OrderStatus        @default(PENDING_PAYMENT)
+  subtotal                  Decimal            @db.Decimal(16, 2)
+  taxAmount                 Decimal            @db.Decimal(16, 2)
+  shippingFee               Decimal            @default(0) @db.Decimal(16, 2)
+  totalAmount               Decimal            @db.Decimal(16, 2)
+  paidAmount                Decimal            @default(0) @db.Decimal(16, 2)
+  paymentMethod             PaymentMethod
+  paymentUrl                String?
+  poDocumentUrl             String?
+  taxInvoiceNo              String?
+  shippingAddress           String
+  shippingRegion            String?
+  createdAt                 DateTime           @default(now())
+  updatedAt                 DateTime           @updatedAt
+  guestAccessToken          String?            @unique
+  priceDisplayMode          PriceDisplayMode   @default(EXCLUDE_PPN)
+  shippedAt                 DateTime?
+  trackingNumber            String?
+  guestAccessTokenExpiresAt DateTime?
+  quotationId               String?
+  invoices                  Invoice[]
+  customer                  Customer           @relation(fields: [customerId], references: [id])
+  quotation                 Quotation?         @relation(fields: [quotationId], references: [id])
+  items                     OrderItem[]
+  reservations              StockReservation[]
+
+  @@index([customerId])
+  @@index([orderNo])
+  @@index([quotationId])
+  @@index([status])
+}
+
+model OrderItem {
+  id        String          @id @default(cuid())
+  orderId   String
+  variantId String?
+  name      String
+  sku       String?
+  price     Decimal         @db.Decimal(16, 2)
+  quantity  Int
+  order     Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  variant   ProductVariant? @relation(fields: [variantId], references: [id])
+
+  @@index([orderId])
+}
+
+model AuditLog {
+  id         String     @id @default(cuid())
+  action     String
+  entityType String
+  entityId   String
+  actorId    String?
+  oldValue   String?
+  newValue   String?
+  notes      String?
+  createdAt  DateTime   @default(now())
+  actor      AdminUser? @relation(fields: [actorId], references: [id])
+
+  @@index([entityType, entityId])
+  @@index([actorId])
+}
+
+model AdminUser {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  name      String
+  role      String     @default("ADMIN")
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  auditLogs AuditLog[]
+  stockLogs StockLog[]
+}
+
+model ProductSpec {
+  id        String  @id @default(cuid())
+  label     String
+  value     String
+  productId String
+  sortOrder Int     @default(0)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
 enum InquiryStatus {
   NEW
   REVIEWING
@@ -124,451 +543,4 @@ enum CustomerStatus {
 enum PriceDisplayMode {
   EXCLUDE_PPN
   INCLUDE_PPN
-}
-
-model Product {
-  id               String          @id @default(cuid())
-  slug             String          @unique
-  name             String
-  category         String
-  categoryLabel    String
-  brand            String
-  model            String
-  subcategory      String
-  image            String
-  brochureUrl      String?
-  description      String
-  price            Decimal         @default(0) @db.Decimal(16,2)
-  isRequestPricing Boolean         @default(false)
-  isReadyStock     Boolean         @default(false)
-  warrantyPeriod   String?
-  leadTime         String?
-  
-  variants         ProductVariant[]
-  specs            ProductSpec[]
-  inquiryItems     InquiryItem[]
-  installedBases   InstalledBase[]
-  documentKnowledges DocumentKnowledge[]
-  whatsAppLogs     WhatsAppLog[]
-  articles         Article[]
-  
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
-}
-
-model ProductVariant {
-  id            String   @id @default(cuid())
-  productId     String
-  sku           String   @unique
-  name          String
-  price         Decimal  @default(0) @db.Decimal(16,2)
-  stock         Int      @default(0)
-  reservedStock Int      @default(0)
-  sortOrder     Int      @default(0)
-  
-  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  
-  stockLogs     StockLog[]
-  reservations  StockReservation[]
-  orderItems    OrderItem[]
-  quotationItems QuotationItem[]
-
-  @@index([sku])
-  @@index([productId])
-}
-
-
-model StockLog {
-  id          String       @id @default(cuid())
-  variantId   String
-  type        StockLogType
-  quantity    Int
-  notes       String?      @db.Text
-  actorId     String?      
-  createdAt   DateTime     @default(now())
-
-  variant     ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
-  actor       AdminUser?     @relation(fields: [actorId], references: [id])
-  
-  @@index([variantId])
-  @@index([actorId])
-}
-
-model StockReservation {
-  id          String   @id @default(cuid())
-  variantId   String
-  orderId     String?
-  quantity    Int
-  expiresAt   DateTime
-  createdAt   DateTime @default(now())
-
-  variant     ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
-  order       Order?         @relation(fields: [orderId], references: [id], onDelete: SetNull)
-  
-  @@index([variantId])
-  @@index([expiresAt])
-}
-
-model Customer {
-  id            String      @id @default(cuid())
-  email         String      @unique
-  password      String?     // Hashed; nullable utk GUEST checkout (K2)
-  status        CustomerStatus @default(GUEST)
-  name          String
-  phone         String?
-  institutionId String?
-  
-  institution   Institution? @relation(fields: [institutionId], references: [id])
-  orders        Order[]
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  
-  @@index([email])
-}
-
-model Institution {
-  id             String          @id @default(cuid())
-  name           String          @unique
-  type           InstitutionType @default(OTHER)
-  npwp           String?
-  phone          String?
-  address        String          @db.Text
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt @default(now())
-  
-  contacts       Contact[]
-  inquiries      Inquiry[]
-  installedBases InstalledBase[]
-  activityLogs   ActivityLog[]
-  customers      Customer[]
-}
-
-model Contact {
-  id            String      @id @default(cuid())
-  institutionId String
-  name          String
-  position      String?
-  phone         String
-  email         String
-  
-  institution   Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
-  
-  @@index([institutionId])
-}
-
-model Inquiry {
-  id            String        @id @default(cuid())
-  inquiryNo     String        @unique
-  institutionId String
-  status        InquiryStatus @default(NEW)
-  notes         String?       @db.Text
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt @default(now())
-  
-  institution   Institution   @relation(fields: [institutionId], references: [id], onDelete: Cascade)
-  items         InquiryItem[]
-  quotation     Quotation?
-  project       Project?
-  activityLogs  ActivityLog[]
-  
-  @@index([institutionId])
-  @@index([inquiryNo])
-}
-
-model InquiryItem {
-  id        String  @id @default(cuid())
-  inquiryId String
-  productId String
-  quantity  Int
-  notes     String? @db.Text
-  
-  inquiry   Inquiry @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
-  product   Product @relation(fields: [productId], references: [id])
-  
-  @@index([inquiryId])
-}
-
-model Quotation {
-  id           String          @id @default(cuid())
-  inquiryId    String          @unique
-  quoteNo      String          @unique
-  subtotal     Decimal         @db.Decimal(16,2)
-  tax          Decimal         @db.Decimal(16,2)
-  shippingFee  Decimal         @default(0) @db.Decimal(16,2)
-  totalAmount  Decimal         @db.Decimal(16,2)
-  validUntil   DateTime
-  paymentTerms String          @db.Text
-  leadTime     String
-  pdfUrl       String?
-  status       QuotationStatus @default(SENT)
-  createdAt    DateTime        @default(now())
-  updatedAt    DateTime        @updatedAt @default(now())
-  
-  inquiry      Inquiry         @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
-  items        QuotationItem[]
-  orders       Order[]
-  
-  @@index([quoteNo])
-}
-
-model QuotationItem {
-  id          String   @id @default(cuid())
-  quotationId String
-  variantId   String?
-  productId   String?  // Made optional because snapshot is what matters, but keeping relation if exists
-  name        String   // Snapshot
-  price       Decimal  @db.Decimal(16,2) // Snapshot
-  quantity    Int
-  
-  quotation   Quotation @relation(fields: [quotationId], references: [id], onDelete: Cascade)
-  variant     ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
-  
-  @@index([quotationId])
-}
-
-model Project {
-  id         String     @id @default(cuid())
-  inquiryId  String     @unique
-  projectNo  String     @unique
-  poNumber   String
-  poDocument String?
-  status     ProjectStatus @default(WAITING_DP)
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt @default(now())
-  
-  inquiry    Inquiry    @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
-  invoices   Invoice[]
-  deliveries Delivery[]
-  
-  @@index([projectNo])
-}
-
-model Invoice {
-  id           String        @id @default(cuid())
-  projectId    String?
-  orderId      String?
-  invoiceNo    String        @unique
-  type         InvoiceType   @default(FULL)
-  amount       Decimal       @db.Decimal(16,2)
-  paidAmount   Decimal       @default(0) @db.Decimal(16,2)
-  dueDate      DateTime
-  paidAt       DateTime?
-  status       InvoiceStatus @default(UNPAID)
-  paymentProof String?
-  taxInvoiceNo String?
-  taxRate      Decimal       @default(11) @db.Decimal(5,2)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt @default(now())
-  
-  project      Project?      @relation(fields: [projectId], references: [id], onDelete: SetNull)
-  order        Order?        @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  
-  @@index([projectId])
-  @@index([orderId])
-  @@index([invoiceNo])
-  @@index([status])
-}
-
-model Delivery {
-  id          String         @id @default(cuid())
-  projectId   String
-  deliveryNo  String         @unique
-  driverName  String?
-  trackingUrl String?
-  shippedDate DateTime?
-  status      DeliveryStatus @default(PREPARING)
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt @default(now())
-  
-  project     Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  
-  @@index([projectId])
-}
-
-model InstalledBase {
-  id               String      @id @default(cuid())
-  institutionId    String
-  productId        String
-  serialNumber     String?
-  installationDate DateTime
-  warrantyExpiry   DateTime
-  lastMaintenance  DateTime?
-  
-  institution      Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
-  product          Product     @relation(fields: [productId], references: [id])
-  reminders        Reminder[]
-  
-  @@index([institutionId])
-  @@index([productId])
-}
-
-model Reminder {
-  id              String         @id @default(cuid())
-  installedBaseId String
-  type            ReminderType   @default(OTHER)
-  dueDate         DateTime
-  status          ReminderStatus @default(PENDING)
-  
-  installedBase   InstalledBase  @relation(fields: [installedBaseId], references: [id], onDelete: Cascade)
-  
-  @@index([installedBaseId])
-}
-
-model ActivityLog {
-  id            String         @id @default(cuid())
-  inquiryId     String?
-  institutionId String?
-  action        ActivityAction @default(OTHER)
-  description   String         @db.Text
-  createdAt     DateTime       @default(now())
-  
-  inquiry       Inquiry?       @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
-  institution   Institution?   @relation(fields: [institutionId], references: [id], onDelete: Cascade)
-  
-  @@index([inquiryId])
-  @@index([institutionId])
-}
-
-model ChatLog {
-  id          String   @id @default(cuid())
-  sessionId   String
-  userMessage String   @db.Text
-  aiResponse  String?  @db.Text
-  agent       String   @default("sales")
-  createdAt   DateTime @default(now())
-}
-
-model DocumentKnowledge {
-  id        String   @id @default(cuid())
-  productId String?
-  title     String
-  content   String   @db.Text
-  embedding Unsupported("vector(768)")?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt @default(now())
-
-  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
-}
-
-model WhatsAppLog {
-  id              String            @id @default(cuid())
-  source          String
-  productName     String?
-  productId       String?
-  inquiryNo       String?
-  messageText     String?           @db.Text
-  leadName        String?
-  leadInstitution String?
-  leadPhone       String?
-  status          WhatsAppLogStatus @default(NEW)
-  createdAt       DateTime          @default(now())
-
-  product     Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
-}
-
-model Article {
-  id        String    @id @default(cuid())
-  slug      String    @unique
-  title     String
-  content   String    @db.Text
-  excerpt   String?   @db.Text
-  image     String?
-  category  String    @default("edukasi-lab")
-  published Boolean   @default(true)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  products  Product[]
-}
-
-model Order {
-  id               String             @id @default(cuid())
-  orderNo          String             @unique
-  orderType        OrderType          @default(DIRECT)
-  customerId       String
-  status           OrderStatus        @default(PENDING_PAYMENT)
-  subtotal         Decimal            @db.Decimal(16,2)
-  taxAmount        Decimal            @db.Decimal(16,2)
-  shippingFee      Decimal            @default(0) @db.Decimal(16,2)
-  totalAmount      Decimal            @db.Decimal(16,2)
-  paidAmount       Decimal            @default(0) @db.Decimal(16,2)
-  paymentMethod    PaymentMethod
-  paymentUrl       String?
-  poDocumentUrl    String?
-  taxInvoiceNo     String?
-  shippingAddress  String             @db.Text
-  shippingRegion   String?            // Key region untuk lookup ongkir (mis. JABODETABEK / LUAR_JABODETABEK)
-  guestAccessToken String?            @unique // Token akses status order utk guest (K2)
-  guestAccessTokenExpiresAt DateTime? // Batas waktu token akses guest
-  priceDisplayMode PriceDisplayMode   @default(EXCLUDE_PPN) // Snapshot mode tampil PPN saat order dibuat (K1)
-  trackingNumber   String?            // Nomor resi/AWB diisi admin saat status SHIPPED (T3.7)
-  shippedAt        DateTime?          // Timestamp saat admin mark SHIPPED
-  quotationId      String?
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
-
-  customer         Customer           @relation(fields: [customerId], references: [id], onDelete: Restrict)
-  quotation        Quotation?         @relation(fields: [quotationId], references: [id])
-  items            OrderItem[]
-  invoices         Invoice[]
-  reservations     StockReservation[]
-
-  @@index([customerId])
-  @@index([orderNo])
-  @@index([quotationId])
-  @@index([status])
-}
-
-model OrderItem {
-  id          String          @id @default(cuid())
-  orderId     String
-  variantId   String?
-  name        String          // Snapshot nama produk/varian
-  sku         String?         // Snapshot SKU
-  price       Decimal         @db.Decimal(16,2) // Snapshot harga
-  quantity    Int
-  
-  order       Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  variant     ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
-  
-  @@index([orderId])
-}
-
-
-
-model AuditLog {
-  id          String   @id @default(cuid())
-  action      String   // e.g. "VERIFY_PAYMENT", "ADJUST_STOCK", "EDIT_TERMIN"
-  entityType  String   // e.g. "PaymentTerm", "StockLog", "Order"
-  entityId    String
-  actorId     String?  // Made nullable for safety
-  oldValue    String?  @db.Text // Format JSON string
-  newValue    String?  @db.Text // Format JSON string
-  notes       String?  @db.Text
-  createdAt   DateTime @default(now())
-  
-  actor       AdminUser? @relation(fields: [actorId], references: [id])
-  
-  @@index([entityType, entityId])
-  @@index([actorId])
-}
-
-model AdminUser {
-  id        String     @id @default(cuid())
-  email     String     @unique
-  name      String
-  role      String     @default("ADMIN")
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-
-  auditLogs AuditLog[]
-  stockLogs StockLog[]
-}
-
-model ProductSpec {
-  id        String   @id @default(cuid())
-  label     String
-  value     String
-  sortOrder Int      @default(0)
-  productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
