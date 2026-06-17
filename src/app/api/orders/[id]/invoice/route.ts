@@ -15,10 +15,7 @@ const ALLOWED_STATUSES = new Set<OrderStatus>([
   OrderStatus.COMPLETED,
 ]);
 
-export async function GET(
-  req: Request,
-  ctx: { params: Promise<{ id: string }> }
-) {
+export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params;
   const url = new URL(req.url);
   const token = url.searchParams.get("t");
