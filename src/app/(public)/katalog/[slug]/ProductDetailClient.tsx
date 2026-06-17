@@ -307,7 +307,7 @@ export default function ProductDetailClient({
               </button>
               
               <a
-                href="#"
+                href={`/?wa=open&source=product_detail&text=Halo%20Andis%20Lab,%20saya%20tertarik%20dengan%20produk:%20${encodeURIComponent(product.name)}.%20Mohon%20info%20harga%20dan%20ketersediaan.`}
                 onClick={(e) => {
                   e.preventDefault();
                   openWaModal({
@@ -369,91 +369,88 @@ export default function ProductDetailClient({
 
          {/* Tab Content */}
          <div className="py-10 min-h-[300px]">
-            {activeTab === "deskripsi" && (
-              <div className="max-w-4xl animate-in fade-in slide-in-from-bottom-2 duration-500">
-                <p className="text-lg text-slate-600 leading-relaxed font-medium">
-                  {product.description}
-                </p>
-                <div className="mt-8 p-6 bg-blue-50 rounded-2xl border border-blue-100 flex items-start gap-4">
-                   <Info className="w-6 h-6 text-blue-600 shrink-0 mt-0.5" />
-                   <p className="text-sm text-blue-800 leading-relaxed">
-                     Produk ini merupakan perangkat spesifik laboratorium. Pastikan Anda telah berkonsultasi dengan tim ahli kami untuk memastikan kecocokan alat dengan metode dan reagen yang Anda gunakan.
-                   </p>
-                </div>
+            {/* Tab: Deskripsi */}
+            <div className={`max-w-4xl animate-in fade-in slide-in-from-bottom-2 duration-500 ${activeTab !== 'deskripsi' ? 'hidden' : ''}`}>
+              <p className="text-lg text-slate-600 leading-relaxed font-medium">
+                {product.description}
+              </p>
+              <div className="mt-8 p-6 bg-blue-50 rounded-2xl border border-blue-100 flex items-start gap-4">
+                  <Info className="w-6 h-6 text-blue-600 shrink-0 mt-0.5" />
+                  <p className="text-sm text-blue-800 leading-relaxed">
+                    Produk ini merupakan perangkat spesifik laboratorium. Pastikan Anda telah berkonsultasi dengan tim ahli kami untuk memastikan kecocokan alat dengan metode dan reagen yang Anda gunakan.
+                  </p>
               </div>
-            )}
+            </div>
             
-            {activeTab === "spesifikasi" && (
-               <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-                  {product.specs && product.specs.length > 0 ? (
-                    <div className="rounded-3xl border border-slate-100 bg-white overflow-hidden shadow-sm max-w-4xl">
-                      <div className="divide-y divide-slate-50">
-                        {product.specs.map((spec, idx) => (
-                          <div
-                            key={idx}
-                            className={`flex flex-col sm:flex-row sm:items-center px-6 py-4 ${
-                              idx % 2 === 0 ? "bg-white" : "bg-slate-50/50"
-                            } hover:bg-slate-50 transition-colors`}
-                          >
-                            <span className="sm:w-1/3 text-sm font-bold text-slate-500 mb-1 sm:mb-0">
-                              {spec.label}
-                            </span>
-                            <span className="sm:w-2/3 text-sm font-semibold text-slate-900 leading-relaxed">
-                              {spec.value}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
+            {/* Tab: Spesifikasi */}
+            <div className={`animate-in fade-in slide-in-from-bottom-2 duration-500 ${activeTab !== 'spesifikasi' ? 'hidden' : ''}`}>
+                {product.specs && product.specs.length > 0 ? (
+                  <div className="rounded-3xl border border-slate-100 bg-white overflow-hidden shadow-sm max-w-4xl">
+                    <div className="divide-y divide-slate-50">
+                      {product.specs.map((spec, idx) => (
+                        <div
+                          key={idx}
+                          className={`flex flex-col sm:flex-row sm:items-center px-6 py-4 ${
+                            idx % 2 === 0 ? "bg-white" : "bg-slate-50/50"
+                          } hover:bg-slate-50 transition-colors`}
+                        >
+                          <span className="sm:w-1/3 text-sm font-bold text-slate-500 mb-1 sm:mb-0">
+                            {spec.label}
+                          </span>
+                          <span className="sm:w-2/3 text-sm font-semibold text-slate-900 leading-relaxed">
+                            {spec.value}
+                          </span>
+                        </div>
+                      ))}
                     </div>
-                  ) : (
-                    <div className="text-center py-12 border-2 border-dashed border-slate-200 rounded-3xl max-w-4xl">
-                       <p className="text-slate-500 font-medium">Spesifikasi teknis detail belum tersedia untuk alat ini.</p>
-                    </div>
-                  )}
-               </div>
-            )}
+                  </div>
+                ) : (
+                  <div className="text-center py-12 border-2 border-dashed border-slate-200 rounded-3xl max-w-4xl">
+                      <p className="text-slate-500 font-medium">Spesifikasi teknis detail belum tersedia untuk alat ini.</p>
+                  </div>
+                )}
+            </div>
 
-            {activeTab === "dokumen" && (
-               <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-                 <div className="rounded-3xl border border-slate-100 bg-slate-50 p-10 flex flex-col items-center justify-center text-center max-w-3xl">
-                    <div className="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-6">
-                       <FileText className="w-8 h-8 text-blue-600" />
-                    </div>
-                    <h3 className="text-xl font-extrabold text-slate-800 mb-3">Brosur & Datasheet Teknis</h3>
-                    <p className="text-slate-500 mb-8 max-w-md">
-                      Unduh brosur resmi untuk melihat pedoman instalasi, operasional, dan parameter teknis yang lebih detail.
-                    </p>
-                    {product.brochureUrl ? (
-                      <a
-                        href={product.brochureUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 rounded-2xl bg-blue-600 px-8 py-4 text-sm font-bold text-white transition-all hover:bg-blue-700 hover:shadow-lg hover:-translate-y-0.5"
-                      >
-                        <Download className="h-5 w-5" />
-                        Unduh File PDF
-                      </a>
-                    ) : (
-                      <a
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          openWaModal({
-                            source: "product_brochure",
-                            productId: product.id,
-                            productName: product.name,
-                            text: `Halo Andis Lab, boleh minta brosur PDF atau datasheet teknis untuk produk: ${product.name}?`
-                          });
-                        }}
-                        className="inline-flex items-center gap-2 rounded-2xl border-2 border-slate-300 bg-white px-8 py-4 text-sm font-bold text-slate-700 transition-all hover:border-blue-500 hover:text-blue-600 hover:shadow-md"
-                      >
-                        <Download className="h-5 w-5" />
-                        Minta Brosur via WA
-                      </a>
-                    )}
-                 </div>
-               </div>
-            )}
+            {/* Tab: Dokumen */}
+            <div className={`animate-in fade-in slide-in-from-bottom-2 duration-500 ${activeTab !== 'dokumen' ? 'hidden' : ''}`}>
+                <div className="rounded-3xl border border-slate-100 bg-slate-50 p-10 flex flex-col items-center justify-center text-center max-w-3xl">
+                  <div className="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-6">
+                      <FileText className="w-8 h-8 text-blue-600" />
+                  </div>
+                  <h3 className="text-xl font-extrabold text-slate-800 mb-3">Brosur & Datasheet Teknis</h3>
+                  <p className="text-slate-500 mb-8 max-w-md">
+                    Unduh brosur resmi untuk melihat pedoman instalasi, operasional, dan parameter teknis yang lebih detail.
+                  </p>
+                  {product.brochureUrl ? (
+                    <a
+                      href={product.brochureUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-2xl bg-blue-600 px-8 py-4 text-sm font-bold text-white transition-all hover:bg-blue-700 hover:shadow-lg hover:-translate-y-0.5"
+                    >
+                      <Download className="h-5 w-5" />
+                      Unduh File PDF
+                    </a>
+                  ) : (
+                    <a
+                      href={`/?wa=open&source=product_brochure&text=Halo%20Andis%20Lab,%20boleh%20minta%20brosur%20PDF%20atau%20datasheet%20teknis%20untuk%20produk:%20${encodeURIComponent(product.name)}?`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        openWaModal({
+                          source: "product_brochure",
+                          productId: product.id,
+                          productName: product.name,
+                          text: `Halo Andis Lab, boleh minta brosur PDF atau datasheet teknis untuk produk: ${product.name}?`
+                        });
+                      }}
+                      className="inline-flex items-center gap-2 rounded-2xl border-2 border-slate-300 bg-white px-8 py-4 text-sm font-bold text-slate-700 transition-all hover:border-blue-500 hover:text-blue-600 hover:shadow-md"
+                    >
+                      <Download className="h-5 w-5" />
+                      Minta Brosur via WA
+                    </a>
+                  )}
+                </div>
+            </div>
          </div>
       </div>
 

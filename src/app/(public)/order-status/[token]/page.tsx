@@ -57,6 +57,21 @@ export default async function OrderStatusPage(props: { params: Promise<{ token: 
 
   if (!order) notFound();
 
+  if (order.guestAccessTokenExpiresAt && new Date() > order.guestAccessTokenExpiresAt) {
+    return (
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12 text-center">
+        <XCircle className="mx-auto h-12 w-12 text-red-500 mb-4" />
+        <h1 className="text-2xl font-bold text-slate-900 mb-2">Link Kedaluwarsa</h1>
+        <p className="text-slate-600 mb-6">
+          Token akses untuk pesanan ini telah melewati batas waktu yang diizinkan (30 hari).
+        </p>
+        <p className="text-sm text-slate-500">
+          Silakan hubungi admin atau login (bila telah terdaftar) untuk melihat status pesanan Anda.
+        </p>
+      </div>
+    );
+  }
+
   const Icon = STATUS_ICON[order.status];
 
   return (

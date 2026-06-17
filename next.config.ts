@@ -26,6 +26,28 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'andislabs.com' }],
+        destination: 'https://www.andislab.com/:path*',
+        permanent: true,
+      },
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.andislabs.com' }],
+        destination: 'https://www.andislab.com/:path*',
+        permanent: true,
+      },
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'andislab.com' }],
+        destination: 'https://www.andislab.com/:path*',
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     return {
       beforeFiles: [],
@@ -58,7 +80,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "andislabs.com",
+        hostname: "andislab.com",
+      },
+      {
+        protocol: "https",
+        hostname: "www.andislab.com",
       },
       {
         protocol: "https",

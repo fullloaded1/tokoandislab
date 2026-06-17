@@ -68,7 +68,7 @@ export async function generateMetadata(
       images: article.image ? [article.image] : [],
     },
     alternates: {
-      canonical: `https://andislabs.com/artikel/${article.slug}`,
+      canonical: `https://www.andislab.com/artikel/${article.slug}`,
     },
   };
 }
@@ -100,19 +100,19 @@ export default async function ArticleDetailPage(
             author: {
               "@type": "Organization",
               name: "AndisLab",
-              url: "https://andislabs.com",
+              url: "https://www.andislab.com",
             },
             publisher: {
               "@type": "Organization",
               name: "AndisLab",
               logo: {
                 "@type": "ImageObject",
-                url: "https://andislabs.com/logo.png",
+                url: "https://www.andislab.com/logo.png",
               },
             },
             mainEntityOfPage: {
               "@type": "WebPage",
-              "@id": `https://andislabs.com/artikel/${article.slug}`,
+              "@id": `https://www.andislab.com/artikel/${article.slug}`,
             },
           }),
         }}

@@ -6,7 +6,7 @@ import { getShippingFee, isValidShippingRegion } from "@/lib/shipping";
 import { generateOrderNo, generateGuestAccessToken } from "@/lib/orderCodes";
 import { calculateOrderTotals } from "@/lib/orderTotals";
 import { sendOrderNotification } from "@/lib/orderNotification";
-import { Prisma } from "@prisma/client";
+import { Prisma, PaymentMethod } from "@prisma/client";
 
 const TAX_RATE = 11;
 const RESERVATION_WINDOW_MS = 30 * 60 * 1000;
@@ -22,7 +22,7 @@ type CreateOrderPayload = {
     address: string;
   };
   shippingRegion: string;
-  paymentMethod: string;
+  paymentMethod: PaymentMethod;
 };
 
 export async function createDirectOrder(payload: CreateOrderPayload) {
@@ -151,6 +151,7 @@ async function runOrderTransaction(payload: CreateOrderPayload) {
 
       const orderNo = generateOrderNo();
       const guestAccessToken = generateGuestAccessToken();
+      const guestAccessTokenExpiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
 
       const order = await tx.order.create({
         data: {
@@ -166,6 +167,7 @@ async function runOrderTransaction(payload: CreateOrderPayload) {
           shippingAddress,
           shippingRegion: payload.shippingRegion,
           guestAccessToken,
+          guestAccessTokenExpiresAt,
           priceDisplayMode: "EXCLUDE_PPN", // K1: snapshot mode tampil saat order dibuat
           items: { create: orderItemsToCreate },
         },

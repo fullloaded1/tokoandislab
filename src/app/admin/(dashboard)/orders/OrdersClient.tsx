@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { OrderStatus } from "@prisma/client";
+import { OrderStatus, PaymentMethod } from "@prisma/client";
 import { getNextStates, requiresTracking } from "@/lib/orderState";
 import { money } from "@/lib/money";
 import { updateOrderStatus } from "./actions";
@@ -25,7 +25,7 @@ type OrderRow = {
   taxAmount: string;
   shippingFee: string;
   totalAmount: string;
-  paymentMethod: string;
+  paymentMethod: PaymentMethod;
   trackingNumber: string | null;
   shippedAt: string | null;
   createdAt: string;

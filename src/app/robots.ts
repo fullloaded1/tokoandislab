@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/admin/', '/api/', '/inquiry/success'],
     },
-    sitemap: 'https://andislabs.com/sitemap.xml',
+    sitemap: 'https://www.andislab.com/sitemap.xml',
   }
 }

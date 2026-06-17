@@ -43,9 +43,5 @@ export default async function KatalogPage() {
     console.error("KatalogPage: Failed to fetch products", error);
   }
 
-  return (
-    <Suspense fallback={<KatalogLoading />}>
-      <KatalogClient initialProducts={products as any} />
-    </Suspense>
-  );
+  return <KatalogClient initialProducts={products as any} />;
 }

@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 import { prisma } from '@/lib/db'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://andislabs.com'
+  const baseUrl = 'https://www.andislab.com'
 
   // Get all products for dynamic routes
   const products = await prisma.product.findMany({

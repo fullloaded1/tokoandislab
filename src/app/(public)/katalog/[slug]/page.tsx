@@ -43,7 +43,7 @@ export async function generateMetadata(
       images: [product.image],
     },
     alternates: {
-      canonical: `https://andislabs.com/katalog/${product.slug}`,
+      canonical: `https://www.andislab.com/katalog/${product.slug}`,
     },
   };
 }
@@ -117,7 +117,7 @@ export default async function ProductDetailPage(
             description: product.description,
             image: product.image.startsWith("http")
               ? product.image
-              : `https://andislabs.com${product.image}`,
+              : `https://www.andislab.com${product.image}`,
             brand: {
               "@type": "Brand",
               name: product.brand || product.categoryLabel,
@@ -125,7 +125,7 @@ export default async function ProductDetailPage(
             sku: product.slug,
             offers: {
               "@type": "Offer",
-              url: `https://andislabs.com/katalog/${product.slug}`,
+              url: `https://www.andislab.com/katalog/${product.slug}`,
               priceCurrency: "IDR",
               price: product.price,
               availability: "https://schema.org/InStock",

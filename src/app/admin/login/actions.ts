@@ -2,6 +2,7 @@
 
 import { createSession } from "@/lib/session";
 import { redirect } from "next/navigation";
+import { prisma } from "@/lib/db";
 
 export async function loginAction(
   _prevState: { error: string } | undefined,
@@ -21,6 +22,15 @@ export async function loginAction(
     return { error: "Username atau password salah." };
   }
 
-  await createSession(username);
+  const adminUser = await prisma.adminUser.upsert({
+    where: { email: username },
+    create: {
+      email: username,
+      name: "Administrator",
+    },
+    update: {}
+  });
+
+  await createSession(adminUser.id);
   redirect("/admin");
 }

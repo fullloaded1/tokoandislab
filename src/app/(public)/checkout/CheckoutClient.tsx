@@ -6,6 +6,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { createDirectOrder } from "./actions";
 import { ChevronRight, ShoppingCart, Loader2, Info, ArrowLeft, ShieldCheck, Truck } from "lucide-react";
+import { PaymentMethod } from "@prisma/client";
 import Link from "next/link";
 import Image from "next/image";
 import { money } from "@/lib/money";
@@ -32,7 +33,7 @@ export default function CheckoutClient() {
   });
 
   const [shippingRegion, setShippingRegion] = useState<string>("");
-  const [paymentMethod, setPaymentMethod] = useState("MANUAL_TRANSFER");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("MANUAL_TRANSFER");
 
   useEffect(() => {
     setMounted(true);

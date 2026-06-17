@@ -7,7 +7,8 @@
     "build": "prisma generate && next build",
     "postinstall": "prisma generate",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "vitest run"
   },
   "dependencies": {
     "@ai-sdk/google": "^3.0.80",
@@ -31,6 +32,7 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-markdown": "^10.1.0",
+    "server-only": "^0.0.1",
     "webp-converter": "^2.3.3",
     "xlsx": "^0.18.5",
     "zustand": "^5.0.14"

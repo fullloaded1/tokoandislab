@@ -13,7 +13,7 @@ describe("orderNotification — buildOrderMessage", () => {
     customerName: "Budi",
     orderNo: "ORD-260615-A1B2C3",
     total: "Rp 1.500.000",
-    statusUrl: "https://andislabs.com/order-status/tkn",
+    statusUrl: "https://www.andislab.com/order-status/tkn",
   };
 
   it("CREATED memuat orderNo, total, link status", () => {
@@ -21,7 +21,7 @@ describe("orderNotification — buildOrderMessage", () => {
     expect(m).toContain("Budi");
     expect(m).toContain("ORD-260615-A1B2C3");
     expect(m).toContain("Rp 1.500.000");
-    expect(m).toContain("https://andislabs.com/order-status/tkn");
+    expect(m).toContain("https://www.andislab.com/order-status/tkn");
     expect(m.toLowerCase()).toContain("menunggu pembayaran");
   });
 

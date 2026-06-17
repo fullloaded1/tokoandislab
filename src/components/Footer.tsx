@@ -91,8 +91,7 @@ export default function Footer() {
               <li className="flex items-start gap-3 text-sm text-slate-400">
                 <Mail className="h-4 w-4 shrink-0 text-cyan-500 mt-1" />
                 <div className="flex flex-col gap-1">
-                  <a href="mailto:cs@andislabs.com" className="hover:text-cyan-400 transition-colors">cs@andislabs.com</a>
-                  <a href="mailto:cs.andislab@gmail.com" className="hover:text-cyan-400 transition-colors">cs.andislab@gmail.com</a>
+                  <a href="mailto:cs@andislab.com" className="hover:text-cyan-400 transition-colors">cs@andislab.com</a>
                 </div>
               </li>
             </ul>
@@ -105,10 +104,10 @@ export default function Footer() {
             © {new Date().getFullYear()} AndisLab. Seluruh hak dilindungi.
           </p>
           <div className="flex items-center gap-6">
-            <Link href="/tentang" className="text-sm text-slate-500 hover:text-slate-300 transition-colors">
+            <Link href="/kebijakan-privasi" className="text-sm text-slate-500 hover:text-slate-300 transition-colors">
               Kebijakan Privasi
             </Link>
-            <Link href="/tentang" className="text-sm text-slate-500 hover:text-slate-300 transition-colors">
+            <Link href="/syarat-ketentuan" className="text-sm text-slate-500 hover:text-slate-300 transition-colors">
               Syarat &amp; Ketentuan
             </Link>
           </div>

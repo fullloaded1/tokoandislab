@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Search, SlidersHorizontal, X, ChevronRight } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
@@ -19,19 +19,21 @@ const categories: { key: Category | "semua"; label: string }[] = [
   })),
 ];
 
+function SearchParamsListener({ onQuery }: { onQuery: (q: string) => void }) {
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    onQuery(searchParams.get("q") || "");
+  }, [searchParams, onQuery]);
+  return null;
+}
+
 export default function KatalogClient({ initialProducts = [] }: { initialProducts: PrismaProduct[] }) {
   const products = useMemo(() => getGroupedProducts(initialProducts), [initialProducts]);
-  const searchParams = useSearchParams();
-  const initialQuery = searchParams.get("q") || "";
-
-  const [searchQuery, setSearchQuery] = useState(initialQuery);
+  
+  const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<Category | "semua">("semua");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showOnlyReadyStock, setShowOnlyReadyStock] = useState(false);
-
-  useEffect(() => {
-    setSearchQuery(initialQuery);
-  }, [initialQuery]);
 
   const filteredProducts = useMemo(() => {
     let result = products.filter((p: PrismaProduct) => {
@@ -55,6 +57,10 @@ export default function KatalogClient({ initialProducts = [] }: { initialProduct
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <Suspense fallback={null}>
+        <SearchParamsListener onQuery={setSearchQuery} />
+      </Suspense>
+
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-slate-500 mb-6">
         <a href="/" className="hover:text-blue-600 transition-colors">

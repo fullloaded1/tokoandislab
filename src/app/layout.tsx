@@ -12,7 +12,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://andislabs.com"),
+  metadataBase: new URL("https://www.andislab.com"),
   title: "AndisLab — Distributor Alat Laboratorium, Bahan Kimia & Furniture Lab",
   description:
     "AndisLab adalah distributor resmi peralatan laboratorium, bahan kimia, reagen, glassware Pyrex, alat uji air Lovibond, inkubator Daihan Labtech, dan furnitur lab custom terpercaya di Indonesia. Dapatkan penawaran harga terbaik via WhatsApp.",
@@ -86,8 +86,8 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Organization",
               name: "AndisLab",
-              url: "https://andislabs.com",
-              logo: "https://andislabs.com/images/logo.png",
+              url: "https://www.andislab.com",
+              logo: "https://www.andislab.com/images/logo.png",
               description: "Distributor Alat Laboratorium, Bahan Kimia & Furniture Lab",
               address: {
                 "@type": "PostalAddress",

@@ -120,7 +120,7 @@ export default function Navbar() {
 
               {/* CTA */}
               <a
-                href="#"
+                href="/?wa=open&source=navbar_desktop&text=Halo%20AndisLab,%20saya%20ingin%20konsultasi%20produk."
                 onClick={(e) => {
                   e.preventDefault();
                   openWaModal({
@@ -211,7 +211,7 @@ export default function Navbar() {
               </Link>
             ))}
             <a
-              href="#"
+              href="/?wa=open&source=navbar_mobile&text=Halo%20AndisLab,%20saya%20ingin%20konsultasi%20produk."
               onClick={(e) => {
                 e.preventDefault();
                 openWaModal({

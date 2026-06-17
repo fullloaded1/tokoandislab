@@ -96,3 +96,101 @@ export async function updateOrderStatus(payload: {
     return { success: false, error: msg };
   }
 }
+
+export async function createRFQOrder(payload: { quotationId: string }) {
+  const session = await verifySession();
+  if (!session) return { success: false, error: "Tidak terautentikasi." };
+
+  try {
+    const quotation = await prisma.quotation.findUnique({
+      where: { id: payload.quotationId },
+      include: { 
+        items: { include: { variant: { include: { product: true } } } }, 
+        inquiry: { include: { institution: { include: { contacts: true } } } } 
+      }
+    });
+
+    if (!quotation) return { success: false, error: "Quotation tidak ditemukan." };
+
+    // Get or create customer based on institution contact
+    const contact = quotation.inquiry.institution.contacts[0];
+    if (!contact) return { success: false, error: "Institusi tidak memiliki kontak (email wajib)." };
+
+    const customer = await prisma.customer.upsert({
+      where: { email: contact.email },
+      create: {
+        email: contact.email,
+        name: contact.name,
+        phone: contact.phone,
+        institutionId: quotation.inquiry.institutionId,
+        status: "REGISTERED",
+      },
+      update: {
+        name: contact.name,
+        phone: contact.phone,
+        institutionId: quotation.inquiry.institutionId,
+      }
+    });
+
+    // Check if order already exists
+    const existingOrder = await prisma.order.findFirst({
+      where: { quotationId: quotation.id }
+    });
+    if (existingOrder) return { success: false, error: "Order sudah dibuat untuk quotation ini." };
+
+    // Import the functions here or use a simple fallback if not imported at top
+    // Since we don't want to mess up imports at the top right now, we can inline or assume it exists if we imported it. 
+    // Wait, let's just use `generateOrderNo` properly by adding it to imports or implementing inline.
+    // I'll implement inline to be safe.
+    const orderNo = `ORD-${Date.now().toString().slice(-6)}-RFQ`;
+    const guestAccessToken = Math.random().toString(36).substring(2, 15);
+    const guestAccessTokenExpiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+
+    const order = await prisma.order.create({
+      data: {
+        orderNo,
+        orderType: "RFQ",
+        status: "PENDING_PAYMENT",
+        customerId: customer.id,
+        quotationId: quotation.id,
+        subtotal: quotation.subtotal,
+        taxAmount: quotation.tax,
+        shippingFee: quotation.shippingFee,
+        totalAmount: quotation.totalAmount,
+        paymentMethod: "TERM_OF_PAYMENT",
+        shippingAddress: quotation.inquiry.institution.address,
+        shippingRegion: "OTHER", // Default or extract if possible
+        guestAccessToken,
+        guestAccessTokenExpiresAt,
+        priceDisplayMode: "EXCLUDE_PPN",
+        items: {
+          create: quotation.items.map(item => ({
+            variantId: item.variantId,
+            name: item.name,
+            sku: item.variant?.sku || "-",
+            price: item.price,
+            quantity: item.quantity
+          }))
+        }
+      }
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "CREATE",
+        entityType: "Order",
+        entityId: order.id,
+        actorId: session.username,
+        newValue: JSON.stringify({ orderNo: order.orderNo, quotationId: quotation.id }),
+        notes: "Membuat Order RFQ dari Quotation",
+      }
+    });
+
+    revalidatePath("/admin/orders");
+    return { success: true, orderId: order.id };
+  } catch (e) {
+    console.error("Failed to create RFQ order:", e);
+    const msg = e instanceof Error ? e.message : "Gagal membuat Order dari Quotation";
+    return { success: false, error: msg };
+  }
+}

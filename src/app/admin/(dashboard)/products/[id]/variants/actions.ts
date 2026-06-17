@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { adjustStock } from "@/lib/stock";
 import { StockLogType } from "@prisma/client";
+import { verifySession } from "@/lib/session";
 
 export async function getVariants(productId: string) {
   try {
@@ -25,6 +26,9 @@ export async function getVariants(productId: string) {
 
 export async function createVariant(data: { productId: string; sku: string; name: string; price: string | number; stock: number }) {
   try {
+    const session = await verifySession();
+    if (!session) throw new Error("Tidak terautentikasi");
+
     // 1. Buat Varian dengan stok awal 0 terlebih dahulu
     const newVariant = await prisma.productVariant.create({
       data: {
@@ -44,7 +48,7 @@ export async function createVariant(data: { productId: string; sku: string; name
         quantity: data.stock,
         type: StockLogType.IN,
         notes: "Initial stock upon variant creation",
-        actorId: "Admin" // TODO: get from session
+        actorId: session.username
       });
     }
 
@@ -87,12 +91,15 @@ export async function deleteVariant(id: string) {
 
 export async function restockVariant(variantId: string, quantity: number, notes: string) {
   try {
+    const session = await verifySession();
+    if (!session) throw new Error("Tidak terautentikasi");
+
     const updated = await adjustStock({
       variantId,
       quantity,
       type: StockLogType.IN,
       notes: notes || "Restock manual",
-      actorId: "Admin"
+      actorId: session.username
     });
     revalidatePath(`/admin/products`);
     return { success: true, data: updated };
@@ -103,12 +110,15 @@ export async function restockVariant(variantId: string, quantity: number, notes:
 
 export async function adjustStockVariant(variantId: string, quantity: number, type: StockLogType, notes: string) {
   try {
+    const session = await verifySession();
+    if (!session) throw new Error("Tidak terautentikasi");
+
     const updated = await adjustStock({
       variantId,
       quantity,
       type, // OUT atau ADJUST
       notes: notes || "Koreksi manual",
-      actorId: "Admin"
+      actorId: session.username
     });
     revalidatePath(`/admin/products`);
     return { success: true, data: updated };
