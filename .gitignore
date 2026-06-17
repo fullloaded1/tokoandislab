@@ -42,3 +42,7 @@ next-env.d.ts
 
 # scratch folder for agent
 /scratch/
+
+# Prisma dev DB
+prisma/dev.db
+*.db
