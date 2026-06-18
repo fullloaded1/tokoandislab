@@ -2,8 +2,10 @@
 
 import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { requireAdmin } from "@/lib/session";
 
 export async function getArticles() {
+  await requireAdmin();
   try {
     const articles = await (prisma as any).article.findMany({
       orderBy: { createdAt: "desc" },
@@ -32,6 +34,7 @@ export async function createArticle(data: {
   published: boolean;
   productIds: string[];
 }) {
+  await requireAdmin();
   try {
     let baseSlug = data.title
       .toLowerCase()
@@ -94,6 +97,7 @@ export async function updateArticle(
     productIds: string[];
   }
 ) {
+  await requireAdmin();
   try {
     const currentArticle = await prisma.article.findUnique({
       where: { id },
@@ -160,6 +164,7 @@ export async function updateArticle(
 }
 
 export async function deleteArticle(id: string) {
+  await requireAdmin();
   try {
     const article = await (prisma as any).article.findUnique({
       where: { id },

@@ -4,9 +4,10 @@ import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { adjustStock } from "@/lib/stock";
 import { StockLogType } from "@prisma/client";
-import { verifySession } from "@/lib/session";
+import { requireAdmin } from "@/lib/session";
 
 export async function getVariants(productId: string) {
+  await requireAdmin();
   try {
     const variants = await prisma.productVariant.findMany({
       where: { productId },
@@ -26,8 +27,7 @@ export async function getVariants(productId: string) {
 
 export async function createVariant(data: { productId: string; sku: string; name: string; price: string | number; stock: number }) {
   try {
-    const session = await verifySession();
-    if (!session) throw new Error("Tidak terautentikasi");
+    const session = await requireAdmin();
 
     // 1. Buat Varian dengan stok awal 0 terlebih dahulu
     const newVariant = await prisma.productVariant.create({
@@ -61,6 +61,7 @@ export async function createVariant(data: { productId: string; sku: string; name
 }
 
 export async function updateVariant(id: string, data: { sku: string; name: string; price: string | number }) {
+  await requireAdmin();
   try {
     const updated = await prisma.productVariant.update({
       where: { id },
@@ -79,6 +80,7 @@ export async function updateVariant(id: string, data: { sku: string; name: strin
 }
 
 export async function deleteVariant(id: string) {
+  await requireAdmin();
   try {
     await prisma.productVariant.delete({
       where: { id }
@@ -91,8 +93,7 @@ export async function deleteVariant(id: string) {
 
 export async function restockVariant(variantId: string, quantity: number, notes: string) {
   try {
-    const session = await verifySession();
-    if (!session) throw new Error("Tidak terautentikasi");
+    const session = await requireAdmin();
 
     const updated = await adjustStock({
       variantId,
@@ -110,8 +111,7 @@ export async function restockVariant(variantId: string, quantity: number, notes:
 
 export async function adjustStockVariant(variantId: string, quantity: number, type: StockLogType, notes: string) {
   try {
-    const session = await verifySession();
-    if (!session) throw new Error("Tidak terautentikasi");
+    const session = await requireAdmin();
 
     const updated = await adjustStock({
       variantId,

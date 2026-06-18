@@ -2,10 +2,12 @@
 
 import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { requireAdmin } from "@/lib/session";
 
 import { WhatsAppLogStatus } from "@prisma/client";
 
 export async function updateLeadStatus(id: string, status: WhatsAppLogStatus) {
+  await requireAdmin();
   try {
     await prisma.whatsAppLog.update({
       where: { id },

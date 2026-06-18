@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { requireAdmin } from "@/lib/session";
 
 export async function createInstalledBase(data: {
   institutionId: string;
@@ -10,6 +11,7 @@ export async function createInstalledBase(data: {
   installationDate: string;
   warrantyMonths: number;
 }) {
+  await requireAdmin();
   try {
     const installationDate = new Date(data.installationDate);
     const warrantyExpiry = new Date(installationDate);
@@ -67,6 +69,7 @@ export async function createInstalledBase(data: {
 }
 
 export async function logMaintenance(installedBaseId: string) {
+  await requireAdmin();
   try {
     // Update lastMaintenance to now
     await prisma.installedBase.update({

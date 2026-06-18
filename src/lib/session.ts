@@ -2,7 +2,14 @@ import "server-only";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
+// Fail-fast: reject startup if SESSION_SECRET is missing or too short
 const secretKey = process.env.SESSION_SECRET;
+if (!secretKey || secretKey.length < 32) {
+  throw new Error(
+    "SESSION_SECRET belum di-set atau terlalu pendek (min 32 karakter). " +
+    "Set env variable SESSION_SECRET dengan nilai acak ≥32 karakter."
+  );
+}
 const encodedKey = new TextEncoder().encode(secretKey);
 
 type SessionPayload = {
@@ -56,8 +63,21 @@ export async function verifySession() {
   return { isAuth: true, username: session.username };
 }
 
+/**
+ * Guard for admin server actions. Call at the start of every
+ * server action that performs read/write of sensitive admin data.
+ * Throws "Unauthorized" if session is invalid.
+ * Returns session object with `username` (AdminUser.id) for audit logging.
+ */
+export async function requireAdmin() {
+  const session = await verifySession();
+  if (!session?.isAuth) {
+    throw new Error("Unauthorized");
+  }
+  return session; // session.username = AdminUser.id → use as actorId for audit
+}
+
 export async function deleteSession() {
   const cookieStore = await cookies();
   cookieStore.delete("session");
 }
-

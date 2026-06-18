@@ -4,8 +4,10 @@ import { prisma } from "@/lib/db";
 import { embed } from "ai";
 import { google } from "@ai-sdk/google";
 import { revalidatePath } from "next/cache";
+import { requireAdmin } from "@/lib/session";
 
 export async function addKnowledge(data: { title: string; content: string; productId?: string }) {
+  await requireAdmin();
   try {
     const { embedding } = await embed({
       model: google.textEmbeddingModel("text-embedding-004"),
@@ -35,6 +37,7 @@ export async function addKnowledge(data: { title: string; content: string; produ
 }
 
 export async function deleteKnowledge(id: string) {
+  await requireAdmin();
   try {
     await prisma.$executeRaw`DELETE FROM "DocumentKnowledge" WHERE id = ${id}`;
     revalidatePath("/admin/knowledge");

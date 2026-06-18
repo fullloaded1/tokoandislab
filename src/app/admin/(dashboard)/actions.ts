@@ -3,15 +3,27 @@
 import { prisma } from "@/lib/db";
 import { money } from "@/lib/money";
 import { ActivityAction, InquiryStatus } from "@prisma/client";
-import { deleteSession } from "@/lib/session";
+import { deleteSession, requireAdmin } from "@/lib/session";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function deleteProduct(id: string) {
+  const session = await requireAdmin();
   try {
     await prisma.product.delete({
       where: { id },
     });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "DELETE",
+        entityType: "Product",
+        entityId: id,
+        actorId: session.username,
+        notes: "Hapus produk",
+      },
+    });
+
     revalidatePath("/admin");
     revalidatePath("/katalog");
     revalidatePath("/");
@@ -23,6 +35,7 @@ export async function deleteProduct(id: string) {
 }
 
 export async function createProduct(data: any) {
+  await requireAdmin();
   try {
     const slug = data.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
     await prisma.product.create({
@@ -51,6 +64,7 @@ export async function createProduct(data: any) {
 }
 
 export async function updateProduct(id: string, data: any) {
+  await requireAdmin();
   try {
     await prisma.product.update({
       where: { id },
@@ -78,6 +92,7 @@ export async function updateProduct(id: string, data: any) {
 }
 
 export async function bulkCreateProducts(products: any[]) {
+  await requireAdmin();
   try {
     const dataToInsert = products.map((p) => {
       // Ensure unique slug, even if there are duplicates we can add a random string or just rely on standard.
@@ -122,6 +137,7 @@ export async function logoutAction() {
 
 // CRM Activity Logs
 export async function createActivityLog(data: { inquiryId?: string; institutionId?: string; action: ActivityAction; description: string }) {
+  await requireAdmin();
   try {
     await prisma.activityLog.create({
       data,
@@ -134,6 +150,7 @@ export async function createActivityLog(data: { inquiryId?: string; institutionI
 }
 
 export async function getActivityLogs(params: { inquiryId?: string; institutionId?: string }) {
+  await requireAdmin();
   try {
     const logs = await prisma.activityLog.findMany({
       where: params,
@@ -150,13 +167,14 @@ export async function getActivityLogs(params: { inquiryId?: string; institutionI
 }
 
 export async function updateInquiryStatus(inquiryId: string, status: InquiryStatus) {
+  const session = await requireAdmin();
   try {
     const inquiry = await prisma.inquiry.update({
       where: { id: inquiryId },
       data: { status },
     });
     
-    // Log activity
+    // Log activity with actorId for audit trail
     await prisma.activityLog.create({
       data: {
         inquiryId: inquiry.id,
@@ -164,6 +182,17 @@ export async function updateInquiryStatus(inquiryId: string, status: InquiryStat
         action: ActivityAction.OTHER,
         description: `Status diubah menjadi ${status}`,
       }
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "UPDATE_INQUIRY_STATUS",
+        entityType: "Inquiry",
+        entityId: inquiry.id,
+        actorId: session.username,
+        newValue: JSON.stringify({ status }),
+        notes: `Status inquiry diubah menjadi ${status}`,
+      },
     });
 
     revalidatePath("/admin/inquiries");
@@ -175,6 +204,7 @@ export async function updateInquiryStatus(inquiryId: string, status: InquiryStat
 }
 
 export async function getInquiries() {
+  await requireAdmin();
   try {
     const inquiries = await prisma.inquiry.findMany({
       orderBy: { createdAt: 'desc' },
