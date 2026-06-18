@@ -50,15 +50,3 @@ JWT_SECRET="secret_panjang_sekali"
    ```bash
    npm run dev
    ```
-
-## Aturan Agen (Antigravity)
-Semua instruksi pengembangan otomatis berbasis agen tunduk pada aturan di file `AGENTS.md`. Aturan utama mencakup:
-- Selalu gunakan `Decimal` untuk data finansial (Uang).
-- Pengurangan/penambahan stok wajib berjalan di dalam *DB Transaction*.
-- Jangan pernah mengubah logika inti dari alur `Inquiry -> Quotation -> Project -> Invoice` yang sudah berjalan.
-
-## Testing
-Sistem diuji menggunakan `Vitest`. Untuk menjalankan test:
-```bash
-npx vitest run
-```
