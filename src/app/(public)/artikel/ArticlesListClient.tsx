@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { BookOpen, Calendar, ArrowRight, Search, FileText } from "lucide-react";
+import { BookOpen, Calendar, ArrowRight, Search, FileText, Eye, Heart } from "lucide-react";
 
 interface Article {
   id: string;
@@ -14,6 +14,8 @@ interface Article {
   image: string | null;
   category: string;
   createdAt: Date;
+  viewCount: number;
+  likeCount: number;
 }
 
 const CATEGORY_TABS = [
@@ -117,14 +119,22 @@ export default function ArticlesListClient({ initialArticles }: { initialArticle
               {/* Body */}
               <div className="p-6 flex flex-col flex-grow">
                 {/* Meta details */}
-                <div className="flex items-center gap-2 text-xs text-slate-400 mb-3 font-semibold">
-                  <Calendar className="h-3.5 w-3.5" />
-                  <span>
+                <div className="flex items-center gap-4 text-xs text-slate-400 mb-3 font-semibold">
+                  <span className="inline-flex items-center gap-1.5">
+                    <Calendar className="h-3.5 w-3.5" />
                     {new Date(article.createdAt).toLocaleDateString("id-ID", {
                       day: "numeric",
                       month: "long",
                       year: "numeric",
                     })}
+                  </span>
+                  <span className="inline-flex items-center gap-1" title="Dilihat">
+                    <Eye className="h-3.5 w-3.5" />
+                    {article.viewCount}
+                  </span>
+                  <span className="inline-flex items-center gap-1" title="Disukai">
+                    <Heart className="h-3.5 w-3.5" />
+                    {article.likeCount}
                   </span>
                 </div>
 

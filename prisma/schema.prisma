@@ -338,6 +338,8 @@ model Article {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   category  String    @default("edukasi-lab")
+  viewCount Int       @default(0)
+  likeCount Int       @default(0)
   products  Product[] @relation("ArticleToProduct")
 }
 

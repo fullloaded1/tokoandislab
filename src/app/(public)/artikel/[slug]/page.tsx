@@ -4,7 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import ProductCard from "@/components/ProductCard";
-import { BookOpen, Calendar, ChevronRight, ArrowLeft } from "lucide-react";
+import ArticleLikeButton from "@/components/ArticleLikeButton";
+import ArticleViewTracker from "@/components/ArticleViewTracker";
+import { BookOpen, Calendar, ChevronRight, ArrowLeft, Eye } from "lucide-react";
 import type { Metadata } from "next";
 import { cache } from "react";
 
@@ -85,6 +87,9 @@ export default async function ArticleDetailPage(
 
   return (
     <>
+      {/* View tracker – fires once on mount */}
+      <ArticleViewTracker slug={article.slug} />
+
       {/* Schema.org BlogPosting Structured Data */}
       <script
         type="application/ld+json"
@@ -147,14 +152,18 @@ export default async function ArticleDetailPage(
         <article className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden p-6 sm:p-10 mb-12">
           {/* Header */}
           <header className="mb-8">
-            <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-400 font-semibold mb-4">
-              <Calendar className="h-4 w-4" />
-              <span>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm text-slate-400 font-semibold mb-4">
+              <span className="inline-flex items-center gap-1.5">
+                <Calendar className="h-4 w-4" />
                 {new Date(article.createdAt).toLocaleDateString("id-ID", {
                   day: "numeric",
                   month: "long",
                   year: "numeric",
                 })}
+              </span>
+              <span className="inline-flex items-center gap-1.5" title="Jumlah dilihat">
+                <Eye className="h-4 w-4" />
+                {article.viewCount.toLocaleString("id-ID")} kali dilihat
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
@@ -165,6 +174,9 @@ export default async function ArticleDetailPage(
                 {article.excerpt}
               </p>
             )}
+            <div className="mt-5">
+              <ArticleLikeButton slug={article.slug} initialLikeCount={article.likeCount} />
+            </div>
           </header>
 
           {/* Cover image */}
