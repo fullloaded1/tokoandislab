@@ -22,9 +22,8 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
 
   const displayName = product.isReadyStock && product.model ? `${product.name} - ${product.model}` : product.name;
 
-  // TODO: HIDE_PRICES_TEMPORARILY di-set true karena user menunggu pengiriman harga terbaru. 
-  // Ubah ke false untuk mengaktifkan kembali Direct Purchase & Ready Stock.
-  const HIDE_PRICES_TEMPORARILY = true;
+  // Harga sudah dimasukkan dari supplier price list (Juni 2026).
+  const HIDE_PRICES_TEMPORARILY = false;
 
   const summary = getReadyStockSummary(product);
   const isReadyToBuy = HIDE_PRICES_TEMPORARILY ? false : summary.state === "available";

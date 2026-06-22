@@ -58,8 +58,8 @@ export default function ProductDetailClient({
 
   const displayName = product.isReadyStock && product.model ? `${product.name} - ${product.model}` : product.name;
 
-  // TODO: HIDE_PRICES_TEMPORARILY di-set true karena user menunggu pengiriman harga terbaru.
-  const HIDE_PRICES_TEMPORARILY = true;
+  // Harga sudah dimasukkan dari supplier price list (Juni 2026).
+  const HIDE_PRICES_TEMPORARILY = false;
 
   const isReadyToBuy = HIDE_PRICES_TEMPORARILY ? false : !!(product.isReadyStock && selectedVariant && (selectedVariant.stock - selectedVariant.reservedStock > 0) && money.toDecimal(selectedVariant.price).toNumber() > 0);
   const readyStockPrice = isReadyToBuy ? money.toDecimal(selectedVariant.price).toNumber() : 0;
