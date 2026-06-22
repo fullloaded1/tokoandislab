@@ -43,7 +43,7 @@ async function sendTelegramMessage(log: {
   }
 }
 
-const waNumber = "6282125523466";
+const waNumber = "6285973211179";
 
 // GET request (simple anchor tag redirection)
 export async function GET(request: Request) {

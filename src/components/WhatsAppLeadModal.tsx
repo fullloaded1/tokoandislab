@@ -105,7 +105,7 @@ function WhatsAppLeadModalInner() {
     } catch (err) {
       console.error("Lead submission error:", err);
       // Fallback directly to WA on error
-      const waNumber = "6282125523466";
+      const waNumber = "6285973211179";
       const fallbackUrl = `https://wa.me/${waNumber}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
       window.open(fallbackUrl, "_blank", "noopener,noreferrer");
     } finally {
@@ -134,7 +134,7 @@ function WhatsAppLeadModalInner() {
       closeModal();
       
       // Redirect immediately
-      const waNumber = "6282125523466";
+      const waNumber = "6285973211179";
       const redirectUrl = `https://wa.me/${waNumber}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
       window.open(redirectUrl, "_blank", "noopener,noreferrer");
     }

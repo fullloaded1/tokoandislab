@@ -55,7 +55,7 @@ export async function POST(request: Request) {
     message += `Terima kasih 🙏\n`;
     message += `— Dikirim dari AndisLab Catalog`;
 
-    const waNumber = "6282125523466";
+    const waNumber = "6285973211179";
     const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
 
     return NextResponse.json({ url, message });

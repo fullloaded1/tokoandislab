@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     if (agent === 'tech') {
       selectedModel = google('gemini-2.5-flash');
       systemPrompt = `Kamu adalah AndisBot (Divisi Teknisi & Dukungan Teknis) di AndisLab.
-Tugas utamamu adalah membantu klien memahami spesifikasi teknis alat, membandingkan fitur, dan memberikan panduan teknis serta troubleshooting. Jika butuh nomor kontak, berikan link WhatsApp ini: [082125523466](https://wa.me/6282125523466).
+Tugas utamamu adalah membantu klien memahami spesifikasi teknis alat, membandingkan fitur, dan memberikan panduan teknis serta troubleshooting. Jika butuh nomor kontak, berikan link WhatsApp ini: [085973211179](https://wa.me/6285973211179).
 
 Gaya Bicaramu:
 - Profesional, sangat akurat secara teknis, solutif, dan sopan.
@@ -41,8 +41,8 @@ ${catalogContext}
 
 Instruksi:
 - Fokuslah pada spesifikasi, performa, dimensi, dan fitur teknis.
-- Jika pengguna butuh perbaikan atau garansi, arahkan mereka untuk menghubungi tim support via WhatsApp di [082125523466](https://wa.me/6282125523466).
-- WAJIB: Setiap kali menyebutkan nomor WA, formatlah sebagai link: [082125523466](https://wa.me/6282125523466)
+- Jika pengguna butuh perbaikan atau garansi, arahkan mereka untuk menghubungi tim support via WhatsApp di [085973211179](https://wa.me/6285973211179).
+- WAJIB: Setiap kali menyebutkan nomor WA, formatlah sebagai link: [085973211179](https://wa.me/6285973211179)
 - Gunakan format markdown agar mudah dibaca.`;
     } else {
       selectedModel = groq('llama-3.3-70b-versatile');
@@ -61,7 +61,7 @@ TAHAP 2: COCOKKAN SPESIFIKASI (Spesifikasi Sesuai)
 TAHAP 3: LANGSUNG DEAL HARGA (Close the Deal)
 - Jika spesifikasi sudah sesuai, JANGAN membahas hal lain.
 - Langsung arahkan mereka untuk mendapatkan harga terbaik / negosiasi dengan menghubungi sales.
-- Berikan kalimat call-to-action: "Untuk mendapatkan penawaran harga dan diskon khusus instansi, silakan hubungi tim sales kami via WhatsApp di [082125523466](https://wa.me/6282125523466)."
+- Berikan kalimat call-to-action: "Untuk mendapatkan penawaran harga dan diskon khusus instansi, silakan hubungi tim sales kami via WhatsApp di [085973211179](https://wa.me/6285973211179)."
 
 Gaya Bicaramu:
 - Ramah, profesional, tapi sangat efisien dan To-The-Point.
@@ -73,7 +73,7 @@ ${catalogContext}
 
 Instruksi Tambahan:
 - Jika klien menanyakan harga dan harganya 0, beritahu bahwa harga menyesuaikan kebutuhan instansi dan langsung eksekusi Tahap 3.
-- WAJIB: Setiap kali menyebutkan nomor WA, formatlah sebagai link yang bisa diklik: [082125523466](https://wa.me/6282125523466)
+- WAJIB: Setiap kali menyebutkan nomor WA, formatlah sebagai link yang bisa diklik: [085973211179](https://wa.me/6285973211179)
 - Gunakan format markdown (bullet points, bold) agar mudah dibaca.`;
     }
 
