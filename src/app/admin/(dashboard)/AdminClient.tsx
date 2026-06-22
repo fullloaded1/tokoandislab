@@ -199,6 +199,28 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
     XLSX.writeFile(workbook, "Ekspor_Produk_EKatalog.xlsx");
   };
 
+  const exportReadyStockToExcel = () => {
+    const readyStockProducts = products.filter(p => p.isReadyStock);
+    
+    const excelData = readyStockProducts.map((p: any, index) => {
+      const totalStock = p.variants ? p.variants.reduce((acc: number, v: any) => acc + (v.stock || 0), 0) : 0;
+      
+      return {
+        "No": index + 1,
+        "Nama Alat": p.name,
+        "Model": p.model || "-",
+        "Brand": p.brand || "-",
+        "Harga": p.price,
+        "Stock/Indent": totalStock > 0 ? totalStock : "Indent"
+      };
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(excelData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Ready_Stock");
+    XLSX.writeFile(workbook, "Ekspor_Ready_Stock.xlsx");
+  };
+
   return (
     <>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
@@ -206,7 +228,14 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
           <h1 className="text-3xl font-black text-slate-900">Admin Dashboard</h1>
           <p className="text-slate-500 mt-1">Kelola data produk Anda di sini.</p>
         </div>
-        <div className="flex items-center gap-3 mt-4 sm:mt-0">
+        <div className="flex flex-wrap items-center gap-3 mt-4 sm:mt-0 justify-end">
+          <button 
+            onClick={exportReadyStockToExcel}
+            className="flex items-center justify-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2.5 rounded-lg font-semibold hover:bg-emerald-100 transition-colors border border-emerald-200"
+          >
+            <Download className="h-5 w-5" />
+            Export Ready Stock
+          </button>
           <button 
             onClick={exportToExcel}
             className="flex items-center justify-center gap-2 bg-green-50 text-green-700 px-4 py-2.5 rounded-lg font-semibold hover:bg-green-100 transition-colors border border-green-200"

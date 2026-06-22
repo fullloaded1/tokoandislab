@@ -7,6 +7,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminDashboard() {
   const products = await prisma.product.findMany({
     orderBy: { createdAt: "desc" },
+    include: { variants: true },
   });
 
   const serializedProducts = products.map(serializeProductDecimals);
