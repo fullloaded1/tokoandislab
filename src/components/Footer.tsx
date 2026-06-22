@@ -6,7 +6,6 @@ const categories = [
   { href: "/katalog?category=daihan-labtech", label: "Daihan Labtech" },
   { href: "/katalog?category=pyrex", label: "Pyrex®" },
   { href: "/katalog?category=andislab-custom", label: "Andislab Custom" },
-  { href: "/katalog?category=yuasa-battery", label: "Yuasa Battery" },
 ];
 
 export default function Footer() {

@@ -89,7 +89,6 @@ export default async function ArticleDetailPage(
     <>
       {/* View tracker – fires once on mount */}
       <ArticleViewTracker slug={article.slug} />
-
       {/* Schema.org BlogPosting Structured Data */}
       <script
         type="application/ld+json"
