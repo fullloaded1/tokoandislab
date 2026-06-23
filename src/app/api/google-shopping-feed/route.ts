@@ -16,7 +16,6 @@ export async function GET() {
     const products = await prisma.product.findMany({
       where: {
         isReadyStock: true,
-        isRequestPricing: false,
       },
       include: {
         variants: true,
@@ -45,7 +44,7 @@ export async function GET() {
 
       return `
     <item>
-      <g:id>${escapeXml(product.slug)}</g:id>
+      <g:id>${escapeXml(product.id)}</g:id>
       <g:title>${escapeXml(product.name)}</g:title>
       <g:description>${escapeXml(product.description || product.name)}</g:description>
       <g:link>${baseUrl}/katalog/${product.slug}</g:link>
