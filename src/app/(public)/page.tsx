@@ -4,7 +4,7 @@ import CategoryGrid from "@/components/CategoryGrid";
 import BrandLogos from "@/components/BrandLogos";
 import ClientLogos from "@/components/ClientLogos";
 import Link from "next/link";
-import { ArrowRight, BookOpen } from "lucide-react";
+import { ArrowRight, BookOpen, Tag } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { CATEGORY_LABELS, type Category, getGroupedProducts, serializeProductDecimals } from "@/lib/products";
 
@@ -115,13 +115,24 @@ export default async function HomePage() {
                 STOCK Terbatas! Barang siap kirim ke instansi/perusahaan Anda. Dapatkan diskon khusus hari ini.
               </p>
             </div>
-            <Link
-              href="/ready-stock"
-              className="hidden sm:inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:border-emerald-300 hover:text-emerald-700 hover:shadow-md transition-all duration-300 shrink-0"
-            >
-              Lihat Semua
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+            <div className="hidden sm:flex items-center gap-3 shrink-0">
+              <a
+                href="/api/ready-stock-pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-2xl bg-rose-600 px-6 py-2.5 text-sm font-bold text-white shadow-lg hover:bg-rose-700 hover:-translate-y-0.5 hover:shadow-xl transition-all duration-300"
+              >
+                <Tag className="h-4 w-4" />
+                Download PDF Ready Stock
+              </a>
+              <Link
+                href="/ready-stock"
+                className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:border-emerald-300 hover:text-emerald-700 hover:shadow-md transition-all duration-300"
+              >
+                Lihat Semua
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 stagger-children">
