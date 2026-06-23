@@ -22,6 +22,11 @@ function WhatsAppLeadModalInner() {
     const wa = searchParams.get("wa");
     if (wa === "open") {
       const src = searchParams.get("source") || "unknown";
+      
+      if (typeof window !== "undefined") {
+        (window as any).gtag?.('event', 'whatsapp_click', { wa_source: src });
+      }
+
       const txt = searchParams.get("text") || "";
       const pId = searchParams.get("productId") || undefined;
       const pName = searchParams.get("productName") || undefined;

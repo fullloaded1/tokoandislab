@@ -1,0 +1,4 @@
+client_id,user_id,timestamp_micros,event_name,ep.transaction_id,epn.value,ep.currency,ep.payment_type
+12345.67890,U-999,1695283200000000,purchase,TRX-1001,150000,IDR,bank_transfer
+12345.67891,,1695283500000000,generate_lead,,,,
+12345.67892,U-105,1695284000000000,purchase,TRX-1002,300000,IDR,credit_card
