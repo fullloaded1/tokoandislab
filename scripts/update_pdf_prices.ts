@@ -8,9 +8,9 @@ function calculateNewPrice(originalStr: string) {
   const original = parseInt(originalStr.replace(/,/g, ''), 10);
   const target = original * 0.99;
   
-  let multiple = original > 100000 ? 10000 : 1000;
+  const multiple = original > 100000 ? 10000 : 1000;
   
-  let base = Math.floor(target / multiple) * multiple;
+  const base = Math.floor(target / multiple) * multiple;
   let finalPrice = base + 700;
   
   if (finalPrice >= original) {

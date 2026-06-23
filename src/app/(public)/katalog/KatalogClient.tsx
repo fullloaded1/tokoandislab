@@ -34,6 +34,16 @@ export default function KatalogClient({ initialProducts = [] }: { initialProduct
   const [activeCategory, setActiveCategory] = useState<Category | "semua">("semua");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showOnlyReadyStock, setShowOnlyReadyStock] = useState(false);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>([]);
+
+  const uniqueBrands = useMemo(() => {
+    return Array.from(new Set(products.map((p: PrismaProduct) => p.brand).filter(Boolean) as string[])).sort();
+  }, [products]);
+
+  const uniqueSubcategories = useMemo(() => {
+    return Array.from(new Set(products.map((p: PrismaProduct) => p.subcategory).filter(Boolean) as string[])).sort();
+  }, [products]);
 
   const filteredProducts = useMemo(() => {
     let result = products.filter((p: PrismaProduct) => {
@@ -45,7 +55,10 @@ export default function KatalogClient({ initialProducts = [] }: { initialProduct
         p.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.categoryLabel.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesReadyStock = !showOnlyReadyStock || p.isReadyStock;
-      return matchesCategory && matchesSearch && matchesReadyStock;
+      const matchesBrand = selectedBrands.length === 0 || (p.brand && selectedBrands.includes(p.brand));
+      const matchesSubcategory = selectedSubcategories.length === 0 || (p.subcategory && selectedSubcategories.includes(p.subcategory));
+
+      return matchesCategory && matchesSearch && matchesReadyStock && matchesBrand && matchesSubcategory;
     });
 
     if (showOnlyReadyStock) {
@@ -53,7 +66,7 @@ export default function KatalogClient({ initialProducts = [] }: { initialProduct
     }
 
     return result;
-  }, [activeCategory, searchQuery, showOnlyReadyStock, products]);
+  }, [activeCategory, searchQuery, showOnlyReadyStock, selectedBrands, selectedSubcategories, products]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
@@ -149,6 +162,54 @@ export default function KatalogClient({ initialProducts = [] }: { initialProduct
                 );
               })}
             </div>
+
+            {uniqueBrands.length > 0 && (
+              <div className="mt-8">
+                <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4">
+                  Brand
+                </h3>
+                <div className="space-y-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+                  {uniqueBrands.map(brand => (
+                    <label key={brand} className="flex items-center gap-3 cursor-pointer group">
+                      <input 
+                        type="checkbox" 
+                        checked={selectedBrands.includes(brand)}
+                        onChange={(e) => {
+                          if (e.target.checked) setSelectedBrands([...selectedBrands, brand]);
+                          else setSelectedBrands(selectedBrands.filter(b => b !== brand));
+                        }}
+                        className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">{brand}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {uniqueSubcategories.length > 0 && (
+              <div className="mt-8">
+                <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4">
+                  Sub-Kategori
+                </h3>
+                <div className="space-y-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+                  {uniqueSubcategories.map(subcat => (
+                    <label key={subcat} className="flex items-center gap-3 cursor-pointer group">
+                      <input 
+                        type="checkbox" 
+                        checked={selectedSubcategories.includes(subcat)}
+                        onChange={(e) => {
+                          if (e.target.checked) setSelectedSubcategories([...selectedSubcategories, subcat]);
+                          else setSelectedSubcategories(selectedSubcategories.filter(s => s !== subcat));
+                        }}
+                        className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">{subcat}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </aside>
 
@@ -198,6 +259,54 @@ export default function KatalogClient({ initialProducts = [] }: { initialProduct
                   );
                 })}
               </div>
+
+              {uniqueBrands.length > 0 && (
+                <div className="mt-6">
+                  <h3 className="text-sm font-bold text-slate-800 mb-3">
+                    Brand
+                  </h3>
+                  <div className="space-y-2 max-h-32 overflow-y-auto pr-2 custom-scrollbar">
+                    {uniqueBrands.map(brand => (
+                      <label key={brand} className="flex items-center gap-3 cursor-pointer group">
+                        <input 
+                          type="checkbox" 
+                          checked={selectedBrands.includes(brand)}
+                          onChange={(e) => {
+                            if (e.target.checked) setSelectedBrands([...selectedBrands, brand]);
+                            else setSelectedBrands(selectedBrands.filter(b => b !== brand));
+                          }}
+                          className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">{brand}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {uniqueSubcategories.length > 0 && (
+                <div className="mt-6">
+                  <h3 className="text-sm font-bold text-slate-800 mb-3">
+                    Sub-Kategori
+                  </h3>
+                  <div className="space-y-2 max-h-32 overflow-y-auto pr-2 custom-scrollbar">
+                    {uniqueSubcategories.map(subcat => (
+                      <label key={subcat} className="flex items-center gap-3 cursor-pointer group">
+                        <input 
+                          type="checkbox" 
+                          checked={selectedSubcategories.includes(subcat)}
+                          onChange={(e) => {
+                            if (e.target.checked) setSelectedSubcategories([...selectedSubcategories, subcat]);
+                            else setSelectedSubcategories(selectedSubcategories.filter(s => s !== subcat));
+                          }}
+                          className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">{subcat}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </>
         )}
@@ -271,6 +380,8 @@ export default function KatalogClient({ initialProducts = [] }: { initialProduct
                 onClick={() => {
                   setSearchQuery("");
                   setActiveCategory("semua");
+                  setSelectedBrands([]);
+                  setSelectedSubcategories([]);
                 }}
                 className="mt-4 inline-flex items-center gap-2 rounded-2xl bg-blue-50 px-5 py-2.5 text-sm font-semibold text-blue-700 hover:bg-blue-100 transition-colors"
               >

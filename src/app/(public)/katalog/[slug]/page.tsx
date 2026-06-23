@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 
 import { cache } from "react";
 import { serializeProductDecimals } from "@/lib/products";
+import { getReadyStockSummary } from "@/lib/readyStock";
 
 // Memoize the product fetch so it's only executed once per request
 const getProduct = cache(async (slug: string) => {
@@ -105,6 +106,29 @@ export default async function ProductDetailPage(
     relatedProducts = [...relatedProducts, ...additionalProducts];
   }
 
+  const summary = getReadyStockSummary(product as any);
+  const initialVariant = summary.firstAvailable ?? product.variants?.[0] ?? null;
+  const availableStock = initialVariant ? initialVariant.stock - initialVariant.reservedStock : 0;
+  
+  const availability = availableStock > 0 
+    ? "https://schema.org/InStock" 
+    : (product.isReadyStock ? "https://schema.org/OutOfStock" : "https://schema.org/PreOrder");
+
+  const offers: any = {
+    "@type": "Offer",
+    url: `https://www.andislab.com/katalog/${product.slug}`,
+    priceCurrency: "IDR",
+    availability: availability,
+    seller: {
+      "@type": "Organization",
+      name: "Andis Lab",
+    },
+  };
+
+  if (!product.isRequestPricing && initialVariant?.price) {
+    offers.price = initialVariant.price.toString();
+  }
+
   return (
     <>
       <script
@@ -122,18 +146,8 @@ export default async function ProductDetailPage(
               "@type": "Brand",
               name: product.brand || product.categoryLabel,
             },
-            sku: product.slug,
-            offers: {
-              "@type": "Offer",
-              url: `https://www.andislab.com/katalog/${product.slug}`,
-              priceCurrency: "IDR",
-              price: product.price,
-              availability: "https://schema.org/InStock",
-              seller: {
-                "@type": "Organization",
-                name: "Andis Lab",
-              },
-            },
+            sku: initialVariant?.sku || product.slug,
+            offers: offers,
           }),
         }}
       />

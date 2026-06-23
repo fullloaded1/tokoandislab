@@ -20,6 +20,7 @@ const navLinks = [
   { href: "/", label: "Beranda" },
   { href: "/katalog", label: "Katalog" },
   { href: "/ready-stock", label: "Ready Stock" },
+  { href: "/pemerintah", label: "Pemerintah / B2B" },
   { href: "/tentang", label: "Tentang Kami" },
   { href: "/artikel", label: "Artikel" },
 ];

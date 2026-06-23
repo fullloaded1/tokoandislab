@@ -6,9 +6,9 @@ const prisma = new PrismaClient();
 function calculateNewPrice(original: number) {
   const target = original;
   
-  let multiple = original > 100000 ? 10000 : 1000;
+  const multiple = original > 100000 ? 10000 : 1000;
   
-  let base = Math.floor(target / multiple) * multiple;
+  const base = Math.floor(target / multiple) * multiple;
   let finalPrice = base + 700;
   
   if (finalPrice >= original) {

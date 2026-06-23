@@ -145,13 +145,22 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
             </span>
           </div>
         )}
-        {isSoldOut && (
-          <div className="absolute top-4 left-4 z-10">
-            <span className="inline-flex items-center gap-1 rounded-2xl bg-red-500/95 backdrop-blur-sm px-3 py-1.5 text-xs font-bold text-white shadow-sm">
-              <AlertCircle className="h-3 w-3" /> Habis
+        {/* Stock Badge inside Image Area */}
+        <div className="absolute top-4 left-4 z-10">
+          {product.isReadyStock && isReadyToBuy && availableVariant ? (
+            <span className="inline-flex items-center gap-1 rounded-2xl bg-emerald-500/95 backdrop-blur-sm px-3 py-1.5 text-xs font-bold text-white shadow-sm">
+              <Check className="h-3 w-3" /> Ready Stock: {availableVariant.stock - availableVariant.reservedStock} pcs · siap kirim
             </span>
-          </div>
-        )}
+          ) : !isReadyToBuy && !isSoldOut ? (
+            <span className="inline-flex items-center gap-1 rounded-2xl bg-amber-500/95 backdrop-blur-sm px-3 py-1.5 text-xs font-bold text-white shadow-sm">
+              PO {product.leadTime || ""}
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1 rounded-2xl bg-slate-500/95 backdrop-blur-sm px-3 py-1.5 text-xs font-bold text-white shadow-sm">
+              <AlertCircle className="h-3 w-3" /> Stok habis
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Content Area - Minimalist */}

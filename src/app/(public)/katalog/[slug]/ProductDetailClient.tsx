@@ -13,6 +13,7 @@ import {
   Info,
   List,
   FileBox,
+  AlertCircle,
 } from "lucide-react";
 import { useRFQStore } from "@/store/useRFQStore";
 import { useWhatsAppLeadStore } from "@/store/useWhatsAppLeadStore";
@@ -175,8 +176,8 @@ export default function ProductDetailClient({
                   <span className="text-3xl font-black text-emerald-600 tracking-tight">
                     {money.formatIDR(readyStockPrice)}
                   </span>
-                  <span className="text-sm font-semibold text-emerald-700 mt-1 flex items-center gap-1.5">
-                    <Check className="h-4 w-4" /> Stok Tersedia ({selectedVariant.stock - selectedVariant.reservedStock} unit)
+                  <span className="text-sm font-semibold text-emerald-600 mt-1 flex items-center gap-1.5">
+                    <Check className="h-4 w-4" /> Ready Stock: {selectedVariant.stock - selectedVariant.reservedStock} pcs · siap kirim
                   </span>
                 </div>
               ) : product.isReadyStock && selectedVariant && !HIDE_PRICES_TEMPORARILY ? (
@@ -187,8 +188,14 @@ export default function ProductDetailClient({
                       ? money.formatIDR(money.toDecimal(selectedVariant.price).toNumber()) 
                       : "Harga Tidak Tersedia"}
                   </span>
-                  <span className="text-sm font-semibold text-red-500 mt-1 flex items-center gap-1.5">
-                    <Check className="h-4 w-4" /> Stok Habis - Silakan Minta Penawaran
+                  <span className="text-sm font-semibold text-slate-500 mt-1 flex items-center gap-1.5">
+                    <AlertCircle className="h-4 w-4" /> Stok habis
+                  </span>
+                </div>
+              ) : !product.isReadyStock && product.leadTime ? (
+                <div className="flex flex-col items-start gap-2">
+                  <span className="inline-flex items-center gap-2 rounded-2xl bg-amber-500 px-5 py-2.5 text-sm font-bold text-white shadow-md">
+                    PO {product.leadTime}
                   </span>
                 </div>
               ) : (
