@@ -84,7 +84,7 @@ export default function Footer() {
                   rel="noopener noreferrer" 
                   className="hover:text-cyan-400 transition-colors"
                 >
-                  0821-2552-3466
+                  0859-7321-1179
                 </a>
               </li>
               <li className="flex items-start gap-3 text-sm text-slate-400">
