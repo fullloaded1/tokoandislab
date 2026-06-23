@@ -30,13 +30,18 @@ export async function GET() {
       const totalStock = product.variants.reduce((acc, v) => acc + (v.stock || 0), 0);
       const availability = totalStock > 0 ? 'in_stock' : 'out_of_stock';
       
-      // Format price
-      const priceStr = product.price ? product.price.toString() : '0';
-      const formattedPrice = `${priceStr} IDR`;
+      // Format price (must have 2 decimal places for Google Shopping)
+      const priceNum = product.price ? Number(product.price.toString()) : 0;
+      const formattedPrice = `${priceNum.toFixed(2)} IDR`;
       
       const imageUrl = product.image?.startsWith('http') 
         ? product.image 
         : `${baseUrl}${product.image?.startsWith('/') ? '' : '/'}${product.image}`;
+
+      const brandTag = product.brand ? `<g:brand>${escapeXml(product.brand)}</g:brand>` : '';
+      const mpnTag = product.model ? `<g:mpn>${escapeXml(product.model)}</g:mpn>` : '';
+      const hasIdentifier = !!(product.brand || product.model);
+      const identifierExistsTag = `<g:identifier_exists>${hasIdentifier ? 'yes' : 'no'}</g:identifier_exists>`;
 
       return `
     <item>
@@ -47,10 +52,10 @@ export async function GET() {
       <g:image_link>${escapeXml(imageUrl || '')}</g:image_link>
       <g:availability>${availability}</g:availability>
       <g:price>${formattedPrice}</g:price>
-      <g:brand>${escapeXml(product.brand)}</g:brand>
-      <g:mpn>${escapeXml(product.model)}</g:mpn>
+      ${brandTag}
+      ${mpnTag}
       <g:condition>new</g:condition>
-      <g:identifier_exists>no</g:identifier_exists>
+      ${identifierExistsTag}
     </item>`;
     }).join('');
 
