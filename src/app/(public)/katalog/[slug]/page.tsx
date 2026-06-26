@@ -106,6 +106,22 @@ export default async function ProductDetailPage(
     relatedProducts = [...relatedProducts, ...additionalProducts];
   }
 
+  // If STILL less than 3, grab ANY products just to fill the bundle UI
+  if (relatedProducts.length < 3) {
+    const fallbackProducts = (await prisma.product.findMany({
+      where: {
+        NOT: {
+          id: {
+            in: [product.id, ...relatedProducts.map(p => p.id)]
+          }
+        }
+      },
+      include: { variants: true },
+      take: 3 - relatedProducts.length,
+    })).map(serializeProductDecimals);
+    relatedProducts = [...relatedProducts, ...fallbackProducts];
+  }
+
   const summary = getReadyStockSummary(product as any);
   const initialVariant = summary.firstAvailable ?? product.variants?.[0] ?? null;
   const availableStock = initialVariant ? initialVariant.stock - initialVariant.reservedStock : 0;

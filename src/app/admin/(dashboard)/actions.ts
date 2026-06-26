@@ -51,6 +51,7 @@ export async function createProduct(data: any) {
         image: data.image || "",
         description: data.description || "",
         isReadyStock: Boolean(data.isReadyStock),
+        costPrice: money.toDecimal(data.costPrice || 0),
       },
     });
     revalidatePath("/admin");
@@ -79,6 +80,7 @@ export async function updateProduct(id: string, data: any) {
         image: data.image || "",
         description: data.description || "",
         isReadyStock: Boolean(data.isReadyStock),
+        costPrice: money.toDecimal(data.costPrice || 0),
       },
     });
     revalidatePath("/admin");

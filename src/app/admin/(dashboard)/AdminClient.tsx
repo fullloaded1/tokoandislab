@@ -57,6 +57,7 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
         image: "",
         description: "",
         isReadyStock: false,
+        costPrice: 0,
       });
     }
     setIsModalOpen(true);
@@ -385,7 +386,7 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
                 </div>
                 
                 <div className="space-y-1">
-                  <label className="text-sm font-semibold text-slate-700">Harga (Rp)</label>
+                  <label className="text-sm font-semibold text-slate-700">Harga Jual (Rp)</label>
                   <input 
                     required
                     type="number" 
@@ -393,6 +394,17 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
                     onChange={(e) => setFormData({...formData, price: e.target.value})}
                     className="w-full border border-slate-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
                     placeholder="Contoh: 35000000"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-slate-700">Harga Modal (Rp)</label>
+                  <input 
+                    type="number" 
+                    value={formData.costPrice ?? 0}
+                    onChange={(e) => setFormData({...formData, costPrice: e.target.value})}
+                    className="w-full border border-slate-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
+                    placeholder="Harga beli dari supplier"
                   />
                 </div>
 

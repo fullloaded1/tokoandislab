@@ -17,6 +17,8 @@ export interface CartItem {
 }
 
 interface CartState {
+  isCartOpen: boolean;
+  setCartOpen: (open: boolean) => void;
   cartType: "RFQ" | "DIRECT" | null;
   items: CartItem[];
   addItem: (item: Omit<CartItem, "qty">) => { success: boolean; error?: string };
@@ -30,6 +32,8 @@ interface CartState {
 export const useRFQStore = create<CartState>()(
   persist(
     (set, get) => ({
+      isCartOpen: false,
+      setCartOpen: (open) => set({ isCartOpen: open }),
       cartType: null,
       items: [],
 
@@ -85,6 +89,9 @@ export const useRFQStore = create<CartState>()(
     }),
     {
       name: "andislab-cart-v2",
+      partialize: (state) => Object.fromEntries(
+        Object.entries(state).filter(([key]) => key !== 'isCartOpen')
+      ),
     }
   )
 );

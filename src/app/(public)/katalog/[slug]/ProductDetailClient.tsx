@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ChevronRight,
   FileText,
@@ -14,6 +14,10 @@ import {
   List,
   FileBox,
   AlertCircle,
+  Eye,
+  Clock,
+  X,
+  ShoppingBag,
 } from "lucide-react";
 import { useRFQStore } from "@/store/useRFQStore";
 import { useWhatsAppLeadStore } from "@/store/useWhatsAppLeadStore";
@@ -37,12 +41,15 @@ import { useToast } from "@/components/Toast";
 import { money } from "@/lib/money";
 import { getReadyStockSummary } from "@/lib/readyStock";
 
+import { useRecentStore } from "@/store/useRecentStore";
+
 export default function ProductDetailClient({
   product,
   relatedProducts,
   variants = [],
 }: ProductDetailClientProps) {
-  const { addItem } = useRFQStore();
+  const addItem = useRFQStore((s) => s.addItem);
+  const setCartOpen = useRFQStore((s) => s.setCartOpen);
   const [added, setAdded] = useState(false);
   const openWaModal = useWhatsAppLeadStore((s) => s.openModal);
   const [activeTab, setActiveTab] = useState<"deskripsi" | "spesifikasi" | "dokumen">("deskripsi");
@@ -57,13 +64,113 @@ export default function ProductDetailClient({
   const initialVariant = summary.firstAvailable ?? productVariants[0] ?? null;
   const [selectedVariant, setSelectedVariant] = useState<any | null>(initialVariant);
 
+  // Add to recently viewed
+  const addRecent = useRecentStore((s) => s.addRecent);
+  useEffect(() => {
+    addRecent(product);
+  }, [product, addRecent]);
+
+  // FOMO States
+  const [timeLeft, setTimeLeft] = useState<{ hours: number; minutes: number; seconds: number } | null>(null);
+  const [viewerCount, setViewerCount] = useState<number>(0);
+  const [showStickyBar, setShowStickyBar] = useState(false);
+  
+  // Social Proof Toast State
+  const [showSocialProof, setShowSocialProof] = useState(false);
+  const [socialProofData, setSocialProofData] = useState({ buyer: "", time: "" });
+
+  useEffect(() => {
+    // Scroll listener for Sticky Bar
+    const handleScroll = () => {
+      if (window.scrollY > 500) {
+        setShowStickyBar(true);
+      } else {
+        setShowStickyBar(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    setViewerCount(Math.floor(Math.random() * 8) + 3); // 3 to 10 viewers
+    
+    // Social Proof Toast Logic
+    const proofTimer = setTimeout(() => {
+      const CITIES = ["Jakarta", "Surabaya", "Bandung", "Medan", "Semarang", "Makassar", "Yogyakarta", "Denpasar", "Palembang", "Balikpapan"];
+      const BUYERS = ["Rumah Sakit", "Klinik Medis", "Universitas", "Laboratorium Klinik", "Instansi Pemerintah", "Perusahaan Farmasi", "Dinas Kesehatan"];
+      const city = CITIES[Math.floor(Math.random() * CITIES.length)];
+      const buyer = BUYERS[Math.floor(Math.random() * BUYERS.length)];
+      const times = ["15 menit yang lalu", "1 jam yang lalu", "2 jam yang lalu", "Baru saja", "30 menit yang lalu"];
+      const time = times[Math.floor(Math.random() * times.length)];
+      
+      setSocialProofData({ buyer: `${buyer} dari ${city}`, time });
+      setShowSocialProof(true);
+
+      setTimeout(() => setShowSocialProof(false), 5000);
+    }, 12000 + Math.random() * 8000); // Pops up between 12-20s
+    
+    const updateCountdown = () => {
+      const now = new Date();
+      const endOfDay = new Date();
+      endOfDay.setHours(23, 59, 59, 999);
+      const diff = endOfDay.getTime() - now.getTime();
+      
+      if (diff > 0) {
+        setTimeLeft({
+          hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((diff / 1000 / 60) % 60),
+          seconds: Math.floor((diff / 1000) % 60),
+        });
+      }
+    };
+
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    return () => {
+      clearInterval(interval);
+      clearTimeout(proofTimer);
+    };
+  }, []);
+
   const displayName = product.isReadyStock && product.model ? `${product.name} - ${product.model}` : product.name;
 
   // Harga sudah dimasukkan dari supplier price list (Juni 2026).
   const HIDE_PRICES_TEMPORARILY = false;
 
+  // Track page view (fire-and-forget)
+  useEffect(() => {
+    fetch("/api/track-view", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug: product.slug }),
+    }).catch(() => {}); // silently ignore errors
+  }, [product.slug]);
+
+  // Clearance discount
+  const dbClearanceDiscount = (product as any).clearanceDiscount
+    ? parseFloat((product as any).clearanceDiscount)
+    : null;
+
+  // Fake Promo Bait for Ready Stock
+  const isFakePromo = !dbClearanceDiscount && product.isReadyStock;
+  const effectiveDiscount = dbClearanceDiscount || (isFakePromo ? 15 : null);
+
   const isReadyToBuy = HIDE_PRICES_TEMPORARILY ? false : !!(product.isReadyStock && selectedVariant && (selectedVariant.stock - selectedVariant.reservedStock > 0) && money.toDecimal(selectedVariant.price).toNumber() > 0);
   const readyStockPrice = isReadyToBuy ? money.toDecimal(selectedVariant.price).toNumber() : 0;
+  
+  let finalPrice = readyStockPrice;
+  let strikePrice: number | null = null;
+
+  if (effectiveDiscount && readyStockPrice > 0) {
+    if (isFakePromo) {
+      finalPrice = readyStockPrice;
+      strikePrice = Math.round(readyStockPrice / (1 - effectiveDiscount / 100));
+    } else {
+      finalPrice = Math.round(readyStockPrice * (1 - effectiveDiscount / 100));
+      strikePrice = readyStockPrice;
+    }
+  }
 
   const handleAdd = () => {
     if (isReadyToBuy && selectedVariant) {
@@ -75,7 +182,7 @@ export default function ProductDetailClient({
         name: `${displayName} (${selectedVariant.name})`,
         image: product.image,
         category: product.categoryLabel,
-        price: readyStockPrice,
+        price: finalPrice,
         type: "DIRECT"
       });
       if (res?.success === false) {
@@ -100,6 +207,7 @@ export default function ProductDetailClient({
     }
     
     setAdded(true);
+    setCartOpen(true);
     toast?.showToast(`${displayName} ditambahkan ke keranjang`, "success");
     setTimeout(() => setAdded(false), 2000);
   };
@@ -167,18 +275,59 @@ export default function ProductDetailClient({
             <div className="mb-8">
               {isReadyToBuy ? (
                 <div className="flex flex-col">
-                  {summary.hasPriceRange && (
+                  {summary.hasPriceRange && !effectiveDiscount && (
                     <span className="text-xs font-semibold uppercase tracking-wider text-emerald-500/80 mb-1">
                       Mulai dari {money.formatIDR(summary.minPrice)} · pilih varian
                     </span>
                   )}
-                  {/* TODO[T3.3]: Check Order.priceDisplayMode or system setting to decide if this price should include PPN */}
-                  <span className="text-3xl font-black text-emerald-600 tracking-tight">
-                    {money.formatIDR(readyStockPrice)}
-                  </span>
-                  <span className="text-sm font-semibold text-emerald-600 mt-1 flex items-center gap-1.5">
-                    <Check className="h-4 w-4" /> Ready Stock: {selectedVariant.stock - selectedVariant.reservedStock} pcs · siap kirim
-                  </span>
+                  {effectiveDiscount ? (
+                    <>
+                      <div className="flex flex-wrap items-center gap-2 mb-2">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500 text-white text-xs font-bold w-fit">
+                          {isFakePromo ? `🔥 Promo Terbatas — Diskon ${effectiveDiscount}%` : `🔥 Clearance Sale — Diskon ${effectiveDiscount}%`}
+                        </span>
+                        {timeLeft && isFakePromo && (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-red-200 bg-red-50 text-red-600 text-xs font-bold w-fit animate-pulse">
+                            <Clock className="w-3.5 h-3.5" /> Berakhir dalam: {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-end gap-3">
+                        {strikePrice && (
+                          <span className="text-xl font-bold text-slate-400 line-through mb-1">
+                            {money.formatIDR(strikePrice)}
+                          </span>
+                        )}
+                        <span className="text-3xl font-black text-red-600 tracking-tight">
+                          {money.formatIDR(finalPrice)}
+                        </span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {/* TODO[T3.3]: Check Order.priceDisplayMode or system setting to decide if this price should include PPN */}
+                      <span className="text-3xl font-black text-emerald-600 tracking-tight">
+                        {money.formatIDR(finalPrice)}
+                      </span>
+                    </>
+                  )}
+                  {(() => {
+                    const available = selectedVariant.stock - selectedVariant.reservedStock;
+                    return available > 0 && available <= 3 ? (
+                      <span className="text-sm font-bold text-red-600 mt-2 flex items-center gap-1.5 animate-pulse">
+                        <AlertCircle className="h-4 w-4" /> Stok Menipis: Sisa {available} pcs! Cepat sebelum kehabisan
+                      </span>
+                    ) : (
+                      <span className="text-sm font-semibold text-emerald-600 mt-2 flex items-center gap-1.5">
+                        <Check className="h-4 w-4" /> Ready Stock: {available} pcs · siap kirim
+                      </span>
+                    );
+                  })()}
+                  {viewerCount > 0 && (
+                    <span className="text-xs font-semibold text-slate-500 mt-2 flex items-center gap-1.5 bg-slate-50 w-fit px-2 py-1 rounded-lg">
+                      <Eye className="w-3.5 h-3.5" /> Sedang dilihat oleh {viewerCount} orang
+                    </span>
+                  )}
                 </div>
               ) : product.isReadyStock && selectedVariant && !HIDE_PRICES_TEMPORARILY ? (
                 <div className="flex flex-col">
@@ -303,7 +452,7 @@ export default function ProductDetailClient({
                   <>
                     <ShoppingCart className="h-5 w-5" />
                     {/* TODO[T3.3]: Apply priceDisplayMode here */}
-                    Beli Sekarang ({money.formatIDR(readyStockPrice)})
+                    Beli Sekarang ({money.formatIDR(finalPrice)})
                   </>
                 ) : (
                   <>
@@ -461,23 +610,94 @@ export default function ProductDetailClient({
          </div>
       </div>
 
-      {/* Related Products */}
+      {/* Frequently Bought Together Bundle */}
       {relatedProducts.length > 0 && (
         <section className="mt-10 border-t border-slate-100 pt-16">
+          <div className="mb-8">
+            <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+              Sering Dibeli <span className="text-blue-600">Bersamaan</span>
+            </h2>
+            <p className="text-slate-500 mt-1 text-sm font-medium">
+              Tingkatkan efisiensi lab Anda dengan paket rekomendasi ini
+            </p>
+          </div>
+
+          <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 mb-12 shadow-sm flex flex-col lg:flex-row gap-8 items-center lg:items-stretch">
+            {/* Images Row */}
+            <div className="flex items-center gap-4 sm:gap-6 overflow-x-auto hide-scrollbar pb-4 lg:pb-0 w-full lg:w-auto">
+              {/* Main Product */}
+              <div className="shrink-0 flex flex-col items-center gap-3">
+                <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl bg-slate-50 border border-slate-100 p-2 sm:p-4 relative">
+                  <Image src={product.image} fill className="object-contain mix-blend-multiply" alt="Main" />
+                </div>
+                <span className="text-xs font-bold text-emerald-600">Barang Ini</span>
+              </div>
+
+              {/* Plus Sign */}
+              <div className="text-slate-300 font-bold text-2xl shrink-0">+</div>
+
+              {/* Related 1 */}
+              <div className="shrink-0 flex flex-col items-center gap-3">
+                <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl bg-slate-50 border border-slate-100 p-2 sm:p-4 relative hover:border-blue-300 transition-colors cursor-pointer" onClick={() => window.location.href = `/katalog/${relatedProducts[0].slug}`}>
+                  <Image src={relatedProducts[0].image} fill className="object-contain mix-blend-multiply" alt="Rel 1" />
+                </div>
+                <span className="text-xs font-bold text-slate-500 truncate w-24 text-center">{relatedProducts[0].model || relatedProducts[0].brand}</span>
+              </div>
+
+              {relatedProducts.length > 1 && (
+                <>
+                  {/* Plus Sign */}
+                  <div className="text-slate-300 font-bold text-2xl shrink-0">+</div>
+
+                  {/* Related 2 */}
+                  <div className="shrink-0 flex flex-col items-center gap-3">
+                    <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl bg-slate-50 border border-slate-100 p-2 sm:p-4 relative hover:border-blue-300 transition-colors cursor-pointer" onClick={() => window.location.href = `/katalog/${relatedProducts[1].slug}`}>
+                      <Image src={relatedProducts[1].image} fill className="object-contain mix-blend-multiply" alt="Rel 2" />
+                    </div>
+                    <span className="text-xs font-bold text-slate-500 truncate w-24 text-center">{relatedProducts[1].model || relatedProducts[1].brand}</span>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Total and CTA */}
+            <div className="flex flex-col justify-center lg:ml-auto w-full lg:w-72 shrink-0 bg-slate-50 rounded-2xl p-6 border border-slate-100">
+               <h3 className="text-sm font-bold text-slate-600 mb-4">Total Paket ({Math.min(relatedProducts.length + 1, 3)} Produk):</h3>
+               <div className="mb-6">
+                 <span className="text-2xl font-black text-slate-900">Minta Penawaran</span>
+               </div>
+               <button
+                  onClick={() => {
+                    const store = useRFQStore.getState();
+                    // Add main
+                    store.addItem({ id: product.id, productId: product.id, slug: product.slug, name: product.name, image: product.image, category: product.categoryLabel, price: money.toDecimal(product.price).toNumber(), type: "RFQ" });
+                    // Add related 1
+                    store.addItem({ id: relatedProducts[0].id, productId: relatedProducts[0].id, slug: relatedProducts[0].slug, name: relatedProducts[0].name, image: relatedProducts[0].image, category: relatedProducts[0].categoryLabel, price: money.toDecimal(relatedProducts[0].price).toNumber(), type: "RFQ" });
+                    // Add related 2 if exists
+                    if (relatedProducts.length > 1) {
+                      store.addItem({ id: relatedProducts[1].id, productId: relatedProducts[1].id, slug: relatedProducts[1].slug, name: relatedProducts[1].name, image: relatedProducts[1].image, category: relatedProducts[1].categoryLabel, price: money.toDecimal(relatedProducts[1].price).toNumber(), type: "RFQ" });
+                    }
+                    store.setCartOpen(true);
+                    toast?.showToast("Paket berhasil ditambahkan ke penawaran", "success");
+                  }}
+                  className="w-full flex items-center justify-center gap-2 bg-slate-900 text-white rounded-xl px-5 py-3.5 text-sm font-bold shadow-lg shadow-slate-900/20 hover:bg-blue-600 hover:shadow-blue-600/20 transition-all duration-300"
+               >
+                 <ShoppingCart className="w-4 h-4" /> Beli Paket Ini
+               </button>
+            </div>
+          </div>
+
           <div className="mb-8 flex items-end justify-between">
             <div>
-              <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-                Produk <span className="text-blue-600">Terkait</span>
-              </h2>
-              <p className="text-slate-500 mt-1 text-sm font-medium">
-                Peralatan lain yang sering dibeli bersamaan
-              </p>
+              <h3 className="text-xl font-bold text-slate-900 tracking-tight">
+                Lihat Produk Terkait Lainnya
+              </h3>
             </div>
             <Link
               href={`/katalog?category=${product.category}`}
               className="hidden sm:inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors"
             >
-              Lihat Kategori Ini →
+              Kategori Ini →
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children">
@@ -487,6 +707,106 @@ export default function ProductDetailClient({
           </div>
         </section>
       )}
+
+      {/* Sticky Bottom Bar */}
+      <div className={`fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 p-4 sm:px-6 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)] transition-transform duration-300 ${showStickyBar ? "translate-y-0" : "translate-y-full"}`}>
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+          <div className="hidden sm:flex items-center gap-4 flex-1 min-w-0">
+             <div className="w-12 h-12 bg-slate-100 rounded-lg overflow-hidden relative shrink-0 border border-slate-200">
+                <Image src={product.image} alt="Thumb" fill className="object-contain p-1 mix-blend-multiply" />
+             </div>
+             <div className="flex flex-col truncate">
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">{product.brand || product.categoryLabel}</span>
+                <span className="text-sm font-bold text-slate-800 truncate">{displayName}</span>
+             </div>
+          </div>
+          
+          <div className="flex items-center justify-between sm:justify-end gap-6 flex-1 w-full sm:w-auto">
+             <div className="flex flex-col items-start sm:items-end shrink-0">
+                {effectiveDiscount && strikePrice && (
+                   <span className="text-xs font-bold text-slate-400 line-through">{money.formatIDR(strikePrice)}</span>
+                )}
+                {isReadyToBuy ? (
+                  <span className="text-lg sm:text-xl font-black text-emerald-600">{money.formatIDR(finalPrice)}</span>
+                ) : (
+                  <span className="text-sm sm:text-base font-black text-slate-900">Hubungi Kami</span>
+                )}
+             </div>
+             
+             <button
+                onClick={handleAdd}
+                disabled={added}
+                className={`flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-bold transition-all duration-300 w-full sm:w-auto ${
+                  added
+                    ? "bg-emerald-50 text-emerald-600 border-2 border-emerald-200"
+                    : isReadyToBuy
+                      ? "bg-emerald-600 text-white shadow-lg shadow-emerald-600/20 hover:bg-emerald-700"
+                      : "bg-blue-600 text-white shadow-lg shadow-blue-600/20 hover:bg-blue-700"
+                }`}
+              >
+                {added ? (
+                  <>
+                    <Check className="h-5 w-5" />
+                    Berhasil
+                  </>
+                ) : isReadyToBuy ? (
+                  <>
+                    <ShoppingCart className="h-5 w-5" />
+                    Beli Sekarang
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart className="h-5 w-5" />
+                    Minta Penawaran
+                  </>
+                )}
+              </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Recently Viewed */}
+      {(() => {
+        const recentStore = useRecentStore();
+        const otherRecent = recentStore.recentProducts.filter(p => p.id !== product.id);
+        
+        if (otherRecent.length === 0) return null;
+        
+        return (
+          <section className="mt-10 border-t border-slate-100 pt-16 pb-24">
+            <div className="mb-8">
+              <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+                Terakhir <span className="text-blue-600">Dilihat</span>
+              </h2>
+              <p className="text-slate-500 mt-1 text-sm font-medium">
+                Lanjutkan penelusuran Anda sebelumnya
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 stagger-children">
+              {otherRecent.slice(0, 4).map((rp) => (
+                <ProductCard key={rp.id} product={rp as any} />
+              ))}
+            </div>
+          </section>
+        );
+      })()}
+
+      {/* Social Proof Toast */}
+      <div className={`fixed bottom-24 sm:bottom-6 left-4 sm:left-6 z-[60] transition-all duration-500 transform ${showSocialProof ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0 pointer-events-none'}`}>
+        <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-100 p-3 sm:p-4 pr-10 flex items-center gap-3 sm:gap-4 max-w-[320px] sm:max-w-sm cursor-pointer hover:bg-slate-50 transition-colors" onClick={() => setShowSocialProof(false)}>
+           <button className="absolute top-2 right-2 text-slate-400 hover:text-slate-600"><X className="w-4 h-4" /></button>
+           <div className="w-10 h-10 sm:w-12 sm:h-12 bg-emerald-50 rounded-full flex items-center justify-center shrink-0">
+             <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-600" />
+           </div>
+           <div>
+             <p className="text-xs sm:text-sm text-slate-600 leading-snug">
+               <span className="font-bold text-slate-900">{socialProofData.buyer}</span> baru saja meminta penawaran untuk produk ini.
+             </p>
+             <p className="text-[10px] sm:text-xs font-bold text-emerald-600 mt-1">{socialProofData.time}</p>
+           </div>
+        </div>
+      </div>
+
     </div>
   );
 }

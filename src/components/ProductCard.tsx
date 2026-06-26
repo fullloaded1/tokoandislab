@@ -16,6 +16,7 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, compact = false }: ProductCardProps) {
   const addItem = useRFQStore((s) => s.addItem);
+  const setCartOpen = useRFQStore((s) => s.setCartOpen);
   const [added, setAdded] = useState(false);
 
   const toast = useToast();
@@ -29,12 +30,40 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
   const isReadyToBuy = HIDE_PRICES_TEMPORARILY ? false : summary.state === "available";
   const isSoldOut = HIDE_PRICES_TEMPORARILY ? false : summary.state === "sold_out";
 
+  // Clearance discount
+  const dbClearanceDiscount = product.clearanceDiscount
+    ? parseFloat(product.clearanceDiscount)
+    : null;
+
+  // Fake Promo Bait for Ready Stock
+  const isFakePromo = !dbClearanceDiscount && product.isReadyStock;
+  const effectiveDiscount = dbClearanceDiscount || (isFakePromo ? 15 : null);
+
   // TODO[T3.3]: render harga sesuai Order.priceDisplayMode (include/exclude PPN)
   let priceDisplay: string = "Minta Penawaran";
+  let originalPrice: string | null = null;
   if (isReadyToBuy) {
-    priceDisplay = summary.hasPriceRange
+    const basePrice = summary.hasPriceRange
       ? `Mulai ${money.formatIDR(summary.minPrice)}`
       : money.formatIDR(summary.minPrice);
+      
+    if (effectiveDiscount && summary.minPrice > 0) {
+      if (isFakePromo) {
+        // Diskon palsu: harga final = minPrice, harga coret = minPrice dinaikkan
+        const inflatedBasePrice = Math.round(summary.minPrice / (1 - effectiveDiscount / 100));
+        originalPrice = summary.hasPriceRange 
+          ? `Mulai ${money.formatIDR(inflatedBasePrice)}` 
+          : money.formatIDR(inflatedBasePrice);
+        priceDisplay = basePrice;
+      } else {
+        // Diskon clearance asli dari DB
+        const discountedPrice = Math.round(summary.minPrice * (1 - effectiveDiscount / 100));
+        originalPrice = basePrice;
+        priceDisplay = money.formatIDR(discountedPrice);
+      }
+    } else {
+      priceDisplay = basePrice;
+    }
   } else if (isSoldOut) {
     priceDisplay = "Stok Habis";
   }
@@ -46,6 +75,12 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
     e.stopPropagation();
     
     if (isReadyToBuy && availableVariant) {
+      const baseVariantPrice = money.toDecimal(availableVariant.price).toNumber();
+      let finalPrice = baseVariantPrice;
+      if (effectiveDiscount && !isFakePromo && baseVariantPrice > 0) {
+        finalPrice = Math.round(baseVariantPrice * (1 - effectiveDiscount / 100));
+      }
+
       // Masuk ke keranjang Direct Purchase
       const res = addItem({
         id: availableVariant.id,
@@ -55,7 +90,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
         name: `${displayName} (${availableVariant.name ?? "Default"})`,
         image: product.image,
         category: product.categoryLabel,
-        price: money.toDecimal(availableVariant.price).toNumber(),
+        price: finalPrice,
         type: "DIRECT"
       });
 
@@ -83,6 +118,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
     }
     
     setAdded(true);
+    setCartOpen(true);
     toast?.showToast(`${displayName} ditambahkan ke keranjang`, "success");
     setTimeout(() => setAdded(false), 1500);
   };
@@ -179,7 +215,17 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
         <div className="mt-auto flex flex-col gap-3 pt-3 border-t border-slate-100">
           {/* Price or Tag */}
           <div>
-             <span className={`text-sm font-bold ${isReadyToBuy ? "text-emerald-600" : isSoldOut ? "text-red-500" : "text-slate-600"}`}>
+             {effectiveDiscount && isReadyToBuy && (
+               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-red-500 text-white text-[10px] font-bold mb-1 w-fit">
+                 {isFakePromo ? `🔥 Promo -${effectiveDiscount}%` : `🔥 -${effectiveDiscount}%`}
+               </span>
+             )}
+             {originalPrice && (
+               <span className="block text-xs font-semibold text-slate-400 line-through">
+                 {originalPrice}
+               </span>
+             )}
+             <span className={`text-sm font-bold ${effectiveDiscount && isReadyToBuy ? "text-red-600" : isReadyToBuy ? "text-emerald-600" : isSoldOut ? "text-red-500" : "text-slate-600"}`}>
                {priceDisplay}
              </span>
           </div>

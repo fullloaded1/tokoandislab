@@ -70,6 +70,12 @@ export function serializeProductDecimals(product: any): any {
   if (serialized.price && typeof serialized.price.toString === "function") {
     serialized.price = serialized.price.toString();
   }
+  if (serialized.costPrice && typeof serialized.costPrice.toString === "function") {
+    serialized.costPrice = serialized.costPrice.toString();
+  }
+  if (serialized.clearanceDiscount && typeof serialized.clearanceDiscount.toString === "function") {
+    serialized.clearanceDiscount = serialized.clearanceDiscount.toString();
+  }
   if (Array.isArray(serialized.variants)) {
     serialized.variants = serialized.variants.map((v: any) => ({
       ...v,

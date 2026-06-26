@@ -30,10 +30,9 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [cartOpen, setCartOpen] = useState(false);
+  const { isCartOpen: cartOpen, setCartOpen, items } = useRFQStore();
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
-  const items = useRFQStore((s) => s.items);
   const openWaModal = useWhatsAppLeadStore((s) => s.openModal);
 
   useEffect(() => {
