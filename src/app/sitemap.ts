@@ -1,60 +1,78 @@
-import { MetadataRoute } from 'next'
-import { prisma } from '@/lib/db'
+import { MetadataRoute } from 'next';
+import { prisma } from '@/lib/db';
+
+const BASE_URL = 'https://www.andislab.com';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://www.andislab.com'
-
-  // Get all products for dynamic routes
+  // 1. Fetch all products
   const products = await prisma.product.findMany({
-    select: { slug: true, category: true, updatedAt: true }
-  })
+    select: {
+      slug: true,
+      updatedAt: true,
+    },
+  });
 
-  const productUrls = products.map((product) => ({
-    url: `${baseUrl}/${product.category}/${product.slug}`,
-    lastModified: product.updatedAt,
-    changeFrequency: 'weekly' as const,
-    priority: 0.8,
-  }))
-
-  // Get all articles for dynamic routes
+  // 2. Fetch all published articles
   const articles = await (prisma as any).article.findMany({
     where: { published: true },
-    select: { slug: true, updatedAt: true }
-  })
+    select: {
+      slug: true,
+      updatedAt: true,
+    },
+  });
 
-  const articleUrls = articles.map((article: any) => ({
-    url: `${baseUrl}/artikel/${article.slug}`,
+  const productUrls: MetadataRoute.Sitemap = products.map((product) => ({
+    url: `${BASE_URL}/katalog/${product.slug}`,
+    lastModified: product.updatedAt,
+    changeFrequency: 'weekly',
+    priority: 0.8,
+  }));
+
+  const articleUrls: MetadataRoute.Sitemap = articles.map((article: any) => ({
+    url: `${BASE_URL}/artikel/${article.slug}`,
     lastModified: article.updatedAt,
-    changeFrequency: 'weekly' as const,
-    priority: 0.7,
-  }))
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }));
 
-  return [
+  const staticUrls: MetadataRoute.Sitemap = [
     {
-      url: baseUrl,
+      url: BASE_URL,
       lastModified: new Date(),
       changeFrequency: 'daily',
-      priority: 1,
+      priority: 1.0,
     },
     {
-      url: `${baseUrl}/katalog`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/artikel`,
+      url: `${BASE_URL}/katalog`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/tentang`,
+      url: `${BASE_URL}/ready-stock`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
+    {
+      url: `${BASE_URL}/pemerintah`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/artikel`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.7,
+    },
+    {
+      url: `${BASE_URL}/tentang`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.5,
+      priority: 0.6,
     },
-    ...productUrls,
-    ...articleUrls,
-  ]
+  ];
+
+  return [...staticUrls, ...productUrls, ...articleUrls];
 }
