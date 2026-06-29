@@ -10,6 +10,7 @@ import {
   type Category,
   getGroupedProducts
 } from "@/lib/products";
+import { getReadyStockSummary } from "@/lib/readyStock";
 
 const categories: { key: Category | "semua"; label: string }[] = [
   { key: "semua", label: "Semua Kategori" },
@@ -62,7 +63,11 @@ export default function KatalogClient({ initialProducts = [] }: { initialProduct
     });
 
     if (showOnlyReadyStock) {
-      result = result.sort((a, b) => Number(a.price) - Number(b.price));
+      result = result.sort((a, b) => {
+        const aMin = getReadyStockSummary(a).minPrice || Number(a.price);
+        const bMin = getReadyStockSummary(b).minPrice || Number(b.price);
+        return aMin - bMin;
+      });
     }
 
     return result;

@@ -37,7 +37,7 @@ export default function RFQCartDrawer({ open, onClose }: RFQCartDrawerProps) {
 
       {/* Drawer */}
       <div
-        className={`fixed top-0 right-0 z-[70] h-full w-full max-w-md bg-white shadow-2xl transition-transform duration-300 ease-out ${
+        className={`fixed flex flex-col top-0 right-0 z-[70] h-full w-full max-w-md bg-white shadow-2xl transition-transform duration-300 ease-out ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -66,7 +66,7 @@ export default function RFQCartDrawer({ open, onClose }: RFQCartDrawerProps) {
         </div>
 
         {/* Body */}
-        <div className="flex-1 overflow-y-auto px-6 py-4" style={{ height: "calc(100% - 180px)" }}>
+        <div className="flex-1 overflow-y-auto px-6 py-4">
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center">
               <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-slate-100 mb-4">

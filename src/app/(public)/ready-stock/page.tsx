@@ -9,6 +9,7 @@ export const metadata = {
 };
 
 import { getGroupedProducts, serializeProductDecimals } from "@/lib/products";
+import { getReadyStockSummary } from "@/lib/readyStock";
 
 export const dynamic = "force-dynamic";
 
@@ -25,7 +26,11 @@ export default async function ReadyStockPage() {
     },
   })).map(serializeProductDecimals);
 
-  const products = getGroupedProducts(allProducts).sort((a, b) => Number(a.price) - Number(b.price));
+  const products = getGroupedProducts(allProducts).sort((a, b) => {
+    const aMin = getReadyStockSummary(a).minPrice || Number(a.price);
+    const bMin = getReadyStockSummary(b).minPrice || Number(b.price);
+    return aMin - bMin;
+  });
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
@@ -47,6 +52,9 @@ export default async function ReadyStockPage() {
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight mb-3">
           Produk <span className="text-emerald-600">Ready Stock</span>
         </h1>
+        <p className="text-5xl sm:text-6xl lg:text-7xl font-black text-emerald-600 tracking-tight mb-3 leading-none">
+          JULY
+        </p>
         <p className="text-base text-slate-500 max-w-2xl">
           STOCK Terbatas! Segera pre-ORDER hubungi kami barang siap kirim ke instansi/perusahaan Anda.Dapatkan diskon khusus jika beli hari ini.
         </p>

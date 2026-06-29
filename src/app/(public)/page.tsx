@@ -80,9 +80,9 @@ export default async function HomePage() {
     "lovibond", "daihan-labtech", "pyrex", "andislab-custom", "general-equipment"
   ];
 
-  // Group exclusive products by category
+  // Group exclusive products by category — hanya PO (bukan ready stock)
   const productsByCategory = exclusiveCategories.map((cat) => {
-    const grouped = getGroupedProducts(allProducts.filter((p) => p.category === cat));
+    const grouped = getGroupedProducts(allProducts.filter((p) => p.category === cat && !p.isReadyStock));
     return {
       category: cat,
       label: CATEGORY_LABELS[cat],
@@ -111,7 +111,10 @@ export default async function HomePage() {
               <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight">
                 Alat Laboratorium <span className="text-emerald-600">Ready Stock</span>
               </h2>
-              <p className="text-sm text-slate-500 mt-1 max-w-xl">
+              <p className="text-5xl sm:text-6xl lg:text-7xl font-black text-emerald-600 tracking-tight mt-2 leading-none">
+                JULY
+              </p>
+              <p className="text-sm text-slate-500 mt-3 max-w-xl">
                 STOCK Terbatas! Barang siap kirim ke instansi/perusahaan Anda. Dapatkan diskon khusus hari ini.
               </p>
             </div>

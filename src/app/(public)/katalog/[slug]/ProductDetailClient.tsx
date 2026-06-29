@@ -156,20 +156,33 @@ export default function ProductDetailClient({
   const isFakePromo = !dbClearanceDiscount && product.isReadyStock;
   const effectiveDiscount = dbClearanceDiscount || (isFakePromo ? 15 : null);
 
+  // Helper: ubah akhiran harga display → .700 (ready stock) atau .900 (PO Andislab/Daihan)
+  const adjustPriceSuffix = (price: number, suffix: 700 | 900): number => {
+    return Math.floor(price / 1000) * 1000 + suffix - 1000;
+  };
+
   const isReadyToBuy = HIDE_PRICES_TEMPORARILY ? false : !!(product.isReadyStock && selectedVariant && (selectedVariant.stock - selectedVariant.reservedStock > 0) && money.toDecimal(selectedVariant.price).toNumber() > 0);
   const readyStockPrice = isReadyToBuy ? money.toDecimal(selectedVariant.price).toNumber() : 0;
+
+  // Cek apakah produk PO Andislab/Daihan dengan harga > 0
+  const isPOWithPrice900 =
+    !product.isReadyStock &&
+    (product.category === "andislab-custom" || product.category === "daihan-labtech") &&
+    money.toDecimal(product.price).toNumber() > 0;
   
   let finalPrice = readyStockPrice;
   let strikePrice: number | null = null;
 
   if (effectiveDiscount && readyStockPrice > 0) {
     if (isFakePromo) {
-      finalPrice = readyStockPrice;
-      strikePrice = Math.round(readyStockPrice / (1 - effectiveDiscount / 100));
+      finalPrice = adjustPriceSuffix(readyStockPrice, 700);
+      strikePrice = adjustPriceSuffix(Math.round(readyStockPrice / (1 - effectiveDiscount / 100)), 700);
     } else {
-      finalPrice = Math.round(readyStockPrice * (1 - effectiveDiscount / 100));
-      strikePrice = readyStockPrice;
+      finalPrice = adjustPriceSuffix(Math.round(readyStockPrice * (1 - effectiveDiscount / 100)), 700);
+      strikePrice = adjustPriceSuffix(readyStockPrice, 700);
     }
+  } else if (isReadyToBuy) {
+    finalPrice = adjustPriceSuffix(readyStockPrice, 700);
   }
 
   const handleAdd = () => {
@@ -341,6 +354,15 @@ export default function ProductDetailClient({
                     <AlertCircle className="h-4 w-4" /> Stok habis
                   </span>
                 </div>
+              ) : isPOWithPrice900 ? (
+                <div className="flex flex-col items-start gap-2">
+                  <span className="text-3xl font-black text-slate-800 tracking-tight">
+                    {money.formatIDR(adjustPriceSuffix(money.toDecimal(product.price).toNumber(), 900))}
+                  </span>
+                  <span className="inline-flex items-center gap-2 rounded-2xl bg-amber-500 px-4 py-1.5 text-xs font-bold text-white shadow-md">
+                    PO {product.leadTime || ''}
+                  </span>
+                </div>
               ) : !product.isReadyStock && product.leadTime ? (
                 <div className="flex flex-col items-start gap-2">
                   <span className="inline-flex items-center gap-2 rounded-2xl bg-amber-500 px-5 py-2.5 text-sm font-bold text-white shadow-md">
@@ -380,7 +402,7 @@ export default function ProductDetailClient({
                         {product.isReadyStock && variantPrice > 0 && !HIDE_PRICES_TEMPORARILY && (
                           <div className={`text-xs mt-1 font-semibold ${isActive ? "text-emerald-700" : "text-slate-700"}`}>
                             {/* TODO[T3.3]: apply Order.priceDisplayMode */}
-                            {money.formatIDR(variantPrice)}
+                            {money.formatIDR(adjustPriceSuffix(variantPrice, 700))}
                           </div>
                         )}
                         {product.isReadyStock && !HIDE_PRICES_TEMPORARILY && (
@@ -728,6 +750,8 @@ export default function ProductDetailClient({
                 )}
                 {isReadyToBuy ? (
                   <span className="text-lg sm:text-xl font-black text-emerald-600">{money.formatIDR(finalPrice)}</span>
+                ) : isPOWithPrice900 ? (
+                  <span className="text-lg sm:text-xl font-black text-slate-800">{money.formatIDR(adjustPriceSuffix(money.toDecimal(product.price).toNumber(), 900))}</span>
                 ) : (
                   <span className="text-sm sm:text-base font-black text-slate-900">Hubungi Kami</span>
                 )}

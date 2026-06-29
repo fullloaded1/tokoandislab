@@ -39,33 +39,54 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
   const isFakePromo = !dbClearanceDiscount && product.isReadyStock;
   const effectiveDiscount = dbClearanceDiscount || (isFakePromo ? 15 : null);
 
+  // Helper: ubah akhiran harga display → .700 (ready stock) atau .900 (PO Andislab/Daihan)
+  const adjustPriceSuffix = (price: number, suffix: 700 | 900): number => {
+    return Math.floor(price / 1000) * 1000 + suffix - 1000;
+  };
+
+  // Cek apakah produk PO Andislab/Daihan dengan harga > 0
+  const isPOWithPrice900 =
+    !isReadyToBuy &&
+    !isSoldOut &&
+    (product.category === "andislab-custom" || product.category === "daihan-labtech") &&
+    Number(product.price) > 0;
+
   // TODO[T3.3]: render harga sesuai Order.priceDisplayMode (include/exclude PPN)
   let priceDisplay: string = "Minta Penawaran";
   let originalPrice: string | null = null;
   if (isReadyToBuy) {
+    // Ready stock: harga akhiran .700
+    const adjustedMinPrice = adjustPriceSuffix(summary.minPrice, 700);
     const basePrice = summary.hasPriceRange
-      ? `Mulai ${money.formatIDR(summary.minPrice)}`
-      : money.formatIDR(summary.minPrice);
+      ? `Mulai ${money.formatIDR(adjustedMinPrice)}`
+      : money.formatIDR(adjustedMinPrice);
       
     if (effectiveDiscount && summary.minPrice > 0) {
       if (isFakePromo) {
-        // Diskon palsu: harga final = minPrice, harga coret = minPrice dinaikkan
+        // Diskon palsu: harga final = minPrice (.700), harga coret = dinaikkan
         const inflatedBasePrice = Math.round(summary.minPrice / (1 - effectiveDiscount / 100));
+        const adjustedInflated = adjustPriceSuffix(inflatedBasePrice, 700);
         originalPrice = summary.hasPriceRange 
-          ? `Mulai ${money.formatIDR(inflatedBasePrice)}` 
-          : money.formatIDR(inflatedBasePrice);
+          ? `Mulai ${money.formatIDR(adjustedInflated)}` 
+          : money.formatIDR(adjustedInflated);
         priceDisplay = basePrice;
       } else {
         // Diskon clearance asli dari DB
         const discountedPrice = Math.round(summary.minPrice * (1 - effectiveDiscount / 100));
+        const adjustedDiscounted = adjustPriceSuffix(discountedPrice, 700);
         originalPrice = basePrice;
-        priceDisplay = money.formatIDR(discountedPrice);
+        priceDisplay = money.formatIDR(adjustedDiscounted);
       }
     } else {
       priceDisplay = basePrice;
     }
   } else if (isSoldOut) {
     priceDisplay = "Stok Habis";
+  } else if (isPOWithPrice900) {
+    // PO Andislab/Daihan: tampilkan harga dengan akhiran .900
+    const rawPrice = Number(product.price);
+    const adjusted = adjustPriceSuffix(rawPrice, 900);
+    priceDisplay = money.formatIDR(adjusted);
   }
 
   const availableVariant = summary.firstAvailable;
