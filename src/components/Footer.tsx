@@ -71,10 +71,13 @@ export default function Footer() {
             <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4">
               Hubungi Kami
             </h4>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-3 text-sm text-slate-400">
-                <MapPin className="h-4 w-4 shrink-0 mt-0.5 text-cyan-500" />
-                Jl. Raya Mayor Oking Jaya Atmaja No.112, Cirimekar, Kec. Cibinong, Kabupaten Bogor, Jawa Barat 16918
+            <ul className="space-y-4">
+              <li className="flex flex-col gap-1 text-sm text-slate-400">
+                <span className="font-bold text-white">PT Andis Sentral Laboratorium</span>
+                <div className="flex items-start gap-3 mt-1">
+                  <MapPin className="h-4 w-4 shrink-0 mt-0.5 text-cyan-500" />
+                  <span>Jl. Raya Mayor Oking Jaya Atmaja No.112, Cirimekar, Kec. Cibinong, Kabupaten Bogor, Jawa Barat 16918</span>
+                </div>
               </li>
               <li className="flex items-center gap-3 text-sm text-slate-400">
                 <Phone className="h-4 w-4 shrink-0 text-cyan-500" />
@@ -92,6 +95,9 @@ export default function Footer() {
                 <div className="flex flex-col gap-1">
                   <a href="mailto:cs@andislab.com" className="hover:text-cyan-400 transition-colors">cs@andislab.com</a>
                 </div>
+              </li>
+              <li className="pt-2 border-t border-slate-800">
+                <p className="text-sm text-slate-400">Melayani pengiriman Jabodetabek & Nasional.</p>
               </li>
             </ul>
           </div>
