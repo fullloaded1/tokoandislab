@@ -28,7 +28,7 @@ function SearchParamsListener({ onQuery }: { onQuery: (q: string) => void }) {
   return null;
 }
 
-export default function KatalogClient({ initialProducts = [] }: { initialProducts: PrismaProduct[] }) {
+export default function KatalogClient({ initialProducts = [], children }: { initialProducts: PrismaProduct[], children?: React.ReactNode }) {
   const products = useMemo(() => getGroupedProducts(initialProducts), [initialProducts]);
   
   const [searchQuery, setSearchQuery] = useState("");
@@ -93,9 +93,12 @@ export default function KatalogClient({ initialProducts = [] }: { initialProduct
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight">
           Katalog <span className="gradient-text">Produk</span>
         </h1>
-        <p className="text-slate-500 mt-2">
+        <p className="text-slate-500 mt-2 mb-6">
           Temukan alat laboratorium berkualitas tinggi untuk kebutuhan Anda
         </p>
+        
+        {/* SEO SSR Content */}
+        {children}
       </div>
 
       {/* Search & Filter Bar */}
