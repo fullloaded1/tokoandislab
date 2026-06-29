@@ -145,6 +145,29 @@ export default async function ProductDetailPage(
     offers.price = initialVariant.price.toString();
   }
 
+  const stockStatus = availableStock > 0 ? "ready stock" : (product.isReadyStock ? "habis" : "pre-order");
+  const priceDisplay = offers.price ? new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(Number(offers.price)) : "Minta Penawaran";
+  const kapsulJawaban = `${product.name} adalah perangkat ${product.subcategory || 'laboratorium'} dari kategori ${product.categoryLabel}. Saat ini produk berstatus ${stockStatus} dengan estimasi pengiriman ${product.leadTime || 'standar'}, ditawarkan dengan harga ${priceDisplay}. Kami menyediakan layanan kirim cepat Jabodetabek, garansi resmi, dan kelengkapan COA (Certificate of Analysis) tersedia.`;
+
+  const faqData = [
+    {
+      question: `Apakah ${product.name} tersedia ready stock?`,
+      answer: `Saat ini, ${product.name} berstatus ${stockStatus}${availableStock > 0 ? ` dengan sisa stok ${availableStock} unit` : ''}.`
+    },
+    {
+      question: `Berapa lama estimasi pengiriman untuk alat ini?`,
+      answer: `Estimasi pengiriman atau lead time untuk produk ini adalah ${product.leadTime || 'sesuai standar pengiriman kami'}.`
+    },
+    {
+      question: `Apakah melayani pembelian untuk pengadaan pemerintah atau e-Katalog?`,
+      answer: `Ya, PT Andis Sentral Laboratorium mendukung pengadaan barang untuk instansi pemerintah, universitas, maupun industri melalui mekanisme resmi dan e-Katalog.`
+    },
+    {
+      question: `Apakah produk ini disertai garansi dan sertifikat?`,
+      answer: `Tentu, setiap pembelian alat laboratorium di AndisLab disertai dengan garansi resmi dan Certificate of Analysis (COA) bila tersedia.`
+    }
+  ];
+
   return (
     <>
       <script
@@ -164,6 +187,24 @@ export default async function ProductDetailPage(
             },
             sku: initialVariant?.sku || product.slug,
             offers: offers,
+            dateModified: new Date(product.updatedAt).toISOString()
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: faqData.map(faq => ({
+              "@type": "Question",
+              name: faq.question,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: faq.answer
+              }
+            }))
           }),
         }}
       />
@@ -171,7 +212,65 @@ export default async function ProductDetailPage(
         product={product as any} 
         relatedProducts={relatedProducts as any}
         variants={variants}
-      />
+      >
+        <div className="mb-10 text-slate-700">
+          {/* 1. Kapsul Jawaban */}
+          <p className="text-base leading-relaxed mb-8">
+            {kapsulJawaban}
+          </p>
+
+          {/* 2. Tabel Spesifikasi */}
+          <h2 className="text-xl font-bold mb-4 text-slate-900">Spesifikasi Singkat {product.name}</h2>
+          <div className="overflow-x-auto mb-10">
+            <table className="w-full text-left text-sm border-collapse border border-slate-200">
+              <thead className="bg-slate-50">
+                <tr>
+                  <th className="px-4 py-3 border border-slate-200 font-bold text-slate-700">Atribut</th>
+                  <th className="px-4 py-3 border border-slate-200 font-bold text-slate-700">Detail</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="px-4 py-3 border border-slate-200 font-semibold">Merek / Brand</td>
+                  <td className="px-4 py-3 border border-slate-200">{product.brand || product.categoryLabel}</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-3 border border-slate-200 font-semibold">Model / Tipe</td>
+                  <td className="px-4 py-3 border border-slate-200">{product.model || '-'}</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-3 border border-slate-200 font-semibold">Kategori</td>
+                  <td className="px-4 py-3 border border-slate-200">{product.categoryLabel}</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-3 border border-slate-200 font-semibold">Lead Time</td>
+                  <td className="px-4 py-3 border border-slate-200">{product.leadTime || '-'}</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-3 border border-slate-200 font-semibold">Ketersediaan Stok</td>
+                  <td className="px-4 py-3 border border-slate-200">{availableStock > 0 ? `${availableStock} unit` : stockStatus}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {/* 3. FAQ */}
+          <h2 className="text-xl font-bold mb-4 text-slate-900">Pertanyaan yang Sering Diajukan (FAQ)</h2>
+          <div className="space-y-4 mb-8">
+            {faqData.map((faq, idx) => (
+              <div key={idx} className="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                <h3 className="font-bold text-slate-800 text-sm mb-1">{faq.question}</h3>
+                <p className="text-sm text-slate-600">{faq.answer}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* 5. Diperbarui */}
+          <div className="text-xs text-slate-400 font-medium">
+            Diperbarui: {new Date(product.updatedAt).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </div>
+        </div>
+      </ProductDetailClient>
     </>
   );
 }

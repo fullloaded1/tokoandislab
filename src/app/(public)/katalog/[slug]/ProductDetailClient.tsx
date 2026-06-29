@@ -35,6 +35,7 @@ interface ProductDetailClientProps {
   product: Product;
   relatedProducts: Product[];
   variants?: ProductVariant[];
+  children?: React.ReactNode;
 }
 
 import { useToast } from "@/components/Toast";
@@ -47,6 +48,7 @@ export default function ProductDetailClient({
   product,
   relatedProducts,
   variants = [],
+  children,
 }: ProductDetailClientProps) {
   const addItem = useRFQStore((s) => s.addItem);
   const setCartOpen = useRFQStore((s) => s.setCartOpen);
@@ -549,7 +551,10 @@ export default function ProductDetailClient({
          <div className="py-10 min-h-[300px]">
             {/* Tab: Deskripsi */}
             <div className={`max-w-4xl animate-in fade-in slide-in-from-bottom-2 duration-500 ${activeTab !== 'deskripsi' ? 'hidden' : ''}`}>
-              <p className="text-lg text-slate-600 leading-relaxed font-medium">
+              {/* Tempat menyisipkan SEO SSR Content (Kapsul, Tabel Spek, FAQ, Diperbarui) */}
+              {children}
+              
+              <p className="text-lg text-slate-600 leading-relaxed font-medium mt-6">
                 {product.description}
               </p>
               <div className="mt-8 p-6 bg-blue-50 rounded-2xl border border-blue-100 flex items-start gap-4">
