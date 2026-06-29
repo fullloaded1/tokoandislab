@@ -71,9 +71,9 @@ export default async function HomePage() {
     allProducts.find((p: any) => p.category === "pyrex"),
   ].filter(Boolean) as any[];
 
-  // Filter Ready Stock products and group them, then shuffle them randomly
+  // Filter Ready Stock products and group them, then sort by price ascending (cheapest first)
   const readyStockProducts = getGroupedProducts(allProducts.filter((p: any) => p.isReadyStock))
-    .sort(() => Math.random() - 0.5);
+    .sort((a: any, b: any) => Number(a.price || 0) - Number(b.price || 0));
 
   // Only show the 5 exclusive categories on the homepage
   const exclusiveCategories: Category[] = [
