@@ -85,10 +85,11 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              name: "AndisLab",
+              name: "PT Andis Sentral Laboratorium",
+              alternateName: "AndisLab",
               url: "https://www.andislab.com",
               logo: "https://www.andislab.com/images/logo.png",
-              description: "Distributor Alat Laboratorium, Bahan Kimia & Furniture Lab",
+              description: "Distributor alat laboratorium ready stock di Indonesia, melayani instansi pemerintah, kampus, dan industri sejak 2013.",
               address: {
                 "@type": "PostalAddress",
                 streetAddress: "Jl. Raya Mayor Oking Jaya Atmaja No.112, Cirimekar",
@@ -100,8 +101,15 @@ export default function RootLayout({
               contactPoint: {
                 "@type": "ContactPoint",
                 telephone: "+62-821-2552-3466",
-                contactType: "customer service"
-              }
+                contactType: "customer service",
+                areaServed: "Indonesia",
+                availableLanguage: ["Indonesian", "English"]
+              },
+              sameAs: [
+                "https://www.linkedin.com/company/andislab",
+                "https://www.tokopedia.com/andislab",
+                "https://shopee.co.id/andislab"
+              ]
             })
           }}
         />
