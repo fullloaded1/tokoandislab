@@ -7,6 +7,25 @@ import { generateOrderNo, generateGuestAccessToken } from "@/lib/orderCodes";
 import { calculateOrderTotals } from "@/lib/orderTotals";
 import { sendOrderNotification } from "@/lib/orderNotification";
 import { Prisma, PaymentMethod } from "@prisma/client";
+import { z } from "zod";
+
+const checkoutItemSchema = z.object({
+  variantId: z.string().min(1, "Variant ID harus diisi"),
+  quantity: z.number().int().positive("Quantity harus lebih dari 0"),
+});
+
+const checkoutSchema = z.object({
+  items: z.array(checkoutItemSchema).min(1, "Keranjang kosong."),
+  buyer: z.object({
+    name: z.string().min(3, "Nama minimal 3 karakter"),
+    email: z.string().email("Format email tidak valid"),
+    phone: z.string().min(8, "Nomor telepon tidak valid").max(20, "Nomor telepon terlalu panjang"),
+    institution: z.string().optional(),
+    address: z.string().min(5, "Alamat pengiriman minimal 5 karakter"),
+  }),
+  shippingRegion: z.string().min(1, "Wilayah pengiriman harus dipilih"),
+  paymentMethod: z.nativeEnum(PaymentMethod),
+});
 
 const TAX_RATE = 11;
 const RESERVATION_WINDOW_MS = 30 * 60 * 1000;
@@ -26,15 +45,18 @@ type CreateOrderPayload = {
 };
 
 export async function createDirectOrder(payload: CreateOrderPayload) {
-  if (!payload.items.length) {
-    return { success: false, error: "Keranjang kosong." };
+  const validationResult = checkoutSchema.safeParse(payload);
+  if (!validationResult.success) {
+    const errorMsg = validationResult.error.issues.map((e: any) => e.message).join(", ");
+    return { success: false, error: errorMsg };
   }
-  if (!isValidShippingRegion(payload.shippingRegion)) {
+  
+  const validPayload = validationResult.data;
+
+  if (!isValidShippingRegion(validPayload.shippingRegion)) {
     return { success: false, error: "Wilayah pengiriman tidak valid." };
   }
-  if (!payload.buyer.email || !payload.buyer.email.includes("@")) {
-    return { success: false, error: "Email tidak valid." };
-  }
+
 
   // Retry kalau Postgres lempar serialization_failure (40001)
   let lastError: unknown = null;

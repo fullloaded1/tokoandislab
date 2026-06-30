@@ -52,6 +52,17 @@ export async function createVariant(data: { productId: string; sku: string; name
       });
     }
 
+    await prisma.auditLog.create({
+      data: {
+        action: "CREATE",
+        entityType: "ProductVariant",
+        entityId: newVariant.id,
+        actorId: session.username,
+        newValue: JSON.stringify(data),
+        notes: "Membuat varian baru",
+      }
+    });
+
     revalidatePath(`/admin/products/${data.productId}/variants`);
     return { success: true, data: newVariant };
   } catch (error: any) {
@@ -61,7 +72,7 @@ export async function createVariant(data: { productId: string; sku: string; name
 }
 
 export async function updateVariant(id: string, data: { sku: string; name: string; price: string | number }) {
-  await requireAdmin();
+  const session = await requireAdmin();
   try {
     const updated = await prisma.productVariant.update({
       where: { id },
@@ -72,6 +83,18 @@ export async function updateVariant(id: string, data: { sku: string; name: strin
         // Dilarang keras update 'stock' secara langsung dari CRUD form
       }
     });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "UPDATE",
+        entityType: "ProductVariant",
+        entityId: id,
+        actorId: session.username,
+        newValue: JSON.stringify(data),
+        notes: "Update varian",
+      }
+    });
+
     revalidatePath(`/admin/products`);
     return { success: true, data: updated };
   } catch (error: any) {
@@ -80,11 +103,22 @@ export async function updateVariant(id: string, data: { sku: string; name: strin
 }
 
 export async function deleteVariant(id: string) {
-  await requireAdmin();
+  const session = await requireAdmin();
   try {
     await prisma.productVariant.delete({
       where: { id }
     });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "DELETE",
+        entityType: "ProductVariant",
+        entityId: id,
+        actorId: session.username,
+        notes: "Hapus varian",
+      }
+    });
+
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };

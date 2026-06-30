@@ -2,25 +2,52 @@
 
 import { prisma } from "@/lib/db";
 import { InstitutionType } from "@prisma/client";
-import { revalidatePath } from "next/cache";
+import { z } from "zod";
+
+const inquiryItemSchema = z.object({
+  productId: z.string().min(1, "Product ID harus diisi"),
+  qty: z.number().int().positive("Quantity harus lebih dari 0"),
+});
+
+const inquirySchema = z.object({
+  institutionName: z.string().min(3, "Nama institusi minimal 3 karakter"),
+  type: z.nativeEnum(InstitutionType),
+  address: z.string().min(5, "Alamat minimal 5 karakter"),
+  contactName: z.string().min(3, "Nama kontak minimal 3 karakter"),
+  phone: z.string().min(8, "Nomor telepon tidak valid").max(20, "Nomor telepon terlalu panjang"),
+  email: z.string().email("Format email tidak valid"),
+  notes: z.string().optional(),
+  items: z.array(inquiryItemSchema).min(1, "Keranjang penawaran kosong"),
+});
 
 export async function submitInquiry(formData: FormData) {
   try {
-    const institutionName = formData.get("institutionName") as string;
-    const type = formData.get("type") as string;
-    const address = formData.get("address") as string;
-    const contactName = formData.get("contactName") as string;
-    const phone = formData.get("phone") as string;
-    const email = formData.get("email") as string;
-    const notes = formData.get("notes") as string;
-    
-    // items is a JSON string passed from the frontend hidden input
     const itemsJson = formData.get("items") as string;
-    const items = JSON.parse(itemsJson) as any[];
-
-    if (!items || items.length === 0) {
-      return { success: false, error: "Keranjang penawaran kosong" };
+    let parsedItems = [];
+    try {
+      parsedItems = JSON.parse(itemsJson);
+    } catch {
+      return { success: false, error: "Format data keranjang tidak valid" };
     }
+
+    const validationResult = inquirySchema.safeParse({
+      institutionName: formData.get("institutionName"),
+      type: formData.get("type"),
+      address: formData.get("address"),
+      contactName: formData.get("contactName"),
+      phone: formData.get("phone"),
+      email: formData.get("email"),
+      notes: formData.get("notes") || undefined, // empty string to undefined if needed, or just let string pass
+      items: parsedItems,
+    });
+
+    if (!validationResult.success) {
+      const errorMsg = validationResult.error.issues.map((e: any) => e.message).join(", ");
+      return { success: false, error: errorMsg };
+    }
+
+    const validData = validationResult.data;
+    const { institutionName, type, address, contactName, phone, email, notes, items } = validData;
 
     // 1. Find or Create Institution
     let institution = await prisma.institution.findUnique({

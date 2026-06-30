@@ -35,10 +35,10 @@ export async function deleteProduct(id: string) {
 }
 
 export async function createProduct(data: any) {
-  await requireAdmin();
+  const session = await requireAdmin();
   try {
     const slug = data.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-    await prisma.product.create({
+    const product = await prisma.product.create({
       data: {
         name: data.name,
         slug: slug,
@@ -54,6 +54,18 @@ export async function createProduct(data: any) {
         costPrice: money.toDecimal(data.costPrice || 0),
       },
     });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "CREATE",
+        entityType: "Product",
+        entityId: product.id,
+        actorId: session.username,
+        newValue: JSON.stringify(data),
+        notes: "Membuat produk baru",
+      },
+    });
+
     revalidatePath("/admin");
     revalidatePath("/katalog");
     revalidatePath("/");
@@ -65,9 +77,9 @@ export async function createProduct(data: any) {
 }
 
 export async function updateProduct(id: string, data: any) {
-  await requireAdmin();
+  const session = await requireAdmin();
   try {
-    await prisma.product.update({
+    const product = await prisma.product.update({
       where: { id },
       data: {
         name: data.name,
@@ -83,6 +95,18 @@ export async function updateProduct(id: string, data: any) {
         costPrice: money.toDecimal(data.costPrice || 0),
       },
     });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "UPDATE",
+        entityType: "Product",
+        entityId: id,
+        actorId: session.username,
+        newValue: JSON.stringify(data),
+        notes: "Update produk",
+      },
+    });
+
     revalidatePath("/admin");
     revalidatePath("/katalog");
     revalidatePath("/");
@@ -94,7 +118,7 @@ export async function updateProduct(id: string, data: any) {
 }
 
 export async function bulkCreateProducts(products: any[]) {
-  await requireAdmin();
+  const session = await requireAdmin();
   try {
     const dataToInsert = products.map((p) => {
       // Ensure unique slug, even if there are duplicates we can add a random string or just rely on standard.
@@ -118,6 +142,16 @@ export async function bulkCreateProducts(products: any[]) {
 
     await prisma.product.createMany({
       data: dataToInsert,
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "BULK_CREATE",
+        entityType: "Product",
+        entityId: "BULK",
+        actorId: session.username,
+        notes: `Bulk create ${dataToInsert.length} produk`,
+      },
     });
 
     revalidatePath("/admin");
