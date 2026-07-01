@@ -6,6 +6,7 @@ import ReactMarkdown from "react-markdown";
 import ProductCard from "@/components/ProductCard";
 import ArticleLikeButton from "@/components/ArticleLikeButton";
 import ArticleViewTracker from "@/components/ArticleViewTracker";
+import ArticleWaCTA from "@/components/ArticleWaCTA";
 import { BookOpen, Calendar, ChevronRight, ArrowLeft, Eye } from "lucide-react";
 import type { Metadata } from "next";
 import { cache } from "react";
@@ -247,14 +248,7 @@ export default async function ArticleDetailPage(
                   Konsultasikan kebutuhan teknis, negosiasi harga, atau minta surat penawaran resmi (RFQ) untuk produk yang dibahas dalam artikel ini.
                 </p>
               </div>
-              <a
-                href={`/api/wa-redirect?source=artikel_cta&text=Halo AndisLab, saya sedang membaca artikel "${encodeURIComponent(article.title)}" dan ingin bertanya lebih lanjut.`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center bg-white text-emerald-700 px-6 py-3.5 rounded-2xl font-bold text-xs sm:text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 shrink-0"
-              >
-                Tanya Spesialis via WA
-              </a>
+              <ArticleWaCTA title={article.title} />
             </div>
           </div>
         </article>

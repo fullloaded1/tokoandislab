@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { rateLimit } from "@/lib/rateLimit";
 
 // Helper function to send Telegram message
 async function sendTelegramMessage(log: {
@@ -55,25 +56,33 @@ export async function GET(request: Request) {
     const productName = searchParams.get("productName") || undefined;
     const inquiryNo = searchParams.get("inquiryNo") || undefined;
 
-    let log = null;
-    try {
-      log = await prisma.whatsAppLog.create({
-        data: {
-          source,
-          productName,
-          productId,
-          inquiryNo,
-          messageText: text || null,
-          status: "NEW",
-        },
-      });
-    } catch (dbError) {
-      console.error("DB logging failed:", dbError);
-    }
+    const ip = request.headers.get("x-forwarded-for") ?? "unknown";
+    // Limit to 5 requests per 10 minutes per IP
+    const { limited } = rateLimit(`wa-redirect-get-${ip}`, 5, 10 * 60 * 1000);
 
-    // Fire background Telegram notification if log created
-    if (log) {
-      sendTelegramMessage(log).catch(console.error);
+    if (!limited) {
+      let log = null;
+      try {
+        log = await prisma.whatsAppLog.create({
+          data: {
+            source,
+            productName,
+            productId,
+            inquiryNo,
+            messageText: text || null,
+            status: "NEW",
+          },
+        });
+      } catch (dbError) {
+        console.error("DB logging failed:", dbError);
+      }
+
+      // Fire background Telegram notification if log created
+      if (log) {
+        sendTelegramMessage(log).catch(console.error);
+      }
+    } else {
+      console.warn(`Rate limited GET wa-redirect for IP: ${ip}`);
     }
 
     const redirectUrl = `https://wa.me/${waNumber}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
@@ -87,6 +96,17 @@ export async function GET(request: Request) {
 // POST request (Modal Form submission)
 export async function POST(request: Request) {
   try {
+    const ip = request.headers.get("x-forwarded-for") ?? "unknown";
+    // Limit to 5 requests per 10 minutes per IP
+    const { limited } = rateLimit(`wa-redirect-post-${ip}`, 5, 10 * 60 * 1000);
+
+    if (limited) {
+      return NextResponse.json(
+        { error: "Terlalu banyak permintaan. Silakan coba beberapa saat lagi." },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
     const {
       source,

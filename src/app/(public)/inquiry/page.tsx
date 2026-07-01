@@ -7,12 +7,14 @@ import { useState } from "react";
 import { FileText, Loader2, Building, User, Phone, Mail, MapPin, CheckCircle } from "lucide-react";
 import Image from "next/image";
 import { submitInquiry } from "./actions";
+import { useWhatsAppLeadStore } from "@/store/useWhatsAppLeadStore";
 
 export default function InquiryPage() {
   const { items, clearCart } = useRFQStore();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [successQuoteNo, setSuccessQuoteNo] = useState<string | null>(null);
+  const openWaModal = useWhatsAppLeadStore((s) => s.openModal);
 
   if (successQuoteNo) {
     return (
@@ -29,17 +31,17 @@ export default function InquiryPage() {
             Tim sales AndisLab telah menerima permintaan penawaran harga Anda. Silakan lanjutkan ke WhatsApp agar tim kami dapat segera merespon Anda.
           </p>
           <div className="flex flex-col gap-3">
-            <a
-              href={`/api/wa-redirect?source=rfq_success&inquiryNo=${encodeURIComponent(successQuoteNo)}&text=${encodeURIComponent(
-                `Halo Tim AndisLab, saya baru saja mengajukan penawaran harga via website dengan Nomor Referensi *${successQuoteNo}*. Mohon segera diproses, terima kasih!`
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => openWaModal({
+                source: "rfq_success",
+                inquiryNo: successQuoteNo,
+                text: `Halo Tim AndisLab, saya baru saja mengajukan penawaran harga via website dengan Nomor Referensi *${successQuoteNo}*. Mohon segera diproses, terima kasih!`
+              })}
               className="w-full py-4 bg-[#25D366] text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-[#20bd5a] transition-all hover:-translate-y-0.5 shadow-lg shadow-[#25D366]/30"
             >
               <Phone className="h-5 w-5" />
               Lanjutkan Chat ke WhatsApp
-            </a>
+            </button>
             <button
               onClick={() => router.push("/katalog")}
               className="w-full py-4 border-2 border-slate-200 text-slate-600 rounded-xl font-bold hover:bg-slate-50 transition-colors"

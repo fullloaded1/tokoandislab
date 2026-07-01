@@ -6,6 +6,7 @@ import { MessageCircle, X, Send, User, Bot, Loader2, MinusCircle, Wrench, Sparkl
 import ReactMarkdown from "react-markdown";
 import Lottie from "lottie-react";
 import robotAnimation from "../../public/images/animas/animasi.json";
+import { useWhatsAppLeadStore } from "@/store/useWhatsAppLeadStore";
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,6 +15,7 @@ export default function Chatbot() {
   const { messages, sendMessage, status, error, setMessages } = useChat();
   const isLoading = status === "streaming" || status === "submitted";
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const openWaModal = useWhatsAppLeadStore((s) => s.openModal);
 
   // Auto scroll to bottom when new messages arrive
   useEffect(() => {
@@ -175,16 +177,28 @@ export default function Chatbot() {
                   <div className="prose prose-sm max-w-none">
                     <ReactMarkdown
                       components={{
-                        a: ({ node, href, ...props }) => {
+                        a: ({ node, href, children, ...props }) => {
                           let finalHref = href || "";
-                          if (finalHref.includes("wa.me")) {
-                            try {
-                              const urlObj = new URL(finalHref);
-                              const text = urlObj.searchParams.get("text") || "";
-                              finalHref = `/api/wa-redirect?source=chatbot&text=${encodeURIComponent(text)}`;
-                            } catch {
-                              finalHref = `/api/wa-redirect?source=chatbot`;
-                            }
+                          if (finalHref.includes("wa.me") || finalHref.includes("wa-redirect")) {
+                            return (
+                              <button 
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  let text = "";
+                                  try {
+                                    const urlObj = new URL(finalHref.startsWith("http") ? finalHref : `http://localhost${finalHref}`);
+                                    text = urlObj.searchParams.get("text") || "";
+                                  } catch {}
+                                  openWaModal({
+                                    source: "chatbot",
+                                    text
+                                  });
+                                }}
+                                className={m.role === 'user' ? "text-blue-200 underline hover:text-white" : "text-blue-600 underline hover:text-blue-800"} 
+                              >
+                                {children}
+                              </button>
+                            );
                           }
                           return (
                             <a 
@@ -193,7 +207,9 @@ export default function Chatbot() {
                               target="_blank" 
                               rel="noopener noreferrer" 
                               className={m.role === 'user' ? "text-blue-200 underline hover:text-white" : "text-blue-600 underline hover:text-blue-800"} 
-                            />
+                            >
+                              {children}
+                            </a>
                           );
                         },
                         p: ({ node, ...props }) => <p className="mb-2 last:mb-0" {...props} />,
@@ -228,14 +244,12 @@ export default function Chatbot() {
                 Mohon maaf, asisten AI kami sedang melayani banyak klien atau telah mencapai batas. 
                 Untuk respon yang lebih cepat, Anda bisa langsung terhubung dengan tim kami!
               </p>
-              <a 
-                href="/api/wa-redirect?source=chatbot_error&text=Halo%20AndisLab%2C%20saya%20butuh%20bantuan%20karena%20sistem%20sedang%20sibuk." 
-                target="_blank" 
-                rel="noopener noreferrer"
+              <button 
+                onClick={() => openWaModal({ source: "chatbot_error", text: "Halo AndisLab, saya butuh bantuan karena sistem sedang sibuk." })}
                 className="bg-[#25D366] hover:bg-[#1ebd5b] text-white font-semibold py-2 px-5 rounded-full text-sm transition-colors shadow-sm"
               >
                 Tanya via WhatsApp
-              </a>
+              </button>
             </div>
           )}
           <div ref={messagesEndRef} />
