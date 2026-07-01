@@ -105,6 +105,9 @@ function WhatsAppLeadModalInner() {
       const data = await response.json();
       
       if (data.redirectUrl) {
+        if (typeof window !== "undefined") {
+          (window as any).gtag?.('event', 'whatsapp_click', { wa_source: source, form_completed: true });
+        }
         window.open(data.redirectUrl, "_blank", "noopener,noreferrer");
       }
     } catch (err) {
@@ -112,6 +115,9 @@ function WhatsAppLeadModalInner() {
       // Fallback directly to WA on error
       const waNumber = "6285973211179";
       const fallbackUrl = `https://wa.me/${waNumber}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
+      if (typeof window !== "undefined") {
+        (window as any).gtag?.('event', 'whatsapp_click', { wa_source: source, form_completed: true, error: true });
+      }
       window.open(fallbackUrl, "_blank", "noopener,noreferrer");
     } finally {
       setIsLoading(false);
@@ -137,6 +143,10 @@ function WhatsAppLeadModalInner() {
     } finally {
       setIsLoading(false);
       closeModal();
+      
+      if (typeof window !== "undefined") {
+        (window as any).gtag?.('event', 'whatsapp_click', { wa_source: source, form_completed: false });
+      }
       
       // Redirect immediately
       const waNumber = "6285973211179";

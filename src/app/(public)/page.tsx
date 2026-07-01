@@ -3,6 +3,7 @@ import ProductCard from "@/components/ProductCard";
 import CategoryGrid from "@/components/CategoryGrid";
 import BrandLogos from "@/components/BrandLogos";
 import ClientLogos from "@/components/ClientLogos";
+import WaLinkCTA from "@/components/WaLinkCTA";
 import Link from "next/link";
 import { ArrowRight, BookOpen, Tag } from "lucide-react";
 import { prisma } from "@/lib/db";
@@ -285,14 +286,12 @@ export default async function HomePage() {
               laboratorium instansi maupun perusahaan Anda.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a
+              <WaLinkCTA 
                 href="?wa=open&source=homepage_cta&text=Halo%20AndisLab%2C%20saya%20ingin%20minta%20penawaran%20khusus."
-                target="_blank"
-                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-2xl bg-white px-8 py-4 text-base font-bold text-blue-700 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-0.5"
               >
                 Hubungi via WhatsApp
-              </a>
+              </WaLinkCTA>
               <Link
                 href="/katalog"
                 className="inline-flex items-center gap-2 rounded-2xl border-2 border-white/30 px-8 py-4 text-base font-bold text-white transition-all duration-300 hover:bg-white/10"

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Mail, Phone, MapPin } from "lucide-react";
+import { trackWhatsApp } from "@/lib/track";
 
 const categories = [
   { href: "/katalog?category=lovibond", label: "Lovibond" },
@@ -83,8 +84,10 @@ export default function Footer() {
                 <Phone className="h-4 w-4 shrink-0 text-cyan-500" />
                 <a 
                   href="?wa=open&source=footer&text=Halo%20AndisLab%2C%20saya%20ingin%20konsultasi%20produk." 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    trackWhatsApp("?wa=open&source=footer&text=Halo%20AndisLab%2C%20saya%20ingin%20konsultasi%20produk.");
+                  }}
                   className="hover:text-cyan-400 transition-colors"
                 >
                   0859-7321-1179

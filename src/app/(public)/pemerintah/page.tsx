@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db";
 import ProductCard from "@/components/ProductCard";
 import ClientLogos from "@/components/ClientLogos";
+import WaLinkCTA from "@/components/WaLinkCTA";
 import Link from "next/link";
 import { 
   ChevronRight, 
@@ -60,13 +61,13 @@ export default async function PemerintahPage() {
               <ShoppingCart className="w-5 h-5" />
               Lihat Produk Ready Stock
             </Link>
-            <a 
+            <WaLinkCTA 
               href="/?wa=open&source=pemerintah"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 px-8 py-4 text-base font-bold text-white transition-all hover:bg-white/20 hover:-translate-y-0.5"
             >
               <MessageSquare className="w-5 h-5" />
               Konsultasi Pengadaan
-            </a>
+            </WaLinkCTA>
           </div>
         </div>
       </section>

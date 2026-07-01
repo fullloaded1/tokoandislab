@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { useRFQStore } from "@/store/useRFQStore";
 import RFQCartDrawer from "./RFQCartDrawer";
-import { useWhatsAppLeadStore } from "@/store/useWhatsAppLeadStore";
+import { trackWhatsApp } from "@/lib/track";
 
 const navLinks = [
   { href: "/", label: "Beranda" },
@@ -33,7 +33,6 @@ export default function Navbar() {
   const { isCartOpen: cartOpen, setCartOpen, items } = useRFQStore();
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
-  const openWaModal = useWhatsAppLeadStore((s) => s.openModal);
 
   useEffect(() => {
     setMounted(true);
@@ -124,10 +123,7 @@ export default function Navbar() {
                 href="/?wa=open&source=navbar_desktop&text=Halo%20AndisLab,%20saya%20ingin%20konsultasi%20produk."
                 onClick={(e) => {
                   e.preventDefault();
-                  openWaModal({
-                    source: "navbar_desktop",
-                    text: "Halo AndisLab, saya ingin konsultasi produk."
-                  });
+                  trackWhatsApp("/?wa=open&source=navbar_desktop&text=Halo%20AndisLab,%20saya%20ingin%20konsultasi%20produk.");
                 }}
                 className="ml-2 inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0"
               >
@@ -215,10 +211,7 @@ export default function Navbar() {
               href="/?wa=open&source=navbar_mobile&text=Halo%20AndisLab,%20saya%20ingin%20konsultasi%20produk."
               onClick={(e) => {
                 e.preventDefault();
-                openWaModal({
-                  source: "navbar_mobile",
-                  text: "Halo AndisLab, saya ingin konsultasi produk."
-                });
+                trackWhatsApp("/?wa=open&source=navbar_mobile&text=Halo%20AndisLab,%20saya%20ingin%20konsultasi%20produk.");
               }}
               className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-4 py-3 text-sm font-semibold text-white mt-2"
             >

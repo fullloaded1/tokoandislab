@@ -178,7 +178,7 @@ export default function Chatbot() {
                     <ReactMarkdown
                       components={{
                         a: ({ node, href, children, ...props }) => {
-                          let finalHref = href || "";
+                          const finalHref = href || "";
                           if (finalHref.includes("wa.me") || finalHref.includes("wa-redirect")) {
                             return (
                               <button 

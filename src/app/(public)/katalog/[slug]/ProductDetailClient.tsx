@@ -19,10 +19,10 @@ import {
   X,
   ShoppingBag,
 } from "lucide-react";
-import { useRFQStore } from "@/store/useRFQStore";
 import { useWhatsAppLeadStore } from "@/store/useWhatsAppLeadStore";
 import ProductCard from "@/components/ProductCard";
 import { type Product } from "@/lib/products";
+import { trackWhatsApp } from "@/lib/track";
 
 interface ProductVariant {
   id: string;
@@ -44,6 +44,8 @@ import { getReadyStockSummary } from "@/lib/readyStock";
 
 import { useRecentStore } from "@/store/useRecentStore";
 
+import { useRFQStore } from "@/store/useRFQStore";
+
 export default function ProductDetailClient({
   product,
   relatedProducts,
@@ -53,7 +55,6 @@ export default function ProductDetailClient({
   const addItem = useRFQStore((s) => s.addItem);
   const setCartOpen = useRFQStore((s) => s.setCartOpen);
   const [added, setAdded] = useState(false);
-  const openWaModal = useWhatsAppLeadStore((s) => s.openModal);
   const [activeTab, setActiveTab] = useState<"deskripsi" | "spesifikasi" | "dokumen">("deskripsi");
   
   const toast = useToast();
@@ -490,12 +491,7 @@ export default function ProductDetailClient({
                 href={`/?wa=open&source=product_detail&text=Halo%20Andis%20Lab,%20saya%20tertarik%20dengan%20produk:%20${encodeURIComponent(product.name)}.%20Mohon%20info%20harga%20dan%20ketersediaan.`}
                 onClick={(e) => {
                   e.preventDefault();
-                  openWaModal({
-                    source: "product_detail",
-                    productId: product.id,
-                    productName: product.name,
-                    text: `Halo Andis Lab, saya tertarik dengan produk: ${product.name}. Mohon info harga dan ketersediaan.`
-                  });
+                  trackWhatsApp(`/?wa=open&source=product_detail&text=Halo%20Andis%20Lab,%20saya%20tertarik%20dengan%20produk:%20${encodeURIComponent(product.name)}.%20Mohon%20info%20harga%20dan%20ketersediaan.`);
                 }}
                 className="w-full flex items-center justify-center gap-2 rounded-2xl border-2 border-slate-200 bg-white px-6 py-4 text-base font-bold text-slate-700 transition-all duration-300 hover:border-emerald-500 hover:text-emerald-600 hover:shadow-md hover:-translate-y-0.5"
               >
@@ -619,12 +615,7 @@ export default function ProductDetailClient({
                       href={`/?wa=open&source=product_brochure&text=Halo%20Andis%20Lab,%20boleh%20minta%20brosur%20PDF%20atau%20datasheet%20teknis%20untuk%20produk:%20${encodeURIComponent(product.name)}?`}
                       onClick={(e) => {
                         e.preventDefault();
-                        openWaModal({
-                          source: "product_brochure",
-                          productId: product.id,
-                          productName: product.name,
-                          text: `Halo Andis Lab, boleh minta brosur PDF atau datasheet teknis untuk produk: ${product.name}?`
-                        });
+                        trackWhatsApp(`/?wa=open&source=product_brochure&text=Halo%20Andis%20Lab,%20boleh%20minta%20brosur%20PDF%20atau%20datasheet%20teknis%20untuk%20produk:%20${encodeURIComponent(product.name)}?`);
                       }}
                       className="inline-flex items-center gap-2 rounded-2xl border-2 border-slate-300 bg-white px-8 py-4 text-sm font-bold text-slate-700 transition-all hover:border-blue-500 hover:text-blue-600 hover:shadow-md"
                     >

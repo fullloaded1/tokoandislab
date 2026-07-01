@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ShieldCheck, Users, Award, Beaker, MapPin, Phone, Mail, MessageCircle } from "lucide-react";
+import WaLinkCTA from "@/components/WaLinkCTA";
 
 export const metadata: Metadata = {
   title: "Tentang Kami: Distributor Alat Laboratorium Resmi — AndisLab",
@@ -217,15 +218,13 @@ export default function TentangPage() {
               </div>
 
               <div className="mt-10">
-                <a
+                <WaLinkCTA
                   href="?wa=open&source=about_page&text=Halo%20AndisLab,%20saya%20ingin%20berkonsultasi..."
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-2xl bg-[#25D366] px-6 py-4 text-base font-bold text-white shadow-lg shadow-[#25D366]/30 hover:shadow-xl hover:shadow-[#25D366]/40 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
                 >
                   <MessageCircle className="h-5 w-5" />
                   Chat via WhatsApp
-                </a>
+                </WaLinkCTA>
               </div>
             </div>
 
