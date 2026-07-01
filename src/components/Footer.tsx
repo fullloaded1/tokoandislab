@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Mail, Phone, MapPin } from "lucide-react";
-import { trackWhatsApp } from "@/lib/track";
+import WaLinkCTA from "@/components/WaLinkCTA";
 
 const categories = [
   { href: "/katalog?category=lovibond", label: "Lovibond" },
@@ -82,16 +82,12 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3 text-sm text-slate-400">
                 <Phone className="h-4 w-4 shrink-0 text-cyan-500" />
-                <a 
+                <WaLinkCTA 
                   href="?wa=open&source=footer&text=Halo%20AndisLab%2C%20saya%20ingin%20konsultasi%20produk." 
-                  onClick={(e) => {
-                    e.preventDefault();
-                    trackWhatsApp("?wa=open&source=footer&text=Halo%20AndisLab%2C%20saya%20ingin%20konsultasi%20produk.");
-                  }}
                   className="hover:text-cyan-400 transition-colors"
                 >
                   0859-7321-1179
-                </a>
+                </WaLinkCTA>
               </li>
               <li className="flex items-start gap-3 text-sm text-slate-400">
                 <Mail className="h-4 w-4 shrink-0 text-cyan-500 mt-1" />
