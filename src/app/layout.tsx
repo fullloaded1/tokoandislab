@@ -3,12 +3,13 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/components/Toast";
 import { Analytics } from "@vercel/analytics/react";
-import WhatsAppLeadModal from "@/components/WhatsAppLeadModal";
 import Script from "next/script";
+import WhatsAppLeadModalWrapper from "@/components/WhatsAppLeadModalWrapper";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -69,9 +70,9 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=G-57LWKFHVYZ`}
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="google-analytics" strategy="afterInteractive">
+        <Script id="google-analytics" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){window.dataLayer.push(arguments);}
@@ -115,7 +116,7 @@ export default function RootLayout({
         />
         <ToastProvider>
           {children}
-          <WhatsAppLeadModal />
+          <WhatsAppLeadModalWrapper />
         </ToastProvider>
         <Analytics />
       </body>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Mail, Phone, MapPin } from "lucide-react";
 import WaLinkCTA from "@/components/WaLinkCTA";
 
@@ -17,7 +18,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center gap-2.5 mb-6 group">
-              <img src="/logo.png" alt="AndisLab Logo" className="h-12 md:h-14 w-auto object-contain bg-white/10 rounded-xl p-2 transition-transform hover:scale-105" />
+              <Image src="/logo.png" alt="AndisLab Logo" width={160} height={56} className="h-12 md:h-14 w-auto object-contain bg-white/10 rounded-xl p-2 transition-transform hover:scale-105" />
             </Link>
             <p className="text-sm text-slate-400 leading-relaxed">
               Distributor terpercaya alat laboratorium dan instrumen analitik
