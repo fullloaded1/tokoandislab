@@ -127,6 +127,7 @@ function WhatsAppLeadModalInner() {
         <div className="relative p-6 bg-gradient-to-br from-blue-600 to-cyan-500 text-white">
           <button 
             onClick={closeModal}
+            aria-label="Tutup"
             className="absolute top-4 right-4 p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-colors"
           >
             <X className="h-5 w-5" />

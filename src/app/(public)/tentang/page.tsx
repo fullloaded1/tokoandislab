@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { ShieldCheck, Users, Award, Beaker, MapPin, Phone, Mail, MessageCircle } from "lucide-react";
 import WaLinkCTA from "@/components/WaLinkCTA";
 
@@ -125,7 +125,7 @@ export default function TentangPage() {
           </div>
           <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden shadow-2xl shadow-blue-500/10 border border-slate-100 bg-gradient-to-br from-blue-50 to-cyan-50 flex items-center justify-center">
             <img
-              src="/logo-transparent.png"
+              src="/logo.png"
               alt="Andis Lab"
               className="w-3/4 max-w-[300px] object-contain opacity-90"
             />
@@ -183,7 +183,7 @@ export default function TentangPage() {
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-base font-bold text-slate-800 mb-1">Kantor</h4>
+                    <h3 className="text-base font-bold text-slate-800 mb-1">Kantor</h3>
                     <p className="text-sm text-slate-500 leading-relaxed">
                       Jl. Raya Mayor Oking Jaya Atmaja No.112, <br />
                       Cirimekar, Kec. Cibinong, Kab. Bogor, <br />
@@ -197,7 +197,7 @@ export default function TentangPage() {
                     <Phone className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-base font-bold text-slate-800 mb-1">WhatsApp</h4>
+                    <h3 className="text-base font-bold text-slate-800 mb-1">WhatsApp</h3>
                     <p className="text-sm text-slate-500 leading-relaxed">
                       0821-2552-3466
                     </p>
@@ -209,7 +209,7 @@ export default function TentangPage() {
                     <Mail className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-base font-bold text-slate-800 mb-1">Email</h4>
+                    <h3 className="text-base font-bold text-slate-800 mb-1">Email</h3>
                     <p className="text-sm text-slate-500 leading-relaxed">
                       info@andislab.com
                     </p>

@@ -174,11 +174,15 @@ export default function HeroSection({ featuredProducts = [] }: { featuredProduct
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  index === currentSlide ? "w-6 bg-slate-800" : "w-2 bg-slate-400 hover:bg-slate-600"
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
+                className="flex h-6 min-w-6 items-center justify-center"
+                aria-label={`Ke slide ${index + 1}`}
+              >
+                <span
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    index === currentSlide ? "w-6 bg-slate-800" : "w-2 bg-slate-400 hover:bg-slate-600"
+                  }`}
+                />
+              </button>
             ))}
           </div>
         </div>

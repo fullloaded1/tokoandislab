@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+﻿import { prisma } from "@/lib/db";
 import ProductCard from "@/components/ProductCard";
 import ClientLogos from "@/components/ClientLogos";
 import WaLinkCTA from "@/components/WaLinkCTA";
@@ -80,21 +80,21 @@ export default async function PemerintahPage() {
               <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <CheckCircle2 className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold text-slate-800 mb-3">Ready Stock Siap PO</h3>
+              <h2 className="text-xl font-bold text-slate-800 mb-3">Ready Stock Siap PO</h2>
               <p className="text-slate-500 font-medium">Barang tersedia di gudang kami, siap dikirim segera setelah PO/SPK diterbitkan tanpa waktu tunggu indent yang lama.</p>
             </div>
             <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm text-center">
               <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <FileText className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold text-slate-800 mb-3">Harga Jelas HPS/SPJ</h3>
+              <h2 className="text-xl font-bold text-slate-800 mb-3">Harga Jelas HPS/SPJ</h2>
               <p className="text-slate-500 font-medium">Transparansi harga untuk memudahkan penyusunan HPS. Harga include/exclude PPN dapat disesuaikan pada dokumen penawaran.</p>
             </div>
             <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm text-center">
               <div className="w-16 h-16 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <Building2 className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold text-slate-800 mb-3">Paket Budgeting Lab</h3>
+              <h2 className="text-xl font-bold text-slate-800 mb-3">Paket Budgeting Lab</h2>
               <p className="text-slate-500 font-medium">Kami bantu menyusun RAB dan kebutuhan alat sesuai standar lab Anda dengan total anggaran yang tersedia.</p>
             </div>
           </div>
@@ -147,21 +147,21 @@ export default async function PemerintahPage() {
                 <div className="flex gap-4">
                   <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 text-blue-600 font-black flex items-center justify-center text-lg">1</div>
                   <div>
-                    <h4 className="text-xl font-bold text-slate-800 mb-2">Minta Penawaran (RFQ)</h4>
+                    <h3 className="text-xl font-bold text-slate-800 mb-2">Minta Penawaran (RFQ)</h3>
                     <p className="text-slate-500 font-medium">Pilih produk dan masukkan ke keranjang RFQ. Lengkapi data instansi Anda di halaman <Link href="/inquiry" className="text-blue-600 hover:underline">Daftar Penawaran</Link>.</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
                   <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 text-blue-600 font-black flex items-center justify-center text-lg">2</div>
                   <div>
-                    <h4 className="text-xl font-bold text-slate-800 mb-2">Terima Quotation Resmi</h4>
+                    <h3 className="text-xl font-bold text-slate-800 mb-2">Terima Quotation Resmi</h3>
                     <p className="text-slate-500 font-medium">Tim kami akan menerbitkan dokumen Quotation resmi beserta ketersediaan stok yang mengikat (reserved) dan rincian pajak (PPN).</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
                   <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 text-blue-600 font-black flex items-center justify-center text-lg">3</div>
                   <div>
-                    <h4 className="text-xl font-bold text-slate-800 mb-2">Terbitkan PO / SPK</h4>
+                    <h3 className="text-xl font-bold text-slate-800 mb-2">Terbitkan PO / SPK</h3>
                     <p className="text-slate-500 font-medium">Setelah setuju, terbitkan dokumen Purchase Order atau Surat Perintah Kerja. Barang langsung kami proses kirim.</p>
                   </div>
                 </div>

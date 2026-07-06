@@ -63,6 +63,7 @@ export default function Chatbot() {
           </div>
           <button
             onClick={() => setIsOpen(false)}
+            aria-label="Kecilkan jendela chat"
             className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors"
           >
             <MinusCircle className="h-5 w-5" />
@@ -280,6 +281,7 @@ export default function Chatbot() {
             <button
               type="submit"
               disabled={!input.trim() || isLoading}
+              aria-label="Kirim pesan"
               className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white transition-colors hover:bg-blue-700 disabled:opacity-50 disabled:hover:bg-blue-600"
             >
               <Send className="h-4 w-4" />

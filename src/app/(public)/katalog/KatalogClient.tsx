@@ -235,6 +235,7 @@ export default function KatalogClient({ initialProducts = [], children }: { init
                 </h3>
                 <button
                   onClick={() => setSidebarOpen(false)}
+                  aria-label="Tutup filter"
                   className="flex h-8 w-8 items-center justify-center rounded-xl text-slate-400 hover:bg-slate-100"
                 >
                   <X className="h-5 w-5" />

@@ -5,7 +5,31 @@ const analyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 });
 
+// Tahap 1: Report-Only. Setelah 1-2 minggu tanpa pelanggaran di console,
+// ubah key menjadi "Content-Security-Policy" (enforcement).
+const cspReportOnly = [
+  "default-src 'self'",
+  // GA4 / Google Ads tag (gtag.js) — jangan dihapus, dipakai campaign aktif
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://googleads.g.doubleclick.net https://www.googleadservices.com",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https://*.public.blob.vercel-storage.com https://www.google-analytics.com https://www.googletagmanager.com https://webicdn.com https://indonesian.chemical-storagecabinet.com https://image.mitrabatavia.com https://cdn.phototourl.com https://picsum.photos https://images.unsplash.com https://*.google.com https://*.google.co.id",
+  "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://stats.g.doubleclick.net https://www.google.com",
+  "font-src 'self' data:",
+  // Google Maps embed (halaman /tentang) + Google Ads remarketing frame
+  "frame-src https://www.google.com https://td.doubleclick.net",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "frame-ancestors 'none'",
+].join("; ");
+
 const nextConfig: NextConfig = {
+  productionBrowserSourceMaps: true,
+  experimental: {
+    // Inline CSS ke HTML — menghilangkan request CSS terpisah di critical path
+    // (CSS situs hanya ~17 KiB sehingga cocok di-inline). Verifikasi di
+    // preview deploy Vercel sebelum promote ke production.
+    inlineCss: true,
+  },
   async headers() {
     return [
       {
@@ -14,6 +38,20 @@ const nextConfig: NextConfig = {
           {
             key: "X-Frame-Options",
             value: "DENY",
+          },
+          {
+            // Mulai 1 hari; setelah verifikasi tidak ada masalah akses,
+            // naikkan ke max-age=63072000; includeSubDomains; preload
+            key: "Strict-Transport-Security",
+            value: "max-age=86400",
+          },
+          {
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin",
+          },
+          {
+            key: "Content-Security-Policy-Report-Only",
+            value: cspReportOnly,
           },
           {
             key: "X-Content-Type-Options",

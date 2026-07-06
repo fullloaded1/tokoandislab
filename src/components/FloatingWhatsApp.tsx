@@ -37,6 +37,7 @@ export default function FloatingWhatsApp() {
         onClick={() => openWaModal({ source: "floating_widget", text: "Halo Andis Lab, saya ingin berkonsultasi mengenai alat laboratorium." })}
         onMouseEnter={() => setExpanded(true)}
         onMouseLeave={() => setExpanded(false)}
+        aria-label="Tanya ahli kami via WhatsApp"
         className="group pointer-events-auto relative flex items-center justify-center bg-[#25D366] hover:bg-[#20b858] text-white rounded-full shadow-[0_8px_30px_rgba(37,211,102,0.4)] transition-all duration-500 transform hover:-translate-y-1"
       >
         <div className={`overflow-hidden transition-all duration-500 ease-in-out whitespace-nowrap flex items-center ${expanded ? 'w-48 sm:w-52 px-5' : 'w-14 sm:w-16 h-14 sm:h-16 justify-center'}`}>

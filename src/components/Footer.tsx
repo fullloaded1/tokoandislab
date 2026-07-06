@@ -28,9 +28,9 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4">
+            <p className="text-sm font-bold text-white uppercase tracking-wider mb-4">
               Navigasi
-            </h4>
+            </p>
             <ul className="space-y-3">
               {[
                 { href: "/", label: "Beranda" },
@@ -51,9 +51,9 @@ export default function Footer() {
 
           {/* Categories */}
           <div>
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4">
+            <p className="text-sm font-bold text-white uppercase tracking-wider mb-4">
               Katalog Produk
-            </h4>
+            </p>
             <ul className="space-y-3">
               {categories.map((cat) => (
                 <li key={cat.href}>
@@ -70,9 +70,9 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4">
+            <p className="text-sm font-bold text-white uppercase tracking-wider mb-4">
               Hubungi Kami
-            </h4>
+            </p>
             <ul className="space-y-4">
               <li className="flex flex-col gap-1 text-sm text-slate-400">
                 <span className="font-bold text-white">PT Andis Sentral Laboratorium</span>

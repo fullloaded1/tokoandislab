@@ -110,6 +110,7 @@ export default function RFQCartDrawer({ open, onClose }: RFQCartDrawerProps) {
                       <div className="flex items-center gap-2">
                       <button
                         onClick={() => updateQty(item.id, item.qty - 1)}
+                        aria-label="Kurangi jumlah"
                         className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-200 text-slate-500 hover:border-blue-300 hover:text-blue-600 transition-colors"
                         disabled={item.qty <= 1}
                       >
@@ -120,6 +121,7 @@ export default function RFQCartDrawer({ open, onClose }: RFQCartDrawerProps) {
                       </span>
                       <button
                         onClick={() => updateQty(item.id, item.qty + 1)}
+                        aria-label="Tambah jumlah"
                         className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-200 text-slate-500 hover:border-blue-300 hover:text-blue-600 transition-colors"
                       >
                         <Plus className="h-3 w-3" />
