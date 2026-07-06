@@ -17,43 +17,7 @@ function WhatsAppLeadModalInner() {
   const [rememberMe, setRememberMe] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
-  // 1. Listen for URL search parameters to trigger modal (?wa=open)
-  useEffect(() => {
-    const wa = searchParams.get("wa");
-    if (wa === "open") {
-      const src = searchParams.get("source") || "unknown";
-      
-      if (typeof window !== "undefined") {
-        (window as any).gtag?.('event', 'whatsapp_click', { wa_source: src });
-      }
-
-      const txt = searchParams.get("text") || "";
-      const pId = searchParams.get("productId") || undefined;
-      const pName = searchParams.get("productName") || undefined;
-      const inq = searchParams.get("inquiryNo") || undefined;
-
-      // Clean the query parameters from URL for clean routing
-      const newParams = new URLSearchParams(searchParams.toString());
-      newParams.delete("wa");
-      newParams.delete("source");
-      newParams.delete("text");
-      newParams.delete("productId");
-      newParams.delete("productName");
-      newParams.delete("inquiryNo");
-      
-      const queryStr = newParams.toString();
-      router.replace(pathname + (queryStr ? `?${queryStr}` : ""), { scroll: false });
-
-      // Open the modal with parameters
-      openModal({
-        source: src,
-        text: txt,
-        productId: pId,
-        productName: pName,
-        inquiryNo: inq,
-      });
-    }
-  }, [searchParams, pathname, router, openModal]);
+  // 1. Logic for wa=open URL trigger has been removed to prevent unwanted URL indexing.
 
   // 2. Load cached lead info if present
   useEffect(() => {

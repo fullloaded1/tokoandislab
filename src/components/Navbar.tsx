@@ -119,17 +119,20 @@ export default function Navbar() {
               </button>
 
               {/* CTA */}
-              <a
-                href="/?wa=open&source=navbar_desktop&text=Halo%20AndisLab,%20saya%20ingin%20konsultasi%20produk."
+              <button
+                type="button"
                 onClick={(e) => {
                   e.preventDefault();
                   trackWhatsApp("/?wa=open&source=navbar_desktop&text=Halo%20AndisLab,%20saya%20ingin%20konsultasi%20produk.");
+                  const waNumber = "6285973211179";
+                  const text = "Halo AndisLab, saya ingin konsultasi produk.";
+                  window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
                 }}
                 className="ml-2 inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0"
               >
                 <Phone className="h-4 w-4" />
                 Hubungi Sales
-              </a>
+              </button>
             </div>
 
             {/* Mobile Actions */}
@@ -207,17 +210,20 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <a
-              href="/?wa=open&source=navbar_mobile&text=Halo%20AndisLab,%20saya%20ingin%20konsultasi%20produk."
+            <button
+              type="button"
               onClick={(e) => {
                 e.preventDefault();
                 trackWhatsApp("/?wa=open&source=navbar_mobile&text=Halo%20AndisLab,%20saya%20ingin%20konsultasi%20produk.");
+                const waNumber = "6285973211179";
+                const text = "Halo AndisLab, saya ingin konsultasi produk.";
+                window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
               }}
               className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-4 py-3 text-sm font-semibold text-white mt-2"
             >
               <Phone className="h-4 w-4" />
               Hubungi Sales
-            </a>
+            </button>
           </div>
         </div>
       </header>

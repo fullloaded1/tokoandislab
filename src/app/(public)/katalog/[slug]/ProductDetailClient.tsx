@@ -487,17 +487,21 @@ export default function ProductDetailClient({
                 )}
               </button>
               
-              <a
-                href={`/?wa=open&source=product_detail&text=Halo%20Andis%20Lab,%20saya%20tertarik%20dengan%20produk:%20${encodeURIComponent(product.name)}.%20Mohon%20info%20harga%20dan%20ketersediaan.`}
+              <button
+                type="button"
                 onClick={(e) => {
                   e.preventDefault();
-                  trackWhatsApp(`/?wa=open&source=product_detail&text=Halo%20Andis%20Lab,%20saya%20tertarik%20dengan%20produk:%20${encodeURIComponent(product.name)}.%20Mohon%20info%20harga%20dan%20ketersediaan.`);
+                  const href = `/?wa=open&source=product_detail&text=Halo%20Andis%20Lab,%20saya%20tertarik%20dengan%20produk:%20${encodeURIComponent(product.name)}.%20Mohon%20info%20harga%20dan%20ketersediaan.`;
+                  trackWhatsApp(href);
+                  const waNumber = "6285973211179";
+                  const text = `Halo Andis Lab, saya tertarik dengan produk: ${product.name}. Mohon info harga dan ketersediaan.`;
+                  window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
                 }}
                 className="w-full flex items-center justify-center gap-2 rounded-2xl border-2 border-slate-200 bg-white px-6 py-4 text-base font-bold text-slate-700 transition-all duration-300 hover:border-emerald-500 hover:text-emerald-600 hover:shadow-md hover:-translate-y-0.5"
               >
                 <FileText className="h-5 w-5" />
                 Tanya Spesifikasi via WA
-              </a>
+              </button>
             </div>
 
             {/* Trust Badges */}
@@ -611,17 +615,21 @@ export default function ProductDetailClient({
                       Unduh File PDF
                     </a>
                   ) : (
-                    <a
-                      href={`/?wa=open&source=product_brochure&text=Halo%20Andis%20Lab,%20boleh%20minta%20brosur%20PDF%20atau%20datasheet%20teknis%20untuk%20produk:%20${encodeURIComponent(product.name)}?`}
+                    <button
+                      type="button"
                       onClick={(e) => {
                         e.preventDefault();
-                        trackWhatsApp(`/?wa=open&source=product_brochure&text=Halo%20Andis%20Lab,%20boleh%20minta%20brosur%20PDF%20atau%20datasheet%20teknis%20untuk%20produk:%20${encodeURIComponent(product.name)}?`);
+                        const href = `/?wa=open&source=product_brochure&text=Halo%20Andis%20Lab,%20boleh%20minta%20brosur%20PDF%20atau%20datasheet%20teknis%20untuk%20produk:%20${encodeURIComponent(product.name)}?`;
+                        trackWhatsApp(href);
+                        const waNumber = "6285973211179";
+                        const text = `Halo Andis Lab, boleh minta brosur PDF atau datasheet teknis untuk produk: ${product.name}?`;
+                        window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
                       }}
                       className="inline-flex items-center gap-2 rounded-2xl border-2 border-slate-300 bg-white px-8 py-4 text-sm font-bold text-slate-700 transition-all hover:border-blue-500 hover:text-blue-600 hover:shadow-md"
                     >
                       <Download className="h-5 w-5" />
                       Minta Brosur via WA
-                    </a>
+                    </button>
                   )}
                 </div>
             </div>
