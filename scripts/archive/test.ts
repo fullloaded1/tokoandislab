@@ -1,0 +1,1 @@
+import { PrismaClient } from '@prisma/client'; const p = new PrismaClient(); p.product.findFirst({where:{name:{contains:'Flokulator'}}}).then(x => console.log(JSON.stringify(x?.image))).finally(()=>p.$disconnect());

@@ -1,0 +1,442 @@
+/* ============================================
+   Promo MERDEKA — Scoped Styles
+   Hallmark · component: PromoMerdekaCSS · genre: modern-minimal · 8-state-ui: pass
+   Tema: Merah-Putih kemerdekaan Indonesia
+   ============================================ */
+
+/* --- Hero Section --- */
+.promo-hero {
+  position: relative;
+  width: 100%;
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, #CE1126 0%, #b30f21 40%, #8b0a19 100%);
+  border-radius: 1.5rem;
+}
+
+.promo-hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
+  z-index: 1;
+}
+
+.promo-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(139, 10, 25, 0.98) 0%,
+    rgba(180, 15, 30, 0.96) 42%,
+    rgba(206, 17, 38, 0.88) 58%,
+    rgba(206, 17, 38, 0.35) 76%,
+    transparent 100%
+  );
+  z-index: 2;
+}
+
+@media (max-width: 768px) {
+  .promo-hero-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(139, 10, 25, 0.98) 0%,
+      rgba(180, 15, 30, 0.96) 65%,
+      rgba(206, 17, 38, 0.75) 85%,
+      rgba(206, 17, 38, 0.3) 100%
+    );
+  }
+}
+
+.promo-hero-content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .promo-hero {
+    min-height: 500px;
+  }
+  .promo-hero-content {
+    padding: 4rem 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .promo-hero-content {
+    padding: 5rem 3rem;
+  }
+}
+
+/* --- CTA Button --- */
+.promo-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.125rem;
+  border-radius: 1rem;
+  border: none;
+  cursor: pointer;
+  box-shadow:
+    0 8px 32px rgba(37, 211, 102, 0.35),
+    0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s var(--ease-out, ease-out);
+  text-decoration: none;
+}
+
+.promo-cta:focus-visible {
+  outline: 2px solid var(--color-focus, #3b82f6);
+  outline-offset: 3px;
+}
+
+.promo-cta:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 40px rgba(37, 211, 102, 0.45),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.promo-cta:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* --- Keuntungan Cards --- */
+.keuntungan-card {
+  position: relative;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  padding: 2rem 1.5rem;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.keuntungan-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #CE1126, #ff4757);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.keuntungan-card:hover {
+  border-color: #fca5a5;
+  box-shadow:
+    0 20px 60px rgba(206, 17, 38, 0.08),
+    0 4px 16px rgba(206, 17, 38, 0.06);
+  transform: translateY(-4px);
+}
+
+.keuntungan-card:hover::before {
+  transform: scaleX(1);
+}
+
+.keuntungan-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fef2f2, #fee2e2);
+  color: #CE1126;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+/* --- Steps / Cara Order --- */
+.step-card {
+  position: relative;
+  text-align: center;
+  padding: 1.5rem 1rem;
+}
+
+.step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #CE1126, #ff4757);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.25rem;
+  box-shadow: 0 4px 16px rgba(206, 17, 38, 0.25);
+}
+
+.step-connector {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .step-connector {
+    display: block;
+    position: absolute;
+    top: 2.75rem;
+    left: calc(50% + 1.75rem);
+    width: calc(100% - 3.5rem);
+    height: 2px;
+    background: repeating-linear-gradient(
+      90deg,
+      #CE1126 0px,
+      #CE1126 6px,
+      transparent 6px,
+      transparent 12px
+    );
+    opacity: 0.3;
+  }
+}
+
+/* --- Product Grid --- */
+.promo-product-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.promo-product-card:hover {
+  border-color: #fca5a5;
+  box-shadow: 0 8px 30px rgba(206, 17, 38, 0.08);
+  transform: translateY(-2px);
+}
+
+.promo-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: linear-gradient(135deg, #CE1126, #ff4757);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  letter-spacing: 0.025em;
+}
+
+.harga-coret {
+  text-decoration: line-through;
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
+
+.harga-promo {
+  color: #CE1126;
+  font-weight: 800;
+  font-size: 1.25rem;
+}
+
+.kategori-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.5rem;
+}
+
+.kategori-tag[data-type="alat"] {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.kategori-tag[data-type="consumable"] {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+/* --- S&K Section --- */
+.snk-section {
+  background: linear-gradient(135deg, #fef2f2 0%, #fff 100%);
+  border: 1px solid #fecaca;
+  border-radius: 1.25rem;
+  padding: 2rem;
+}
+
+.snk-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #fee2e2;
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+.snk-item:last-child {
+  border-bottom: none;
+}
+
+.snk-bullet {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: #CE1126;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  margin-top: 0.1rem;
+}
+
+/* --- Floating WA Promo --- */
+.floating-wa-promo {
+  position: fixed;
+  bottom: 5.5rem;
+  right: 1rem;
+  z-index: 55;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, #CE1126 0%, #ff4757 100%);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.875rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow:
+    0 8px 30px rgba(206, 17, 38, 0.35),
+    0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  animation: float-wa 3s ease-in-out infinite;
+}
+
+.floating-wa-promo:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow:
+    0 12px 40px rgba(206, 17, 38, 0.45),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes float-wa {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.floating-wa-promo:hover {
+  animation: none;
+  transform: translateY(-3px) scale(1.03);
+}
+
+/* Ping dot */
+.floating-wa-promo .ping-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+}
+
+.floating-wa-promo .ping-dot span:first-child {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #25D366;
+  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  opacity: 0.75;
+}
+
+.floating-wa-promo .ping-dot span:last-child {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #25D366;
+  border: 2px solid #fff;
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* --- Section divider deco --- */
+.promo-divider {
+  width: 80px;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #CE1126, #ff4757);
+  margin: 0 auto 2rem;
+}
+
+/* --- Responsive tweaks --- */
+@media (min-width: 640px) {
+  .floating-wa-promo {
+    right: 1.5rem;
+    bottom: 6rem;
+    font-size: 0.9rem;
+    padding: 1rem 1.75rem;
+  }
+}
+
+@media (max-width: 639px) {
+  .promo-hero-content h1 {
+    font-size: 1.75rem !important;
+  }
+}
+
+/* --- Promo Bundling Badge --- */
+.promo-badge-bundling {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.65rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  letter-spacing: 0.025em;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+/* --- FAQ Accordion styling --- */
+.faq-details {
+  transition: all 0.3s ease;
+}
+
+.faq-details[open] {
+  border-color: #fecaca;
+  box-shadow: 0 10px 25px rgba(206, 17, 38, 0.04);
+}
+
+.faq-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-details summary {
+  list-style: none;
+}

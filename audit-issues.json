@@ -1,0 +1,1048 @@
+[
+  {
+    "severity": "info",
+    "issueType": "canonicalized-page",
+    "issue": "Canonicalized to another URL",
+    "url": "https://www.andislab.com/katalog?category=lovibond",
+    "details": {
+      "canonicalUrl": "https://www.andislab.com/katalog"
+    },
+    "howToFix": "If this page should rank on its own, set its canonical to itself. Otherwise no action is needed."
+  },
+  {
+    "severity": "info",
+    "issueType": "canonicalized-page",
+    "issue": "Canonicalized to another URL",
+    "url": "https://www.andislab.com/katalog?category=daihan-labtech",
+    "details": {
+      "canonicalUrl": "https://www.andislab.com/katalog"
+    },
+    "howToFix": "If this page should rank on its own, set its canonical to itself. Otherwise no action is needed."
+  },
+  {
+    "severity": "info",
+    "issueType": "canonicalized-page",
+    "issue": "Canonicalized to another URL",
+    "url": "https://www.andislab.com/katalog?category=pyrex",
+    "details": {
+      "canonicalUrl": "https://www.andislab.com/katalog"
+    },
+    "howToFix": "If this page should rank on its own, set its canonical to itself. Otherwise no action is needed."
+  },
+  {
+    "severity": "info",
+    "issueType": "canonicalized-page",
+    "issue": "Canonicalized to another URL",
+    "url": "https://www.andislab.com/katalog?category=andislab-custom",
+    "details": {
+      "canonicalUrl": "https://www.andislab.com/katalog"
+    },
+    "howToFix": "If this page should rank on its own, set its canonical to itself. Otherwise no action is needed."
+  },
+  {
+    "severity": "info",
+    "issueType": "canonicalized-page",
+    "issue": "Canonicalized to another URL",
+    "url": "https://www.andislab.com/katalog?category=microscope",
+    "details": {
+      "canonicalUrl": "https://www.andislab.com/katalog"
+    },
+    "howToFix": "If this page should rank on its own, set its canonical to itself. Otherwise no action is needed."
+  },
+  {
+    "severity": "info",
+    "issueType": "canonicalized-page",
+    "issue": "Canonicalized to another URL",
+    "url": "https://www.andislab.com/katalog?category=reagents",
+    "details": {
+      "canonicalUrl": "https://www.andislab.com/katalog"
+    },
+    "howToFix": "If this page should rank on its own, set its canonical to itself. Otherwise no action is needed."
+  },
+  {
+    "severity": "info",
+    "issueType": "canonicalized-page",
+    "issue": "Canonicalized to another URL",
+    "url": "https://www.andislab.com/katalog?category=balances",
+    "details": {
+      "canonicalUrl": "https://www.andislab.com/katalog"
+    },
+    "howToFix": "If this page should rank on its own, set its canonical to itself. Otherwise no action is needed."
+  },
+  {
+    "severity": "info",
+    "issueType": "heading-order-skip",
+    "issue": "Heading levels skip",
+    "url": "https://www.andislab.com/katalog",
+    "details": null,
+    "howToFix": "Adjust heading levels so they descend one step at a time (H1 → H2 → H3) without skipping."
+  },
+  {
+    "severity": "info",
+    "issueType": "heading-order-skip",
+    "issue": "Heading levels skip",
+    "url": "https://www.andislab.com/ready-stock",
+    "details": null,
+    "howToFix": "Adjust heading levels so they descend one step at a time (H1 → H2 → H3) without skipping."
+  },
+  {
+    "severity": "info",
+    "issueType": "heading-order-skip",
+    "issue": "Heading levels skip",
+    "url": "https://www.andislab.com/katalog/lemari-penyimpanan-mudah-terbakar",
+    "details": null,
+    "howToFix": "Adjust heading levels so they descend one step at a time (H1 → H2 → H3) without skipping."
+  },
+  {
+    "severity": "info",
+    "issueType": "heading-order-skip",
+    "issue": "Heading levels skip",
+    "url": "https://www.andislab.com/katalog/daihan-lco-165ai-air-jacket-co2-incubator",
+    "details": null,
+    "howToFix": "Adjust heading levels so they descend one step at a time (H1 → H2 → H3) without skipping."
+  },
+  {
+    "severity": "info",
+    "issueType": "heading-order-skip",
+    "issue": "Heading levels skip",
+    "url": "https://www.andislab.com/katalog/daihan-lcv-203gr-vaccine-pharmacy-refrigerator",
+    "details": null,
+    "howToFix": "Adjust heading levels so they descend one step at a time (H1 → H2 → H3) without skipping."
+  },
+  {
+    "severity": "info",
+    "issueType": "heading-order-skip",
+    "issue": "Heading levels skip",
+    "url": "https://www.andislab.com/katalog/daihan-ldo-060e-universal-drying-oven",
+    "details": null,
+    "howToFix": "Adjust heading levels so they descend one step at a time (H1 → H2 → H3) without skipping."
+  },
+  {
+    "severity": "info",
+    "issueType": "heading-order-skip",
+    "issue": "Heading levels skip",
+    "url": "https://www.andislab.com/katalog/daihan-lac-1021sv-autoclave",
+    "details": null,
+    "howToFix": "Adjust heading levels so they descend one step at a time (H1 → H2 → H3) without skipping."
+  },
+  {
+    "severity": "info",
+    "issueType": "heading-order-skip",
+    "issue": "Heading levels skip",
+    "url": "https://www.andislab.com/katalog?category=lovibond",
+    "details": null,
+    "howToFix": "Adjust heading levels so they descend one step at a time (H1 → H2 → H3) without skipping."
+  },
+  {
+    "severity": "info",
+    "issueType": "heading-order-skip",
+    "issue": "Heading levels skip",
+    "url": "https://www.andislab.com/katalog?category=daihan-labtech",
+    "details": null,
+    "howToFix": "Adjust heading levels so they descend one step at a time (H1 → H2 → H3) without skipping."
+  },
+  {
+    "severity": "info",
+    "issueType": "heading-order-skip",
+    "issue": "Heading levels skip",
+    "url": "https://www.andislab.com/katalog?category=pyrex",
+    "details": null,
+    "howToFix": "Adjust heading levels so they descend one step at a time (H1 → H2 → H3) without skipping."
+  },
+  {
+    "severity": "info",
+    "issueType": "heading-order-skip",
+    "issue": "Heading levels skip",
+    "url": "https://www.andislab.com/katalog?category=andislab-custom",
+    "details": null,
+    "howToFix": "Adjust heading levels so they descend one step at a time (H1 → H2 → H3) without skipping."
+  },
+  {
+    "severity": "info",
+    "issueType": "heading-order-skip",
+    "issue": "Heading levels skip",
+    "url": "https://www.andislab.com/katalog?category=microscope",
+    "details": null,
+    "howToFix": "Adjust heading levels so they descend one step at a time (H1 → H2 → H3) without skipping."
+  },
+  {
+    "severity": "info",
+    "issueType": "heading-order-skip",
+    "issue": "Heading levels skip",
+    "url": "https://www.andislab.com/katalog?category=reagents",
+    "details": null,
+    "howToFix": "Adjust heading levels so they descend one step at a time (H1 → H2 → H3) without skipping."
+  },
+  {
+    "severity": "info",
+    "issueType": "heading-order-skip",
+    "issue": "Heading levels skip",
+    "url": "https://www.andislab.com/katalog?category=balances",
+    "details": null,
+    "howToFix": "Adjust heading levels so they descend one step at a time (H1 → H2 → H3) without skipping."
+  },
+  {
+    "severity": "info",
+    "issueType": "heading-order-skip",
+    "issue": "Heading levels skip",
+    "url": "https://www.andislab.com/katalog/micropipette-single-channel-100-1000ul-ae-ma08-aelab",
+    "details": null,
+    "howToFix": "Adjust heading levels so they descend one step at a time (H1 → H2 → H3) without skipping."
+  },
+  {
+    "severity": "info",
+    "issueType": "heading-order-skip",
+    "issue": "Heading levels skip",
+    "url": "https://www.andislab.com/katalog/micropipette-single-channel-10-100ul-ae-mb05-aelab",
+    "details": null,
+    "howToFix": "Adjust heading levels so they descend one step at a time (H1 → H2 → H3) without skipping."
+  },
+  {
+    "severity": "info",
+    "issueType": "heading-order-skip",
+    "issue": "Heading levels skip",
+    "url": "https://www.andislab.com/katalog/8-channels-adjustable-volume-pipettes-5-50ul-ae-8m50-aelab",
+    "details": null,
+    "howToFix": "Adjust heading levels so they descend one step at a time (H1 → H2 → H3) without skipping."
+  },
+  {
+    "severity": "info",
+    "issueType": "heading-order-skip",
+    "issue": "Heading levels skip",
+    "url": "https://www.andislab.com/katalog/daihan-lwb-211a-analog-water-bath",
+    "details": null,
+    "howToFix": "Adjust heading levels so they descend one step at a time (H1 → H2 → H3) without skipping."
+  },
+  {
+    "severity": "info",
+    "issueType": "heading-order-skip",
+    "issue": "Heading levels skip",
+    "url": "https://www.andislab.com/katalog/vortex-mixer-servicebio-smv-4500b",
+    "details": null,
+    "howToFix": "Adjust heading levels so they descend one step at a time (H1 → H2 → H3) without skipping."
+  },
+  {
+    "severity": "info",
+    "issueType": "heading-order-skip",
+    "issue": "Heading levels skip",
+    "url": "https://www.andislab.com/katalog/vortex-mixer-delta-mixer-se-04-taitec",
+    "details": null,
+    "howToFix": "Adjust heading levels so they descend one step at a time (H1 → H2 → H3) without skipping."
+  },
+  {
+    "severity": "info",
+    "issueType": "heading-order-skip",
+    "issue": "Heading levels skip",
+    "url": "https://www.andislab.com/katalog/lovibond-md-100-photometer",
+    "details": null,
+    "howToFix": "Adjust heading levels so they descend one step at a time (H1 → H2 → H3) without skipping."
+  },
+  {
+    "severity": "info",
+    "issueType": "heading-order-skip",
+    "issue": "Heading levels skip",
+    "url": "https://www.andislab.com/katalog/lovibond-sensodirect-150",
+    "details": null,
+    "howToFix": "Adjust heading levels so they descend one step at a time (H1 → H2 → H3) without skipping."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/incubator-oven-do-150f",
+    "details": {
+      "length": 347
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/pipet-ukur",
+    "details": {
+      "length": 208
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/lemari-penyimpanan-mudah-terbakar",
+    "details": {
+      "length": 264
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/centrifuge-cf-10",
+    "details": {
+      "length": 288
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/thermoreactor-rd-125",
+    "details": {
+      "length": 266
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/water-bath-wb-22",
+    "details": {
+      "length": 276
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/kit-uji-air-pendingin",
+    "details": {
+      "length": 281
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/labu-erlenmeyer-250ml",
+    "details": {
+      "length": 243
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/labu-takar-volumetrik-250ml",
+    "details": {
+      "length": 251
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/kabinet-termostatik-bod",
+    "details": {
+      "length": 256
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/floc-tester-et-730",
+    "details": {
+      "length": 257
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/hotplate-hp-300",
+    "details": {
+      "length": 258
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/daihan-lco-165ai-air-jacket-co2-incubator",
+    "details": {
+      "length": 228
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/autoclave-maxterile",
+    "details": {
+      "length": 249
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/daihan-ldo-060e-universal-drying-oven",
+    "details": {
+      "length": 242
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/daihan-lac-1021sv-autoclave",
+    "details": {
+      "length": 179
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/flokulator-portabel-fb-4s",
+    "details": {
+      "length": 258
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/promo-merdeka",
+    "details": {
+      "length": 184
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/micropipette-single-channel-100-1000ul-ae-ma08-aelab",
+    "details": {
+      "length": 249
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/micropipette-single-channel-10-100ul-ae-mb05-aelab",
+    "details": {
+      "length": 219
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/8-channels-adjustable-volume-pipettes-5-50ul-ae-8m50-aelab",
+    "details": {
+      "length": 221
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/daihan-lwb-211a-analog-water-bath",
+    "details": {
+      "length": 217
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/vortex-mixer-delta-mixer-se-04-taitec",
+    "details": {
+      "length": 256
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/lovibond-md-100-photometer",
+    "details": {
+      "length": 288
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/lovibond-sensodirect-150",
+    "details": {
+      "length": 246
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/pyrex-screw-cap-media-bottle-500ml",
+    "details": {
+      "length": 246
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/pyrex-aspirator-bottle",
+    "details": {
+      "length": 239
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/silinder-ukur",
+    "details": {
+      "length": 240
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/pyrex-buret-stopcock",
+    "details": {
+      "length": 220
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/meja-laboratorium-island-bench",
+    "details": {
+      "length": 235
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-long",
+    "issue": "Meta description too long",
+    "url": "https://www.andislab.com/katalog/corrosive-storage-cabinet",
+    "details": {
+      "length": 237
+    },
+    "howToFix": "Trim the description to roughly 70–160 characters while keeping the core message and call to action."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-short",
+    "issue": "Meta description too short",
+    "url": "https://www.andislab.com/kebijakan-privasi",
+    "details": {
+      "length": 56
+    },
+    "howToFix": "Expand the description to roughly 70–160 characters that summarize the page and give a reason to click."
+  },
+  {
+    "severity": "info",
+    "issueType": "meta-description-too-short",
+    "issue": "Meta description too short",
+    "url": "https://www.andislab.com/syarat-ketentuan",
+    "details": {
+      "length": 60
+    },
+    "howToFix": "Expand the description to roughly 70–160 characters that summarize the page and give a reason to click."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/gelas-piala-beaker-250ml",
+    "details": {
+      "responseTimeMs": 1894
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/centrifuge-cf-10",
+    "details": {
+      "responseTimeMs": 1894
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/labu-takar-volumetrik-250ml",
+    "details": {
+      "responseTimeMs": 1894
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/kabinet-termostatik-bod",
+    "details": {
+      "responseTimeMs": 1894
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/floc-tester-et-730",
+    "details": {
+      "responseTimeMs": 1894
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/hotplate-hp-300",
+    "details": {
+      "responseTimeMs": 1894
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/daihan-lco-165ai-air-jacket-co2-incubator",
+    "details": {
+      "responseTimeMs": 2667
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/daihan-lcv-203gr-vaccine-pharmacy-refrigerator",
+    "details": {
+      "responseTimeMs": 2667
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/autoclave-maxterile",
+    "details": {
+      "responseTimeMs": 2667
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/daihan-ldo-060e-universal-drying-oven",
+    "details": {
+      "responseTimeMs": 2667
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/daihan-lac-1021sv-autoclave",
+    "details": {
+      "responseTimeMs": 2667
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/flokulator-portabel-fb-4s",
+    "details": {
+      "responseTimeMs": 2667
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog?category=reagents",
+    "details": {
+      "responseTimeMs": 1589
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog?category=balances",
+    "details": {
+      "responseTimeMs": 1589
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/micropipette-single-channel-100-1000ul-ae-ma08-aelab",
+    "details": {
+      "responseTimeMs": 1589
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/micropipette-single-channel-10-100ul-ae-mb05-aelab",
+    "details": {
+      "responseTimeMs": 1589
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/8-channels-adjustable-volume-pipettes-5-50ul-ae-8m50-aelab",
+    "details": {
+      "responseTimeMs": 1589
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/daihan-lwb-211a-analog-water-bath",
+    "details": {
+      "responseTimeMs": 1589
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/vortex-mixer-servicebio-smv-4500b",
+    "details": {
+      "responseTimeMs": 2720
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/vortex-mixer-delta-mixer-se-04-taitec",
+    "details": {
+      "responseTimeMs": 2720
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/lovibond-md-100-photometer",
+    "details": {
+      "responseTimeMs": 2720
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/lovibond-sensodirect-150",
+    "details": {
+      "responseTimeMs": 2720
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/pyrex-screw-cap-media-bottle-500ml",
+    "details": {
+      "responseTimeMs": 2720
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/pyrex-aspirator-bottle",
+    "details": {
+      "responseTimeMs": 2720
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/silinder-ukur",
+    "details": {
+      "responseTimeMs": 5091
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/pyrex-buret-stopcock",
+    "details": {
+      "responseTimeMs": 5091
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/meja-laboratorium-island-bench",
+    "details": {
+      "responseTimeMs": 5091
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/katalog/corrosive-storage-cabinet",
+    "details": {
+      "responseTimeMs": 5091
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/kebijakan-privasi",
+    "details": {
+      "responseTimeMs": 5091
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "slow-response",
+    "issue": "Slow server response",
+    "url": "https://www.andislab.com/syarat-ketentuan",
+    "details": {
+      "responseTimeMs": 5091
+    },
+    "howToFix": "Investigate server/database time and caching for this route; serving cached or statically generated HTML usually fixes it."
+  },
+  {
+    "severity": "info",
+    "issueType": "title-too-long",
+    "issue": "Title too long",
+    "url": "https://www.andislab.com/katalog/lemari-penyimpanan-mudah-terbakar",
+    "details": {
+      "length": 69
+    },
+    "howToFix": "Shorten the title to roughly 50–60 characters, front-loading the most important words."
+  },
+  {
+    "severity": "info",
+    "issueType": "title-too-long",
+    "issue": "Title too long",
+    "url": "https://www.andislab.com/katalog/daihan-lco-165ai-air-jacket-co2-incubator",
+    "details": {
+      "length": 70
+    },
+    "howToFix": "Shorten the title to roughly 50–60 characters, front-loading the most important words."
+  },
+  {
+    "severity": "info",
+    "issueType": "title-too-long",
+    "issue": "Title too long",
+    "url": "https://www.andislab.com/katalog/daihan-lac-1021sv-autoclave",
+    "details": {
+      "length": 74
+    },
+    "howToFix": "Shorten the title to roughly 50–60 characters, front-loading the most important words."
+  },
+  {
+    "severity": "info",
+    "issueType": "title-too-long",
+    "issue": "Title too long",
+    "url": "https://www.andislab.com/katalog/flokulator-portabel-fb-4s",
+    "details": {
+      "length": 61
+    },
+    "howToFix": "Shorten the title to roughly 50–60 characters, front-loading the most important words."
+  },
+  {
+    "severity": "info",
+    "issueType": "title-too-long",
+    "issue": "Title too long",
+    "url": "https://www.andislab.com/daihan-labtech",
+    "details": {
+      "length": 61
+    },
+    "howToFix": "Shorten the title to roughly 50–60 characters, front-loading the most important words."
+  },
+  {
+    "severity": "info",
+    "issueType": "title-too-long",
+    "issue": "Title too long",
+    "url": "https://www.andislab.com/katalog/micropipette-single-channel-100-1000ul-ae-ma08-aelab",
+    "details": {
+      "length": 77
+    },
+    "howToFix": "Shorten the title to roughly 50–60 characters, front-loading the most important words."
+  },
+  {
+    "severity": "info",
+    "issueType": "title-too-long",
+    "issue": "Title too long",
+    "url": "https://www.andislab.com/katalog/micropipette-single-channel-10-100ul-ae-mb05-aelab",
+    "details": {
+      "length": 81
+    },
+    "howToFix": "Shorten the title to roughly 50–60 characters, front-loading the most important words."
+  },
+  {
+    "severity": "info",
+    "issueType": "title-too-long",
+    "issue": "Title too long",
+    "url": "https://www.andislab.com/katalog/8-channels-adjustable-volume-pipettes-5-50ul-ae-8m50-aelab",
+    "details": {
+      "length": 73
+    },
+    "howToFix": "Shorten the title to roughly 50–60 characters, front-loading the most important words."
+  },
+  {
+    "severity": "info",
+    "issueType": "title-too-long",
+    "issue": "Title too long",
+    "url": "https://www.andislab.com/katalog/daihan-lwb-211a-analog-water-bath",
+    "details": {
+      "length": 62
+    },
+    "howToFix": "Shorten the title to roughly 50–60 characters, front-loading the most important words."
+  },
+  {
+    "severity": "info",
+    "issueType": "title-too-long",
+    "issue": "Title too long",
+    "url": "https://www.andislab.com/katalog/vortex-mixer-servicebio-smv-4500b",
+    "details": {
+      "length": 69
+    },
+    "howToFix": "Shorten the title to roughly 50–60 characters, front-loading the most important words."
+  },
+  {
+    "severity": "info",
+    "issueType": "title-too-long",
+    "issue": "Title too long",
+    "url": "https://www.andislab.com/katalog/lovibond-md-100-photometer",
+    "details": {
+      "length": 62
+    },
+    "howToFix": "Shorten the title to roughly 50–60 characters, front-loading the most important words."
+  },
+  {
+    "severity": "info",
+    "issueType": "title-too-long",
+    "issue": "Title too long",
+    "url": "https://www.andislab.com/katalog/pyrex-screw-cap-media-bottle-500ml",
+    "details": {
+      "length": 64
+    },
+    "howToFix": "Shorten the title to roughly 50–60 characters, front-loading the most important words."
+  },
+  {
+    "severity": "info",
+    "issueType": "title-too-long",
+    "issue": "Title too long",
+    "url": "https://www.andislab.com/katalog/pyrex-aspirator-bottle",
+    "details": {
+      "length": 75
+    },
+    "howToFix": "Shorten the title to roughly 50–60 characters, front-loading the most important words."
+  },
+  {
+    "severity": "info",
+    "issueType": "title-too-long",
+    "issue": "Title too long",
+    "url": "https://www.andislab.com/katalog/silinder-ukur",
+    "details": {
+      "length": 70
+    },
+    "howToFix": "Shorten the title to roughly 50–60 characters, front-loading the most important words."
+  },
+  {
+    "severity": "info",
+    "issueType": "title-too-long",
+    "issue": "Title too long",
+    "url": "https://www.andislab.com/katalog/pyrex-buret-stopcock",
+    "details": {
+      "length": 63
+    },
+    "howToFix": "Shorten the title to roughly 50–60 characters, front-loading the most important words."
+  },
+  {
+    "severity": "info",
+    "issueType": "title-too-long",
+    "issue": "Title too long",
+    "url": "https://www.andislab.com/katalog/meja-laboratorium-island-bench",
+    "details": {
+      "length": 68
+    },
+    "howToFix": "Shorten the title to roughly 50–60 characters, front-loading the most important words."
+  },
+  {
+    "severity": "info",
+    "issueType": "title-too-long",
+    "issue": "Title too long",
+    "url": "https://www.andislab.com/katalog/corrosive-storage-cabinet",
+    "details": {
+      "length": 61
+    },
+    "howToFix": "Shorten the title to roughly 50–60 characters, front-loading the most important words."
+  }
+]
