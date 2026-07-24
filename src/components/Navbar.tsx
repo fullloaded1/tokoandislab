@@ -87,7 +87,7 @@ export default function Navbar() {
         style={{ top: pathname !== "/promo-merdeka" ? "42px" : "12px" }}
       >
         <div
-          className={`w-full overflow-hidden transition-all duration-300 ease-[var(--ease-out)] ${
+          className={`w-full transition-all duration-300 ease-[var(--ease-out)] ${
             scrolled
               ? "bg-white/90 backdrop-blur-2xl shadow-xl shadow-slate-900/10 py-2 px-3 sm:px-5 border border-slate-200/80 rounded-2xl"
               : "bg-white/80 backdrop-blur-xl py-2.5 sm:py-3 px-3 sm:px-5 border border-slate-200/60 rounded-2xl shadow-lg shadow-slate-900/5"
