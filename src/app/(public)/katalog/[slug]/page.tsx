@@ -7,6 +7,7 @@ import { cache } from "react";
 import { serializeProductDecimals } from "@/lib/products";
 import { getReadyStockSummary } from "@/lib/readyStock";
 import { truncateTitle, truncateDescription } from "@/lib/seo";
+import { SEO_CONSTANTS } from "@/constants/seo";
 
 export const revalidate = 60;
 
@@ -82,7 +83,7 @@ export async function generateMetadata(
       images: [product.image],
     },
     alternates: {
-      canonical: `https://www.andislab.com/katalog/${product.slug}`,
+      canonical: `${SEO_CONSTANTS.siteUrl}/katalog/${product.slug}`,
     },
   };
 }
@@ -170,7 +171,7 @@ export default async function ProductDetailPage(
 
   const offers: any = {
     "@type": "Offer",
-    url: `https://www.andislab.com/katalog/${product.slug}`,
+    url: `${SEO_CONSTANTS.siteUrl}/katalog/${product.slug}`,
     priceCurrency: "IDR",
     availability: availability,
     seller: {
@@ -218,7 +219,7 @@ export default async function ProductDetailPage(
             description: product.description,
             image: product.image.startsWith("http")
               ? product.image
-              : `https://www.andislab.com${product.image}`,
+              : `${SEO_CONSTANTS.siteUrl}${product.image}`,
             brand: {
               "@type": "Brand",
               name: product.brand || product.categoryLabel,
@@ -240,19 +241,19 @@ export default async function ProductDetailPage(
                 "@type": "ListItem",
                 position: 1,
                 name: "Beranda",
-                item: "https://www.andislab.com",
+                item: SEO_CONSTANTS.siteUrl,
               },
               {
                 "@type": "ListItem",
                 position: 2,
                 name: "Katalog",
-                item: "https://www.andislab.com/katalog",
+                item: `${SEO_CONSTANTS.siteUrl}/katalog`,
               },
               {
                 "@type": "ListItem",
                 position: 3,
                 name: product.name,
-                item: `https://www.andislab.com/katalog/${product.slug}`,
+                item: `${SEO_CONSTANTS.siteUrl}/katalog/${product.slug}`,
               },
             ],
           }),

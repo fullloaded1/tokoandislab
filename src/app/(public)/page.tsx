@@ -130,17 +130,17 @@ export default async function HomePage() {
           <div className="relative z-10 flex flex-col sm:flex-row items-center gap-4 sm:gap-5 text-center sm:text-left">
             <span className="inline-flex items-center gap-2 rounded-2xl bg-cyan-500/15 px-4 py-2 text-xs font-black text-cyan-300 border border-cyan-400/30 shadow-inner shrink-0">
               <span className="flex h-2 w-2 rounded-full bg-cyan-400 animate-pulse"></span>
-              ⚡ Resmi e-Katalog & SPJ Lengkap
+              ⚡ Pengadaan Cepat, SPJ Aman
             </span>
             <p className="text-xs sm:text-sm font-medium text-slate-300 max-w-2xl leading-relaxed">
-              Barang datang tepat waktu. Harga masuk anggaran. Dokumen lengkap untuk SPJ. Puluhan produk <strong className="text-white font-extrabold underline decoration-cyan-400/60">ready stock</strong>, siap kirim minggu ini ke laboratorium instansi Anda.
+              Solusi pengadaan tanpa pusing. Harga kompetitif di e-Katalog INAPROC dengan dukungan teknis dan dokumen SPJ lengkap. Tersedia ratusan produk <strong className="text-white font-extrabold underline decoration-cyan-400/60">ready stock</strong> untuk kebutuhan mendesak laboratorium Anda.
             </p>
           </div>
           <Link
             href="/pemerintah#bukti-harga"
             className="relative z-10 inline-flex items-center gap-2.5 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 px-6 py-3 text-xs sm:text-sm font-extrabold text-white shadow-lg shadow-cyan-500/25 hover:from-cyan-400 hover:via-blue-500 hover:to-indigo-500 hover:shadow-cyan-500/40 hover:-translate-y-0.5 transition-all duration-200 ease-[var(--ease-out)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)] active:scale-[0.98] shrink-0"
           >
-            <span>Bandingkan Harga Daihan (-48%)</span>
+            <span>Buktikan Harga Daihan Kami (-48%)</span>
             <ArrowRight className="h-4 w-4 transition-transform group-hover/ekatalog:translate-x-1" />
           </Link>
         </div>
@@ -187,7 +187,7 @@ export default async function HomePage() {
                   </span>
                 </div>
                 <p className="text-sm sm:text-base text-slate-600 mt-4 max-w-2xl font-medium leading-relaxed">
-                  Barang telah lolos QA &amp; siap kirim ke seluruh Indonesia. Pengiriman mudah &amp; cepat dengan dokumen resmi lengkap untuk SPJ instansi atau kebutuhan proyek mendesak.
+                  Tidak perlu menunggu lama (indent). Ratusan instrumen analitik dan alat laboratorium dasar kami telah lolos uji kualitas dan siap dikirim hari ini juga ke seluruh Indonesia, lengkap dengan faktur pajak dan garansi resmi.
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-3 shrink-0">
@@ -370,18 +370,17 @@ export default async function HomePage() {
 
           <div className="relative">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
-              Butuh Penawaran Khusus?
+              Dapatkan Penawaran Harga Terbaik
             </h2>
             <p className="text-blue-100 text-lg max-w-xl mx-auto mb-8">
-              Tim sales kami siap membantu Anda mendapatkan harga terbaik untuk kebutuhan
-              laboratorium instansi maupun perusahaan Anda.
+              Konsultasikan kebutuhan alat lab Anda kepada tim engineering kami. Kami berikan rekomendasi spesifikasi teknis beserta penawaran harga resmi (Quotation) dalam waktu kurang dari 24 jam.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <WaLinkCTA 
                 href="?wa=open&source=homepage_cta&text=Halo%20AndisLab%2C%20saya%20ingin%20minta%20penawaran%20khusus."
                 className="inline-flex items-center gap-2 rounded-2xl bg-white px-8 py-4 text-base font-bold text-blue-700 shadow-xl transition-all duration-200 ease-[var(--ease-out)] hover:shadow-2xl hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:scale-[0.98]"
               >
-                Hubungi via WhatsApp
+                Minta Penawaran via WhatsApp
               </WaLinkCTA>
               <Link
                 href="/katalog"

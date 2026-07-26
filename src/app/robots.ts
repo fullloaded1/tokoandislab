@@ -1,4 +1,5 @@
-import { MetadataRoute } from 'next'
+import { MetadataRoute } from 'next';
+import { SEO_CONSTANTS } from '@/constants/seo';
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -13,6 +14,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
       }
     ],
-    sitemap: 'https://www.andislab.com/sitemap.xml',
+    sitemap: `${SEO_CONSTANTS.siteUrl}/sitemap.xml`,
   }
 }

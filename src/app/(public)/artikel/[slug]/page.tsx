@@ -8,7 +8,7 @@ import ProductCard from "@/components/ProductCard";
 import ArticleLikeButton from "@/components/ArticleLikeButton";
 import ArticleViewTracker from "@/components/ArticleViewTracker";
 import ArticleWaCTA from "@/components/ArticleWaCTA";
-import { BookOpen, Calendar, ChevronRight, ArrowLeft, Eye, User } from "lucide-react";
+import { BookOpen, Calendar, ChevronRight, ArrowLeft, Eye, User, ShieldCheck } from "lucide-react";
 import type { Metadata } from "next";
 import { cache } from "react";
 
@@ -290,10 +290,17 @@ export default async function ArticleDetailPage(
           {/* Header */}
           <header className="mb-8">
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm text-slate-400 font-semibold mb-4">
-              <span className="inline-flex items-center gap-1.5">
-                <User className="h-4 w-4 text-blue-600" />
-                {(article as any).authorName || "Tim Redaksi AndisLab"}
-              </span>
+              <div className="flex items-center gap-3 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-200">
+                <span className="inline-flex items-center gap-1.5 font-bold text-slate-800">
+                  <User className="h-4 w-4 text-blue-600" />
+                  {(article as any).authorName || "Tim Redaksi AndisLab"}
+                </span>
+                <div className="w-1 h-1 rounded-full bg-slate-300"></div>
+                <span className="inline-flex items-center gap-1 text-slate-600 text-xs">
+                  <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+                  Ditinjau oleh Tim Teknisi Khusus Lab
+                </span>
+              </div>
               <span className="inline-flex items-center gap-1.5">
                 <Calendar className="h-4 w-4" />
                 {new Date(article.createdAt).toLocaleDateString("id-ID", {

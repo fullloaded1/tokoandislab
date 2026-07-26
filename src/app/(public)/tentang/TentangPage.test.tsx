@@ -18,7 +18,7 @@ describe("TentangPage Component Tests (TDD & Institutional Trust Polish)", () =>
     render(<TentangPage />);
 
     // Verify main institutional headline
-    expect(screen.getAllByText(/Tentang AndisLab: Distributor Alat Laboratorium Resmi/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Distributor Resmi Alat Laboratorium/i).length).toBeGreaterThan(0);
     
     // Verify stats
     expect(screen.getAllByText(new RegExp(`${COMPANY_FACTS.experienceYears}\\+`, "i")).length).toBeGreaterThan(0);

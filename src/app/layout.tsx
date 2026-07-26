@@ -5,8 +5,11 @@ import { ToastProvider } from "@/components/Toast";
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
 import WhatsAppLeadModalWrapper from "@/components/WhatsAppLeadModalWrapper";
+import LeadMagnetModalWrapper from "@/components/LeadMagnetModalWrapper";
 import { WA_NUMBER } from "@/lib/contact";
 import { COMPANY_FACTS } from "@/lib/companyFacts";
+import { getOrganizationSchema } from "@/services/seo";
+import { GA_TRACKING_ID } from "@/lib/analytics";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -70,25 +73,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const organizationSchema = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: COMPANY_FACTS.name,
+  const organizationSchema = getOrganizationSchema();
+  
+  // Extend organizationSchema with more specific data from COMPANY_FACTS if needed
+  Object.assign(organizationSchema, {
     alternateName: COMPANY_FACTS.shortName,
-    url: "https://www.andislab.com",
-    logo: "https://www.andislab.com/logo.png",
-    description: COMPANY_FACTS.description,
     address: {
       "@type": "PostalAddress",
       addressLocality: "Indonesia",
       addressCountry: "ID"
-    },
-    contactPoint: {
-      "@type": "ContactPoint",
-      telephone: `+${WA_NUMBER}`,
-      contactType: "customer service",
-      areaServed: "Indonesia",
-      availableLanguage: ["Indonesian", "English"]
     },
     sameAs: [
       "https://www.linkedin.com/company/andislab",
@@ -102,13 +95,14 @@ export default function RootLayout({
       bestRating: "5",
       worstRating: "1"
     }
-  };
+  });
 
   return (
     <html lang="id" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-background text-foreground">
+
         <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=G-57LWKFHVYZ`}
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
           strategy="lazyOnload"
         />
         <Script id="google-analytics" strategy="lazyOnload">
@@ -116,7 +110,7 @@ export default function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){window.dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-57LWKFHVYZ');
+            gtag('config', '${GA_TRACKING_ID}');
           `}
         </Script>
         <script
@@ -126,6 +120,7 @@ export default function RootLayout({
         <ToastProvider>
           {children}
           <WhatsAppLeadModalWrapper />
+          <LeadMagnetModalWrapper />
         </ToastProvider>
         <Analytics />
       </body>

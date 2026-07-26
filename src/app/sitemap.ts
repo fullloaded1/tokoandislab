@@ -1,7 +1,8 @@
 import { MetadataRoute } from 'next';
 import { prisma } from '@/lib/db';
+import { SEO_CONSTANTS } from '@/constants/seo';
 
-const BASE_URL = 'https://www.andislab.com';
+const BASE_URL = SEO_CONSTANTS.siteUrl;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 1. Fetch all products

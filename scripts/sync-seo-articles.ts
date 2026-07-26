@@ -14,14 +14,14 @@ const SEO_ARTICLES_MAPPING: ArticleUpdateSpec[] = [
   {
     slug: 'panduan-pengadaan-alat-laboratorium-e-katalog',
     title: 'Pengadaan Alat Lab e-Katalog & Penawaran Resmi 2026',
-    excerpt: 'Langkah pengadaan alat laboratorium via e-Katalog/INAPROC untuk dinas, PDAM, dan instansi — plus cara membandingkan harga agar anggaran efisien dan SPJ aman.',
+    excerpt: 'Panduan lengkap pengadaan alat laboratorium via e-Katalog LKPP untuk instansi pemerintah dan BUMN. Dapatkan tips perbandingan harga, spesifikasi teknis, dan kelengkapan dokumen SPJ bersama AndisLab.',
     image: '/images/articles/panduan-pengadaan-ekatalog.png',
     category: 'panduan-alat',
   },
   {
     slug: 'panduan-alat-uji-kualitas-air-laboratorium-industri',
     title: 'Alat Uji Kualitas Air: Photometer & pH Meter Lab 2026',
-    excerpt: 'Panduan komprehensif alat uji kualitas air laboratorium dan industri. Pelajari perbedaan photometer, pH meter, turbidimeter, serta rekomendasi dari Lovibond dan Milwaukee.',
+    excerpt: 'Pelajari spesifikasi alat uji kualitas air untuk PDAM dan industri. Panduan memilih photometer, turbidimeter, dan pH meter Lovibond original dengan garansi resmi dan sertifikat.',
     image: '/images/articles/alat-uji-kualitas-air.png',
     category: 'panduan-alat',
   },

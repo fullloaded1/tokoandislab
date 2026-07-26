@@ -64,12 +64,10 @@ export default function TentangPage() {
             <span>Institutional Profil & Principal Partner</span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-6 leading-tight text-white">
-            Tentang AndisLab: Distributor Alat Laboratorium Resmi
+            Distributor Resmi Alat Laboratorium & Partner Pengadaan Nasional
           </h1>
           <p className="text-base sm:text-xl text-slate-300 leading-relaxed max-w-2xl">
-            Kami adalah distributor alat laboratorium terpercaya yang melayani
-            kebutuhan industri, pendidikan, dan riset di seluruh Indonesia
-            sejak tahun 2010.
+            Lebih dari satu dekade menjadi mitra strategis untuk instansi pemerintah, BUMN, universitas, dan industri. Kami mendistribusikan instrumen lab presisi dengan jaminan keaslian dan dukungan teknis penuh.
           </p>
         </div>
       </section>
@@ -186,12 +184,10 @@ export default function TentangPage() {
                 Hubungi Kami
               </p>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight mb-6">
-                Siap Membantu Kebutuhan <br className="hidden sm:block" />
-                Laboratorium Anda
+                Butuh Penawaran Resmi Hari Ini?
               </h2>
               <p className="text-slate-500 leading-relaxed mb-8 max-w-lg">
-                Jangan ragu untuk menghubungi tim ahli kami untuk konsultasi produk, 
-                permintaan penawaran, atau dukungan teknis.
+                Hubungi tim engineering kami untuk konsultasi teknis, pengurusan dokumen SPJ, atau permintaan Quotation. Kami menjamin respons cepat dalam hari kerja.
               </p>
 
               <div className="space-y-6">

@@ -15,6 +15,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { useRFQStore } from "@/store/useRFQStore";
+import { useLeadMagnetStore } from "@/store/useLeadMagnetStore";
 import RFQCartDrawer from "./RFQCartDrawer";
 import { trackWhatsApp } from "@/lib/track";
 import { waMeUrl } from "@/lib/contact";
@@ -26,6 +27,7 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [infoDropdownOpen, setInfoDropdownOpen] = useState(false);
   const { isCartOpen: cartOpen, setCartOpen, items } = useRFQStore();
+  const openLeadMagnet = useLeadMagnetStore((state) => state.openModal);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
 
@@ -114,20 +116,11 @@ export default function Navbar() {
 
             {/* Clean Desktop Navigation (lg:flex) */}
             <nav className="hidden lg:flex items-center justify-center gap-0.5 xl:gap-1.5 flex-1 min-w-0 px-2">
-              <Link
-                href="/"
-                className={`px-2.5 xl:px-3 py-1.5 text-xs font-bold rounded-xl whitespace-nowrap transition-all duration-200 ease-[var(--ease-out)] focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] active:translate-y-0.5 ${
-                  pathname === "/"
-                    ? "text-blue-600 bg-blue-50/80 shadow-2xs"
-                    : "text-slate-700 hover:text-blue-600 hover:bg-slate-50"
-                }`}
-              >
-                Beranda
-              </Link>
+              {/* Beranda is redundant with Logo on desktop, removed to save space */}
 
               <Link
                 href="/katalog"
-                className={`px-2.5 xl:px-3 py-1.5 text-xs font-bold rounded-xl whitespace-nowrap transition-all duration-200 ease-[var(--ease-out)] focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] active:translate-y-0.5 ${
+                className={`px-2 xl:px-3 py-1.5 text-xs font-bold rounded-xl whitespace-nowrap transition-all duration-200 ease-[var(--ease-out)] focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] active:translate-y-0.5 ${
                   pathname === "/katalog"
                     ? "text-blue-600 bg-blue-50/80 shadow-2xs"
                     : "text-slate-700 hover:text-blue-600 hover:bg-slate-50"
@@ -138,7 +131,7 @@ export default function Navbar() {
 
               <Link
                 href="/ready-stock"
-                className={`inline-flex items-center gap-1.5 px-2.5 xl:px-3 py-1.5 text-xs font-bold rounded-xl whitespace-nowrap transition-all duration-200 ease-[var(--ease-out)] focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] active:translate-y-0.5 ${
+                className={`inline-flex items-center gap-1.5 px-2 xl:px-3 py-1.5 text-xs font-bold rounded-xl whitespace-nowrap transition-all duration-200 ease-[var(--ease-out)] focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] active:translate-y-0.5 ${
                   pathname === "/ready-stock"
                     ? "text-emerald-700 bg-emerald-50 border border-emerald-200/60 shadow-2xs"
                     : "text-slate-700 hover:text-emerald-700 hover:bg-emerald-50/60"
@@ -150,13 +143,13 @@ export default function Navbar() {
 
               <Link
                 href="/pemerintah"
-                className={`inline-flex items-center gap-1 px-2.5 xl:px-3 py-1.5 text-xs font-bold rounded-xl whitespace-nowrap transition-all duration-200 ease-[var(--ease-out)] focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] active:translate-y-0.5 ${
+                className={`inline-flex items-center gap-1 px-2 xl:px-3 py-1.5 text-xs font-bold rounded-xl whitespace-nowrap transition-all duration-200 ease-[var(--ease-out)] focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] active:translate-y-0.5 ${
                   pathname === "/pemerintah"
                     ? "text-blue-700 bg-blue-50 border border-blue-200/60 shadow-2xs"
                     : "text-slate-700 hover:text-blue-700 hover:bg-blue-50/60"
                 }`}
               >
-                <span>Pemerintah / B2B</span>
+                <span>Instansi B2B</span>
                 <span className="rounded bg-blue-600 px-1 py-0.5 text-[9px] font-extrabold text-white leading-none">
                   Resmi
                 </span>
@@ -164,7 +157,7 @@ export default function Navbar() {
 
               <Link
                 href="/daihan-labtech"
-                className={`px-2.5 xl:px-3 py-1.5 text-xs font-bold rounded-xl whitespace-nowrap transition-all duration-200 ease-[var(--ease-out)] focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] active:translate-y-0.5 ${
+                className={`hidden xl:block px-2 xl:px-3 py-1.5 text-xs font-bold rounded-xl whitespace-nowrap transition-all duration-200 ease-[var(--ease-out)] focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] active:translate-y-0.5 ${
                   pathname === "/daihan-labtech"
                     ? "text-blue-600 bg-blue-50/80 shadow-2xs"
                     : "text-slate-700 hover:text-blue-600 hover:bg-slate-50"
@@ -193,8 +186,19 @@ export default function Navbar() {
                 </button>
 
                 {infoDropdownOpen && (
-                  <div className="absolute top-full right-0 pt-2 w-48 z-50">
+                  <div className="absolute top-full right-0 pt-2 w-52 z-50">
                     <div className="rounded-2xl bg-white p-2 shadow-xl border border-slate-100 ring-1 ring-slate-900/5">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setInfoDropdownOpen(false);
+                          openLeadMagnet();
+                        }}
+                        className="w-full text-left flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-xs font-bold transition-all text-indigo-700 bg-indigo-50 hover:bg-indigo-100 mb-1"
+                      >
+                        <span className="flex h-4 w-4 items-center justify-center rounded-full bg-indigo-600 text-[10px] text-white">↓</span>
+                        Unduh e-Katalog 2026
+                      </button>
                       <Link
                         href="/tentang"
                         onClick={() => setInfoDropdownOpen(false)}
@@ -429,6 +433,17 @@ export default function Navbar() {
             >
               <Phone className="h-4 w-4" />
               <span>Hubungi Sales Sekarang</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                openLeadMagnet();
+              }}
+              className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-2xl bg-indigo-50 hover:bg-indigo-100 px-4 py-3 text-sm font-black text-indigo-700 active:scale-[0.98] transition-all mt-2 border border-indigo-200"
+            >
+              <span className="shrink-0 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600 text-xs text-white">↓</span>
+              <span>Unduh e-Katalog 2026</span>
             </button>
           </div>
         </div>
