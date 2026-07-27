@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Beaker, Thermometer, FlaskConical, Droplets, Microscope, TestTube, Scale } from "lucide-react";
+import { Beaker, Thermometer, FlaskConical, Droplets, Microscope, TestTube, Scale, BatteryFull } from "lucide-react";
 
 const categories = [
   { id: "lovibond", label: "Water Testing", icon: Droplets, color: "bg-blue-100 text-blue-600" },
@@ -9,6 +9,7 @@ const categories = [
   { id: "microscope", label: "Mikroskop", icon: Microscope, color: "bg-purple-100 text-purple-600" },
   { id: "reagents", label: "Reagen", icon: TestTube, color: "bg-pink-100 text-pink-600" },
   { id: "balances", label: "Timbangan", icon: Scale, color: "bg-emerald-100 text-emerald-600" },
+  { id: "yuasa-battery", label: "Battery", icon: BatteryFull, color: "bg-red-100 text-red-600" },
 ];
 
 export default function CategoryGrid() {

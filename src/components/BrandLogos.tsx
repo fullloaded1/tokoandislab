@@ -6,6 +6,7 @@ export default function BrandLogos() {
     { name: "Pyrex", src: "/images/pyrexlogo.PNG" },
     { name: "Daihan LabTech", src: "/images/daihanlabtechlogo.png" },
     { name: "Merck", src: "/images/Logo_Merck_KGaA_2015.svg.png" },
+    { name: "Yuasa Battery", src: "/images/logos/yuasa_battery_cropped.jpg" },
   ];
 
   return (
