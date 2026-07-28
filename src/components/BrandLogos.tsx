@@ -13,7 +13,7 @@ export default function BrandLogos() {
     <section className="bg-white py-16 border-b border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-center text-sm font-bold text-slate-500 uppercase tracking-[0.2em] mb-12">
-          DISTRIBUTOR RESMI
+          AUTHORIZED BRAND
         </h2>
         
         <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-12 lg:gap-16">

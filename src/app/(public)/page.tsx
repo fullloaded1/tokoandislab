@@ -1,4 +1,4 @@
-/* Hallmark · page: Home · genre: modern-minimal · macrostructure: Marquee Hero · design-system: design.md */
+/* Hallmark · page: Home · genre: corporate-b2b · macrostructure: Clean Enterprise */
 import HeroSection from "@/components/HeroSection";
 import ProductCard from "@/components/ProductCard";
 import CategoryGrid from "@/components/CategoryGrid";
@@ -7,11 +7,11 @@ import ClientLogos from "@/components/ClientLogos";
 import WaLinkCTA from "@/components/WaLinkCTA";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, BookOpen, Tag } from "lucide-react";
+import { ArrowRight, BookOpen, FileText, CheckCircle, ShieldCheck } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { CATEGORY_LABELS, type Category, getGroupedProducts, serializeProductDecimals } from "@/lib/products";
 
-// ISR: revalidate setiap 60 detik — jauh lebih cepat dari force-dynamic
+// ISR: revalidate setiap 60 detik
 export const revalidate = 60;
 
 export const metadata = {
@@ -120,28 +120,24 @@ export default async function HomePage() {
     <>
       <h1 className="sr-only">AndisLab: Pusat Distributor Alat Laboratorium, Reagen, dan Furniture Lab Terpercaya di Indonesia</h1>
       
-      {/* Premium B2B & e-Katalog Value Proposition Strip - Scientific Dark Console */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-8 pb-3 animate-fade-in">
-        <div className="relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-5 rounded-[2rem] bg-gradient-to-r from-slate-950 via-indigo-950/90 to-slate-950 p-6 md:px-8 md:py-6 shadow-2xl text-white border border-cyan-500/30 group/ekatalog transition-all duration-300 hover:border-cyan-400/60 hover:shadow-cyan-500/10">
-          {/* Ambient cyan glow backdrop */}
-          <div className="absolute -left-20 -top-20 h-40 w-40 rounded-full bg-cyan-500/15 blur-3xl pointer-events-none group-hover/ekatalog:bg-cyan-500/25 transition-all duration-500"></div>
-          <div className="absolute -right-20 -bottom-20 h-40 w-40 rounded-full bg-blue-600/15 blur-3xl pointer-events-none"></div>
-          
-          <div className="relative z-10 flex flex-col sm:flex-row items-center gap-4 sm:gap-5 text-center sm:text-left">
-            <span className="inline-flex items-center gap-2 rounded-2xl bg-cyan-500/15 px-4 py-2 text-xs font-black text-cyan-300 border border-cyan-400/30 shadow-inner shrink-0">
-              <span className="flex h-2 w-2 rounded-full bg-cyan-400 animate-pulse"></span>
-              ⚡ Pengadaan Cepat, SPJ Aman
+      {/* Premium B2B & e-Katalog Value Proposition Strip - Corporate Clean */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-2">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 rounded-xl bg-blue-900 p-5 md:px-8 text-white shadow-md border border-blue-800">
+          <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+            <span className="inline-flex items-center gap-1.5 rounded-sm bg-blue-800 px-3 py-1.5 text-xs font-bold text-blue-100 border border-blue-700 shrink-0">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              Tersedia di e-Katalog
             </span>
-            <p className="text-xs sm:text-sm font-medium text-slate-300 max-w-2xl leading-relaxed">
-              Solusi pengadaan tanpa pusing. Harga kompetitif di e-Katalog INAPROC dengan dukungan teknis dan dokumen SPJ lengkap. Tersedia ratusan produk <strong className="text-white font-extrabold underline decoration-cyan-400/60">ready stock</strong> untuk kebutuhan mendesak laboratorium Anda.
+            <p className="text-sm font-medium text-blue-100 max-w-2xl leading-relaxed">
+              Mitra resmi pengadaan alat laboratorium dan bahan kimia. Harga transparan, dokumen SPJ lengkap, dan dukungan instalasi teknis untuk seluruh Indonesia.
             </p>
           </div>
           <Link
             href="/pemerintah#bukti-harga"
-            className="relative z-10 inline-flex items-center gap-2.5 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 px-6 py-3 text-xs sm:text-sm font-extrabold text-white shadow-lg shadow-cyan-500/25 hover:from-cyan-400 hover:via-blue-500 hover:to-indigo-500 hover:shadow-cyan-500/40 hover:-translate-y-0.5 transition-all duration-200 ease-[var(--ease-out)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)] active:scale-[0.98] shrink-0"
+            className="inline-flex items-center gap-2 rounded-md bg-white px-5 py-2.5 text-sm font-bold text-blue-900 shadow-sm hover:bg-slate-100 transition-colors shrink-0"
           >
-            <span>Buktikan Harga Daihan Kami (-48%)</span>
-            <ArrowRight className="h-4 w-4 transition-transform group-hover/ekatalog:translate-x-1" />
+            <span>Lihat Harga e-Katalog</span>
+            <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </section>
@@ -151,43 +147,57 @@ export default async function HomePage() {
         promoBanner={{
           image: "/images/Banner Promo MERDEKA AndisLab 2026.png",
           href: "/promo-merdeka",
-          alt: "Promo MERDEKA AndisLab — Diskon 17% Alat Lab, Order 13 Juli–14 Agustus 2026",
+          alt: "Promo AndisLab — Diskon Alat Lab",
         }}
       />
       <BrandLogos />
+      
+      {/* Trust Factors Section (New B2B Section) */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 text-center sm:text-left flex flex-col items-center sm:items-start gap-4">
+            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-700">
+              <ShieldCheck className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-bold text-slate-900 text-lg mb-1">Distributor Resmi</h3>
+              <p className="text-sm text-slate-600">Surat penunjukan principal resmi dan garansi pabrik terjamin untuk semua instrumen analitik.</p>
+            </div>
+          </div>
+          <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 text-center sm:text-left flex flex-col items-center sm:items-start gap-4">
+            <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center text-emerald-700">
+              <CheckCircle className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-bold text-slate-900 text-lg mb-1">Dokumen SPJ Lengkap</h3>
+              <p className="text-sm text-slate-600">Faktur pajak, berita acara serah terima, dan kelengkapan dokumen untuk kebutuhan administrasi instansi.</p>
+            </div>
+          </div>
+          <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 text-center sm:text-left flex flex-col items-center sm:items-start gap-4">
+            <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-700">
+              <FileText className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-bold text-slate-900 text-lg mb-1">Dukungan Instalasi</h3>
+              <p className="text-sm text-slate-600">Tim teknisi tersertifikasi siap membantu instalasi, kalibrasi, dan training operasional alat di lab Anda.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <CategoryGrid />
 
-      {/* Ready Stock Section - High-Impact Workbench Bento Stage */}
+      {/* Ready Stock Section - Corporate Clean Stage */}
       {readyStockProducts.length > 0 && (
-        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 mt-10 mb-10" id="ready-stock">
-          <div className="relative overflow-hidden rounded-[3rem] bg-gradient-to-b from-emerald-950/5 via-slate-50/90 to-white p-6 sm:p-10 lg:p-12 border-2 border-emerald-500/20 shadow-2xl">
-            {/* Background watermark typography */}
-            <div className="absolute right-6 top-6 select-none pointer-events-none opacity-[0.04] text-right">
-              <span className="text-8xl sm:text-9xl font-black tracking-tighter block text-slate-900 leading-none">READY</span>
-              <span className="text-7xl sm:text-8xl font-black tracking-tighter block text-emerald-900 leading-none">STOCK</span>
-            </div>
-            
-            <div className="relative z-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 mb-10" id="ready-stock">
+          <div className="bg-white p-6 sm:p-10 border border-slate-200 rounded-2xl shadow-sm">
+            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10 pb-6 border-b border-slate-100">
               <div>
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-4 py-1.5 text-xs font-black text-white shadow-md shadow-emerald-600/25">
-                    <span className="flex h-2 w-2 rounded-full bg-white animate-pulse"></span>
-                    ⚡ Tersedia & Siap Kirim Hari Ini
-                  </span>
-                </div>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-                  Alat Laboratorium <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Ready Stock</span>
+                <h2 className="text-3xl font-bold text-slate-900 tracking-tight">
+                  Ketersediaan Stok (Ready Stock)
                 </h2>
-                <div className="flex items-baseline gap-3 mt-2">
-                  <span className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
-                    JULY
-                  </span>
-                  <span className="text-sm font-bold text-slate-600 uppercase tracking-widest bg-emerald-100/80 border border-emerald-300/60 px-3 py-1 rounded-xl">
-                    Stok Tercepat
-                  </span>
-                </div>
-                <p className="text-sm sm:text-base text-slate-600 mt-4 max-w-2xl font-medium leading-relaxed">
-                  Tidak perlu menunggu lama (indent). Ratusan instrumen analitik dan alat laboratorium dasar kami telah lolos uji kualitas dan siap dikirim hari ini juga ke seluruh Indonesia, lengkap dengan faktur pajak dan garansi resmi.
+                <p className="text-sm text-slate-600 mt-2 max-w-2xl leading-relaxed">
+                  Peralatan yang tersedia dan siap dikirim hari ini. Cocok untuk kebutuhan pengadaan mendesak tanpa perlu indent.
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-3 shrink-0">
@@ -195,51 +205,32 @@ export default async function HomePage() {
                   href="/api/ready-stock-pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-rose-600 to-red-700 px-6 py-3 text-sm font-extrabold text-white shadow-lg shadow-rose-600/25 hover:from-rose-500 hover:to-red-600 hover:-translate-y-0.5 transition-all duration-300 ease-[var(--ease-out)]"
+                  className="inline-flex items-center gap-2 rounded-md bg-blue-50 px-5 py-2.5 text-sm font-semibold text-blue-700 hover:bg-blue-100 transition-colors border border-blue-200"
                 >
-                  <Tag className="h-4 w-4" />
-                  Download PDF Ready Stock
+                  <FileText className="h-4 w-4" />
+                  Unduh Katalog PDF
                 </a>
                 <Link
                   href="/ready-stock"
-                  className="inline-flex items-center gap-2 rounded-2xl border-2 border-slate-300/80 bg-white px-6 py-3 text-sm font-extrabold text-slate-800 shadow-md hover:border-emerald-500 hover:text-emerald-700 hover:shadow-xl transition-all duration-200 ease-[var(--ease-out)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)] active:scale-[0.98]"
+                  className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition-colors shadow-sm"
                 >
-                  Lihat Semua ({readyStockProducts.length})
+                  Lihat Semua
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
             </div>
             
-            {/* Promo MERDEKA Banner Strip inside Ready Stock Stage */}
-            <Link
-              href="/promo-merdeka"
-              className="relative z-10 group flex items-center justify-between gap-4 rounded-2xl bg-gradient-to-r from-red-600 via-red-700 to-red-600 px-6 py-4 mb-8 shadow-xl shadow-red-600/20 hover:shadow-2xl hover:shadow-red-600/30 hover:-translate-y-0.5 transition-all duration-200 ease-[var(--ease-out)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)] active:scale-[0.99] border border-red-400/40"
-            >
-              <div className="flex items-center gap-3.5">
-                <span className="text-2xl animate-bounce">🇮🇩</span>
-                <div>
-                  <span className="text-sm sm:text-base font-black text-white block">
-                    Promo MERDEKA — Diskon 17% Produk Ready Stock / Bundling Gratis!
-                  </span>
-                  <span className="text-xs text-red-100/90 hidden sm:block">Periode Campaign: 13 Juli – 14 Agustus 2026</span>
-                </div>
-              </div>
-              <span className="inline-flex items-center gap-1 text-xs font-black text-red-900 bg-yellow-300 px-3.5 py-1.5 rounded-xl shadow-sm group-hover:bg-white transition-colors whitespace-nowrap shrink-0">
-                Lihat Detail →
-              </span>
-            </Link>
-            
-            <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 stagger-children">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {readyStockProducts.slice(0, 8).map((product) => (
                 <ProductCard key={product.id} product={product} showPromoMerdeka />
               ))}
             </div>
             
             {readyStockProducts.length > 8 && (
-              <div className="mt-10 flex justify-center sm:hidden relative z-10">
+              <div className="mt-8 flex justify-center sm:hidden">
                 <Link
                   href="/ready-stock"
-                  className="w-full justify-center inline-flex items-center gap-2 rounded-2xl border-2 border-emerald-500 bg-white px-6 py-3.5 text-sm font-extrabold text-emerald-700 shadow-md hover:bg-emerald-50 transition-colors"
+                  className="w-full justify-center inline-flex items-center gap-2 rounded-md border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
                 >
                   Lihat Semua Ready Stock ({readyStockProducts.length})
                   <ArrowRight className="h-4 w-4" />
@@ -253,30 +244,27 @@ export default async function HomePage() {
       {/* Exclusive Products Grouped by Category */}
       {productsByCategory.map((group) => (
         <section key={group.category} className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
-          <div className="flex items-end justify-between mb-8">
+          <div className="flex items-end justify-between mb-6 pb-4 border-b border-slate-100">
             <div>
-              <div className="flex items-center gap-3 mb-3">
-                <div className="relative h-8 w-24">
-                  <Image src={group.logo} alt={group.label} fill sizes="96px" className="object-contain object-left" />
+              <div className="flex items-center gap-3 mb-2">
+                <div className="relative h-6 w-20">
+                  <Image src={group.logo} alt={group.label} fill sizes="80px" className="object-contain object-left grayscale opacity-80" />
                 </div>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight">
-                Jual Alat Lab & Produk <span className="gradient-text">{group.label}</span>
+              <h2 className="text-2xl font-bold text-slate-900">
+                Produk {group.label}
               </h2>
-              <p className="text-sm text-slate-500 mt-1">
-                {group.products.length} produk tersedia
-              </p>
             </div>
             <Link
               href={`/katalog?category=${group.category}`}
-              className="hidden sm:inline-flex items-center gap-2 rounded-2xl border border-[var(--color-rule)]/60 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:border-blue-300 hover:text-blue-700 hover:shadow-md transition-all duration-200 ease-[var(--ease-out)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)] active:scale-[0.98]"
+              className="hidden sm:inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors"
             >
               Lihat Semua
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 stagger-children">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {group.products.slice(0, 8).map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -286,69 +274,66 @@ export default async function HomePage() {
 
       {/* Article & Guides Section */}
       {latestArticles.length > 0 && (
-        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 border-t border-slate-100">
-          <div className="flex items-end justify-between mb-10">
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 border-t border-slate-200 mt-8">
+          <div className="flex items-end justify-between mb-8">
             <div>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-1 text-xs font-bold text-blue-700 mb-2 border border-blue-100">
-                📚 Edukasi & Informasi
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight animate-fade-in">
-                Artikel & Panduan Terbaru
+              <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+                Publikasi & Panduan Edukasi
               </h2>
-              <p className="text-sm text-slate-500 mt-1">
-                Ikuti tips penggunaan, spesifikasi teknis mendalam, dan berita seputar alat laboratorium.
+              <p className="text-sm text-slate-600 mt-2">
+                Spesifikasi teknis, standar operasional prosedur, dan panduan kalibrasi alat laboratorium.
               </p>
             </div>
             <Link
               href="/artikel"
-              className="inline-flex items-center gap-2 rounded-2xl border border-[var(--color-rule)]/60 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:border-blue-300 hover:text-blue-700 hover:shadow-md transition-all duration-200 ease-[var(--ease-out)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)] active:scale-[0.98] shrink-0 animate-fade-in"
+              className="inline-flex items-center gap-2 rounded-md border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
             >
               Lihat Semua
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {latestArticles.map((article: any) => (
               <article
                 key={article.id}
-                className="group flex flex-col bg-white rounded-3xl border border-[var(--color-rule)]/50 hover:shadow-xl hover:border-blue-100 transition-all duration-200 ease-[var(--ease-out)] overflow-hidden"
+                className="group flex flex-col bg-white rounded-xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition-all duration-200 overflow-hidden"
               >
-                <Link href={`/artikel/${article.slug}`} className="relative aspect-video w-full bg-slate-100 overflow-hidden block">
+                <Link href={`/artikel/${article.slug}`} className="relative aspect-video w-full bg-slate-50 overflow-hidden block border-b border-slate-100">
                   {article.image ? (
                     <img
                       src={article.image}
                       alt={article.title}
-                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                     />
                   ) : (
-                    <div className="absolute inset-0 flex items-center justify-center bg-slate-50">
-                      <BookOpen className="h-10 w-10 text-slate-300" />
+                    <div className="absolute inset-0 flex items-center justify-center bg-slate-100">
+                      <BookOpen className="h-8 w-8 text-slate-300" />
                     </div>
                   )}
                 </Link>
-                <div className="p-6 flex flex-col flex-grow">
-                  <span className="text-xs text-slate-500 font-semibold mb-2 block">
+                <div className="p-5 flex flex-col flex-grow">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2 block">
                     {new Date(article.createdAt).toLocaleDateString("id-ID", {
                       day: "numeric",
                       month: "long",
                       year: "numeric",
                     })}
                   </span>
-                  <h3 className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2 leading-snug">
+                  <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-700 transition-colors line-clamp-2 leading-snug">
                     <Link href={`/artikel/${article.slug}`}>{article.title}</Link>
                   </h3>
                   {article.excerpt && (
-                    <p className="text-xs sm:text-sm text-slate-500 line-clamp-2 mt-2 leading-relaxed">
+                    <p className="text-sm text-slate-600 line-clamp-2 mt-2 leading-relaxed">
                       {article.excerpt}
                     </p>
                   )}
-                  <div className="mt-4 pt-4 border-t border-slate-100/50">
+                  <div className="mt-auto pt-4 border-t border-slate-100/50">
                     <Link
                       href={`/artikel/${article.slug}`}
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors"
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-700 hover:text-blue-900 transition-colors"
                     >
-                      Baca Selengkapnya
+                      Baca Dokumen
                       <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
                   </div>
@@ -361,37 +346,32 @@ export default async function HomePage() {
 
       <ClientLogos />
 
-      {/* CTA Section */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
-        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600 px-8 py-16 sm:px-16 sm:py-20 text-center">
-          {/* Decorative elements */}
-          <div className="absolute top-0 left-0 w-64 h-64 rounded-full bg-white/5 -translate-x-1/2 -translate-y-1/2" />
-          <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-white/5 translate-x-1/3 translate-y-1/3" />
-
-          <div className="relative">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
-              Dapatkan Penawaran Harga Terbaik
-            </h2>
-            <p className="text-blue-100 text-lg max-w-xl mx-auto mb-8">
-              Konsultasikan kebutuhan alat lab Anda kepada tim engineering kami. Kami berikan rekomendasi spesifikasi teknis beserta penawaran harga resmi (Quotation) dalam waktu kurang dari 24 jam.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <WaLinkCTA 
-                href="?wa=open&source=homepage_cta&text=Halo%20AndisLab%2C%20saya%20ingin%20minta%20penawaran%20khusus."
-                className="inline-flex items-center gap-2 rounded-2xl bg-white px-8 py-4 text-base font-bold text-blue-700 shadow-xl transition-all duration-200 ease-[var(--ease-out)] hover:shadow-2xl hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:scale-[0.98]"
-              >
-                Minta Penawaran via WhatsApp
-              </WaLinkCTA>
-              <Link
-                href="/katalog"
-                className="inline-flex items-center gap-2 rounded-2xl border-2 border-white/30 px-8 py-4 text-base font-bold text-white transition-all duration-200 ease-[var(--ease-out)] hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:scale-[0.98]"
-              >
-                Lihat Katalog
-              </Link>
-            </div>
+      {/* CTA Section - Professional Corporate */}
+      <section className="bg-slate-900 py-20 mt-12">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold text-white mb-4">
+            Minta Penawaran Spesifikasi
+          </h2>
+          <p className="text-slate-300 text-base mb-8">
+            Kirimkan daftar kebutuhan laboratorium Anda (BoQ). Tim spesialis kami akan menyusun penawaran harga resmi (Quotation) sesuai dengan anggaran dan spesifikasi teknis instansi Anda dalam 1x24 jam.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <WaLinkCTA 
+              href="?wa=open&source=homepage_cta&text=Halo%20AndisLab%2C%20saya%20ingin%20minta%20penawaran%20pengadaan%20alat%20lab."
+              className="inline-flex items-center justify-center gap-2 rounded-md bg-blue-600 px-8 py-3.5 text-sm font-bold text-white hover:bg-blue-500 transition-colors min-w-[240px]"
+            >
+              Hubungi Representatif (WhatsApp)
+            </WaLinkCTA>
+            <Link
+              href="/katalog"
+              className="inline-flex items-center justify-center gap-2 rounded-md bg-slate-800 border border-slate-700 px-8 py-3.5 text-sm font-bold text-white hover:bg-slate-700 transition-colors min-w-[240px]"
+            >
+              Jelajahi Katalog
+            </Link>
           </div>
         </div>
       </section>
     </>
   );
 }
+

@@ -1,9 +1,9 @@
-/* Hallmark · component: ProductCard · genre: modern-minimal · 8-state-ui: pass · contrast: pass · decimal-safety: pass */
+/* Hallmark · component: ProductCard · genre: corporate-b2b · 8-state-ui: pass · contrast: pass · decimal-safety: pass */
 "use client";
 
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCart, Check, AlertCircle } from "lucide-react";
+import { ShoppingCart, Check, AlertCircle, ArrowRight, FileText } from "lucide-react";
 import { useRFQStore } from "@/store/useRFQStore";
 import { useState } from "react";
 import { money } from "@/lib/money";
@@ -124,185 +124,173 @@ export default function ProductCard({ product, compact = false, showPromoMerdeka
     setTimeout(() => setAdded(false), 1500);
   };
 
-    if (compact) {
-      return (
-        <Link
-          href={`/katalog/${product.slug}`}
-          className="group/card flex flex-col overflow-hidden rounded-[1.75rem] bg-white border border-slate-200/80 transition-all duration-300 ease-out hover:shadow-xl hover:shadow-emerald-950/10 hover:border-emerald-500/40 hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
-        >
-          <div className="relative aspect-square overflow-hidden bg-gradient-to-b from-slate-50/90 via-slate-50/40 to-slate-100/60 rounded-[1.5rem] m-2 p-4 flex items-center justify-center transition-colors duration-300 group-hover/card:from-emerald-50/40 group-hover/card:to-teal-50/30">
-            <Image
-              src={product.image}
-              alt={displayName}
-              fill
-              className="object-contain mix-blend-multiply p-6 transition-transform duration-500 ease-out group-hover/card:scale-110"
-              sizes="200px"
-            />
-            {product.variantCount > 1 && (
-              <div className="absolute top-2.5 right-2.5 z-10">
-                <span className="inline-flex items-center rounded-full bg-slate-900/85 backdrop-blur-md px-2.5 py-0.5 text-[10px] font-black text-emerald-300 shadow-sm border border-emerald-500/30">
-                  {product.variantCount} Tipe
-                </span>
-              </div>
-            )}
-            <div className="absolute top-2.5 left-2.5 z-10">
-              {product.isReadyStock && availableStockCount > 0 ? (
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-600 text-white px-2.5 py-0.5 text-[10px] font-black shadow-sm">
-                  Ready {availableStockCount} pcs
-                </span>
-              ) : !product.isReadyStock && !isSoldOut ? (
-                <span className="inline-flex items-center gap-1 rounded-full bg-amber-600 px-2.5 py-0.5 text-[10px] font-black text-white shadow-sm">
-                  PO {product.leadTime || ""}
-                </span>
-              ) : (
-                <span className="inline-flex items-center gap-1 rounded-full bg-slate-800 px-2.5 py-0.5 text-[10px] font-bold text-rose-300 shadow-sm">
-                  Stok habis
-                </span>
-              )}
-            </div>
-            {showPromoMerdeka && product.isReadyStock && availableStockCount > 0 && Number(product.price) < 20000000 && Number(product.price) > 0 && (
-              <div className="absolute bottom-2.5 right-2.5 z-10">
-                <span className="inline-flex items-center gap-1 rounded-full bg-red-600 px-2.5 py-0.5 text-[10px] font-black text-white shadow-sm animate-pulse">
-                  🔥 -17%
-                </span>
-              </div>
+  if (compact) {
+    return (
+      <Link
+        href={`/katalog/${product.slug}`}
+        className="group/card flex flex-col overflow-hidden bg-white border border-slate-200 hover:border-blue-400 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 rounded-lg"
+      >
+        <div className="relative aspect-square overflow-hidden bg-slate-50 border-b border-slate-100 flex items-center justify-center p-4">
+          <Image
+            src={product.image}
+            alt={displayName}
+            fill
+            className="object-contain mix-blend-multiply p-4 transition-transform duration-300 group-hover/card:scale-105"
+            sizes="200px"
+          />
+          <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
+            {product.isReadyStock && availableStockCount > 0 ? (
+              <span className="inline-flex items-center rounded-sm bg-blue-50 border border-blue-200 text-blue-700 px-2 py-0.5 text-[10px] font-semibold">
+                Ready: {availableStockCount} pcs
+              </span>
+            ) : !product.isReadyStock && !isSoldOut ? (
+              <span className="inline-flex items-center rounded-sm bg-slate-100 border border-slate-200 text-slate-600 px-2 py-0.5 text-[10px] font-semibold">
+                PO {product.leadTime || ""}
+              </span>
+            ) : (
+              <span className="inline-flex items-center rounded-sm bg-red-50 border border-red-200 text-red-600 px-2 py-0.5 text-[10px] font-semibold">
+                Stok habis
+              </span>
             )}
           </div>
-          <div className="flex flex-col flex-1 px-4 pt-2.5 pb-4">
-            <p className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1 truncate">
-              {product.brand || product.categoryLabel}
-            </p>
-            <CompactHeading className="text-sm font-bold text-slate-800 line-clamp-2 leading-snug group-hover/card:text-emerald-600 transition-colors">
-              {displayName}
-            </CompactHeading>
-            <div className="mt-auto pt-3 flex items-center justify-between border-t border-slate-100">
-              <span className="text-xs font-black text-slate-900 truncate">
-                {priceDisplay}
-              </span>
-              <span className="text-[11px] font-black text-emerald-600 group-hover/card:translate-x-1 transition-transform inline-flex items-center gap-1">
-                Detail →
-              </span>
-            </div>
+        </div>
+        <div className="flex flex-col flex-1 px-4 py-3">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1 truncate">
+            {product.brand || product.categoryLabel}
+          </p>
+          <CompactHeading className="text-sm font-semibold text-slate-900 line-clamp-2 leading-snug group-hover/card:text-blue-700 transition-colors">
+            {displayName}
+          </CompactHeading>
+          <div className="mt-auto pt-3 flex items-center justify-between border-t border-slate-100 mt-3">
+            <span className="text-xs font-bold text-slate-900 truncate">
+              {priceDisplay}
+            </span>
+            <span className="text-[11px] font-semibold text-blue-600 inline-flex items-center gap-1">
+              Detail <ArrowRight className="w-3 h-3" />
+            </span>
           </div>
-        </Link>
-      );
-    }
+        </div>
+      </Link>
+    );
+  }
 
   return (
     <Link
       href={`/katalog/${product.slug}`}
-      className="group/card flex flex-col overflow-hidden rounded-[2.25rem] bg-white border border-slate-200/80 transition-all duration-500 ease-out hover:shadow-2xl hover:shadow-emerald-950/10 hover:border-emerald-500/50 hover:-translate-y-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 h-full relative"
+      className="group/card flex flex-col overflow-hidden bg-white border border-slate-200 transition-all duration-200 hover:border-blue-400 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 h-full rounded-xl relative"
     >
-      {/* Image Area - Studio Glass Look */}
-      <div className="relative aspect-square shrink-0 overflow-hidden bg-gradient-to-b from-slate-50/90 via-slate-50/50 to-slate-100/60 rounded-[2rem] m-2.5 transition-colors duration-500 group-hover/card:from-emerald-50/40 group-hover/card:to-teal-50/30 w-[calc(100%-1.25rem)]">
+      {/* Image Area - Corporate Clean */}
+      <div className="relative aspect-square shrink-0 overflow-hidden bg-slate-50/80 border-b border-slate-100 w-full">
         <Image
           src={product.image}
           alt={displayName}
           fill
-          className="object-contain mix-blend-multiply p-8 transition-transform duration-700 ease-out group-hover/card:scale-110"
+          className="object-contain mix-blend-multiply p-6 transition-transform duration-300 ease-out group-hover/card:scale-105"
           quality={80}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 280px"
         />
         
-        {/* Floating Badges inside Image Area */}
-        {product.variantCount > 1 && (
-          <div className="absolute top-3.5 right-3.5 z-10">
-            <span className="inline-flex items-center rounded-2xl bg-slate-900/85 backdrop-blur-md px-3 py-1.5 text-[11px] font-black text-emerald-300 shadow-md border border-emerald-500/30 tracking-wide">
-              {product.variantCount} Varian
-            </span>
-          </div>
-        )}
-        {/* Stock Badge inside Image Area */}
-        <div className="absolute top-3.5 left-3.5 z-10 flex flex-col gap-1 items-start">
+        {/* Floating Badges */}
+        <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5 items-start">
           {product.isReadyStock && availableStockCount > 0 ? (
             <>
-              <AntiIndentBadge variant="compact" />
-              <span className="inline-flex items-center gap-1.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-700 text-white backdrop-blur-md px-3.5 py-1 text-[11px] font-black shadow-lg shadow-emerald-600/30 border border-white/20">
-                <span className="flex h-2 w-2 rounded-full bg-emerald-300 animate-ping"></span>
+              <span className="inline-flex items-center rounded-sm bg-white border border-blue-200 text-blue-700 shadow-sm px-2.5 py-1 text-[11px] font-semibold">
                 Ready Stock: {availableStockCount} pcs
               </span>
             </>
           ) : !product.isReadyStock && !isSoldOut ? (
-            <span className="inline-flex items-center gap-1 rounded-2xl bg-amber-600/90 backdrop-blur-md px-3.5 py-1.5 text-xs font-black text-white shadow-md border border-white/20">
-              PO {product.leadTime || ""}
+            <span className="inline-flex items-center rounded-sm bg-white border border-slate-200 text-slate-600 shadow-sm px-2.5 py-1 text-[11px] font-semibold">
+              Pre-Order {product.leadTime || ""}
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1 rounded-2xl bg-slate-800/90 backdrop-blur-md px-3.5 py-1.5 text-xs font-bold text-rose-300 shadow-md border border-rose-500/30">
-              <AlertCircle className="h-3.5 w-3.5 text-rose-400" /> Stok habis
+            <span className="inline-flex items-center gap-1 rounded-sm bg-white border border-red-200 text-red-600 shadow-sm px-2.5 py-1 text-[11px] font-semibold">
+              <AlertCircle className="h-3 w-3" /> Out of Stock
+            </span>
+          )}
+          
+          {product.variantCount > 1 && (
+            <span className="inline-flex items-center rounded-sm bg-slate-100 border border-slate-200 text-slate-700 px-2.5 py-1 text-[10px] font-semibold">
+              {product.variantCount} Varian Spesifikasi
             </span>
           )}
         </div>
-        {/* Promo MERDEKA Badge */}
+
         {showPromoMerdeka && product.isReadyStock && availableStockCount > 0 && Number(product.price) < 20000000 && Number(product.price) > 0 && (
-          <div className="absolute bottom-3.5 right-3.5 z-10">
-            <span className="inline-flex items-center gap-1.5 rounded-2xl bg-gradient-to-r from-red-600 to-red-700 px-3.5 py-1.5 text-xs font-black text-white shadow-lg shadow-red-600/40 animate-pulse border border-white/25">
-              🔥 -17% 🇮🇩
+          <div className="absolute bottom-3 right-3 z-10">
+            <span className="inline-flex items-center rounded-sm bg-red-700 px-2 py-1 text-[10px] font-bold text-white shadow-sm">
+              Promo Kemerdekaan -17%
             </span>
           </div>
         )}
       </div>
 
-      {/* Content Area - Scientific Trust Studio */}
-      <div className="flex flex-col flex-1 px-5 pt-3.5 pb-5">
+      {/* Content Area - B2B Professional */}
+      <div className="flex flex-col flex-1 p-5">
         <div className="mb-4">
-           <p className="text-[11px] font-black uppercase tracking-[0.18em] text-emerald-700/80 mb-1.5 truncate group-hover/card:text-emerald-600 transition-colors">
+           <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5 truncate group-hover/card:text-blue-600 transition-colors">
              {product.brand || product.categoryLabel}
            </p>
-           <Heading className="text-lg font-black text-slate-900 group-hover/card:text-emerald-700 transition-colors line-clamp-2 leading-snug">
+           <Heading className="text-base font-semibold text-slate-900 group-hover/card:text-blue-700 transition-colors line-clamp-2 leading-snug">
              {displayName}
            </Heading>
         </div>
         
+        {/* Specs List (Optional: Can inject specs if available, currently static text placeholder) */}
+        <div className="text-xs text-slate-600 mb-4 line-clamp-2 leading-relaxed">
+          {product.description ? (
+            <span dangerouslySetInnerHTML={{ __html: product.description.substring(0, 100) + "..." }} />
+          ) : (
+            "Konsultasikan spesifikasi teknis alat lab ini dengan representatif kami."
+          )}
+        </div>
+        
         {/* Price and CTA */}
-        <div className="mt-auto flex flex-col gap-3.5 pt-3.5 border-t border-slate-100">
-          {/* Price or Tag */}
+        <div className="mt-auto flex flex-col gap-4 pt-4 border-t border-slate-100">
           <div>
              {showPromoMerdeka && isReadyToBuy && Number(product.price) > 0 ? (
                <>
-                 <span className="text-xs font-semibold text-slate-400 line-through block">
+                 <span className="text-xs font-medium text-slate-400 line-through block">
                    {priceDisplay}
                  </span>
-                 <span className="text-lg font-black text-red-600 tracking-tight">
+                 <span className="text-lg font-bold text-slate-900">
                    {money.formatIDR(
                      money.toDecimal(product.price).mul(83).dividedBy(100).toDecimalPlaces(0)
                    )}
                  </span>
-                 <span className="mt-1 inline-flex items-center gap-1 text-[11px] font-black text-red-600 bg-red-50 px-2.5 py-0.5 rounded-lg border border-red-200">
-                   🔥 Promo MERDEKA 🇮🇩
-                 </span>
                </>
              ) : (
                <>
-                 <span className={`text-lg font-black tracking-tight ${isReadyToBuy || ekatalogRow ? "text-emerald-600" : isSoldOut ? "text-red-500" : "text-slate-900"}`}>
+                 <span className={`text-lg font-bold ${isSoldOut ? "text-slate-500" : "text-slate-900"}`}>
                    {priceDisplay}
                  </span>
                  {ekatalogSavings !== null && (
-                   <span className="mt-1.5 inline-flex items-center gap-1.5 text-xs font-black text-emerald-800 bg-gradient-to-r from-emerald-50 to-teal-50 px-2.5 py-1 rounded-xl border border-emerald-300/60 shadow-2xs">
-                     ✨ Hemat {ekatalogSavings}% vs e-Katalog
+                   <span className="mt-1 block text-xs font-medium text-blue-700">
+                     Lebih hemat {ekatalogSavings}% dari e-Katalog
                    </span>
                  )}
                </>
              )}
           </div>
 
-          <p className="text-[11px] font-medium text-slate-500 flex items-center gap-1">
-            <span>💬 Butuh spec khusus? <span className="text-emerald-600 font-bold underline">Konsultasi gratis</span></span>
-          </p>
-
-          {/* Quick Action Button - Touch-safe min-h-[44px] */}
           <button
             onClick={handleAdd}
             disabled={added}
             aria-label={isReadyToBuy ? `Beli Sekarang ${displayName}` : `Minta Penawaran ${displayName}`}
-            className={`w-full flex items-center justify-center min-h-[44px] px-4 rounded-2xl text-sm font-black transition-all duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 active:scale-[0.98] ${
+            className={`w-full flex items-center justify-center min-h-[40px] px-4 rounded-md text-sm font-semibold transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${
               added
-                ? "bg-emerald-50 text-emerald-700 border border-emerald-300 shadow-xs"
+                ? "bg-slate-100 text-slate-700 border border-slate-200"
                 : isReadyToBuy 
-                  ? "bg-gradient-to-r from-emerald-600 via-emerald-600 to-teal-700 text-white shadow-md shadow-emerald-600/25 hover:from-emerald-500 hover:to-teal-600 hover:shadow-xl hover:shadow-emerald-600/35 hover:-translate-y-0.5"
-                  : "bg-slate-900 text-white shadow-md shadow-slate-900/20 group-hover/card:bg-gradient-to-r group-hover/card:from-emerald-600 group-hover/card:to-teal-700 hover:shadow-xl hover:shadow-emerald-600/30 hover:-translate-y-0.5"
+                  ? "bg-blue-600 text-white hover:bg-blue-700 shadow-sm"
+                  : "bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 hover:text-slate-900"
             }`}
           >
-            {added ? <Check className="h-4 w-4 mr-2 text-emerald-600" /> : <ShoppingCart className="h-4 w-4 mr-2" />}
+            {added ? (
+              <Check className="h-4 w-4 mr-2" />
+            ) : isReadyToBuy ? (
+              <ShoppingCart className="h-4 w-4 mr-2" />
+            ) : (
+              <FileText className="h-4 w-4 mr-2" />
+            )}
             <span>{added ? "Ditambahkan" : isReadyToBuy ? "Beli Sekarang" : "Minta Penawaran"}</span>
           </button>
         </div>
@@ -310,3 +298,4 @@ export default function ProductCard({ product, compact = false, showPromoMerdeka
     </Link>
   );
 }
+

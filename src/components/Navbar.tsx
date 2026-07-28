@@ -60,23 +60,23 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Top Utility & Promo Strip */}
+      {/* Top Utility & Promo Strip - Corporate Kemerdekaan Style */}
       {pathname !== "/promo-merdeka" && (
-        <div className="fixed top-0 left-0 right-0 z-[51] bg-gradient-to-r from-red-700 via-red-600 to-red-700 text-white shadow-xs">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between py-2 text-xs font-semibold">
+        <div className="fixed top-0 left-0 right-0 z-[51] bg-red-900 text-white border-b border-red-950 shadow-sm">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between py-2 text-[11px] font-semibold tracking-wide">
             <Link
               href="/promo-merdeka"
-              className="flex items-center gap-2 hover:text-yellow-200 transition-colors truncate"
+              className="flex items-center gap-2 hover:text-red-100 transition-colors truncate"
             >
-              <span className="shrink-0 flex h-4 w-4 items-center justify-center rounded-full bg-white/20 text-[10px]">🔥</span>
-              <span className="truncate">Promo MERDEKA — Diskon 17% Produk Ready Stock / Bundling Gratis!</span>
-              <span className="hidden md:inline font-bold text-yellow-300 underline decoration-yellow-300/60 shrink-0">Order 13 Juli – 14 Agustus →</span>
+              <span className="shrink-0 flex h-4 w-4 items-center justify-center rounded-sm bg-red-800 text-[10px] border border-red-700">🇮🇩</span>
+              <span className="truncate font-bold">PROMO KEMERDEKAAN: Potongan Harga Spesial 17% untuk Pengadaan Agustus</span>
+              <span className="hidden md:inline font-bold text-red-200 underline decoration-red-400/60 shrink-0 ml-1">Lihat Detail Program &rarr;</span>
             </Link>
             <div className="hidden xl:flex items-center gap-4 text-red-100 font-medium shrink-0">
-              <span className="flex items-center gap-1.5 border-l border-red-500/40 pl-4">
-                <ShieldCheck className="h-3.5 w-3.5 text-yellow-300" /> e-Katalog INAPROC Terdaftar
+              <span className="flex items-center gap-1.5 border-l border-red-800 pl-4">
+                <ShieldCheck className="h-3.5 w-3.5 text-red-200" /> Terdaftar di e-Katalog INAPROC
               </span>
-              <span className="border-l border-red-500/40 pl-4">⭐ SPJ & Faktur Pajak Resmi</span>
+              <span className="border-l border-red-800 pl-4">Faktur Pajak & SPJ Resmi</span>
             </div>
           </div>
         </div>
@@ -208,7 +208,7 @@ export default function Navbar() {
                             : "text-slate-700 hover:bg-slate-50 hover:text-blue-600"
                         }`}
                       >
-                        🏢 Tentang Kami & Principal
+                        Tentang Kami & Principal
                       </Link>
                       <Link
                         href="/artikel"
@@ -219,7 +219,7 @@ export default function Navbar() {
                             : "text-slate-700 hover:bg-slate-50 hover:text-blue-600"
                         }`}
                       >
-                        📰 Artikel & Edukasi Lab
+                        Artikel & Edukasi Lab
                       </Link>
                     </div>
                   </div>
@@ -396,7 +396,7 @@ export default function Navbar() {
                 href="/tentang"
                 onClick={() => setMobileMenuOpen(false)}
                 className={`flex items-center min-h-[44px] rounded-2xl px-4 text-sm font-bold transition-all active:scale-[0.98] ${
-                  pathname === "/tentang" ? "text-emerald-700 bg-emerald-50" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  pathname === "/tentang" ? "text-blue-700 bg-blue-50" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                 }`}
               >
                 Tentang Kami & Principal
@@ -405,7 +405,7 @@ export default function Navbar() {
                 href="/artikel"
                 onClick={() => setMobileMenuOpen(false)}
                 className={`flex items-center min-h-[44px] rounded-2xl px-4 text-sm font-bold transition-all active:scale-[0.98] ${
-                  pathname === "/artikel" ? "text-emerald-700 bg-emerald-50" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  pathname === "/artikel" ? "text-blue-700 bg-blue-50" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                 }`}
               >
                 Artikel & Edukasi Lab
@@ -416,11 +416,11 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
               className={`flex items-center min-h-[44px] rounded-2xl px-4 text-sm font-black transition-all active:scale-[0.98] ${
                 pathname === "/promo-merdeka"
-                  ? "text-red-700 bg-red-50 border border-red-200 shadow-2xs"
-                  : "text-red-600 bg-red-50/60 hover:bg-red-100"
+                  ? "text-red-700 bg-red-50 border border-red-200 shadow-sm"
+                  : "text-red-700 bg-red-50 hover:bg-red-100 border border-red-100"
               }`}
             >
-              🔥 Promo MERDEKA — Diskon 17%
+              Promo Kemerdekaan -17%
             </Link>
             <button
               type="button"
