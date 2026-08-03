@@ -7,7 +7,7 @@ vi.mock('next/font/google', () => ({
 }));
 import { metadata as rootMetadata } from './layout';
 import { metadata as homeMetadata } from './(public)/page';
-import { metadata as katalogMetadata } from './(public)/katalog/page';
+import { generateMetadata as generateKatalogMetadata } from './(public)/katalog/page';
 import { metadata as readyStockMetadata } from './(public)/ready-stock/page';
 import { metadata as pemerintahMetadata } from './(public)/pemerintah/page';
 import { metadata as daihanMetadata } from './(public)/daihan-labtech/page';
@@ -23,8 +23,9 @@ describe('SEO Metadata & OpenGraph Verification', () => {
     expect(rootMetadata.alternates?.canonical).toBe('https://www.andislab.com');
   });
 
-  it('all primary public pages have canonical alternates defined', () => {
+  it('all primary public pages have canonical alternates defined', async () => {
     expect(homeMetadata.alternates?.canonical).toBe('/');
+    const katalogMetadata = await generateKatalogMetadata({ searchParams: Promise.resolve({}) } as any);
     expect(katalogMetadata.alternates?.canonical).toBe('/katalog');
     expect(readyStockMetadata.alternates?.canonical).toBe('/ready-stock');
     expect(pemerintahMetadata.alternates?.canonical).toBe('/pemerintah');
@@ -35,7 +36,8 @@ describe('SEO Metadata & OpenGraph Verification', () => {
     expect(checkoutMetadata.alternates?.canonical).toBe('/checkout');
   });
 
-  it('all key landing pages have explicit OpenGraph and Twitter tags', () => {
+  it('all key landing pages have explicit OpenGraph and Twitter tags', async () => {
+    const katalogMetadata = await generateKatalogMetadata({ searchParams: Promise.resolve({}) } as any);
     const pages = [homeMetadata, katalogMetadata, readyStockMetadata, pemerintahMetadata, daihanMetadata, promoMerdekaMetadata];
     for (const pageMeta of pages) {
       expect(pageMeta.openGraph).toBeDefined();
