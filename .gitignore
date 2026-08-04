@@ -46,3 +46,8 @@ next-env.d.ts
 # Prisma dev DB
 prisma/dev.db
 *.db
+
+# Sales & Marketing Data
+*.csv
+*.xlsx
+/reports/

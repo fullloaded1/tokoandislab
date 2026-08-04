@@ -25,6 +25,7 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [solusiDropdownOpen, setSolusiDropdownOpen] = useState(false);
   const [infoDropdownOpen, setInfoDropdownOpen] = useState(false);
   const { isCartOpen: cartOpen, setCartOpen, items } = useRFQStore();
   const openLeadMagnet = useLeadMagnetStore((state) => state.openModal);
@@ -44,6 +45,7 @@ export default function Navbar() {
   useEffect(() => {
     setMobileMenuOpen(false);
     setSearchOpen(false);
+    setSolusiDropdownOpen(false);
     setInfoDropdownOpen(false);
   }, [pathname]);
 
@@ -165,6 +167,66 @@ export default function Navbar() {
               >
                 Daihan Labtech
               </Link>
+
+              {/* Dropdown for Solusi Industri */}
+              <div
+                className="relative"
+                onMouseEnter={() => setSolusiDropdownOpen(true)}
+                onMouseLeave={() => setSolusiDropdownOpen(false)}
+              >
+                <button
+                  type="button"
+                  onClick={() => setSolusiDropdownOpen(!solusiDropdownOpen)}
+                  className={`inline-flex items-center gap-1 px-2.5 xl:px-3 py-1.5 text-xs font-bold rounded-xl whitespace-nowrap transition-all ${
+                    ["/solusi/manufaktur", "/solusi/farmasi", "/pemerintah"].includes(pathname)
+                      ? "text-blue-600 bg-blue-50/80"
+                      : "text-slate-700 hover:text-blue-600 hover:bg-slate-50"
+                  }`}
+                >
+                  <span>Solusi Industri</span>
+                  <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-200 ${solusiDropdownOpen ? "rotate-180 text-blue-600" : ""}`} />
+                </button>
+
+                {solusiDropdownOpen && (
+                  <div className="absolute top-full right-0 lg:left-0 pt-2 w-52 z-50">
+                    <div className="rounded-2xl bg-white p-2 shadow-xl border border-slate-100 ring-1 ring-slate-900/5">
+                      <Link
+                        href="/solusi/manufaktur"
+                        onClick={() => setSolusiDropdownOpen(false)}
+                        className={`block rounded-xl px-3.5 py-2.5 text-xs font-bold transition-all ${
+                          pathname === "/solusi/manufaktur"
+                            ? "bg-blue-50 text-blue-700"
+                            : "text-slate-700 hover:bg-slate-50 hover:text-blue-600"
+                        }`}
+                      >
+                        Manufaktur & Pabrik
+                      </Link>
+                      <Link
+                        href="/solusi/farmasi"
+                        onClick={() => setSolusiDropdownOpen(false)}
+                        className={`block rounded-xl px-3.5 py-2.5 text-xs font-bold transition-all ${
+                          pathname === "/solusi/farmasi"
+                            ? "bg-blue-50 text-blue-700"
+                            : "text-slate-700 hover:bg-slate-50 hover:text-blue-600"
+                        }`}
+                      >
+                        Farmasi & Kesehatan
+                      </Link>
+                      <Link
+                        href="/pemerintah"
+                        onClick={() => setSolusiDropdownOpen(false)}
+                        className={`block rounded-xl px-3.5 py-2.5 text-xs font-bold transition-all ${
+                          pathname === "/pemerintah"
+                            ? "bg-blue-50 text-blue-700"
+                            : "text-slate-700 hover:bg-slate-50 hover:text-blue-600"
+                        }`}
+                      >
+                        Pemerintah / e-Katalog
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {/* Dropdown for Secondary Info (Tentang & Artikel) */}
               <div
@@ -391,6 +453,28 @@ export default function Navbar() {
             >
               Daihan Labtech
             </Link>
+            <div className="border-t border-slate-100 my-2 pt-2 space-y-1.5">
+              <span className="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Solusi Industri</span>
+              <Link
+                href="/solusi/manufaktur"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`flex items-center min-h-[44px] rounded-2xl px-4 text-sm font-bold transition-all active:scale-[0.98] ${
+                  pathname === "/solusi/manufaktur" ? "text-blue-700 bg-blue-50" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                }`}
+              >
+                Manufaktur & Pabrik
+              </Link>
+              <Link
+                href="/solusi/farmasi"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`flex items-center min-h-[44px] rounded-2xl px-4 text-sm font-bold transition-all active:scale-[0.98] ${
+                  pathname === "/solusi/farmasi" ? "text-blue-700 bg-blue-50" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                }`}
+              >
+                Farmasi & Kesehatan
+              </Link>
+            </div>
+            
             <div className="border-t border-slate-100 my-2 pt-2 space-y-1.5">
               <Link
                 href="/tentang"

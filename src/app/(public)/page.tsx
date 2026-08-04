@@ -7,7 +7,7 @@ import ClientLogos from "@/components/ClientLogos";
 import WaLinkCTA from "@/components/WaLinkCTA";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, BookOpen, FileText, CheckCircle, ShieldCheck } from "lucide-react";
+import { ArrowRight, BookOpen, FileText, CheckCircle, ShieldCheck, Factory, FlaskConical, Building2 } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { CATEGORY_LABELS, type Category, getGroupedProducts, serializeProductDecimals } from "@/lib/products";
 
@@ -152,6 +152,7 @@ export default async function HomePage() {
       />
       <BrandLogos />
       
+
       {/* Trust Factors Section (New B2B Section) */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
