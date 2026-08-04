@@ -88,6 +88,13 @@ const SEO_ARTICLES_MAPPING: ArticleUpdateSpec[] = [
     image: '/images/articles/spektrofotometer-uv-vis.png',
     category: 'panduan-alat',
   },
+  {
+    slug: 'kebutuhan-alat-lab-qc-industri-cikarang',
+    title: 'Supplier Alat Laboratorium QC Terpercaya di Kawasan Industri Cikarang (KIC)',
+    excerpt: 'Panduan dan rekomendasi peralatan laboratorium Quality Control (QC) untuk pabrik manufaktur, F&B, dan otomotif di Kawasan Industri Cikarang. Dapatkan layanan pengadaan terbaik dari AndisLab.',
+    image: '/images/articles/kic-lab-equipment.png',
+    category: 'edukasi-lab',
+  },
 ];
 
 async function main() {
