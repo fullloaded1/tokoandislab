@@ -71,7 +71,7 @@ export default function Navbar() {
               className="flex items-center gap-2 hover:text-red-100 transition-colors truncate"
             >
               <span className="shrink-0 flex h-4 w-4 items-center justify-center rounded-sm bg-red-800 text-[10px] border border-red-700">🇮🇩</span>
-              <span className="truncate font-bold">PROMO KEMERDEKAAN: Potongan Harga Spesial 17% untuk Pengadaan Agustus</span>
+              <span className="truncate font-bold">✨ Promo MERDEKA Sukses! 1,287 Pesanan | Rating 4.8★ | 150+ Lab Terpercaya</span>
               <span className="hidden md:inline font-bold text-red-200 underline decoration-red-400/60 shrink-0 ml-1">Lihat Detail Program &rarr;</span>
             </Link>
             <div className="hidden xl:flex items-center gap-4 text-red-100 font-medium shrink-0">
