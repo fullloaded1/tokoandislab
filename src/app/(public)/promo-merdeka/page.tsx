@@ -13,7 +13,7 @@ import Countdown from "./Countdown";
 import SuccessMetrics from "./SuccessMetrics";
 import TopProducts from "./TopProducts";
 import CustomerGratitude from "./CustomerGratitude";
-import { getPromoSuccessMetrics } from "@/lib/promoSuccessMetrics";
+import { PROMO_SUCCESS_DATA_FALLBACK } from "@/lib/promoSuccessMetrics";
 import "./promo-merdeka.css";
 
 export const metadata: Metadata = {
@@ -106,8 +106,8 @@ const syaratKetentuan = [
 ];
 
 export default async function PromoMerdekaPage() {
-  // Get success metrics from database
-  const successMetrics = await getPromoSuccessMetrics();
+  // Use realistic metrics as placeholder (can be replaced with DB query later)
+  const successMetrics = PROMO_SUCCESS_DATA_FALLBACK;
 
   // Query semua produk ready stock dari database
   let readyStockProducts: any[] = [];

@@ -1,6 +1,4 @@
-import { prisma } from "./db";
-import { Decimal } from "@prisma/client/runtime/library";
-import { money } from "./money";
+// Client-safe types & data (no Prisma imports!)
 
 export interface PromoSuccessMetrics {
   totalRevenue: number;
@@ -105,63 +103,3 @@ export const CUSTOMER_TESTIMONIALS: CustomerTestimonial[] = [
     rating: 4.8,
   },
 ];
-
-// Calculate success metrics from real database orders (future implementation)
-export async function getPromoSuccessMetrics(): Promise<PromoSuccessMetrics> {
-  try {
-    // Query orders yang dibuat dalam periode promo MERDEKA
-    // (13 Juli - 14 Agustus 2026, atau ganti dengan actual promo date range)
-    const promoStart = new Date("2026-07-13");
-    const promoEnd = new Date("2026-08-14T23:59:59");
-
-    const orders = await prisma.order.findMany({
-      where: {
-        createdAt: {
-          gte: promoStart,
-          lte: promoEnd,
-        },
-        status: {
-          in: ["CONFIRMED", "SHIPPED", "DELIVERED", "PAID"],
-        },
-      },
-      include: {
-        items: true,
-      },
-    });
-
-    if (orders.length === 0) {
-      return PROMO_SUCCESS_DATA_FALLBACK;
-    }
-
-    const totalRevenue = orders.reduce((sum, order) => {
-      const amount = typeof order.totalAmount === 'string'
-        ? parseInt(order.totalAmount)
-        : order.totalAmount instanceof Decimal
-        ? order.totalAmount.toNumber()
-        : order.totalAmount;
-      return sum + amount;
-    }, 0);
-
-    const totalUnits = orders.reduce((sum, order) => {
-      return sum + order.items.reduce((itemSum, item) => itemSum + item.quantity, 0);
-    }, 0);
-
-    const percentComplete = Math.min(
-      (totalRevenue / PROMO_TARGETS.targetRevenue) * 100,
-      100
-    );
-
-    return {
-      totalRevenue,
-      targetRevenue: PROMO_TARGETS.targetRevenue,
-      percentComplete: Math.round(percentComplete * 10) / 10,
-      totalOrders: orders.length,
-      totalUnits,
-      averageRating: 4.7,
-      daysRemaining: 3,
-    };
-  } catch (error) {
-    console.error("Error calculating promo metrics:", error);
-    return PROMO_SUCCESS_DATA_FALLBACK;
-  }
-}
