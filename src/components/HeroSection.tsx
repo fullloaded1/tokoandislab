@@ -96,6 +96,20 @@ export default function HeroSection({ featuredProducts = [], promoBanner }: { fe
                 quality={85}
                 sizes="(max-width: 768px) 100vw, 1280px"
               />
+              {/* Success Overlay Badge */}
+              {currentSlide === 0 && (
+                <div className="absolute top-6 right-6 z-20 flex flex-col gap-2">
+                  <div className="inline-flex items-center gap-2 rounded-lg bg-emerald-500/95 backdrop-blur-sm border border-emerald-300 px-4 py-2.5 text-sm font-bold text-white shadow-lg">
+                    ✨ Sukses! 1,287 Pesanan
+                  </div>
+                  <div className="inline-flex items-center gap-2 rounded-lg bg-yellow-500/95 backdrop-blur-sm border border-yellow-300 px-4 py-2.5 text-sm font-bold text-white shadow-lg">
+                    ⭐ Rating 4.8/5
+                  </div>
+                  <div className="inline-flex items-center gap-2 rounded-lg bg-blue-500/95 backdrop-blur-sm border border-blue-300 px-4 py-2.5 text-sm font-bold text-white shadow-lg">
+                    🏢 150+ Lab Terpercaya
+                  </div>
+                </div>
+              )}
             </Link>
           )}
           {featuredProducts.map((product, index) => {
