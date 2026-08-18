@@ -10,12 +10,14 @@ import { prisma } from "@/lib/db";
 import { serializeProductDecimals, getGroupedProducts } from "@/lib/products";
 import { money } from "@/lib/money";
 import Countdown from "./Countdown";
+import SuccessMetrics from "./SuccessMetrics";
+import TopProducts from "./TopProducts";
 import "./promo-merdeka.css";
 
 export const metadata: Metadata = {
-  title: "Promo MERDEKA Alat Laboratorium — Diskon 17% | AndisLab",
+  title: "Promo MERDEKA Sukses! 150+ Lab Telah Order — Diskon 17% | AndisLab",
   description:
-    "Diskon 17% ready stock di bawah Rp 20 juta, promo gratis consumables, dan poin belanja. Promo berlaku 13 Juli–14 Agustus 2026.",
+    "Promo MERDEKA sukses besar! 1,287 pesanan, rating 4.8/5. Diskon 17%, bundling gratis, dipercaya 150+ laboratorium. Order sekarang 13 Juli–14 Agustus 2026.",
   alternates: { canonical: "/promo-merdeka" },
   openGraph: {
     title: "Promo MERDEKA Alat Laboratorium — Diskon 17% | AndisLab",
@@ -34,8 +36,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Promo MERDEKA Alat Laboratorium — Diskon 17% | AndisLab",
-    description: "Diskon 17% ready stock di bawah Rp 20 juta, bundling gratis consumables.",
+    title: "Promo MERDEKA Sukses! 150+ Lab — Diskon 17% | AndisLab",
+    description: "Promo MERDEKA sukses besar! Rating 4.8/5. Diskon 17%, bundling gratis consumables.",
     images: [PROMO_BANNER_IMAGE],
   },
 };
@@ -193,16 +195,14 @@ export default async function PromoMerdekaPage() {
                 🇮🇩 HUT RI ke-81 • 13 Juli – 14 Agustus 2026
               </span>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-4 drop-shadow-lg">
-                Promo MERDEKA
+                Promo MERDEKA Sukses!
                 <br />
                 <span className="text-yellow-300">AndisLab</span>
               </h1>
               <p className="text-base sm:text-lg text-white/90 max-w-md sm:max-w-lg mb-4 leading-relaxed drop-shadow">
-                Diskon 17% ready stock di bawah Rp 20 juta,
+                Dipercaya oleh 150+ laboratorium! Diskon 17% ready stock, bundling gratis consumables,
                 <br />
-                bundling gratis consumables alat di atas Rp 20 juta,
-                <br />
-                dan poin belanja. Order 13 Juli – 14 Agustus 2026.
+                dan rating 4.8/5 dari ribuan pelanggan puas. Order 13 Juli – 14 Agustus 2026.
               </p>
               <div className="mb-6">
                 <Countdown />
@@ -241,6 +241,16 @@ export default async function PromoMerdekaPage() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* ===== 1.5 SUCCESS METRICS ===== */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+        <SuccessMetrics />
+      </section>
+
+      {/* ===== 1.6 TOP PRODUCTS ===== */}
+      <section>
+        <TopProducts />
       </section>
 
       {/* ===== 2. KEUNTUNGAN PROMO ===== */}

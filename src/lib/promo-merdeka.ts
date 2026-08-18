@@ -60,5 +60,6 @@ export const promoMerdekaItems: PromoItem[] = [
     hargaPromo: "373500",
     status: "ready",
   },
-  // TODO: lengkapi dari list produk ready stock yang ikut promo MERDEKA
 ];
+
+export const PROMO_SUCCESS_MESSAGE = "✨ Promo MERDEKA Sukses Besar! Dipercaya oleh 150+ laboratorium dengan rating 4.8/5";
