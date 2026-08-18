@@ -12,6 +12,8 @@ import { money } from "@/lib/money";
 import Countdown from "./Countdown";
 import SuccessMetrics from "./SuccessMetrics";
 import TopProducts from "./TopProducts";
+import CustomerGratitude from "./CustomerGratitude";
+import { getPromoSuccessMetrics } from "@/lib/promoSuccessMetrics";
 import "./promo-merdeka.css";
 
 export const metadata: Metadata = {
@@ -104,6 +106,9 @@ const syaratKetentuan = [
 ];
 
 export default async function PromoMerdekaPage() {
+  // Get success metrics from database
+  const successMetrics = await getPromoSuccessMetrics();
+
   // Query semua produk ready stock dari database
   let readyStockProducts: any[] = [];
   try {
@@ -245,7 +250,7 @@ export default async function PromoMerdekaPage() {
 
       {/* ===== 1.5 SUCCESS METRICS ===== */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-        <SuccessMetrics />
+        <SuccessMetrics data={successMetrics} />
       </section>
 
       {/* ===== 1.6 TOP PRODUCTS ===== */}
@@ -514,6 +519,11 @@ export default async function PromoMerdekaPage() {
             </Link>
           </div>
         </div>
+      </section>
+
+      {/* ===== CUSTOMER GRATITUDE SECTION ===== */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+        <CustomerGratitude />
       </section>
 
       {/* ===== FAQ SECTION (ACCORDION) ===== */}

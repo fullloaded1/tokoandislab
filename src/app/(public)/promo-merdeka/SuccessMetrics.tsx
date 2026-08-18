@@ -1,11 +1,14 @@
 "use client";
 
-import { PROMO_SUCCESS_DATA } from "@/lib/promoSuccessMetrics";
+import { PromoSuccessMetrics } from "@/lib/promoSuccessMetrics";
 import { money } from "@/lib/money";
 
-export default function SuccessMetrics() {
-  const { totalRevenue, targetRevenue, percentComplete, totalOrders, averageRating } =
-    PROMO_SUCCESS_DATA;
+interface SuccessMetricsProps {
+  data: PromoSuccessMetrics;
+}
+
+export default function SuccessMetrics({ data }: SuccessMetricsProps) {
+  const { totalRevenue, targetRevenue, percentComplete, totalOrders, averageRating } = data;
 
   return (
     <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 bg-gradient-to-br from-red-50 to-white rounded-3xl border border-red-100">
