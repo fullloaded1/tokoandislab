@@ -100,7 +100,7 @@ export default function HeroSection({ featuredProducts = [], promoBanner }: { fe
               {currentSlide === 0 && (
                 <div className="absolute top-6 right-6 z-20 flex flex-col gap-2">
                   <div className="inline-flex items-center gap-2 rounded-lg bg-emerald-500/95 backdrop-blur-sm border border-emerald-300 px-4 py-2.5 text-sm font-bold text-white shadow-lg">
-                    ✨ Sukses! 1,287 Pesanan
+                    ✨ Sukses! 24 Pesanan
                   </div>
                   <div className="inline-flex items-center gap-2 rounded-lg bg-yellow-500/95 backdrop-blur-sm border border-yellow-300 px-4 py-2.5 text-sm font-bold text-white shadow-lg">
                     ⭐ Rating 4.8/5

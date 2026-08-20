@@ -2,19 +2,16 @@
 import { prisma } from "@/lib/db";
 import ProductCard from "@/components/ProductCard";
 import AntiIndentBadge from "@/components/AntiIndentBadge";
-import WaLinkCTA from "@/components/WaLinkCTA";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
-const WA_PROMO_MERDEKA = "/?wa=open&source=ready_stock_promo_merdeka&text=Halo%20AndisLab%2C%20saya%20ingin%20order%20promo%20Merdeka%20ready%20stock%3A%20";
-
 export const metadata = {
   title: "Alat Lab Ready Stock — Kirim Cepat | AndisLab",
-  description: "Inkubator, oven, autoclave, water bath Daihan ready stock. Hemat hingga 48% vs e-Katalog. Order sebelum 31 Juli, tiba pekan 17 Agustus. Cek stok via WhatsApp.",
+  description: "Inkubator, oven, LAF, BSC, mikroskop, dan alat lab lainnya ready stock. Siap kirim 1×24 jam ke seluruh Indonesia. Dokumen SPJ & Faktur Pajak lengkap.",
   alternates: { canonical: "/ready-stock" },
   openGraph: {
     title: "Alat Lab Ready Stock — Kirim Cepat | AndisLab",
-    description: "Inkubator, oven, autoclave, water bath Daihan ready stock. Hemat hingga 48% vs e-Katalog. Cek stok via WhatsApp.",
+    description: "Inkubator, oven, LAF, BSC, mikroskop, dan alat lab lainnya ready stock. Siap kirim 1×24 jam ke seluruh Indonesia.",
     type: "website",
     siteName: "AndisLab",
     images: [{ url: "/logo.png", width: 1200, height: 630, alt: "Ready Stock AndisLab" }],
@@ -22,7 +19,7 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Alat Lab Ready Stock — Kirim Cepat | AndisLab",
-    description: "Inkubator, oven, autoclave, water bath Daihan ready stock. Hemat hingga 48% vs e-Katalog.",
+    description: "Inkubator, oven, LAF, BSC, mikroskop, dan alat lab lainnya ready stock. Siap kirim 1×24 jam ke seluruh Indonesia.",
     images: ["/logo.png"],
   },
 };
@@ -53,14 +50,6 @@ export default async function ReadyStockPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-      {/* Banner Promo Merdeka - UI/UX Pro Max 48px touch safe */}
-      <WaLinkCTA
-        href={WA_PROMO_MERDEKA}
-        className="mb-6 flex min-h-[48px] w-full items-center justify-center gap-2.5 rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 px-6 py-3.5 text-center text-sm sm:text-base font-black text-white shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.99] border border-red-400/30"
-      >
-        <span>🇮🇩 Promo Merdeka — order ready stock sebelum 31 Juli, tiba di pekan 17 Agustus &rarr;</span>
-      </WaLinkCTA>
-
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-slate-500 mb-8">
         <Link href="/" className="hover:text-emerald-600 font-semibold transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-emerald-600 rounded-sm">
