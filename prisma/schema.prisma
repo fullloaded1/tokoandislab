@@ -28,17 +28,17 @@ model Product {
   warrantyPeriod     String?
   brochureUrl        String?
   isReadyStock       Boolean             @default(false)
-  costPrice          Decimal             @default(0) @db.Decimal(16, 2)
   clearanceDiscount  Decimal?            @db.Decimal(5, 2)
+  costPrice          Decimal             @default(0) @db.Decimal(16, 2)
   pageViews          Int                 @default(0)
   documentKnowledges DocumentKnowledge[]
   inquiryItems       InquiryItem[]
   installedBases     InstalledBase[]
   specs              ProductSpec[]
   variants           ProductVariant[]
+  evalItems          StockEvalItem[]
   whatsAppLogs       WhatsAppLog[]
   articles           Article[]           @relation("ArticleToProduct")
-  evalItems          StockEvalItem[]
 }
 
 model ProductVariant {
@@ -332,20 +332,20 @@ model WhatsAppLog {
 }
 
 model Article {
-  id        String    @id @default(cuid())
-  slug      String    @unique
-  title     String
-  content   String
-  excerpt   String?
-  image     String?
+  id         String    @id @default(cuid())
+  slug       String    @unique
+  title      String
+  content    String
+  excerpt    String?
+  image      String?
+  published  Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  category   String    @default("edukasi-lab")
+  likeCount  Int       @default(0)
+  viewCount  Int       @default(0)
   authorName String?   @default("Tim Redaksi AndisLab")
-  published Boolean   @default(true)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  category  String    @default("edukasi-lab")
-  viewCount Int       @default(0)
-  likeCount Int       @default(0)
-  products  Product[] @relation("ArticleToProduct")
+  products   Product[] @relation("ArticleToProduct")
 }
 
 model Order {
@@ -416,15 +416,15 @@ model AuditLog {
 }
 
 model AdminUser {
-  id        String     @id @default(cuid())
-  email     String     @unique
-  name      String
-  role      String     @default("ADMIN")
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  id          String            @id @default(cuid())
+  email       String            @unique
+  name        String
+  role        String            @default("ADMIN")
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
   auditLogs   AuditLog[]
-  stockLogs   StockLog[]
   evaluations StockEvaluation[]
+  stockLogs   StockLog[]
 }
 
 model ProductSpec {
@@ -434,6 +434,50 @@ model ProductSpec {
   productId String
   sortOrder Int     @default(0)
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model StockEvaluation {
+  id          String          @id @default(cuid())
+  evalNo      String          @unique
+  period      DateTime
+  status      StockEvalStatus @default(DRAFT)
+  targetCount Int             @default(50)
+  notes       String?
+  createdBy   String?
+  approvedAt  DateTime?
+  executedAt  DateTime?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  items       StockEvalItem[]
+  admin       AdminUser?      @relation(fields: [createdBy], references: [id])
+
+  @@index([period])
+  @@index([status])
+}
+
+model StockEvalItem {
+  id                String          @id @default(cuid())
+  evaluationId      String
+  productId         String
+  action            StockEvalAction
+  salesCount        Int             @default(0)
+  inquiryCount      Int             @default(0)
+  pageViews         Int             @default(0)
+  currentStock      Int             @default(0)
+  daysSinceLastSale Int?
+  marginPercent     Decimal?        @db.Decimal(5, 2)
+  score             Decimal         @default(0) @db.Decimal(10, 2)
+  clearanceDiscount Decimal?        @db.Decimal(5, 2)
+  productName       String
+  productBrand      String?
+  productModel      String?
+  reason            String?
+  createdAt         DateTime        @default(now())
+  evaluation        StockEvaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+  product           Product         @relation(fields: [productId], references: [id])
+
+  @@index([evaluationId])
+  @@index([productId])
 }
 
 enum InquiryStatus {
@@ -553,8 +597,6 @@ enum PriceDisplayMode {
   INCLUDE_PPN
 }
 
-// ── Stock Evaluation (Monthly Rolling) ──────────────────────────
-
 enum StockEvalStatus {
   DRAFT
   APPROVED
@@ -565,55 +607,4 @@ enum StockEvalStatus {
 enum StockEvalAction {
   RETIRE
   INTRODUCE
-}
-
-model StockEvaluation {
-  id         String          @id @default(cuid())
-  evalNo     String          @unique // EVAL-2026-07
-  period     DateTime // first day of eval month
-  status     StockEvalStatus @default(DRAFT)
-  targetCount Int            @default(50) // target jumlah ready stock
-  notes      String?
-  createdBy  String?
-  approvedAt DateTime?
-  executedAt DateTime?
-  createdAt  DateTime        @default(now())
-  updatedAt  DateTime        @updatedAt
-  admin      AdminUser?      @relation(fields: [createdBy], references: [id])
-  items      StockEvalItem[]
-
-  @@index([period])
-  @@index([status])
-}
-
-model StockEvalItem {
-  id               String          @id @default(cuid())
-  evaluationId     String
-  productId        String
-  action           StockEvalAction
-
-  // Snapshot skor (RETIRE)
-  salesCount       Int             @default(0)
-  inquiryCount     Int             @default(0)
-  pageViews        Int             @default(0)
-  currentStock     Int             @default(0)
-  daysSinceLastSale Int?
-  marginPercent    Decimal?        @db.Decimal(5, 2) // gross margin %
-  score            Decimal         @default(0) @db.Decimal(10, 2)
-
-  // Clearance discount (RETIRE)
-  clearanceDiscount Decimal?       @db.Decimal(5, 2) // persen diskon clearance
-
-  // Snapshot info produk
-  productName      String
-  productBrand     String?
-  productModel     String?
-  reason           String?
-  createdAt        DateTime        @default(now())
-
-  evaluation       StockEvaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
-  product          Product         @relation(fields: [productId], references: [id])
-
-  @@index([evaluationId])
-  @@index([productId])
 }
