@@ -14,7 +14,7 @@ export async function GET() {
         variants: true,
       },
       orderBy: {
-        name: "asc",
+        price: "asc",
       },
     });
 
