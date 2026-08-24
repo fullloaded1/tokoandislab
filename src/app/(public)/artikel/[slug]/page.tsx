@@ -100,6 +100,16 @@ const ARTICLE_SEO: Record<string, { title: string; description: string }> = {
     description:
       "Pilih timbangan analitik yang tepat: perbedaan 0,1 mg vs 0,01 mg, kalibrasi sesuai ISO 17025/BSNI, dan rekomendasi Aczet ready stock untuk lab farmasi & riset →",
   },
+  "panduan-ph-meter-laboratorium": {
+    title: "pH Meter Lab: Panduan Memilih, Kalibrasi & Harga 2026",
+    description:
+      "Cara memilih pH meter laboratorium: portable vs bench, kalibrasi buffer 3 titik, perawatan elektroda, dan rekomendasi Milwaukee & Lovibond untuk PDAM, farmasi, dan riset →",
+  },
+  "panduan-centrifuge-laboratorium": {
+    title: "Centrifuge Laboratorium: Jenis, RPM vs RCF & Panduan Memilih",
+    description:
+      "Panduan lengkap centrifuge lab: perbedaan microcentrifuge, refrigerated, dan high-speed, cara konversi RPM ke RCF, keselamatan penggunaan, dan rekomendasi per tipe lab →",
+  },
 };
 
 // FAQPage schema per-slug (di luar konten Markdown). Emit hanya bila slug punya entri.
@@ -162,6 +172,40 @@ const ARTICLE_INTERNAL_LINKS: Record<string, { href: string; label: string; desc
       href: "/ready-stock",
       label: "Cek Semua Alat Cold Chain Ready Stock",
       desc: "Produk cold chain tersedia ready stock — pengiriman 1–3 hari kerja ke seluruh Indonesia",
+    },
+  ],
+  "panduan-ph-meter-laboratorium": [
+    {
+      href: "/milwaukee",
+      label: "Distributor Milwaukee Instruments Indonesia",
+      desc: "pH meter, conductivity meter, dan DO meter Milwaukee original — garansi resmi, elektroda & buffer solution tersedia",
+    },
+    {
+      href: "/lovibond",
+      label: "Distributor Lovibond Indonesia",
+      desc: "Photometer, turbidimeter, dan alat uji kualitas air Lovibond original dengan reagen resmi",
+    },
+    {
+      href: "/katalog?q=ph+meter",
+      label: "Cek Semua pH Meter di Katalog",
+      desc: "Lihat pilihan pH meter portable dan bench yang tersedia — harga live dan status stok",
+    },
+  ],
+  "panduan-centrifuge-laboratorium": [
+    {
+      href: "/katalog?q=centrifuge",
+      label: "Cek Semua Centrifuge di Katalog",
+      desc: "Microcentrifuge, refrigerated centrifuge, dan general purpose centrifuge — harga live",
+    },
+    {
+      href: "/daihan-labtech",
+      label: "Distributor Daihan Labtech Indonesia",
+      desc: "Inkubator, autoclave, oven, dan water bath Daihan — ready stock, harga di bawah e-Katalog",
+    },
+    {
+      href: "/katalog",
+      label: "Lihat Semua Alat Laboratorium",
+      desc: "1.000+ produk lab dari distributor resmi — penawaran 1 hari kerja",
     },
   ],
 };

@@ -96,6 +96,20 @@ const SEO_ARTICLES_MAPPING: ArticleUpdateSpec[] = [
     category: 'panduan-alat',
   },
   {
+    slug: 'panduan-ph-meter-laboratorium',
+    title: 'pH Meter Laboratorium: Panduan Memilih, Kalibrasi & Harga 2026',
+    excerpt: 'Panduan memilih pH meter laboratorium — perbedaan portable vs bench, cara kalibrasi buffer 3 titik, perawatan elektroda, dan rekomendasi merek Milwaukee & Lovibond untuk PDAM, farmasi, dan riset.',
+    image: '/images/articles/ph-meter-milwaukee.png',
+    category: 'panduan-alat',
+  },
+  {
+    slug: 'panduan-centrifuge-laboratorium',
+    title: 'Centrifuge Laboratorium: Jenis, RPM vs RCF & Panduan Memilih 2026',
+    excerpt: 'Panduan lengkap memilih centrifuge laboratorium — perbedaan microcentrifuge, refrigerated centrifuge, dan high-speed centrifuge, cara menghitung RCF dari RPM, dan rekomendasi per tipe laboratorium.',
+    image: '/images/articles/centrifuge-laboratorium.png',
+    category: 'panduan-alat',
+  },
+  {
     slug: 'kebutuhan-alat-lab-qc-industri-cikarang',
     title: 'Supplier Alat Laboratorium QC Terpercaya di Kawasan Industri Cikarang (KIC)',
     excerpt: 'Panduan dan rekomendasi peralatan laboratorium Quality Control (QC) untuk pabrik manufaktur, F&B, dan otomotif di Kawasan Industri Cikarang. Dapatkan layanan pengadaan terbaik dari AndisLab.',
