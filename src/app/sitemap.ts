@@ -91,6 +91,36 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly',
       priority: 0.8,
     },
+    {
+      url: `${BASE_URL}/wilayah/jakarta`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/wilayah/surabaya`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/wilayah/bandung`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/wilayah/bekasi`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/wilayah/medan`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
   ];
 
   return [...staticUrls, ...productUrls, ...articleUrls];
