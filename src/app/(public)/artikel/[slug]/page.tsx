@@ -41,9 +41,9 @@ const getArticle = cache(async (slug: string) => {
 // Override SEO title & meta description per slug (di luar excerpt DB).
 const ARTICLE_SEO: Record<string, { title: string; description: string }> = {
   "panduan-cold-chain-penyimpanan-sampel-laboratorium": {
-    title: "Kulkas Vaksin & ULT Freezer -86°C: Panduan & Harga 2026",
+    title: "ULT Freezer -86°C & Kulkas Vaksin Lab: Panduan + Harga 2026",
     description:
-      "Cara memilih kulkas vaksin, lab freezer, dan ULT freezer sesuai standar WHO/BPOM — plus perbandingan harga vs e-Katalog 2026. Panduan lengkap untuk instansi.",
+      "Lindungi sampel & vaksin Anda. Panduan memilih ULT freezer -86°C dan kulkas farmasi sesuai WHO/BPOM. Daihan original, harga transparan →",
   },
   "panduan-lengkap-titrator-otomatis-laboratorium": {
     title: "Titrator Otomatis Lab: Panduan Lengkap & Harga 2026",
@@ -95,6 +95,11 @@ const ARTICLE_SEO: Record<string, { title: string; description: string }> = {
     description:
       "Panduan memilih spektrofotometer UV-Vis single beam vs double beam. Pelajari spesifikasi rentang panjang gelombang, bandwidth, dan rekomendasi alat akurasi tinggi.",
   },
+  "panduan-timbangan-analitik-laboratorium": {
+    title: "Timbangan Analitik Lab: Panduan Memilih & Harga 2026",
+    description:
+      "Pilih timbangan analitik yang tepat: perbedaan 0,1 mg vs 0,01 mg, kalibrasi sesuai ISO 17025/BSNI, dan rekomendasi Aczet ready stock untuk lab farmasi & riset →",
+  },
 };
 
 // FAQPage schema per-slug (di luar konten Markdown). Emit hanya bila slug punya entri.
@@ -119,6 +124,44 @@ const ARTICLE_FAQ: Record<string, { q: string; a: string }[]> = {
     {
       q: "Berapa lama proses dari penawaran sampai barang tiba?",
       a: "Penawaran resmi terbit dalam 1 hari kerja. Unit ready stock dikirim 1–3 hari kerja setelah PO/pembayaran dengan pengiriman mudah dan cepat ke seluruh Indonesia.",
+    },
+  ],
+};
+
+// Per-slug inline "Lihat Juga" links injected after article body (no DB change needed).
+const ARTICLE_INTERNAL_LINKS: Record<string, { href: string; label: string; desc: string }[]> = {
+  "panduan-timbangan-analitik-laboratorium": [
+    {
+      href: "/katalog/analytical-balance-cy285c-aczet",
+      label: "Analytical Balance Aczet CY285C (0,1 mg)",
+      desc: "Timbangan analitik 220g readability 0,1 mg — ready stock, kalibrasi internal, cocok lab farmasi & universitas",
+    },
+    {
+      href: "/katalog/infitek-analytical-balance-ba-n503",
+      label: "Analytical Balance Infitek BA-N503",
+      desc: "Alternatif timbangan analitik readability 0,1 mg — ready stock dengan harga kompetitif",
+    },
+    {
+      href: "/ready-stock",
+      label: "Cek Semua Timbangan Ready Stock",
+      desc: "Lihat stok timbangan analitik dan presisi yang tersedia — pengiriman 1–3 hari kerja",
+    },
+  ],
+  "panduan-cold-chain-penyimpanan-sampel-laboratorium": [
+    {
+      href: "/katalog/daihan-ldf-9010u-ultra-low-temp-freezer",
+      label: "Upright ULT Freezer LDF-9010U (-86°C)",
+      desc: "Freezer ultra rendah tegak 500L — ready stock untuk biobank dan sampel biologis",
+    },
+    {
+      href: "/katalog/daihan-lcv-203gr-vaccine-pharmacy-refrigerator",
+      label: "Vaccine & Pharmacy Refrigerator LCV-203GR",
+      desc: "Kulkas vaksin +2°C~+8°C sesuai standar WHO PQS, ready stock",
+    },
+    {
+      href: "/ready-stock",
+      label: "Cek Semua Alat Cold Chain Ready Stock",
+      desc: "Produk cold chain tersedia ready stock — pengiriman 1–3 hari kerja ke seluruh Indonesia",
     },
   ],
 };
@@ -384,6 +427,26 @@ export default async function ArticleDetailPage(
               {article.content}
             </ReactMarkdown>
           </div>
+
+          {/* Inline "Lihat Juga" internal links — per slug */}
+          {ARTICLE_INTERNAL_LINKS[article.slug] && (
+            <div className="mt-8 border border-blue-100 bg-blue-50/40 rounded-2xl p-5">
+              <p className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-3">Lihat Juga</p>
+              <ul className="space-y-3">
+                {ARTICLE_INTERNAL_LINKS[article.slug].map((link) => (
+                  <li key={link.href}>
+                    <Link href={link.href} className="group flex items-start gap-2.5">
+                      <span className="mt-0.5 text-blue-400 shrink-0 text-sm">→</span>
+                      <span>
+                        <span className="font-semibold text-blue-700 group-hover:underline text-sm">{link.label}</span>
+                        <span className="block text-xs text-slate-500 mt-0.5">{link.desc}</span>
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           {/* Dynamic WhatsApp CTA Banner */}
           <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-600 rounded-2xl p-6 sm:p-8 text-white shadow-md relative overflow-hidden mt-12 border border-emerald-550/20">

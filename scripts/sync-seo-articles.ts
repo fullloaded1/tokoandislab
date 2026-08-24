@@ -41,8 +41,8 @@ const SEO_ARTICLES_MAPPING: ArticleUpdateSpec[] = [
   },
   {
     slug: 'panduan-cold-chain-penyimpanan-sampel-laboratorium',
-    title: 'Kulkas Vaksin & ULT Freezer -86°C: Panduan & Harga 2026',
-    excerpt: 'Sistem cold chain laboratorium komprehensif — dari ultra low freezer -86°C untuk penyimpanan sampel biologis hingga kulkas farmasi untuk vaksin sesuai standar WHO & BPOM.',
+    title: 'ULT Freezer -86°C & Kulkas Vaksin Lab: Panduan + Harga 2026',
+    excerpt: 'Lindungi sampel & vaksin Anda. Panduan memilih ULT freezer -86°C dan kulkas farmasi sesuai standar WHO/BPOM — Daihan original, harga transparan.',
     image: '/images/articles/cold-chain-ult-freezer.png',
     category: 'edukasi-lab',
   },
@@ -86,6 +86,13 @@ const SEO_ARTICLES_MAPPING: ArticleUpdateSpec[] = [
     title: 'Spektrofotometer Lab: Panduan Memilih & Spesifikasi',
     excerpt: 'Panduan memilih spektrofotometer UV-Vis single beam vs double beam. Pelajari spesifikasi rentang panjang gelombang, bandwidth, dan rekomendasi alat akurasi tinggi.',
     image: '/images/articles/spektrofotometer-uv-vis.png',
+    category: 'panduan-alat',
+  },
+  {
+    slug: 'panduan-timbangan-analitik-laboratorium',
+    title: 'Timbangan Analitik Laboratorium: Panduan Memilih, Kalibrasi & Harga 2026',
+    excerpt: 'Panduan memilih timbangan analitik laboratorium — dari perbedaan resolusi 0,1 mg vs 0,01 mg, cara kalibrasi berkala sesuai standar BSNI, hingga rekomendasi merek Aczet yang sudah dipercaya lab farmasi dan riset di Indonesia.',
+    image: '/images/articles/timbangan-analitik-aczet.png',
     category: 'panduan-alat',
   },
   {

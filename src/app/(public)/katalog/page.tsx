@@ -14,24 +14,25 @@ export async function generateMetadata(
     ? `/katalog?category=${category}`
     : "/katalog";
 
+  const title = "Distributor Alat Laboratorium Indonesia | AndisLab";
+  const description =
+    "Distributor resmi alat laboratorium Indonesia. 1.000+ produk: Daihan, Yamato, Lovibond, Milwaukee. Penawaran resmi 1 hari kerja. Cek katalog →";
+
   return {
-    title: "Katalog Alat Laboratorium & Reagen Lengkap | AndisLab",
-    description:
-      "Ribuan alat lab: Daihan, Aczet, Yamato, Lovibond, Pyrex, Milwaukee. Harga transparan, ready stock & PO, penawaran resmi untuk instansi dalam 1 hari kerja.",
+    title,
+    description,
     alternates: { canonical: canonicalPath },
     openGraph: {
-      title: "Katalog Alat Laboratorium & Reagen Lengkap | AndisLab",
-      description:
-        "Ribuan alat lab: Daihan, Aczet, Yamato, Lovibond, Pyrex, Milwaukee. Harga transparan, ready stock & PO, penawaran resmi untuk instansi dalam 1 hari kerja.",
+      title,
+      description,
       type: "website",
       siteName: "AndisLab",
       images: [{ url: "/logo.png", width: 1200, height: 630, alt: "Katalog AndisLab" }],
     },
     twitter: {
       card: "summary_large_image",
-      title: "Katalog Alat Laboratorium & Reagen Lengkap | AndisLab",
-      description:
-        "Ribuan alat lab: Daihan, Aczet, Yamato, Lovibond, Pyrex, Milwaukee. Ready stock & PO.",
+      title,
+      description,
       images: ["/logo.png"],
     },
   };

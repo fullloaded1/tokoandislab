@@ -101,6 +101,12 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // Promo MERDEKA sudah berakhir 14 Agustus 2026 — redirect ke katalog
+      {
+        source: '/promo-merdeka',
+        destination: '/katalog',
+        permanent: false,
+      },
       {
         source: '/:path*',
         has: [{ type: 'host', value: 'andislabs.com' }],
