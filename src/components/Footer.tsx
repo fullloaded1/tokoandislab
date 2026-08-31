@@ -15,9 +15,9 @@ export default function Footer() {
       <div className="absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none"></div>
       
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 relative z-10">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-10">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-10">
           {/* Brand */}
-          <div className="col-span-2 md:col-span-1">
+          <div className="col-span-2 lg:col-span-2">
             <Link href="/" className="inline-block mb-6 group focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] rounded-2xl">
               <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3.5 border border-white/10 shadow-lg transition-transform duration-300 ease-[var(--ease-out)] group-hover:scale-105 group-hover:bg-white/15">
                 <Image src="/logo.png" alt="AndisLab Logo" width={160} height={56} className="h-12 md:h-14 w-auto object-contain" />
@@ -43,8 +43,34 @@ export default function Footer() {
               {[
                 { href: "/", label: "Beranda" },
                 { href: "/katalog", label: "Katalog Produk" },
-                { href: "/daihan-labtech", label: "Daihan Labtech" },
+                { href: "/ready-stock", label: "Ready Stock" },
                 { href: "/tentang", label: "Tentang Kami" },
+              ].map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-slate-400 hover:text-cyan-400 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] rounded-sm"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Sumber Daya */}
+          <div>
+            <p className="text-sm font-bold text-white uppercase tracking-wider mb-4">
+              Sumber Daya
+            </p>
+            <ul className="space-y-3">
+              {[
+                { href: "/artikel", label: "Artikel & Panduan" },
+                { href: "/pemerintah", label: "Pengadaan Pemerintah" },
+                { href: "/solusi/manufaktur", label: "Solusi Manufaktur" },
+                { href: "/solusi/farmasi", label: "Solusi Farmasi" },
+                { href: "/solusi/pendidikan", label: "Solusi Pendidikan" },
+                { href: "/solusi/pengolahan-air", label: "Solusi Pengolahan Air" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link

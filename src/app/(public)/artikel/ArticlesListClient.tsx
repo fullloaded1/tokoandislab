@@ -146,19 +146,30 @@ export default function ArticlesListClient({ initialArticles }: { initialArticle
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-slate-50 p-6 rounded-3xl border border-slate-100">
         {/* Category Tabs */}
         <div className="flex flex-wrap gap-2 order-2 md:order-1">
-          {CATEGORY_TABS.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-2 rounded-2xl text-xs font-bold transition-all duration-200 ease-[var(--ease-out)] focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] active:scale-[0.98] ${
-                activeTab === tab.id
-                  ? "bg-blue-600 text-white shadow-md shadow-blue-200"
-                  : "bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+          {CATEGORY_TABS.map((tab) => {
+            const count = tab.id === "all" 
+              ? articles.length 
+              : articles.filter(a => a.category === tab.id).length;
+              
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-2xl text-xs font-bold transition-all duration-200 ease-[var(--ease-out)] focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] active:scale-[0.98] ${
+                  activeTab === tab.id
+                    ? "bg-blue-600 text-white shadow-md shadow-blue-200"
+                    : "bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200"
+                }`}
+              >
+                {tab.label}
+                <span className={`px-2 py-0.5 rounded-full text-[10px] ${
+                  activeTab === tab.id ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500"
+                }`}>
+                  {count}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
         {/* Search Input */}

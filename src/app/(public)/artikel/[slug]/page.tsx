@@ -8,7 +8,7 @@ import ProductCard from "@/components/ProductCard";
 import ArticleLikeButton from "@/components/ArticleLikeButton";
 import ArticleViewTracker from "@/components/ArticleViewTracker";
 import ArticleWaCTA from "@/components/ArticleWaCTA";
-import { BookOpen, Calendar, ChevronRight, ArrowLeft, Eye, User, ShieldCheck } from "lucide-react";
+import { BookOpen, Calendar, ChevronRight, ArrowLeft, ArrowRight, Eye, User, ShieldCheck } from "lucide-react";
 import type { Metadata } from "next";
 import { cache } from "react";
 
@@ -110,10 +110,29 @@ const ARTICLE_SEO: Record<string, { title: string; description: string }> = {
     description:
       "Panduan lengkap centrifuge lab: perbedaan microcentrifuge, refrigerated, dan high-speed, cara konversi RPM ke RCF, keselamatan penggunaan, dan rekomendasi per tipe lab →",
   },
+  "panduan-memilih-water-bath-laboratorium": {
+    title: "Water Bath Laboratorium: Jenis, Presisi Suhu & Panduan 2026",
+    description:
+      "Panduan memilih water bath lab: water bath sirkulasi vs non-sirkulasi, shaking bath, kontrol suhu PID, proteksi dry-run, dan rekomendasi Daihan Labtech →",
+  },
 };
 
 // FAQPage schema per-slug (di luar konten Markdown). Emit hanya bila slug punya entri.
 const ARTICLE_FAQ: Record<string, { q: string; a: string }[]> = {
+  "panduan-memilih-water-bath-laboratorium": [
+    {
+      q: "Kapan harus menggunakan Water Bath Sirkulasi dibandingkan Water Bath Konvensional?",
+      a: "Water bath sirkulasi (circulating bath) wajib dipilih jika pengujian memerlukan keseragaman dan presisi suhu sangat ketat (toleransi ±0.05°C hingga ±0.1°C), seperti pada uji kinetika enzim, serologi, viskositas, atau kalibrasi sensor.",
+    },
+    {
+      q: "Mengapa dilarang menggunakan air keran biasa pada water bath laboratorium?",
+      a: "Air keran mengandung mineral kalsium dan magnesium tinggi yang cepat mengendap menjadi kerak (scaling). Kerak ini melapisi elemen pemanas, mengurangi efisiensi termal, dan merusak sensor suhu. Selalu gunakan air deionisasi (DI water) atau aquadest.",
+    },
+    {
+      q: "Apakah AndisLab melayani pengadaan water bath resmi dan e-Katalog LKPP?",
+      a: "Ya, AndisLab menyediakan water bath, circulating bath, dan shaking bath bergaransi resmi dari merek terkemuka seperti Daihan Labtech, lengkap dengan faktur pajak dan dukungan pengadaan e-Katalog / LPSE.",
+    },
+  ],
   "panduan-pengadaan-alat-laboratorium-e-katalog": [
     {
       q: "Apakah pembelian via e-Katalog wajib untuk instansi pemerintah?",
@@ -208,6 +227,23 @@ const ARTICLE_INTERNAL_LINKS: Record<string, { href: string; label: string; desc
       desc: "1.000+ produk lab dari distributor resmi — penawaran 1 hari kerja",
     },
   ],
+  "panduan-memilih-water-bath-laboratorium": [
+    {
+      href: "/daihan-labtech",
+      label: "Distributor Daihan Labtech Indonesia",
+      desc: "Water bath, circulating bath, incubator, dan oven Daihan — bergaransi resmi dengan harga kompetitif",
+    },
+    {
+      href: "/katalog?q=water+bath",
+      label: "Cek Water Bath di Katalog AndisLab",
+      desc: "Lihat pilihan water bath presisi dengan berbagai kapasitas volume (6L s.d. 30L)",
+    },
+    {
+      href: "/ready-stock",
+      label: "Cek Produk Laboratorium Ready Stock",
+      desc: "Instrumen lab siap kirim 1–3 hari kerja ke seluruh Indonesia",
+    },
+  ],
 };
 
 export async function generateMetadata(
@@ -259,6 +295,44 @@ export default async function ArticleDetailPage(
 
   if (!article || !article.published) {
     notFound();
+  }
+
+  let relatedArticles = await (prisma as any).article.findMany({
+    where: {
+      published: true,
+      category: article.category,
+      slug: { not: article.slug },
+    },
+    take: 3,
+    orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      slug: true,
+      title: true,
+      excerpt: true,
+      image: true,
+      createdAt: true,
+    },
+  });
+
+  if (relatedArticles.length < 3) {
+    const fallbackArticles = await (prisma as any).article.findMany({
+      where: {
+        published: true,
+        slug: { notIn: [article.slug, ...relatedArticles.map((a: any) => a.slug)] },
+      },
+      take: 3 - relatedArticles.length,
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        excerpt: true,
+        image: true,
+        createdAt: true,
+      },
+    });
+    relatedArticles = [...relatedArticles, ...fallbackArticles];
   }
 
   return (
@@ -526,6 +600,88 @@ export default async function ArticleDetailPage(
               {article.products.map((product: any) => (
                 <ProductCard key={product.id} product={product as any} />
               ))}
+            </div>
+          </section>
+        )}
+
+        {/* Related Articles section */}
+        {relatedArticles.length > 0 && (
+          <section className="border-t border-slate-200 pt-12 mb-16">
+            <div className="flex items-end justify-between mb-8">
+              <div>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-1 text-xs font-bold text-blue-700 mb-2 border border-blue-100">
+                  📚 Baca Juga
+                </span>
+                <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+                  Artikel Terkait
+                </h2>
+                <p className="text-sm text-slate-500 mt-1">
+                  Temukan wawasan dan panduan spesifikasi alat laboratorium lainnya.
+                </p>
+              </div>
+              <Link
+                href="/artikel"
+                className="hidden sm:inline-flex items-center gap-2 rounded-md border border-slate-300 bg-white px-5 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+              >
+                Semua Artikel
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {relatedArticles.map((relArticle: any) => (
+                <article
+                  key={relArticle.id}
+                  className="group flex flex-col bg-white rounded-xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition-all duration-200 overflow-hidden"
+                >
+                  <Link href={`/artikel/${relArticle.slug}`} className="relative aspect-video w-full bg-slate-50 overflow-hidden block border-b border-slate-100">
+                    {relArticle.image ? (
+                      <Image
+                        src={relArticle.image}
+                        alt={relArticle.title}
+                        fill
+                        className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center bg-slate-100">
+                        <BookOpen className="h-8 w-8 text-slate-300" />
+                      </div>
+                    )}
+                  </Link>
+                  <div className="p-5 flex flex-col flex-grow">
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2 block">
+                      {new Date(relArticle.createdAt).toLocaleDateString("id-ID", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </span>
+                    <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-700 transition-colors line-clamp-2 leading-snug">
+                      <Link href={`/artikel/${relArticle.slug}`}>{relArticle.title}</Link>
+                    </h3>
+                    <div className="mt-auto pt-4 border-t border-slate-100/50">
+                      <Link
+                        href={`/artikel/${relArticle.slug}`}
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-700 hover:text-blue-900 transition-colors"
+                      >
+                        Baca Artikel
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+            
+            <div className="mt-6 flex justify-center sm:hidden">
+              <Link
+                href="/artikel"
+                className="w-full justify-center inline-flex items-center gap-2 rounded-md border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+              >
+                Lihat Semua Artikel
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
           </section>
         )}
