@@ -116,6 +116,20 @@ const SEO_ARTICLES_MAPPING: ArticleUpdateSpec[] = [
     image: '/images/articles/kic-lab-equipment.png',
     category: 'edukasi-lab',
   },
+  {
+    slug: 'panduan-memilih-water-bath-laboratorium',
+    title: 'Panduan Memilih Water Bath Laboratorium: Jenis, Presisi Suhu & Tips Perawatan 2026',
+    excerpt: 'Panduan lengkap memilih water bath laboratorium — perbedaan water bath sirkulasi vs non-sirkulasi, shaking bath, sistem kontrol PID, proteksi dry-run, hingga tips perawatan rutin dari tim AndisLab.',
+    image: '/images/articles/water-bath-laboratorium.jpg',
+    category: 'panduan-alat',
+  },
+  {
+    slug: 'panduan-kalibrasi-perawatan-alat-laboratorium',
+    title: '5 Kesalahan Fatal dalam Perawatan Alat Laboratorium yang Bikin Rugi Jutaan Rupiah',
+    excerpt: 'Jangan biarkan investasi miliaran rupiah rusak karena kelalaian kecil. Pelajari 5 kesalahan umum perawatan alat lab—autoclave, spektrofotometer, centrifuge—dan cara mencegahnya agar data Anda tetap valid.',
+    image: '/images/articles/kalibrasi-perawatan-alat-lab.jpg',
+    category: 'edukasi-lab',
+  },
 ];
 
 async function main() {

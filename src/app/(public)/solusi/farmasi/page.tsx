@@ -50,7 +50,7 @@ export default async function SolusiFarmasiPage() {
       {/* Hero Section */}
       <section className="relative bg-emerald-950 pt-24 pb-20 lg:pt-32 lg:pb-28 overflow-hidden">
         <div className="absolute inset-0 opacity-20">
-          <Image src="/images/Banner Promo MERDEKA AndisLab 2026.png" alt="Pharma Background" fill className="object-cover" />
+          <Image src="/images/articles/kalibrasi-perawatan-alat-lab.jpg" alt="Pharma Background" fill className="object-cover" />
           <div className="absolute inset-0 bg-emerald-950 mix-blend-multiply"></div>
         </div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center sm:text-left z-10">

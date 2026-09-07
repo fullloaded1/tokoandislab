@@ -115,6 +115,11 @@ const ARTICLE_SEO: Record<string, { title: string; description: string }> = {
     description:
       "Panduan memilih water bath lab: water bath sirkulasi vs non-sirkulasi, shaking bath, kontrol suhu PID, proteksi dry-run, dan rekomendasi Daihan Labtech →",
   },
+  "panduan-kalibrasi-perawatan-alat-laboratorium": {
+    title: "5 Kesalahan Perawatan Alat Lab yang Bikin Rugi Jutaan Rupiah",
+    description:
+      "Pelajari 5 kesalahan fatal perawatan alat laboratorium: dari kelalaian kalibrasi, pembersihan salah, hingga overload centrifuge. Lindungi investasi lab Anda bersama AndisLab.",
+  },
 };
 
 // FAQPage schema per-slug (di luar konten Markdown). Emit hanya bila slug punya entri.
