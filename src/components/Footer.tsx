@@ -95,6 +95,8 @@ export default function Footer() {
                 { href: "/lovibond", label: "Lovibond" },
                 { href: "/aczet", label: "Aczet" },
                 { href: "/milwaukee", label: "Milwaukee" },
+                { href: "/taitec", label: "Taitec" },
+                { href: "/yamato", label: "Yamato Scientific" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
@@ -118,9 +120,11 @@ export default function Footer() {
                 { href: "/wilayah/jakarta", label: "Jakarta" },
                 { href: "/wilayah/surabaya", label: "Surabaya" },
                 { href: "/wilayah/bandung", label: "Bandung" },
-                { href: "/wilayah/bekasi", label: "Bekasi & Cikarang" },
+                { href: "/wilayah/semarang", label: "Semarang" },
+                { href: "/wilayah/yogyakarta", label: "Yogyakarta" },
+                { href: "/wilayah/tangerang", label: "Tangerang & BSD" },
+                { href: "/wilayah/makassar", label: "Makassar" },
                 { href: "/wilayah/medan", label: "Medan" },
-                { href: "/wilayah/cilegon-banten", label: "Cilegon & Banten" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link

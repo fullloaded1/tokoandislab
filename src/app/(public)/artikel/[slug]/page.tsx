@@ -120,10 +120,48 @@ const ARTICLE_SEO: Record<string, { title: string; description: string }> = {
     description:
       "Pelajari 5 kesalahan fatal perawatan alat laboratorium: dari kelalaian kalibrasi, pembersihan salah, hingga overload centrifuge. Lindungi investasi lab Anda bersama AndisLab.",
   },
+  "panduan-spj-pengadaan-alat-laboratorium": {
+    title: "Panduan SPJ Pengadaan Alat Laboratorium Pemerintah 2026",
+    description:
+      "Daftar 11 dokumen wajib SPJ pengadaan alat lab, perbandingan e-Katalog LKPP vs Pengadaan Langsung, dan checklist anti-temuan BPK untuk instansi pemerintah.",
+  },
+  "panduan-memilih-incubator-laboratorium": {
+    title: "Inkubator Laboratorium: Jenis, Spesifikasi & Panduan 2026",
+    description:
+      "Panduan memilih inkubator lab mikrobiologi vs BOD vs CO2 incubator. Pelajari sistem pemanasan konveksi alami vs forced air dan rekomendasi Daihan & Yamato.",
+  },
 };
 
 // FAQPage schema per-slug (di luar konten Markdown). Emit hanya bila slug punya entri.
 const ARTICLE_FAQ: Record<string, { q: string; a: string }[]> = {
+  "panduan-spj-pengadaan-alat-laboratorium": [
+    {
+      q: "Dokumen apa saja yang wajib disiapkan penyedia untuk SPJ pengadaan alat lab?",
+      a: "Surat Penawaran Harga resmi ber-KOP, Invoice bermaterai, Faktur Pajak standar (e-Faktur PPN 11%), Berita Acara Serah Terima (BAST), Berita Acara Pemeriksaan Barang (BAPB), Kuitansi sah, Surat Jalan pengiriman, dan Kartu Garansi/Sertifikat Kalibrasi.",
+    },
+    {
+      q: "Kapan instansi dapat menggunakan Pengadaan Langsung (PL) dibanding e-Katalog?",
+      a: "Pengadaan Langsung non-katalog dapat dilakukan untuk pagu s.d. Rp 200 juta apabila produk alat laboratorium atau spesifikasi khusus yang dibutuhkan belum tersedia di etalase Katalog Elektronik, dengan tetap melampirkan minimal 2-3 penawaran pembanding.",
+    },
+    {
+      q: "Apakah AndisLab dapat memberikan penawaran resmi pembanding dalam 1 hari kerja?",
+      a: "Ya. Tim sales B2B AndisLab siap menerbitkan Surat Penawaran Harga resmi ber-KOP lengkap dengan spesifikasi teknis dan legalitas perusahaan dalam waktu 1x24 jam kerja.",
+    },
+  ],
+  "panduan-memilih-incubator-laboratorium": [
+    {
+      q: "Kapan memilih inkubator konveksi alami dibanding konveksi paksa (forced air)?",
+      a: "Konveksi alami (natural convection) dipilih jika Anda menginkubasi sampel pada cawan petri terbuka atau media yang mudah mengering karena aliran udaranya sangat lembut tanpa blower.",
+    },
+    {
+      q: "Berapa toleransi suhu yang baik untuk inkubator mikrobiologi?",
+      a: "Inkubator mikrobiologi berkualitas memiliki stabilitas kontrol suhu digital PID minimal ±0.2°C hingga ±0.3°C dan keseragaman suhu antar rak tidak lebih dari ±0.5°C.",
+    },
+    {
+      q: "Apakah inkubator laboratorium perlu dikalibrasi berkala?",
+      a: "Ya, inkubator wajib dikalibrasi dan divalidasi pemetaan suhunya minimal satu tahun sekali menggunakan sensor terstandarisasi ISO 17025 agar hasil uji mikrobiologi diakui secara sah oleh KAN dan BPOM.",
+    },
+  ],
   "panduan-memilih-water-bath-laboratorium": [
     {
       q: "Kapan harus menggunakan Water Bath Sirkulasi dibandingkan Water Bath Konvensional?",
@@ -247,6 +285,40 @@ const ARTICLE_INTERNAL_LINKS: Record<string, { href: string; label: string; desc
       href: "/ready-stock",
       label: "Cek Produk Laboratorium Ready Stock",
       desc: "Instrumen lab siap kirim 1–3 hari kerja ke seluruh Indonesia",
+    },
+  ],
+  "panduan-spj-pengadaan-alat-laboratorium": [
+    {
+      href: "/pemerintah",
+      label: "Layanan Pengadaan Instansi & e-Katalog",
+      desc: "Panduan lengkap alur pemesanan resmi, transparansi harga, dan berkas SPJ untuk instansi pemerintah",
+    },
+    {
+      href: "/katalog",
+      label: "Katalog Alat Laboratorium Resmi",
+      desc: "1.000+ produk instrumen dan consumables lab dengan spesifikasi lengkap untuk penyusunan HPS",
+    },
+    {
+      href: "/ready-stock",
+      label: "Instrumen Lab Siap Kirim (Anti-Indent)",
+      desc: "Hindari keterlambatan realisasi anggaran dengan produk ready stock terkirim dalam 1–3 hari kerja",
+    },
+  ],
+  "panduan-memilih-incubator-laboratorium": [
+    {
+      href: "/daihan-labtech",
+      label: "Distributor Daihan Labtech Indonesia",
+      desc: "Inkubator mikrobiologi seri LIB dan refrigerated incubator seri LBI dengan garansi resmi principal",
+    },
+    {
+      href: "/katalog?q=incubator",
+      label: "Cek Pilihan Inkubator di Katalog",
+      desc: "Lihat varian kapasitas 50L, 105L, 150L hingga 300L dengan sistem pemanas PID digital",
+    },
+    {
+      href: "/solusi/farmasi",
+      label: "Solusi Laboratorium Farmasi & Mikrobiologi",
+      desc: "Peralatan lab berstandar CPOB/GLP lengkap dengan dukungan instalasi dan sertifikasi kalibrasi KAN",
     },
   ],
 };

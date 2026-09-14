@@ -146,8 +146,8 @@ export default async function HomePage() {
         featuredProducts={featuredSliderProducts}
         promoBanner={{
           image: "/images/Banner Promo MERDEKA AndisLab 2026.png",
-          href: "/promo-merdeka",
-          alt: "Promo AndisLab — Diskon Alat Lab",
+          href: "/ready-stock",
+          alt: "Promo Sukses AndisLab — Cek Alat Lab Ready Stock",
         }}
       />
       <BrandLogos />

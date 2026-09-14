@@ -15,6 +15,8 @@ import { metadata as promoMerdekaMetadata } from './(public)/promo-merdeka/page'
 import { metadata as kebijakanMetadata } from './(public)/kebijakan-privasi/page';
 import { metadata as syaratMetadata } from './(public)/syarat-ketentuan/page';
 import { metadata as checkoutMetadata } from './(public)/checkout/page';
+import { metadata as taitecMetadata } from './(public)/taitec/page';
+import { metadata as yamatoMetadata } from './(public)/yamato/page';
 
 describe('SEO Metadata & OpenGraph Verification', () => {
   it('root layout has valid metadataBase and OpenGraph fallback', () => {
@@ -34,11 +36,13 @@ describe('SEO Metadata & OpenGraph Verification', () => {
     expect(kebijakanMetadata.alternates?.canonical).toBe('/kebijakan-privasi');
     expect(syaratMetadata.alternates?.canonical).toBe('/syarat-ketentuan');
     expect(checkoutMetadata.alternates?.canonical).toBe('/checkout');
+    expect(taitecMetadata.alternates?.canonical).toBe('/taitec');
+    expect(yamatoMetadata.alternates?.canonical).toBe('/yamato');
   });
 
   it('all key landing pages have explicit OpenGraph and Twitter tags', async () => {
     const katalogMetadata = await generateKatalogMetadata({ searchParams: Promise.resolve({}) } as any);
-    const pages = [homeMetadata, katalogMetadata, readyStockMetadata, pemerintahMetadata, daihanMetadata, promoMerdekaMetadata];
+    const pages = [homeMetadata, katalogMetadata, readyStockMetadata, pemerintahMetadata, daihanMetadata, promoMerdekaMetadata, taitecMetadata, yamatoMetadata];
     for (const pageMeta of pages) {
       expect(pageMeta.openGraph).toBeDefined();
       expect(pageMeta.openGraph?.title).toBeTruthy();

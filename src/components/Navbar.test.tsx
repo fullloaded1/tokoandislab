@@ -25,15 +25,15 @@ describe("Navbar Component Tests (TDD & Navigation Polish)", () => {
     render(<Navbar />);
 
     // Verify top announcement strip
-    expect(screen.getAllByText(/Promo MERDEKA — Diskon 17%/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Promo MERDEKA Sukses/i).length).toBeGreaterThan(0);
 
     // Verify logo and institutional partner badge
     expect(screen.getAllByText(/Distributor e-Katalog/i).length).toBeGreaterThan(0);
 
     // Verify primary navigation links
-    expect(screen.getAllByText(/Beranda/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Katalog/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Ready Stock/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Pemerintah \/ B2B/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Instansi B2B/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Daihan Labtech/i).length).toBeGreaterThan(0);
 
     // Verify Hubungi Sales CTA
