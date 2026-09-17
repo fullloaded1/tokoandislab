@@ -130,6 +130,16 @@ const ARTICLE_SEO: Record<string, { title: string; description: string }> = {
     description:
       "Panduan memilih inkubator lab mikrobiologi vs BOD vs CO2 incubator. Pelajari sistem pemanasan konveksi alami vs forced air dan rekomendasi Daihan & Yamato.",
   },
+  "smart-lab-2026-alat-laboratorium-terintegrasi-otomatis": {
+    title: "Smart Lab 2026: Alat Lab Terintegrasi IoT, Otomasi & AI",
+    description:
+      "Modernisasi laboratorium dengan alat lab terintegrasi IoT, monitoring otomatis, dan AI. Pahami strategi efisiensi dan pemilihan alat masa depan bersama AndisLab.",
+  },
+  "memilih-timbangan-analitik-jangan-hanya-melihat-resolusi": {
+    title: "Memilih Timbangan Analitik: Jangan Hanya Melihat Resolusi",
+    description:
+      "Timbangan 0,1 mg belum tentu tepat untuk semua lab. Pahami kapasitas, repeatability, minimum weight, dan kalibrasi sebelum membeli untuk investasi efisien.",
+  },
 };
 
 // FAQPage schema per-slug (di luar konten Markdown). Emit hanya bila slug punya entri.
@@ -196,6 +206,34 @@ const ARTICLE_FAQ: Record<string, { q: string; a: string }[]> = {
     {
       q: "Berapa lama proses dari penawaran sampai barang tiba?",
       a: "Penawaran resmi terbit dalam 1 hari kerja. Unit ready stock dikirim 1–3 hari kerja setelah PO/pembayaran dengan pengiriman mudah dan cepat ke seluruh Indonesia.",
+    },
+  ],
+  "smart-lab-2026-alat-laboratorium-terintegrasi-otomatis": [
+    {
+      q: "Apa keuntungan utama menerapkan konsep Smart Lab di laboratorium pengujian?",
+      a: "Keuntungan utamanya adalah integritas data pengujian (traceability 100% tanpa salah catat manual), efisiensi waktu preparasi dan analisis hingga 40-60%, serta penurunan risiko human error secara signifikan.",
+    },
+    {
+      q: "Apakah instrumen laboratorium yang sudah ada bisa dihubungkan ke sistem smart lab?",
+      a: "Banyak instrumen modern dengan port RS-232, USB, atau Ethernet dapat diintegrasikan ke LIMS atau sistem pemantauan terpusat menggunakan modul konverter IoT industri.",
+    },
+    {
+      q: "Apakah AndisLab menyediakan alat laboratorium yang mendukung integrasi LIMS?",
+      a: "Ya, AndisLab menyediakan timbangan analitik, moisture analyzer, oven, dan inkubator yang dilengkapi antarmuka komunikasi data untuk integrasi sistem informasi lab dan audit trail.",
+    },
+  ],
+  "memilih-timbangan-analitik-jangan-hanya-melihat-resolusi": [
+    {
+      q: "Mengapa resolusi tinggi (0,1 mg atau 0,01 mg) tidak selalu disarankan untuk semua laboratorium?",
+      a: "Karena semakin tinggi resolusi pembacaan, timbangan menjadi semakin sensitif terhadap getaran mikro, aliran udara AC, dan listrik statis. Tanpa ruangan stabil dan meja marmer anti-vibrasi khusus, angka timbangan akan terus melompat (drifting) dan menyulitkan operator.",
+    },
+    {
+      q: "Kapan laboratorium wajib memilih timbangan dengan kalibrasi internal otomatis?",
+      a: "Kalibrasi internal otomatis (isoCAL) sangat disarankan untuk lab yang menerapkan standar ISO/IEC 17025, GMP, atau CPOB farmasi di mana fluktuasi suhu ruangan berpotensi memicu deviasi pengukuran.",
+    },
+    {
+      q: "Apakah AndisLab melayani pengadaan timbangan analitik bersertifikat kalibrasi KAN?",
+      a: "Ya, AndisLab menyediakan unit timbangan analitik original bergaransi resmi beserta sertifikasi kalibrasi terakreditasi KAN untuk kebutuhan audit dan akreditasi lab Anda.",
     },
   ],
 };
@@ -319,6 +357,40 @@ const ARTICLE_INTERNAL_LINKS: Record<string, { href: string; label: string; desc
       href: "/solusi/farmasi",
       label: "Solusi Laboratorium Farmasi & Mikrobiologi",
       desc: "Peralatan lab berstandar CPOB/GLP lengkap dengan dukungan instalasi dan sertifikasi kalibrasi KAN",
+    },
+  ],
+  "smart-lab-2026-alat-laboratorium-terintegrasi-otomatis": [
+    {
+      href: "/katalog/analytical-balance-cy285c-aczet",
+      label: "Analytical Balance Aczet CY285C (RS232/USB Ready)",
+      desc: "Timbangan analitik presisi dengan port koneksi digital untuk integrasi pencatatan data otomatis",
+    },
+    {
+      href: "/katalog/yamato-incubator-ic413c",
+      label: "Incubator Yamato IC413C Digital",
+      desc: "Inkubator digital dengan kontrol suhu mikroprosesor PID untuk kestabilan kultur lab",
+    },
+    {
+      href: "/katalog",
+      label: "Jelajahi Katalog Alat Laboratorium AndisLab",
+      desc: "Temukan 1.000+ pilihan instrumen lab dengan spesifikasi mutakhir dan garansi resmi",
+    },
+  ],
+  "memilih-timbangan-analitik-jangan-hanya-melihat-resolusi": [
+    {
+      href: "/katalog/analytical-balance-cy285c-aczet",
+      label: "Analytical Balance Aczet CY285C (0,1 mg)",
+      desc: "Timbangan analitik 220g readability 0,1 mg — ready stock, kalibrasi internal, cocok untuk lab farmasi & riset",
+    },
+    {
+      href: "/katalog/infitek-analytical-balance-ba-n503",
+      label: "Analytical Balance Infitek BA-N503",
+      desc: "Alternatif timbangan analitik readability 0,1 mg dengan harga kompetitif dan pelindung angin kaca",
+    },
+    {
+      href: "/ready-stock",
+      label: "Cek Semua Timbangan Ready Stock",
+      desc: "Instrumen timbangan analitik dan presisi yang siap kirim 1–3 hari kerja",
     },
   ],
 };
