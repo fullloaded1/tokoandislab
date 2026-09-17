@@ -165,11 +165,31 @@ export default async function ReadyStockPage() {
           <p className="text-sm sm:text-base text-slate-300 max-w-3xl leading-relaxed font-medium">
             Semua unit di bawah ini tersedia dan siap dikirim dalam <strong className="text-white font-extrabold underline decoration-emerald-400/60">1x24 jam kerja</strong> ke seluruh laboratorium instansi, universitas, atau perusahaan Anda di seluruh Indonesia dengan kelengkapan dokumen formal pengadaan SPJ.
           </p>
-          <div className="mt-5">
+          <div className="mt-5 flex flex-wrap items-center gap-3">
             <AntiIndentBadge variant="banner" showConsultText={true} />
+            <div className="flex items-center gap-2 mt-2 sm:mt-0">
+              <span className="text-xs text-slate-400 font-semibold mr-1">📄 Katalog PDF:</span>
+              <a
+                id="download-katalog-m1"
+                href="/api/ready-stock-pdf?edition=M1"
+                download
+                className="inline-flex items-center gap-1.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 px-3.5 py-1.5 text-xs font-black text-white transition-all duration-200 focus-visible:outline-2 focus-visible:outline-white"
+              >
+                ⬇ Edisi M1
+              </a>
+              <a
+                id="download-katalog-m3"
+                href="/api/ready-stock-pdf?edition=M3"
+                download
+                className="inline-flex items-center gap-1.5 rounded-xl bg-amber-500/25 hover:bg-amber-500/40 border border-amber-400/30 px-3.5 py-1.5 text-xs font-black text-amber-300 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-amber-400"
+              >
+                ⬇ Edisi M3
+              </a>
+            </div>
           </div>
         </div>
       </div>
+
 
       {/* Tier Legend */}
       <div className="mb-10 grid grid-cols-2 sm:grid-cols-4 gap-3">
