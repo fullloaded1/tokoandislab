@@ -2,7 +2,9 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const smartLabContent = `Laboratorium modern mulai bergeser dari sekadar kumpulan alat menjadi ekosistem yang saling terhubung. Peralatan laboratorium seperti timbangan analitik, incubator, moisture analyzer, hingga sistem penyimpanan data kini semakin diarahkan menuju monitoring digital, otomatisasi, dan integrasi informasi menyeluruh. Di era Smart Laboratory 2026, kecerdasan buatan (Artificial Intelligence / AI) juga mulai membantu membaca pola data, mendeteksi anomali, serta mengurangi pekerjaan repetitif yang selama ini membebani analis laboratorium.
+const smartLabContent = `![Smart Lab 2026: Alat Laboratorium Terintegrasi & Otomatis](/images/articles/smart-lab-2026.jpg)
+
+Laboratorium modern mulai bergeser dari sekadar kumpulan alat menjadi ekosistem yang saling terhubung. Peralatan laboratorium seperti timbangan analitik, incubator, moisture analyzer, hingga sistem penyimpanan data kini semakin diarahkan menuju monitoring digital, otomatisasi, dan integrasi informasi menyeluruh. Di era Smart Laboratory 2026, kecerdasan buatan (Artificial Intelligence / AI) juga mulai membantu membaca pola data, mendeteksi anomali, serta mengurangi pekerjaan repetitif yang selama ini membebani analis laboratorium.
 
 Bagi laboratorium pendidikan, fasilitas kesehatan, industri manufaktur, maupun jasa pengujian (*testing & calibration*), manfaat utamanya bukan sekadar kemewahan teknologi canggih. Keuntungan terbesarnya adalah: **proses analisa menjadi jauh lebih cepat, tepat sasaran aplikasinya, data pengujian 100% tertelusur (*traceable*), dan risiko kesalahan manusia (*human error*) dapat ditekan serendah mungkin**.
 
@@ -52,7 +54,9 @@ Menjawab pergeseran menuju Smart Lab 2026, **AndisLab** siap berperan dan berkon
 
 Konsultasikan rencana modernisasi laboratorium Anda bersama tim spesialis AndisLab hari ini.`;
 
-const timbanganContent = `Timbangan dengan resolusi (*readability*) 0,1 mg belum tentu otomatis paling tepat untuk semua kebutuhan laboratorium. Banyak pengelola laboratorium berasumsi bahwa semakin kecil angka desimal di belakang koma, semakin unggul timbangan tersebut untuk segala jenis pekerjaan.
+const timbanganContent = `![Panduan Memilih Timbangan Analitik Laboratorium Presisi](/images/articles/panduan-timbangan-analitik.jpg)
+
+Timbangan dengan resolusi (*readability*) 0,1 mg belum tentu otomatis paling tepat untuk semua kebutuhan laboratorium. Banyak pengelola laboratorium berasumsi bahwa semakin kecil angka desimal di belakang koma, semakin unggul timbangan tersebut untuk segala jenis pekerjaan.
 
 Kenyataannya di lapangan, timbangan beresolusi super-tinggi yang ditempatkan di ruangan dengan getaran atau sirkulasi udara tidak stabil justru akan menghasilkan angka display yang terus melompat (*drifting*). Hasilnya, analis kesulitan mencatat berat yang stabil dan proses pengujian menjadi terhambat.
 

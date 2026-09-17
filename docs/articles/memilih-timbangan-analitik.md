@@ -8,6 +8,8 @@ keywords: ["timbangan analitik", "analytical balance", "kalibrasi timbangan", "a
 
 # MEMILIH TIMBANGAN ANALITIK: JANGAN HANYA MELIHAT RESOLUSI
 
+![Panduan Memilih Timbangan Analitik Laboratorium Presisi](/images/articles/panduan-timbangan-analitik.jpg)
+
 Timbangan dengan resolusi (*readability*) 0,1 mg belum tentu otomatis paling tepat untuk semua kebutuhan laboratorium. Banyak pengelola laboratorium berasumsi bahwa semakin kecil angka desimal di belakang koma, semakin unggul timbangan tersebut untuk segala jenis pekerjaan.
 
 Kenyataannya di lapangan, timbangan beresolusi super-tinggi yang ditempatkan di ruangan dengan getaran atau sirkulasi udara tidak stabil justru akan menghasilkan angka display yang terus melompat (*drifting*). Hasilnya, analis kesulitan mencatat berat yang stabil dan proses pengujian menjadi terhambat.

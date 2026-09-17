@@ -21,8 +21,9 @@ interface Article {
 
 const CATEGORY_TABS = [
   { id: "all", label: "Semua Artikel" },
-  { id: "edukasi-lab", label: "Edukasi & Riset" },
+  { id: "teknologi-lab", label: "Smart Lab & Otomasi" },
   { id: "panduan-alat", label: "Panduan Alat" },
+  { id: "edukasi-lab", label: "Edukasi & Riset" },
   { id: "tips-perawatan", label: "Tips & Perawatan" },
   { id: "berita-toko", label: "Berita & Event" },
 ];
@@ -30,7 +31,10 @@ const CATEGORY_TABS = [
 const ArticleCard = ({ article }: { article: Article }) => {
   const [imgError, setImgError] = useState(false);
   const showImage = article.image && !imgError;
-  const isLocalEquipmentImage = article.image && article.image.startsWith("/images/");
+  const isLocalEquipmentImage =
+    article.image &&
+    !article.image.includes("/articles/") &&
+    (article.image.includes("logo") || article.image.includes("/products/"));
 
   return (
     <article className="group flex flex-col bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-emerald-950/10 hover:border-emerald-300/60 transition-all duration-300 overflow-hidden transform hover:-translate-y-1.5">
@@ -66,6 +70,7 @@ const ArticleCard = ({ article }: { article: Article }) => {
 
         {/* Category label badge on image */}
         <span className="absolute top-4 left-4 z-10 inline-flex items-center px-3.5 py-1.5 rounded-full text-[11px] font-bold bg-slate-900/85 text-emerald-300 shadow-md backdrop-blur-md border border-emerald-500/30 tracking-wide">
+          {article.category === "teknologi-lab" && "Smart Lab & Otomasi"}
           {article.category === "edukasi-lab" && "Edukasi & Riset"}
           {article.category === "panduan-alat" && "Panduan Alat"}
           {article.category === "tips-perawatan" && "Tips & Perawatan"}
