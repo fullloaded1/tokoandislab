@@ -140,6 +140,21 @@ const ARTICLE_SEO: Record<string, { title: string; description: string }> = {
     description:
       "Timbangan 0,1 mg belum tentu tepat untuk semua lab. Pahami kapasitas, repeatability, minimum weight, dan kalibrasi sebelum membeli untuk investasi efisien.",
   },
+  "panduan-memilih-timbangan-analitis-presisi-2026": {
+    title: "Panduan Memilih Timbangan Analitis Presisi Lab 2026 | AndisLab",
+    description:
+      "Panduan praktis memilih timbangan analitis presisi 0.1mg & microbalance, fitur internal calibration, dan kepatuhan ISO/GLP untuk industri & farmasi.",
+  },
+  "daftar-alat-laboratorium-wajib-standar-sekolah-dan-perguruan-tinggi": {
+    title: "Daftar Alat Lab Wajib Standar Sekolah & Perguruan Tinggi 2026",
+    description:
+      "Checklist pengadaan peralatan laboratorium esensial untuk SMA, SMK, dan universitas sesuai standar kurikulum, keselamatan kerja & efisiensi SPJ.",
+  },
+  "perbandingan-brand-alat-lab-aczet-daihan-lovibond-milwaukee-yamato": {
+    title: "Perbandingan Brand Alat Lab: Aczet, Daihan, Lovibond, Milwaukee & Yamato",
+    description:
+      "Ulasan perbandingan spesialisasi brand alat lab internasional (Aczet, Daihan, Lovibond, Milwaukee, Yamato) untuk rekomendasi anggaran & aplikasi lab Anda.",
+  },
 };
 
 // FAQPage schema per-slug (di luar konten Markdown). Emit hanya bila slug punya entri.
