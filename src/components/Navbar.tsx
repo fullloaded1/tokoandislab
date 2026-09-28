@@ -62,23 +62,23 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Top Utility & Promo Strip - Corporate Kemerdekaan Style */}
-      {pathname !== "/promo-merdeka" && (
-        <div className="fixed top-0 left-0 right-0 z-[51] bg-red-900 text-white border-b border-red-950 shadow-sm">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between py-2 text-[11px] font-semibold tracking-wide">
+      {/* Top Utility & Promo Strip - Corporate Milenian 2026 Style */}
+      {pathname !== "/promo/milenian" && (
+        <div className="fixed top-0 left-0 right-0 z-[51] bg-slate-950 text-white border-b border-cyan-500/30 shadow-xs">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between py-1.5 text-[11px] font-semibold tracking-wide">
             <Link
-              href="/promo-merdeka"
-              className="flex items-center gap-2 hover:text-red-100 transition-colors truncate"
+              href="/promo/milenian"
+              className="flex items-center gap-2 hover:text-cyan-300 transition-colors truncate"
             >
-              <span className="shrink-0 flex h-4 w-4 items-center justify-center rounded-sm bg-red-800 text-[10px] border border-red-700">🇮🇩</span>
-              <span className="truncate font-bold">✨ Promo MERDEKA Sukses! 24 Pesanan | Rating 4.8★ | 150+ Lab Terpercaya</span>
-              <span className="hidden md:inline font-bold text-red-200 underline decoration-red-400/60 shrink-0 ml-1">Lihat Detail Program &rarr;</span>
+              <span className="shrink-0 flex h-4 w-4 items-center justify-center rounded-sm bg-cyan-500/20 text-[10px] border border-cyan-400/30 text-cyan-300">⚡</span>
+              <span className="truncate font-bold">Promo Milenian 2026 — Diskon 5–15%, Bundling Gratis &amp; Star Points ×2</span>
+              <span className="hidden md:inline font-bold text-cyan-400 underline decoration-cyan-400/60 shrink-0 ml-1">Lihat Detail Promo &rarr;</span>
             </Link>
-            <div className="hidden xl:flex items-center gap-4 text-red-100 font-medium shrink-0">
-              <span className="flex items-center gap-1.5 border-l border-red-800 pl-4">
-                <ShieldCheck className="h-3.5 w-3.5 text-red-200" /> Terdaftar di e-Katalog INAPROC
+            <div className="hidden xl:flex items-center gap-4 text-slate-300 font-medium shrink-0">
+              <span className="flex items-center gap-1.5 border-l border-slate-800 pl-4">
+                <ShieldCheck className="h-3.5 w-3.5 text-cyan-400" /> Terdaftar di e-Katalog INAPROC
               </span>
-              <span className="border-l border-red-800 pl-4">Faktur Pajak & SPJ Resmi</span>
+              <span className="border-l border-slate-800 pl-4">Faktur Pajak &amp; SPJ Resmi</span>
             </div>
           </div>
         </div>

@@ -25,7 +25,7 @@ describe("Navbar Component Tests (TDD & Navigation Polish)", () => {
     render(<Navbar />);
 
     // Verify top announcement strip
-    expect(screen.getAllByText(/Promo MERDEKA Sukses/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Promo Milenian 2026/i).length).toBeGreaterThan(0);
 
     // Verify logo and institutional partner badge
     expect(screen.getAllByText(/Distributor e-Katalog/i).length).toBeGreaterThan(0);
