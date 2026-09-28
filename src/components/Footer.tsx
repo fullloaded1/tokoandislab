@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Mail, Phone, MapPin } from "lucide-react";
 import WaLinkCTA from "@/components/WaLinkCTA";
-import { WA_NUMBER_DISPLAY } from "@/lib/contact";
+import { WA_NUMBER_DISPLAY, OFFICE_PHONE } from "@/lib/contact";
 import { COMPANY_FACTS } from "@/lib/companyFacts";
 
 
@@ -148,17 +148,23 @@ export default function Footer() {
                 <span className="font-bold text-white">{COMPANY_FACTS.name}</span>
                 <div className="flex items-start gap-3 mt-1">
                   <MapPin className="h-4 w-4 shrink-0 mt-0.5 text-cyan-500" />
-                  <span>Pengiriman mudah &amp; cepat ke {COMPANY_FACTS.coverageArea}, dokumen SPJ lengkap.</span>
+                  <span>{COMPANY_FACTS.address}</span>
                 </div>
               </li>
               <li className="flex items-center gap-3 text-sm text-slate-400">
                 <Phone className="h-4 w-4 shrink-0 text-cyan-500" />
-                <WaLinkCTA 
-                  href="?wa=open&source=footer&text=Halo%20AndisLab%2C%20saya%20ingin%20konsultasi%20produk." 
-                  className="hover:text-cyan-400 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] rounded-sm"
-                >
-                  {WA_NUMBER_DISPLAY}
-                </WaLinkCTA>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
+                  <a href={`tel:${OFFICE_PHONE.replace(/[^0-9]/g, "")}`} className="hover:text-cyan-400 transition-colors">
+                    Telp Kantor: {OFFICE_PHONE}
+                  </a>
+                  <span className="hidden sm:inline text-slate-600">|</span>
+                  <WaLinkCTA 
+                    href="?wa=open&source=footer&text=Halo%20AndisLab%2C%20saya%20ingin%20konsultasi%20produk." 
+                    className="hover:text-cyan-400 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-[var(--color-focus)] rounded-sm"
+                  >
+                    WA: {WA_NUMBER_DISPLAY}
+                  </WaLinkCTA>
+                </div>
               </li>
               <li className="flex items-start gap-3 text-sm text-slate-400">
                 <Mail className="h-4 w-4 shrink-0 text-cyan-500 mt-1" />

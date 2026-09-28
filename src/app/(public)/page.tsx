@@ -145,9 +145,9 @@ export default async function HomePage() {
       <HeroSection
         featuredProducts={featuredSliderProducts}
         promoBanner={{
-          image: "/images/Banner Promo MERDEKA AndisLab 2026.png",
-          href: "/ready-stock",
-          alt: "Promo Sukses AndisLab — Cek Alat Lab Ready Stock",
+          image: "/images/promo-milenian-2026.jpg",
+          href: "/promo/milenian",
+          alt: "Promo Milenian 2026 — Lab Lebih Produktif. Budget Tetap Terjaga.",
         }}
       />
       <BrandLogos />
@@ -188,45 +188,105 @@ export default async function HomePage() {
 
       <CategoryGrid />
 
-      {/* Ready Stock Section - Corporate Clean Stage */}
+      {/* Promo Milenian × Ready Stock Section */}
       {readyStockProducts.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 mb-10" id="ready-stock">
-          <div className="bg-white p-6 sm:p-10 border border-slate-200 rounded-2xl shadow-sm">
-            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10 pb-6 border-b border-slate-100">
-              <div>
-                <h2 className="text-3xl font-bold text-slate-900 tracking-tight">
-                  Ketersediaan Stok (Ready Stock)
-                </h2>
-                <p className="text-sm text-slate-600 mt-2 max-w-2xl leading-relaxed">
-                  Peralatan yang tersedia dan siap dikirim hari ini. Cocok untuk kebutuhan pengadaan mendesak tanpa perlu indent.
-                </p>
-              </div>
-              <div className="flex flex-wrap items-center gap-3 shrink-0">
-                <a
-                  href="/api/ready-stock-pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-md bg-blue-50 px-5 py-2.5 text-sm font-semibold text-blue-700 hover:bg-blue-100 transition-colors border border-blue-200"
-                >
-                  <FileText className="h-4 w-4" />
-                  Unduh Katalog PDF
-                </a>
-                <Link
-                  href="/ready-stock"
-                  className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition-colors shadow-sm"
-                >
-                  Lihat Semua
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
+          {/* Promo Milenian Header Banner */}
+          <div
+            className="rounded-2xl overflow-hidden mb-6"
+            style={{ background: "linear-gradient(135deg, #0d1b3e 0%, #0e2a5c 60%, #134e4a 100%)" }}
+          >
+            <div className="relative px-6 sm:px-10 py-8 sm:py-10">
+              {/* Teal accent glow */}
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: "radial-gradient(ellipse at top right, rgba(20,184,166,0.18) 0%, transparent 60%)"
+                }}
+              />
+              <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                {/* Left: Promo info */}
+                <div className="space-y-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span
+                      className="inline-flex items-center gap-1.5 text-[0.65rem] font-black uppercase tracking-widest text-white px-3 py-1.5 rounded-full"
+                      style={{ background: "linear-gradient(90deg, #14b8a6, #0ea5e9)" }}
+                    >
+                      📢 Penawaran Eksklusif
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 bg-white/10 border border-white/20 text-slate-200 text-xs font-semibold px-3 py-1 rounded-full">
+                      🗓️ 22 Sep – 28 Okt 2026
+                    </span>
+                  </div>
+                  <div>
+                    <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
+                      Promo Milenian <span style={{ color: "#5eead4" }}>2026</span>
+                    </h2>
+                    <p className="text-sm font-semibold mt-1" style={{ color: "#a5f3fc", fontStyle: "italic" }}>
+                      Lab Lebih Produktif. Budget Tetap Terjaga.
+                    </p>
+                  </div>
+                  {/* 3 offer pills */}
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    <span className="inline-flex items-center gap-1.5 bg-teal-500/20 border border-teal-400/40 text-teal-200 text-xs font-bold px-3 py-1.5 rounded-full">
+                      🏷️ Diskon 5–15%
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 bg-blue-500/20 border border-blue-400/40 text-blue-200 text-xs font-bold px-3 py-1.5 rounded-full">
+                      🎁 Bundling Gratis Aksesoris
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 bg-amber-500/20 border border-amber-400/40 text-amber-200 text-xs font-bold px-3 py-1.5 rounded-full">
+                      ⭐ Star Points ×2
+                    </span>
+                  </div>
+                </div>
+                {/* Right: CTAs */}
+                <div className="flex flex-wrap items-center gap-3 shrink-0">
+                  <a
+                    href="/api/ready-stock-pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 px-4 py-2.5 text-sm font-semibold text-white transition-colors duration-200"
+                  >
+                    <FileText className="h-4 w-4" />
+                    Unduh Katalog PDF
+                  </a>
+                  <Link
+                    href="/promo/milenian"
+                    className="inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-bold text-white transition-all duration-200 hover:-translate-y-0.5 shadow-lg"
+                    style={{ background: "linear-gradient(90deg, #14b8a6, #0ea5e9)" }}
+                  >
+                    Detail Promo
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
               </div>
             </div>
-            
+          </div>
+
+          {/* Ready Stock Products Grid */}
+          <div className="bg-white p-6 sm:p-8 border border-slate-200 rounded-2xl shadow-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Stok Tersedia • Siap Kirim</p>
+                <h2 className="text-xl font-bold text-slate-900 mt-0.5">
+                  Produk Ready Stock
+                </h2>
+              </div>
+              <Link
+                href="/ready-stock"
+                className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition-colors"
+              >
+                Lihat Semua
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {readyStockProducts.slice(0, 8).map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
-            
+
             {readyStockProducts.length > 8 && (
               <div className="mt-8 flex justify-center sm:hidden">
                 <Link
@@ -241,6 +301,7 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
 
       {/* Exclusive Products Grouped by Category */}
       {productsByCategory.map((group) => (

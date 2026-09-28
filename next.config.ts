@@ -101,11 +101,22 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      // Promo MERDEKA sudah berakhir 14 Agustus 2026 — redirect ke katalog
+      // Promo MERDEKA sudah berakhir 14 Agustus 2026 — redirect permanen 301 ke katalog
       {
         source: '/promo-merdeka',
         destination: '/katalog',
-        permanent: false,
+        permanent: true,
+      },
+      // 301 Redirects untuk URL 404 dari produk yang sudah dihapus/pindah
+      {
+        source: '/katalog/andislab-anti-vibration-table',
+        destination: '/katalog',
+        permanent: true,
+      },
+      {
+        source: '/katalog/pyrex-cawan-petri',
+        destination: '/katalog',
+        permanent: true,
       },
       {
         source: '/:path*',

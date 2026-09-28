@@ -11,6 +11,7 @@ import ArticleWaCTA from "@/components/ArticleWaCTA";
 import { BookOpen, Calendar, ChevronRight, ArrowLeft, ArrowRight, Eye, User, ShieldCheck } from "lucide-react";
 import type { Metadata } from "next";
 import { cache } from "react";
+import { truncateDescription } from "@/lib/seo";
 
 // Cache article fetching to avoid redundant database calls
 const getArticle = cache(async (slug: string) => {
@@ -154,6 +155,16 @@ const ARTICLE_SEO: Record<string, { title: string; description: string }> = {
     title: "Perbandingan Brand Alat Lab: Aczet, Daihan, Lovibond, Milwaukee & Yamato",
     description:
       "Ulasan perbandingan spesialisasi brand alat lab internasional (Aczet, Daihan, Lovibond, Milwaukee, Yamato) untuk rekomendasi anggaran & aplikasi lab Anda.",
+  },
+  "panduan-lengkap-ph-meter-laboratorium": {
+    title: "Panduan Lengkap pH Meter Lab: Prinsip, Kalibrasi & Harga 2026",
+    description:
+      "Pelajari prinsip kerja pH meter laboratorium, perbedaan jenis elektroda kaca, teknik kalibrasi buffer 3 titik yang benar, dan rekomendasi alat akurat.",
+  },
+  "pentingnya-kalibrasi-alat-uji-kualitas-air": {
+    title: "Pentingnya Kalibrasi & Perawatan Alat Uji Kualitas Air | AndisLab",
+    description:
+      "Cegah drift pembacaan fotometer & pH meter. Panduan perawatan harian kuvet, penyimpanan elektroda, dan jadwal kalibrasi KAN ISO 17025.",
   },
 };
 
@@ -408,6 +419,40 @@ const ARTICLE_INTERNAL_LINKS: Record<string, { href: string; label: string; desc
       desc: "Instrumen timbangan analitik dan presisi yang siap kirim 1–3 hari kerja",
     },
   ],
+  "panduan-lengkap-ph-meter-laboratorium": [
+    {
+      href: "/milwaukee",
+      label: "Distributor Milwaukee Instruments Indonesia",
+      desc: "pH meter bench & portable Milwaukee original dengan garansi resmi dan elektroda lengkap",
+    },
+    {
+      href: "/katalog?q=ph+meter",
+      label: "Cek Semua Pilihan pH Meter di Katalog",
+      desc: "Bandingkan spesifikasi dan harga pH meter laboratorium ready stock",
+    },
+    {
+      href: "/ready-stock",
+      label: "Alat Laboratorium Siap Kirim",
+      desc: "Unit ready stock pengiriman 1–3 hari kerja ke seluruh Indonesia",
+    },
+  ],
+  "pentingnya-kalibrasi-alat-uji-kualitas-air": [
+    {
+      href: "/lovibond",
+      label: "Distributor Lovibond Indonesia",
+      desc: "Photometer, turbidimeter, dan reaktor COD Lovibond resmi untuk uji kualitas air",
+    },
+    {
+      href: "/katalog?q=uji+kualitas+air",
+      label: "Katalog Alat Pengujian Kualitas Air & Lingkungan",
+      desc: "Temukan instrumen analisis air limbah, air minum, dan industri",
+    },
+    {
+      href: "/solusi/pengolahan-air",
+      label: "Solusi Laboratorium Pengolahan Air & PDAM",
+      desc: "Paket instrumen lengkap untuk pengujian parameter air sesuai standar baku mutu",
+    },
+  ],
 };
 
 export async function generateMetadata(
@@ -418,32 +463,35 @@ export async function generateMetadata(
   if (!article || !article.published) return {};
 
   const seo = ARTICLE_SEO[slug];
+  const ogImageUrl = article.image
+    ? (article.image.startsWith("http")
+        ? article.image
+        : `https://www.andislab.com${article.image.startsWith("/") ? "" : "/"}${article.image}`)
+    : "https://www.andislab.com/logo.png";
 
   return {
     title: seo?.title ?? `${article.title} - AndisLab`,
-    description: seo?.description ?? (article.excerpt || "Baca artikel selengkapnya di AndisLab."),
+    description: truncateDescription(seo?.description ?? (article.excerpt || "Baca artikel selengkapnya di AndisLab.")),
     openGraph: {
       title: `${article.title} - AndisLab`,
       description: article.excerpt || "Baca artikel selengkapnya di AndisLab.",
       type: "article",
       publishedTime: article.createdAt.toISOString(),
       modifiedTime: article.updatedAt.toISOString(),
-      images: article.image
-        ? [
-            {
-              url: article.image,
-              width: 1200,
-              height: 630,
-              alt: article.title,
-            },
-          ]
-        : [],
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: article.title,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: `${article.title} - AndisLab`,
       description: article.excerpt || "Baca artikel selengkapnya di AndisLab.",
-      images: article.image ? [article.image] : [],
+      images: [ogImageUrl],
     },
     alternates: {
       canonical: `https://www.andislab.com/artikel/${article.slug}`,
@@ -457,7 +505,7 @@ export default async function ArticleDetailPage(
   const { slug } = await props.params;
   const article = await getArticle(slug);
 
-  if (!article || !article.published) {
+  if (!article || !article.published || !article.content) {
     notFound();
   }
 

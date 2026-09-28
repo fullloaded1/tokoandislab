@@ -7,7 +7,15 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin/', '/api/', '/inquiry/success', '/*?wa=open*'],
+        disallow: [
+          '/admin/',
+          '/api/',
+          '/inquiry/success',
+          '/*?wa=*',
+          '/*?wa-*',
+          '/*&wa=*',
+          '/*&wa-*',
+        ],
       },
       {
         userAgent: ['GPTBot', 'OAI-SearchBot', 'PerplexityBot', 'ClaudeBot', 'Google-Extended', 'Bingbot'],

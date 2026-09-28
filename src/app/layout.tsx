@@ -80,8 +80,11 @@ export default function RootLayout({
     alternateName: COMPANY_FACTS.shortName,
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Indonesia",
-      addressCountry: "ID"
+      streetAddress: COMPANY_FACTS.streetAddress,
+      addressLocality: COMPANY_FACTS.addressLocality,
+      addressRegion: COMPANY_FACTS.addressRegion,
+      postalCode: COMPANY_FACTS.postalCode,
+      addressCountry: COMPANY_FACTS.addressCountry
     },
     sameAs: [
       "https://www.linkedin.com/company/andislab",

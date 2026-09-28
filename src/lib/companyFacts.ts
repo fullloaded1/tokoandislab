@@ -1,6 +1,14 @@
 export const COMPANY_FACTS = {
   name: "PT Andis Sentral Laboratorium",
   shortName: "AndisLab",
+  address: "Jl. Raya Mayor Oking Jaya Atmaja No.112, Cirimekar, Kec. Cibinong, Kabupaten Bogor, Jawa Barat 16918",
+  streetAddress: "Jl. Raya Mayor Oking Jaya Atmaja No.112, Cirimekar",
+  addressLocality: "Cibinong",
+  addressRegion: "Jawa Barat",
+  postalCode: "16918",
+  addressCountry: "ID",
+  officePhone: "021-38740154",
+  officePhoneInt: "+62-21-38740154",
   foundYear: 2010,
   get experienceYears() {
     return new Date().getFullYear() - this.foundYear;

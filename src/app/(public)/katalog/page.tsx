@@ -4,15 +4,24 @@ import KatalogClient from "./KatalogClient";
 
 import type { Metadata } from "next";
 
+const BRAND_CANONICAL_MAP: Record<string, string> = {
+  "daihan-labtech": "/daihan-labtech",
+  "yamato": "/yamato",
+  "lovibond": "/lovibond",
+  "milwaukee": "/milwaukee",
+  "aczet": "/aczet",
+};
+
 export async function generateMetadata(
   props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }
 ): Promise<Metadata> {
   const searchParams = await props.searchParams;
   const category = searchParams.category;
   
-  const canonicalPath = category && typeof category === 'string'
-    ? `/katalog?category=${category}`
-    : "/katalog";
+  const canonicalPath =
+    category && typeof category === "string" && BRAND_CANONICAL_MAP[category]
+      ? BRAND_CANONICAL_MAP[category]
+      : "/katalog";
 
   const title = "Distributor Alat Laboratorium Indonesia | AndisLab";
   const description =

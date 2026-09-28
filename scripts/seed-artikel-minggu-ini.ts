@@ -43,9 +43,9 @@ Untuk informasi ketersediaan unit ready stock dan penawaran resmi, Anda dapat la
     title: "Daftar Alat Laboratorium Wajib Standar Sekolah & Perguruan Tinggi",
     category: "edukasi-lab",
     excerpt: "Panduan pengadaan peralatan laboratorium dasar untuk SMA, SMK, dan universitas sesuai standar kurikulum dan keselamatan kerja.",
-    image: "/images/articles/water-bath-lab.jpg",
+    image: "/images/articles/peralatan-dasar-lab.png",
     authorName: "Tim Spesialis Lab Pendidikan",
-    content: `![Alat Lab Pendidikan](/images/articles/water-bath-lab.jpg)
+    content: `![Alat Lab Pendidikan](/images/articles/peralatan-dasar-lab.png)
 
 Pengadaan instrumen laboratorium pendidikan memerlukan perhatian khusus pada aspek keandalan instrumen, kemudahan operasional bagi siswa/mahasiswa, serta efisiensi anggaran pengadaan (SPJ/Pemerintah).
 

@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 import { ShieldCheck, Users, Award, Beaker, MapPin, Phone, Mail, MessageCircle } from "lucide-react";
 import WaLinkCTA from "@/components/WaLinkCTA";
-import { WA_NUMBER_DISPLAY } from "@/lib/contact";
+import { WA_NUMBER_DISPLAY, OFFICE_PHONE } from "@/lib/contact";
 import { COMPANY_FACTS } from "@/lib/companyFacts";
 
 export const metadata: Metadata = {
@@ -196,10 +196,9 @@ export default function TentangPage() {
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-slate-800 mb-1">Layanan &amp; Pengiriman</h3>
+                    <h3 className="text-base font-bold text-slate-800 mb-1">Alamat Kantor Utama</h3>
                     <p className="text-sm text-slate-500 leading-relaxed">
-                      Pengiriman mudah &amp; cepat ke 34 Provinsi di seluruh Indonesia, <br />
-                      dilengkapi dokumen formal &amp; SPJ pengadaan lengkap.
+                      {COMPANY_FACTS.address}
                     </p>
                   </div>
                 </div>
@@ -209,9 +208,10 @@ export default function TentangPage() {
                     <Phone className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-slate-800 mb-1">WhatsApp</h3>
+                    <h3 className="text-base font-bold text-slate-800 mb-1">Telepon &amp; WhatsApp</h3>
                     <p className="text-sm text-slate-500 leading-relaxed">
-                      {WA_NUMBER_DISPLAY}
+                      Telepon Kantor: <a href={`tel:${OFFICE_PHONE.replace(/[^0-9]/g, "")}`} className="font-semibold text-slate-700 hover:text-blue-600">{OFFICE_PHONE}</a> <br />
+                      WhatsApp Sales: <span className="font-semibold text-slate-700">{WA_NUMBER_DISPLAY}</span>
                     </p>
                   </div>
                 </div>

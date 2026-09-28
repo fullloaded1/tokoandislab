@@ -33,16 +33,32 @@ export default function LeadMagnetModal() {
 
   if (!isOpen) return null;
 
+  const [waRedirectUrl, setWaRedirectUrl] = useState('');
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !company || !phone) return;
+    if (!name.trim() || !company.trim() || !phone.trim()) return;
 
     setIsLoading(true);
 
     try {
-      // In a real app, this would hit an API to store the lead in database/CRM
-      // For now we simulate an API call and fire Google Analytics event
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // 1. Post lead directly to DB (WhatsAppLog) & Telegram notification
+      const res = await fetch('/api/wa-redirect', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          source: 'lead_magnet_katalog_pdf',
+          leadName: name.trim(),
+          leadInstitution: company.trim(),
+          leadPhone: phone.trim(),
+          text: `Halo Tim Spesialis AndisLab, saya ${name.trim()} dari ${company.trim()} baru saja mengunduh e-Katalog Alat Lab 2026. Saya ingin berkonsultasi mengenai ketersediaan & penawaran resmi alat lab.`,
+        }),
+      });
+
+      const data = await res.json().catch(() => null);
+      if (data?.redirectUrl) {
+        setWaRedirectUrl(data.redirectUrl);
+      }
       
       trackEvent('generate_lead', {
         lead_source: 'contact_form',
@@ -50,27 +66,32 @@ export default function LeadMagnetModal() {
       });
 
       // Save user details locally for future
-      localStorage.setItem('lead_name', name);
-      localStorage.setItem('lead_institution', company);
-      localStorage.setItem('lead_phone', phone);
+      localStorage.setItem('lead_name', name.trim());
+      localStorage.setItem('lead_institution', company.trim());
+      localStorage.setItem('lead_phone', phone.trim());
       
       setIsSuccess(true);
       
-      // Auto-trigger download (using a dummy PDF path for now)
+      // Auto-trigger download of real dynamic ready-stock PDF
       const link = document.createElement('a');
-      link.href = '/docs/katalog-andislab-2026.pdf';
-      link.download = 'Katalog-AndisLab-2026.pdf';
+      link.href = '/api/ready-stock-pdf';
+      link.download = 'Katalog-Alat-Laboratorium-AndisLab-2026.pdf';
+      link.target = '_blank';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
 
-      // Close modal after 3 seconds of success state
-      setTimeout(() => {
-        closeModal();
-      }, 3000);
-
     } catch (error) {
       console.error('Error submitting lead form:', error);
+      // Fallback download if API network issue
+      const link = document.createElement('a');
+      link.href = '/api/ready-stock-pdf';
+      link.download = 'Katalog-Alat-Laboratorium-AndisLab-2026.pdf';
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setIsSuccess(true);
     } finally {
       setIsLoading(false);
     }

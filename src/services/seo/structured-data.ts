@@ -1,4 +1,5 @@
 import { SEO_CONSTANTS } from '@/constants/seo';
+import { COMPANY_FACTS } from '@/lib/companyFacts';
 
 export function getOrganizationSchema() {
   return {
@@ -8,9 +9,17 @@ export function getOrganizationSchema() {
     url: SEO_CONSTANTS.siteUrl,
     logo: `${SEO_CONSTANTS.siteUrl}/logo.png`,
     description: SEO_CONSTANTS.defaultDescription,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: COMPANY_FACTS.streetAddress,
+      addressLocality: COMPANY_FACTS.addressLocality,
+      addressRegion: COMPANY_FACTS.addressRegion,
+      postalCode: COMPANY_FACTS.postalCode,
+      addressCountry: COMPANY_FACTS.addressCountry,
+    },
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+62-812-3456-7890', // Adjust based on your contact info
+      telephone: COMPANY_FACTS.officePhoneInt,
       contactType: 'customer service',
       areaServed: 'ID',
       availableLanguage: 'Indonesian'

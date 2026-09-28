@@ -83,7 +83,7 @@ export default function HeroSection({ featuredProducts = [], promoBanner }: { fe
           {hasPromo && (
             <Link
               href={promoBanner.href as Route}
-              className={`absolute inset-0 transition-opacity duration-700 ease-in-out block bg-[#CE1126] ${
+              className={`absolute inset-0 transition-opacity duration-700 ease-in-out block bg-[#0d1b3e] ${
                 currentSlide === 0 ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
               }`}
             >
@@ -91,22 +91,22 @@ export default function HeroSection({ featuredProducts = [], promoBanner }: { fe
                 src={promoBanner.image}
                 alt={promoBanner.alt}
                 fill
-                className="object-contain"
+                className="object-cover"
                 priority
-                quality={85}
+                quality={80}
                 sizes="(max-width: 768px) 100vw, 1280px"
               />
-              {/* Success Overlay Badge */}
+              {/* Promo Milenian Overlay Badges */}
               {currentSlide === 0 && (
                 <div className="absolute top-6 right-6 z-20 flex flex-col gap-2">
-                  <div className="inline-flex items-center gap-2 rounded-lg bg-emerald-500/95 backdrop-blur-sm border border-emerald-300 px-4 py-2.5 text-sm font-bold text-white shadow-lg">
-                    ✨ Sukses! 24 Pesanan
+                  <div className="inline-flex items-center gap-2 rounded-lg bg-teal-500/95 backdrop-blur-sm border border-teal-300 px-4 py-2.5 text-sm font-bold text-white shadow-lg">
+                    🏷️ Diskon 5–15%
                   </div>
-                  <div className="inline-flex items-center gap-2 rounded-lg bg-yellow-500/95 backdrop-blur-sm border border-yellow-300 px-4 py-2.5 text-sm font-bold text-white shadow-lg">
-                    ⭐ Rating 4.8/5
+                  <div className="inline-flex items-center gap-2 rounded-lg bg-blue-600/95 backdrop-blur-sm border border-blue-400 px-4 py-2.5 text-sm font-bold text-white shadow-lg">
+                    🎁 Bundling Gratis
                   </div>
-                  <div className="inline-flex items-center gap-2 rounded-lg bg-blue-500/95 backdrop-blur-sm border border-blue-300 px-4 py-2.5 text-sm font-bold text-white shadow-lg">
-                    🏢 150+ Lab Terpercaya
+                  <div className="inline-flex items-center gap-2 rounded-lg bg-amber-500/95 backdrop-blur-sm border border-amber-300 px-4 py-2.5 text-sm font-bold text-white shadow-lg">
+                    ⭐ Star Points ×2
                   </div>
                 </div>
               )}
