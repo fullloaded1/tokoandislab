@@ -4,7 +4,7 @@
 import { useRFQStore } from "@/store/useRFQStore";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FileText, Loader2, Building, User, Phone, Mail, MapPin, CheckCircle } from "lucide-react";
 import Image from "next/image";
 import { submitInquiry } from "./actions";
@@ -15,7 +15,15 @@ export default function InquiryPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [successQuoteNo, setSuccessQuoteNo] = useState<string | null>(null);
+  const [sourceArticleId, setSourceArticleId] = useState<string | null>(null);
   const openWaModal = useWhatsAppLeadStore((s) => s.openModal);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      setSourceArticleId(urlParams.get("src"));
+    }
+  }, []);
 
   if (successQuoteNo) {
     return (
@@ -130,6 +138,7 @@ export default function InquiryPage() {
             </div>
             
             <form onSubmit={handleSubmit} className="space-y-5">
+              {sourceArticleId && <input type="hidden" name="sourceArticleId" value={sourceArticleId} />}
               <div className="grid sm:grid-cols-2 gap-5">
                 <div className="space-y-1.5">
                   <label className="text-sm font-bold text-slate-700">Nama Instansi *</label>

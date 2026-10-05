@@ -17,6 +17,7 @@ const inquirySchema = z.object({
   phone: z.string().min(8, "Nomor telepon tidak valid").max(20, "Nomor telepon terlalu panjang"),
   email: z.string().email("Format email tidak valid"),
   notes: z.string().optional(),
+  sourceArticleId: z.string().optional(),
   items: z.array(inquiryItemSchema).min(1, "Keranjang penawaran kosong"),
 });
 
@@ -38,6 +39,7 @@ export async function submitInquiry(formData: FormData) {
       phone: formData.get("phone"),
       email: formData.get("email"),
       notes: formData.get("notes") || undefined, // empty string to undefined if needed, or just let string pass
+      sourceArticleId: formData.get("sourceArticleId") || undefined,
       items: parsedItems,
     });
 
@@ -47,7 +49,7 @@ export async function submitInquiry(formData: FormData) {
     }
 
     const validData = validationResult.data;
-    const { institutionName, type, address, contactName, phone, email, notes, items } = validData;
+    const { institutionName, type, address, contactName, phone, email, notes, sourceArticleId, items } = validData;
 
     // 1. Find or Create Institution
     let institution = await prisma.institution.findUnique({
@@ -93,6 +95,7 @@ export async function submitInquiry(formData: FormData) {
       data: {
         inquiryNo,
         institutionId: institution.id,
+        sourceArticleId,
         notes: notes ? `PIC: ${contactName} (${phone} / ${email})\nCatatan: ${notes}` : `PIC: ${contactName} (${phone} / ${email})`,
         items: {
           create: items.map(item => ({

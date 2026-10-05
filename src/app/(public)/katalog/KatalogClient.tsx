@@ -25,6 +25,28 @@ const categories: { key: Category | "semua"; label: string }[] = [
   })),
 ];
 
+const LAB_SYNONYMS: Record<string, string[]> = {
+  "timbangan": ["balance", "scale", "neraca"],
+  "neraca": ["balance", "scale", "timbangan"],
+  "oven": ["drying oven", "incubator"],
+  "kulkas": ["refrigerator", "freezer", "chiller", "cold storage"],
+  "pendingin": ["refrigerator", "freezer", "chiller"],
+  "pengaduk": ["stirrer", "shaker", "mixer"],
+  "kocokan": ["stirrer", "shaker", "mixer", "vortex"],
+  "pemanas": ["heater", "hotplate", "heating mantle", "water bath"],
+};
+
+function expandSearchQuery(query: string): string[] {
+  const q = query.toLowerCase();
+  const expanded = new Set<string>([q]);
+  Object.keys(LAB_SYNONYMS).forEach(key => {
+    if (q.includes(key) || key.includes(q)) {
+      LAB_SYNONYMS[key].forEach(syn => expanded.add(syn));
+    }
+  });
+  return Array.from(expanded);
+}
+
 function SearchParamsListener({ onQuery }: { onQuery: (q: string) => void }) {
   const searchParams = useSearchParams();
   useEffect(() => {
@@ -60,11 +82,18 @@ export default function KatalogClient({ initialProducts = [], children }: { init
     const baseFiltered = products.filter((p: PrismaProduct) => {
       const matchesCategory =
         activeCategory === "semua" || p.category === activeCategory;
-      const matchesSearch =
-        !searchQuery ||
-        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.categoryLabel.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      let matchesSearch = true;
+      if (searchQuery) {
+        const expandedQueries = expandSearchQuery(searchQuery);
+        matchesSearch = expandedQueries.some(q => 
+          p.name.toLowerCase().includes(q) ||
+          p.description.toLowerCase().includes(q) ||
+          p.categoryLabel.toLowerCase().includes(q) ||
+          (p.brand && p.brand.toLowerCase().includes(q))
+        );
+      }
+
       const matchesReadyStock = !showOnlyReadyStock || p.isReadyStock;
       const matchesPromoMerdeka = !showPromoMerdekaOnly || p.isReadyStock;
       const matchesBrand = selectedBrands.length === 0 || (p.brand && selectedBrands.includes(p.brand));
@@ -108,6 +137,21 @@ export default function KatalogClient({ initialProducts = [], children }: { init
     maxPriceInput,
     sortBy,
   ]);
+
+  // Log empty searches
+  useEffect(() => {
+    if (searchQuery.length > 2 && filteredProducts.length === 0) {
+      const timer = setTimeout(() => {
+        fetch("/api/log-search", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query: searchQuery, results: 0 })
+        }).catch(console.error);
+      }, 1500); // 1.5s debounce
+
+      return () => clearTimeout(timer);
+    }
+  }, [searchQuery, filteredProducts.length]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
@@ -703,23 +747,32 @@ export default function KatalogClient({ initialProducts = [], children }: { init
                 Produk tidak ditemukan
               </h2>
               <p className="text-sm text-slate-500 mt-2 max-w-sm">
-                Coba gunakan kata kunci lain atau ubah filter kategori Anda
+                Coba gunakan kata kunci lain atau ubah filter kategori Anda. 
               </p>
-              <button
-                onClick={() => {
-                  setSearchQuery("");
-                  setActiveCategory("semua");
-                  setSelectedBrands([]);
-                  setSelectedSubcategories([]);
-                  setActivePriceTier("all");
-                  setMinPriceInput("");
-                  setMaxPriceInput("");
-                  setSortBy("default");
-                }}
-                className="mt-4 inline-flex items-center gap-2 rounded-2xl bg-blue-50 px-5 py-2.5 text-sm font-semibold text-blue-700 hover:bg-blue-100 transition-colors"
-              >
-                Reset Filter
-              </button>
+              
+              <div className="mt-6 flex flex-col sm:flex-row items-center gap-3">
+                <button
+                  onClick={() => {
+                    setSearchQuery("");
+                    setActiveCategory("semua");
+                    setSelectedBrands([]);
+                    setSelectedSubcategories([]);
+                    setActivePriceTier("all");
+                    setMinPriceInput("");
+                    setMaxPriceInput("");
+                    setSortBy("default");
+                  }}
+                  className="inline-flex items-center gap-2 rounded-2xl bg-blue-50 px-5 py-2.5 text-sm font-semibold text-blue-700 hover:bg-blue-100 transition-colors"
+                >
+                  Reset Filter
+                </button>
+                <a
+                  href={`/inquiry?q=${encodeURIComponent(searchQuery)}`}
+                  className="inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-500/20 transition-all"
+                >
+                  🔍 Tidak ketemu? Kami carikan
+                </a>
+              </div>
             </div>
           )}
         </div>

@@ -789,7 +789,7 @@ export default async function ArticleDetailPage(
                   Konsultasikan kebutuhan teknis, negosiasi harga, atau minta surat penawaran resmi (RFQ) untuk produk yang dibahas dalam artikel ini.
                 </p>
               </div>
-              <ArticleWaCTA title={article.title} />
+              <ArticleWaCTA title={article.title} slug={article.slug} />
             </div>
           </div>
         </article>

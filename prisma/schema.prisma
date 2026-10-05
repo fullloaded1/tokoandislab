@@ -39,6 +39,7 @@ model Product {
   evalItems          StockEvalItem[]
   whatsAppLogs       WhatsAppLog[]
   articles           Article[]           @relation("ArticleToProduct")
+  testMethods        TestMethod[]        @relation("TestMethodToProduct")
 }
 
 model ProductVariant {
@@ -134,18 +135,20 @@ model Contact {
 }
 
 model Inquiry {
-  id            String        @id @default(cuid())
-  inquiryNo     String        @unique
-  institutionId String
-  notes         String?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @default(now()) @updatedAt
-  status        InquiryStatus @default(NEW)
-  activityLogs  ActivityLog[]
-  institution   Institution   @relation(fields: [institutionId], references: [id], onDelete: Cascade)
-  items         InquiryItem[]
-  project       Project?
-  quotation     Quotation?
+  id              String        @id @default(cuid())
+  inquiryNo       String        @unique
+  institutionId   String
+  notes           String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @default(now()) @updatedAt
+  status          InquiryStatus @default(NEW)
+  activityLogs    ActivityLog[]
+  institution     Institution   @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  items           InquiryItem[]
+  project         Project?
+  quotation       Quotation?
+  sourceArticleId String?
+  sourceArticle   Article?      @relation(fields: [sourceArticleId], references: [id])
 
   @@index([institutionId])
   @@index([inquiryNo])
@@ -332,20 +335,35 @@ model WhatsAppLog {
 }
 
 model Article {
-  id         String    @id @default(cuid())
-  slug       String    @unique
-  title      String
-  content    String
-  excerpt    String?
-  image      String?
-  published  Boolean   @default(true)
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  category   String    @default("edukasi-lab")
-  likeCount  Int       @default(0)
-  viewCount  Int       @default(0)
-  authorName String?   @default("Tim Redaksi AndisLab")
-  products   Product[] @relation("ArticleToProduct")
+  id          String        @id @default(cuid())
+  slug        String        @unique
+  title       String
+  content     String
+  excerpt     String?
+  image       String?
+  published   Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  category    String        @default("edukasi-lab")
+  likeCount   Int           @default(0)
+  viewCount   Int           @default(0)
+  authorName  String?       @default("Tim Redaksi AndisLab")
+  pillar       ContentPillar @default(SEARCH)
+  funnelStage  FunnelStage   @default(KNOWLEDGE)
+  testMethodId String?
+  products     Product[]     @relation("ArticleToProduct")
+  inquiries    Inquiry[]
+  testMethod   TestMethod?   @relation(fields: [testMethodId], references: [id])
+}
+
+model TestMethod {
+  id        String    @id @default(cuid())
+  slug      String    @unique
+  name      String
+  summary   String
+  standard  String?
+  articles  Article[]
+  products  Product[] @relation("TestMethodToProduct")
 }
 
 model Order {
@@ -607,4 +625,28 @@ enum StockEvalStatus {
 enum StockEvalAction {
   RETIRE
   INTRODUCE
+}
+
+enum ContentPillar {
+  SEARCH
+  SOLUTION
+  TREND
+  BRAND
+}
+
+enum FunnelStage {
+  PROBLEM
+  KNOWLEDGE
+  METHOD
+  TOOL
+  SELECTION
+  STOCK
+  QUOTATION
+}
+
+model SearchLog {
+  id          String   @id @default(cuid())
+  query       String
+  results     Int      @default(0)
+  createdAt   DateTime @default(now())
 }
