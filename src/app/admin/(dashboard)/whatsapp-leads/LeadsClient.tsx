@@ -21,12 +21,18 @@ import {
   Clock,
   CheckCircle,
   XCircle,
-  AlertCircle
+  AlertCircle,
+  Target,
+  Sparkles,
+  Moon,
+  TrendingUp,
+  FileText
 } from "lucide-react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import * as XLSX from "xlsx";
-import { updateLeadStatus } from "./actions";
+import { updateLeadStatus, convertLeadToInquiry } from "./actions";
 import { WhatsAppLogStatus } from "@prisma/client";
+import { calculateWeeklyProgress, isWithinBusinessHours } from "@/lib/businessHours";
 
 interface LogItem {
   id: string;
@@ -50,6 +56,7 @@ const SOURCE_DETAILS: Record<string, { label: string; bg: string }> = {
   rfq_success: { label: "Checkout RFQ", bg: "bg-emerald-50 text-emerald-700 border-emerald-250" },
   product_detail: { label: "Tanya Produk", bg: "bg-blue-50 text-blue-700 border-blue-250" },
   product_brochure: { label: "Minta Brosur", bg: "bg-violet-50 text-violet-700 border-violet-250" },
+  lead_magnet_katalog_pdf: { label: "e-Katalog PDF (Magnet)", bg: "bg-indigo-50 text-indigo-700 border-indigo-250" },
   navbar_desktop: { label: "Navbar (PC)", bg: "bg-cyan-50 text-cyan-700 border-cyan-250" },
   navbar_mobile: { label: "Navbar (HP)", bg: "bg-cyan-50 text-cyan-700 border-cyan-250" },
   footer: { label: "Footer Link", bg: "bg-slate-100 text-slate-700 border-slate-300" },
@@ -75,6 +82,8 @@ export default function LeadsClient({ initialLogs }: { initialLogs: LogItem[] })
   const [logs, setLogs] = useState<LogItem[]>(initialLogs);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSource, setSelectedSource] = useState("all");
+  const [filterCategory, setFilterCategory] = useState<"all" | "qualified" | "off_hours" | "new">("all");
+  const [convertingId, setConvertingId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [viewMode, setViewMode] = useState<"table" | "crm">("table");
   const [isMounted, setIsMounted] = useState(false);
@@ -85,6 +94,7 @@ export default function LeadsClient({ initialLogs }: { initialLogs: LogItem[] })
   }, []);
 
   // 1. Calculations & Metrics
+  const weeklyReport = calculateWeeklyProgress(logs);
   const totalClicks = logs.length;
   const rfqSuccessCount = logs.filter(l => l.source === "rfq_success").length;
   const productDetailCount = logs.filter(l => l.source === "product_detail" || l.source === "product_brochure").length;
@@ -129,6 +139,20 @@ export default function LeadsClient({ initialLogs }: { initialLogs: LogItem[] })
   const filteredLogs = logs.filter(log => {
     const matchesSource = selectedSource === "all" || log.source === selectedSource;
     
+    let matchesCategory = true;
+    if (filterCategory === "qualified") {
+      matchesCategory = Boolean(
+        (log.leadName && log.leadName.trim()) ||
+        (log.leadInstitution && log.leadInstitution.trim()) ||
+        (log.leadPhone && log.leadPhone.trim()) ||
+        ["CONTACTED", "OFFERS", "WON"].includes(log.status)
+      );
+    } else if (filterCategory === "off_hours") {
+      matchesCategory = !isWithinBusinessHours(new Date(log.createdAt));
+    } else if (filterCategory === "new") {
+      matchesCategory = log.status === "NEW";
+    }
+
     const searchLower = searchTerm.toLowerCase();
     const matchesSearch = 
       !searchTerm ||
@@ -139,8 +163,26 @@ export default function LeadsClient({ initialLogs }: { initialLogs: LogItem[] })
       (log.leadInstitution && log.leadInstitution.toLowerCase().includes(searchLower)) ||
       (log.source && log.source.toLowerCase().includes(searchLower));
 
-    return matchesSource && matchesSearch;
+    return matchesSource && matchesCategory && matchesSearch;
   });
+
+  const handleConvertToInquiry = async (logId: string) => {
+    if (convertingId) return;
+    setConvertingId(logId);
+    try {
+      const res = await convertLeadToInquiry(logId);
+      if (res.success) {
+        setLogs(prev => prev.map(l => l.id === logId ? { ...l, inquiryNo: res.inquiryNo || l.inquiryNo, status: "OFFERS" } : l));
+        alert(`Berhasil membuat Inquiry resmi: ${res.inquiryNo}! Lead telah masuk ke pipeline RFQ status Kirim Penawaran.`);
+      } else {
+        alert(res.error || "Gagal konversi ke inquiry");
+      }
+    } catch (err: any) {
+      alert(err?.message || "Terjadi kesalahan saat konversi");
+    } finally {
+      setConvertingId(null);
+    }
+  };
 
   // 4. Pagination
   const totalPages = Math.ceil(filteredLogs.length / itemsPerPage);
@@ -260,6 +302,135 @@ export default function LeadsClient({ initialLogs }: { initialLogs: LogItem[] })
             <Download className="h-5 w-5" />
             Ekspor Excel ({filteredLogs.length})
           </button>
+        </div>
+      </div>
+
+      {/* Target 20 Leads / Minggu Tracker Banner */}
+      <div className="bg-gradient-to-r from-slate-950 via-blue-950 to-slate-900 text-white rounded-3xl p-6 sm:p-8 mb-8 shadow-xl border border-blue-900/40 relative overflow-hidden">
+        {/* Background glow decoration */}
+        <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/3" />
+        <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none translate-y-1/3" />
+
+        <div className="relative z-10">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-6">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-300 border border-blue-400/30 mb-3">
+                <Target className="h-3.5 w-3.5" />
+                Target Operasional: 20 Leads / Minggu
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-black tracking-tight">
+                Progres Minggu Ini ({weeklyReport.weekStartStr} – {weeklyReport.weekEndStr})
+              </h2>
+              <p className="text-sm text-slate-300 mt-1 max-w-2xl font-medium">
+                Pantau konversi menuju 20 leads per minggu. Leads yang masuk di luar jam kerja (Jumat 15.00 – Selasa 09.00) otomatis dikumpulkan untuk antrian tindak lanjut prioritas Selasa pagi.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/10">
+                <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Capaian Target</p>
+                <div className="flex items-baseline gap-2 mt-0.5">
+                  <span className="text-3xl font-black text-white">{weeklyReport.thisWeekTotal}</span>
+                  <span className="text-sm font-bold text-slate-400">/ 20</span>
+                  <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${weeklyReport.isTargetAchieved ? 'bg-emerald-500/20 text-emerald-300' : 'bg-blue-500/20 text-blue-300'}`}>
+                    {weeklyReport.percentage}%
+                  </span>
+                </div>
+              </div>
+
+              {weeklyReport.lastWeekTotal > 0 && (
+                <div className="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/10">
+                  <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">vs Minggu Lalu</p>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <TrendingUp className={`h-4 w-4 ${weeklyReport.growthPercentage >= 0 ? 'text-emerald-400' : 'text-rose-400'}`} />
+                    <span className="text-xl font-black text-white">
+                      {weeklyReport.growthPercentage >= 0 ? `+${weeklyReport.growthPercentage}%` : `${weeklyReport.growthPercentage}%`}
+                    </span>
+                    <span className="text-xs text-slate-400">({weeklyReport.lastWeekTotal})</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Progress Bar */}
+          <div className="space-y-2 mb-6">
+            <div className="w-full bg-white/10 h-3.5 rounded-full overflow-hidden p-0.5 border border-white/10">
+              <div
+                className={`h-full rounded-full transition-all duration-500 ${
+                  weeklyReport.percentage >= 100
+                    ? "bg-gradient-to-r from-emerald-500 to-teal-400"
+                    : weeklyReport.percentage >= 50
+                    ? "bg-gradient-to-r from-blue-500 to-cyan-400"
+                    : "bg-gradient-to-r from-amber-500 to-orange-400"
+                }`}
+                style={{ width: `${weeklyReport.percentage}%` }}
+              />
+            </div>
+            <div className="flex justify-between text-xs text-slate-300 font-semibold">
+              <span>{weeklyReport.isTargetAchieved ? "🎉 Target 20 leads/minggu telah tercapai!" : `Kurang ${weeklyReport.remaining} leads untuk mencapai target 20 minggu ini.`}</span>
+              <span>Target: 20 Leads</span>
+            </div>
+          </div>
+
+          {/* Breakdown Badges / Interactive filter shortcuts */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-white/10">
+            <button
+              type="button"
+              onClick={() => { setFilterCategory("qualified"); setCurrentPage(1); }}
+              className={`flex items-center justify-between p-3.5 rounded-2xl border transition-all text-left cursor-pointer ${
+                filterCategory === "qualified"
+                  ? "bg-blue-600/40 border-blue-400 shadow-md ring-2 ring-blue-400/30"
+                  : "bg-white/5 border-white/10 hover:bg-white/10"
+              }`}
+            >
+              <div>
+                <p className="text-[11px] font-bold text-blue-300 uppercase tracking-wider flex items-center gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  Prospek Berkualitas (MQL)
+                </p>
+                <p className="text-lg font-black text-white mt-0.5">{weeklyReport.thisWeekQualified} prospek</p>
+              </div>
+              <span className="text-xs text-blue-300 font-semibold">Filter →</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => { setFilterCategory("off_hours"); setCurrentPage(1); }}
+              className={`flex items-center justify-between p-3.5 rounded-2xl border transition-all text-left cursor-pointer ${
+                filterCategory === "off_hours"
+                  ? "bg-amber-600/40 border-amber-400 shadow-md ring-2 ring-amber-400/30"
+                  : "bg-white/5 border-white/10 hover:bg-white/10"
+              }`}
+            >
+              <div>
+                <p className="text-[11px] font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+                  <Moon className="h-3.5 w-3.5" />
+                  Antrian Luar Jam Kerja
+                </p>
+                <p className="text-lg font-black text-white mt-0.5">{weeklyReport.thisWeekOffHours} prospek</p>
+              </div>
+              <span className="text-xs text-amber-300 font-semibold">Prioritas Selasa →</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => { setFilterCategory("all"); setCurrentPage(1); }}
+              className={`flex items-center justify-between p-3.5 rounded-2xl border transition-all text-left cursor-pointer ${
+                filterCategory === "all"
+                  ? "bg-slate-700/50 border-white/30 shadow-md ring-2 ring-white/20"
+                  : "bg-white/5 border-white/10 hover:bg-white/10"
+              }`}
+            >
+              <div>
+                <p className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
+                  Semua Aktivitas Klik
+                </p>
+                <p className="text-lg font-black text-white mt-0.5">{totalClicks} total</p>
+              </div>
+              <span className="text-xs text-slate-400 font-semibold">Lihat Semua →</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -460,15 +631,20 @@ export default function LeadsClient({ initialLogs }: { initialLogs: LogItem[] })
                     ) : (
                       paginatedLogs.map((log) => (
                         <tr key={log.id} className="hover:bg-slate-50/50 transition-colors">
-                          {/* Time */}
+                          {/* Time & Schedule Status */}
                           <td className="px-6 py-4 whitespace-nowrap align-top">
-                            <div className="text-xs text-slate-500 flex items-center gap-1">
+                            <div className="text-xs text-slate-600 font-bold flex items-center gap-1">
                               <Calendar className="h-3.5 w-3.5 text-slate-400 shrink-0" />
                               {new Date(log.createdAt).toLocaleDateString("id-ID", { month: "short", day: "numeric" })}
                             </div>
-                            <div className="text-[10px] text-slate-400 font-semibold mt-0.5">
-                              {new Date(log.createdAt).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })}
+                            <div className="text-[11px] text-slate-400 font-semibold mt-0.5">
+                              {new Date(log.createdAt).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })} WIB
                             </div>
+                            {!isWithinBusinessHours(new Date(log.createdAt)) && (
+                              <span className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                                🌙 Luar Jam Kerja
+                              </span>
+                            )}
                           </td>
 
                           {/* Prospect details */}
@@ -476,24 +652,27 @@ export default function LeadsClient({ initialLogs }: { initialLogs: LogItem[] })
                             {log.leadName ? (
                               <div className="space-y-1">
                                 <div className="font-bold text-slate-800 text-sm flex items-center gap-1.5">
-                                  <User className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                                  <User className="h-3.5 w-3.5 text-blue-600 shrink-0" />
                                   {log.leadName}
+                                  <span className="text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 rounded px-1.5 py-0.2">
+                                    MQL
+                                  </span>
                                 </div>
                                 {log.leadInstitution && (
-                                  <div className="text-xs text-slate-500 flex items-center gap-1 pl-5">
+                                  <div className="text-xs text-slate-600 font-medium flex items-center gap-1 pl-5">
                                     <Building className="h-3 w-3 text-slate-400 shrink-0" />
                                     {log.leadInstitution}
                                   </div>
                                 )}
                                 {log.leadPhone && (
-                                  <div className="text-xs text-slate-500 flex items-center gap-1 pl-5">
+                                  <div className="text-xs text-slate-600 font-medium flex items-center gap-1 pl-5">
                                     <Phone className="h-3 w-3 text-slate-400 shrink-0" />
                                     {log.leadPhone}
                                   </div>
                                 )}
                               </div>
                             ) : (
-                              <span className="text-xs text-slate-400 italic">Visitor Anonim</span>
+                              <span className="text-xs text-slate-400 italic">Klik Anonim (Tanpa Form)</span>
                             )}
                           </td>
 
@@ -502,9 +681,13 @@ export default function LeadsClient({ initialLogs }: { initialLogs: LogItem[] })
                             <div className="flex flex-wrap gap-1.5 mb-1.5 items-center">
                               {getSourceBadge(log.source)}
                               {log.inquiryNo && (
-                                <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 rounded px-1.5 py-0.5">
-                                  RFQ: {log.inquiryNo}
-                                </span>
+                                <a
+                                  href={`/admin/inquiries`}
+                                  className="text-[10px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded px-1.5 py-0.5"
+                                  title="Buka Inquiry di CRM"
+                                >
+                                  RFQ: {log.inquiryNo} ↗
+                                </a>
                               )}
                             </div>
                             {log.productName && (
@@ -514,35 +697,69 @@ export default function LeadsClient({ initialLogs }: { initialLogs: LogItem[] })
                               </div>
                             )}
                             {log.messageText && (
-                              <p className="text-xs text-slate-500 leading-relaxed font-medium bg-slate-50 p-2.5 rounded-xl border border-slate-100 break-words max-w-sm line-clamp-2 hover:line-clamp-none transition-all">
+                              <p className="text-xs text-slate-600 leading-relaxed font-medium bg-slate-50 p-2.5 rounded-xl border border-slate-100 break-words max-w-sm line-clamp-2 hover:line-clamp-none transition-all">
                                 {log.messageText}
                               </p>
                             )}
                           </td>
 
-                          {/* Actions */}
+                          {/* Actions & Status */}
                           <td className="px-6 py-4 text-right align-top whitespace-nowrap">
-                            <div className="flex flex-col gap-1 items-end">
+                            <div className="flex flex-col gap-1.5 items-end">
+                              {/* Status Select */}
+                              <select
+                                value={log.status}
+                                onChange={async (e) => {
+                                  const newStatus = e.target.value as WhatsAppLogStatus;
+                                  const updated = logs.map(l => l.id === log.id ? { ...l, status: newStatus } : l);
+                                  setLogs(updated);
+                                  await updateLeadStatus(log.id, newStatus);
+                                }}
+                                className="text-xs font-bold border border-slate-200 rounded-lg px-2 py-1 bg-white text-slate-700 outline-none cursor-pointer hover:border-slate-300"
+                              >
+                                {CRM_COLUMNS.map(col => (
+                                  <option key={col.id} value={col.id}>{col.title}</option>
+                                ))}
+                              </select>
+
+                              {/* WhatsApp Contact Button */}
                               {log.leadPhone && (
                                 <a
                                   href={`https://wa.me/${log.leadPhone.replace(/[^0-9]/g, "")}`}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-lg transition-colors border border-emerald-100"
+                                  className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 hover:text-emerald-900 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-lg transition-colors border border-emerald-200"
                                 >
                                   Hubungi Klien
                                   <MessageCircle className="h-3 w-3" />
                                 </a>
                               )}
+
+                              {/* 1-Click Convert to RFQ */}
+                              {!log.inquiryNo ? (
+                                <button
+                                  type="button"
+                                  disabled={convertingId === log.id}
+                                  onClick={() => handleConvertToInquiry(log.id)}
+                                  className="inline-flex items-center gap-1 text-xs font-bold text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors border border-blue-200 cursor-pointer disabled:opacity-50"
+                                  title="Konversi prospek ini ke Inquiry resmi di pipeline RFQ"
+                                >
+                                  {convertingId === log.id ? "Memproses..." : "⚡ Buat RFQ"}
+                                </button>
+                              ) : (
+                                <span className="text-[10px] font-semibold text-slate-400">
+                                  Tersambung ke RFQ
+                                </span>
+                              )}
+
                               {log.product?.slug && (
                                 <a
                                   href={`/katalog/${log.product.slug}`}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors border border-blue-100"
+                                  className="inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-slate-800 transition-colors"
                                 >
-                                  Lihat Alat
-                                  <ExternalLink className="h-3 w-3" />
+                                  Lihat Produk ↗
                                 </a>
                               )}
                             </div>
@@ -627,27 +844,39 @@ export default function LeadsClient({ initialLogs }: { initialLogs: LogItem[] })
                                 className={`p-4 bg-white rounded-xl border border-slate-200 shadow-sm transition-all select-none
                                   ${snapshot.isDragging ? "shadow-xl rotate-1 scale-102 border-blue-400" : "hover:border-blue-300 hover:shadow-md"}`}
                               >
-                                <div className="flex justify-between items-start mb-2.5">
-                                  <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider">
-                                    {new Date(log.createdAt).toLocaleDateString("id-ID", { month: "short", day: "numeric" })}
-                                  </span>
+                                <div className="flex justify-between items-start mb-2.5 gap-2">
+                                  <div className="flex flex-col">
+                                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider">
+                                      {new Date(log.createdAt).toLocaleDateString("id-ID", { month: "short", day: "numeric" })}
+                                    </span>
+                                    {!isWithinBusinessHours(new Date(log.createdAt)) && (
+                                      <span className="text-[9px] font-bold text-amber-600 mt-0.5">
+                                        🌙 Luar Jam Kerja
+                                      </span>
+                                    )}
+                                  </div>
                                   {getSourceBadge(log.source)}
                                 </div>
 
                                 {/* Prospect Info */}
                                 <div className="space-y-1 mb-3">
                                   <h4 className="font-bold text-slate-800 text-sm flex items-center gap-1.5">
-                                    <User className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                                    <User className="h-3.5 w-3.5 text-blue-600 shrink-0" />
                                     {log.leadName || "Visitor Anonim"}
+                                    {log.leadName && (
+                                      <span className="text-[9px] font-bold bg-blue-50 text-blue-700 border border-blue-200 rounded px-1 py-0.2">
+                                        MQL
+                                      </span>
+                                    )}
                                   </h4>
                                   {log.leadInstitution && (
-                                    <p className="text-xs text-slate-500 flex items-center gap-1 pl-5">
+                                    <p className="text-xs text-slate-600 font-medium flex items-center gap-1 pl-5">
                                       <Building className="h-3 w-3 text-slate-400 shrink-0" />
                                       {log.leadInstitution}
                                     </p>
                                   )}
                                   {log.leadPhone && (
-                                    <p className="text-xs text-slate-500 flex items-center gap-1 pl-5">
+                                    <p className="text-xs text-slate-600 font-medium flex items-center gap-1 pl-5">
                                       <Phone className="h-3 w-3 text-slate-400 shrink-0" />
                                       {log.leadPhone}
                                     </p>
@@ -658,13 +887,17 @@ export default function LeadsClient({ initialLogs }: { initialLogs: LogItem[] })
                                 {log.productName && (
                                   <div className="mb-3 pl-2.5 border-l-2 border-blue-500 text-xs">
                                     <p className="font-bold text-slate-700 line-clamp-1">{log.productName}</p>
-                                    {log.inquiryNo && <p className="text-[10px] text-slate-400 font-semibold mt-0.5">Ref: {log.inquiryNo}</p>}
+                                    {log.inquiryNo && (
+                                      <a href="/admin/inquiries" className="text-[10px] text-emerald-600 font-bold mt-0.5 block hover:underline">
+                                        RFQ: {log.inquiryNo} ↗
+                                      </a>
+                                    )}
                                   </div>
                                 )}
 
-                                {/* Action button */}
-                                {log.leadPhone && (
-                                  <div className="pt-2.5 border-t border-slate-100 flex justify-between items-center">
+                                {/* Action buttons */}
+                                <div className="pt-2.5 border-t border-slate-100 flex flex-col gap-1.5">
+                                  {log.leadPhone && (
                                     <a
                                       href={`https://wa.me/${log.leadPhone.replace(/[^0-9]/g, "")}`}
                                       target="_blank"
@@ -674,8 +907,26 @@ export default function LeadsClient({ initialLogs }: { initialLogs: LogItem[] })
                                       Chat Client
                                       <MessageCircle className="h-3 w-3" />
                                     </a>
-                                  </div>
-                                )}
+                                  )}
+
+                                  {!log.inquiryNo ? (
+                                    <button
+                                      type="button"
+                                      disabled={convertingId === log.id}
+                                      onClick={() => handleConvertToInquiry(log.id)}
+                                      className="w-full flex items-center justify-center gap-1 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold py-1 rounded-lg transition-colors border border-blue-200 cursor-pointer disabled:opacity-50"
+                                    >
+                                      {convertingId === log.id ? "Memproses..." : "⚡ Buat RFQ Resmi"}
+                                    </button>
+                                  ) : (
+                                    <a
+                                      href="/admin/inquiries"
+                                      className="w-full text-center text-[10px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 py-1 rounded border border-emerald-200"
+                                    >
+                                      Terdaftar di RFQ ({log.inquiryNo}) ↗
+                                    </a>
+                                  )}
+                                </div>
                               </div>
                             )}
                           </Draggable>

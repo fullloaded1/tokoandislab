@@ -38,11 +38,14 @@ export async function createProduct(data: any) {
   const session = await requireAdmin();
   try {
     const slug = data.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    const newPrice = money.toDecimal(data.price);
+    const newCostPrice = money.toDecimal(data.costPrice || 0);
+
     const product = await prisma.product.create({
       data: {
         name: data.name,
         slug: slug,
-        price: money.toDecimal(data.price),
+        price: newPrice,
         category: data.category,
         categoryLabel: data.categoryLabel,
         brand: data.brand || "",
@@ -51,9 +54,21 @@ export async function createProduct(data: any) {
         image: data.image || "",
         description: data.description || "",
         isReadyStock: Boolean(data.isReadyStock),
-        costPrice: money.toDecimal(data.costPrice || 0),
+        costPrice: newCostPrice,
       },
     });
+
+    if (Boolean(data.isReadyStock)) {
+      await prisma.productVariant.create({
+        data: {
+          productId: product.id,
+          sku: `${product.model || slug}-DEF`,
+          name: product.name,
+          price: newPrice,
+          stock: 1,
+        },
+      });
+    }
 
     await prisma.auditLog.create({
       data: {
@@ -68,6 +83,9 @@ export async function createProduct(data: any) {
 
     revalidatePath("/admin");
     revalidatePath("/katalog");
+    revalidatePath("/ready-stock");
+    revalidatePath(`/katalog/${product.slug}`);
+    revalidatePath(`/produk/${product.slug}`);
     revalidatePath("/");
     return { success: true };
   } catch (error) {
@@ -79,11 +97,14 @@ export async function createProduct(data: any) {
 export async function updateProduct(id: string, data: any) {
   const session = await requireAdmin();
   try {
+    const newPrice = money.toDecimal(data.price);
+    const newCostPrice = money.toDecimal(data.costPrice || 0);
+
     const product = await prisma.product.update({
       where: { id },
       data: {
         name: data.name,
-        price: money.toDecimal(data.price),
+        price: newPrice,
         category: data.category,
         categoryLabel: data.categoryLabel,
         brand: data.brand || "",
@@ -92,9 +113,33 @@ export async function updateProduct(id: string, data: any) {
         image: data.image || "",
         description: data.description || "",
         isReadyStock: Boolean(data.isReadyStock),
-        costPrice: money.toDecimal(data.costPrice || 0),
+        costPrice: newCostPrice,
+      },
+      include: {
+        variants: true,
       },
     });
+
+    // SINKRONISASI HARGA KE VARIAN:
+    // Jika produk memiliki 1 varian (seperti produk ready stock / tunggal),
+    // harga varian HARUS disinkronkan dengan harga baru agar tampil di katalog & keranjang.
+    if (product.variants.length === 1) {
+      await prisma.productVariant.update({
+        where: { id: product.variants[0].id },
+        data: { price: newPrice },
+      });
+    } else if (product.variants.length === 0 && Boolean(data.isReadyStock)) {
+      // Jika dijadikan ready stock tapi belum ada varian, buat varian default
+      await prisma.productVariant.create({
+        data: {
+          productId: product.id,
+          sku: `${product.model || product.slug || id}-DEF`,
+          name: product.name,
+          price: newPrice,
+          stock: 1,
+        },
+      });
+    }
 
     await prisma.auditLog.create({
       data: {
@@ -108,7 +153,11 @@ export async function updateProduct(id: string, data: any) {
     });
 
     revalidatePath("/admin");
+    revalidatePath(`/admin/products/${id}/variants`);
     revalidatePath("/katalog");
+    revalidatePath("/ready-stock");
+    revalidatePath(`/katalog/${product.slug}`);
+    revalidatePath(`/produk/${product.slug}`);
     revalidatePath("/");
     return { success: true };
   } catch (error) {

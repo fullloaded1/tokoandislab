@@ -44,6 +44,8 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
       setIsEditing(true);
       setFormData({
         ...product,
+        price: product.price ? Number(product.price) : 0,
+        costPrice: product.costPrice ? Number(product.costPrice) : 0,
       });
     } else {
       setIsEditing(false);
@@ -112,7 +114,12 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
     if (isEditing) {
       const res = await updateProduct(formData.id, formData);
       if (res.success) {
-        setProducts(products.map(p => p.id === formData.id ? { ...p, ...formData } : p));
+        setProducts(products.map(p => p.id === formData.id ? { 
+          ...p, 
+          ...formData,
+          price: formData.price.toString(),
+          costPrice: (formData.costPrice ?? 0).toString(),
+        } : p));
         handleCloseModal();
       } else {
         alert(res.error);
@@ -386,7 +393,23 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
                 </div>
                 
                 <div className="space-y-1">
-                  <label className="text-sm font-semibold text-slate-700">Harga Jual (Rp)</label>
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-semibold text-slate-700">Harga Jual (Rp)</label>
+                    {Number(formData.costPrice) > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const cost = Number(formData.costPrice);
+                          const calculated = Math.round(cost / 0.8);
+                          setFormData({ ...formData, price: calculated });
+                        }}
+                        className="text-xs text-blue-600 hover:text-blue-800 font-medium hover:underline cursor-pointer"
+                        title="Hitung harga jual = modal ÷ 0,8"
+                      >
+                        ⚡ Hitung dari Modal (÷ 0,8)
+                      </button>
+                    )}
+                  </div>
                   <input 
                     required
                     type="number" 
@@ -395,10 +418,15 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
                     className="w-full border border-slate-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
                     placeholder="Contoh: 35000000"
                   />
+                  {Number(formData.price) > 0 && (
+                    <p className="text-xs text-emerald-600 font-medium">
+                      Display: {money.formatIDR(formData.price)}
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-sm font-semibold text-slate-700">Harga Modal (Rp)</label>
+                  <label className="text-sm font-semibold text-slate-700">Harga Modal Supplier (Rp)</label>
                   <input 
                     type="number" 
                     value={formData.costPrice ?? 0}
@@ -406,6 +434,11 @@ export default function AdminClient({ initialProducts }: { initialProducts: Pris
                     className="w-full border border-slate-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
                     placeholder="Harga beli dari supplier"
                   />
+                  {Number(formData.costPrice) > 0 && (
+                    <p className="text-xs text-slate-500 font-medium">
+                      Modal: {money.formatIDR(formData.costPrice)}
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-1">

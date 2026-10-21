@@ -6,6 +6,8 @@ import { X, Send, Phone, User, Building, Loader2, ArrowRight, MessageCircle } fr
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { waMeUrl } from "@/lib/contact";
 
+import { getBusinessHoursStatus } from "@/lib/businessHours";
+
 function WhatsAppLeadModalInner() {
   const { isOpen, source, text, productId, productName, inquiryNo, openModal, closeModal } = useWhatsAppLeadStore();
   const searchParams = useSearchParams();
@@ -17,6 +19,11 @@ function WhatsAppLeadModalInner() {
   const [phone, setPhone] = useState("");
   const [rememberMe, setRememberMe] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [businessStatus, setBusinessStatus] = useState<any>(null);
+
+  useEffect(() => {
+    setBusinessStatus(getBusinessHoursStatus());
+  }, [isOpen]);
 
   // 1. Logic for wa=open URL trigger has been removed to prevent unwanted URL indexing.
 
@@ -33,6 +40,8 @@ function WhatsAppLeadModalInner() {
   }, [isOpen]);
 
   if (!isOpen) return null;
+
+  const isOnline = businessStatus?.isOpen ?? true;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,13 +60,19 @@ function WhatsAppLeadModalInner() {
       localStorage.removeItem("lead_phone");
     }
 
+    // Append off-hours note if offline so visitor feels prioritized
+    let submissionText = text || "";
+    if (!isOnline && businessStatus?.nextOpeningText) {
+      submissionText += `\n(Mohon diproses prioritas saat jam kerja aktif: ${businessStatus.nextOpeningText})`;
+    }
+
     try {
       const response = await fetch("/api/wa-redirect", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           source,
-          text,
+          text: submissionText,
           productId,
           productName,
           inquiryNo,
@@ -78,7 +93,7 @@ function WhatsAppLeadModalInner() {
     } catch (err) {
       console.error("Lead submission error:", err);
       // Fallback directly to WA on error
-      const fallbackUrl = waMeUrl(text);
+      const fallbackUrl = waMeUrl(submissionText);
       if (typeof window !== "undefined") {
         (window as any).gtag?.('event', 'whatsapp_click', { wa_source: source, form_completed: true, error: true });
       }
@@ -132,12 +147,31 @@ function WhatsAppLeadModalInner() {
             <X className="h-5 w-5" />
           </button>
           
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 mb-3 border border-white/10">
-            <MessageCircle className="h-6 w-6 text-white" />
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 border border-white/10">
+              <MessageCircle className="h-6 w-6 text-white" />
+            </div>
+
+            {businessStatus && (
+              isOnline ? (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-400/20 text-emerald-100 border border-emerald-300/30">
+                  <span className="h-2 w-2 rounded-full bg-emerald-300 animate-pulse" />
+                  Online (09.00 - 15.00 WIB)
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-400/25 text-amber-100 border border-amber-300/40">
+                  <span>🌙</span>
+                  Di Luar Jam Kerja
+                </span>
+              )
+            )}
           </div>
+
           <h2 className="text-xl font-bold">Mulai Konsultasi Sales</h2>
-          <p className="text-xs text-blue-100 mt-1">
-            Bantu kami melayani Anda lebih cepat dengan mengisi identitas singkat di bawah ini.
+          <p className="text-xs text-blue-100 mt-1 leading-relaxed">
+            {isOnline
+              ? "Bantu kami melayani Anda lebih cepat dengan mengisi identitas singkat di bawah ini."
+              : `Tim kami melayani Selasa–Jumat 09.00–15.00 WIB. Isi identitas Anda di bawah agar permintaan langsung disiapkan prioritas: ${businessStatus?.nextOpeningText || "hari kerja berikutnya"}.`}
           </p>
         </div>
 

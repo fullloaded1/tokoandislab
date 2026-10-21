@@ -120,6 +120,10 @@ export default function Footer() {
                 <Mail className="h-3.5 w-3.5 shrink-0 text-cyan-400" />
                 <a href="mailto:cs@andislab.com" className="hover:text-cyan-300 text-slate-300 font-medium">cs@andislab.com</a>
               </div>
+              <div className="flex items-center gap-2 pt-1 text-[11px] text-slate-300 font-medium border-t border-slate-800/80">
+                <span className="text-cyan-400 font-bold">⏰</span>
+                <span>Layanan Aktif: Selasa – Jumat 09.00 – 15.00 WIB</span>
+              </div>
             </div>
           </div>
 

@@ -3,6 +3,8 @@ import { prisma } from "@/lib/db";
 import { rateLimit } from "@/lib/rateLimit";
 import { WA_NUMBER as waNumber } from "@/lib/contact";
 
+import { isWithinBusinessHours, getNextOpeningText } from "@/lib/businessHours";
+
 // Helper function to send Telegram message
 async function sendTelegramMessage(log: {
   source: string;
@@ -18,8 +20,14 @@ async function sendTelegramMessage(log: {
   if (!token || !chatId) return;
 
   try {
+    const isOnline = isWithinBusinessHours();
+    const scheduleTag = isOnline
+      ? "🟢 *ONLINE SEKARANG* (Target respons: ≤15 menit)"
+      : `🌙 *DI LUAR JAM KERJA* (Antrian Prioritas Buka: ${getNextOpeningText()})`;
+
     const text = `🔔 *LEAD WHATSAPP BARU*\n` +
       `━━━━━━━━━━━━━━━━━━━━\n` +
+      `⏰ *Status Operasional:* ${scheduleTag}\n` +
       `👤 *Nama:* ${log.leadName || "-"}\n` +
       `🏢 *Instansi:* ${log.leadInstitution || "-"}\n` +
       `📞 *No. WA:* ${log.leadPhone || "-"}\n` +
@@ -28,7 +36,7 @@ async function sendTelegramMessage(log: {
       `🧾 *Inquiry Ref:* ${log.inquiryNo || "-"}\n` +
       `💬 *Pesan:* ${log.messageText || "-"}\n` +
       `━━━━━━━━━━━━━━━━━━━━\n` +
-      `Silakan segera hubungi klien!`;
+      (isOnline ? `Silakan segera hubungi klien!` : `Telah masuk antrian tindak lanjut prioritas.`);
 
     const url = `https://api.telegram.org/bot${token}/sendMessage`;
     await fetch(url, {

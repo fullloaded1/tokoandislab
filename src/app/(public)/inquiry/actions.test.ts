@@ -28,7 +28,7 @@ describe('submitInquiry', () => {
     // Arrange
     const formData = new FormData();
     formData.append('institutionName', 'Test Inst');
-    formData.append('type', 'RUMAH_SAKIT');
+    formData.append('type', 'HOSPITAL');
     formData.append('address', 'Jl. Test No 1');
     formData.append('contactName', 'John Doe');
     formData.append('phone', '081234567890');

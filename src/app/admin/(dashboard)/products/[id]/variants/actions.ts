@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { adjustStock } from "@/lib/stock";
 import { StockLogType } from "@prisma/client";
 import { requireAdmin } from "@/lib/session";
+import { money } from "@/lib/money";
 
 export async function getVariants(productId: string) {
   await requireAdmin();
@@ -28,6 +29,7 @@ export async function getVariants(productId: string) {
 export async function createVariant(data: { productId: string; sku: string; name: string; price: string | number; stock: number }) {
   try {
     const session = await requireAdmin();
+    const decimalPrice = money.toDecimal(data.price);
 
     // 1. Buat Varian dengan stok awal 0 terlebih dahulu
     const newVariant = await prisma.productVariant.create({
@@ -35,9 +37,14 @@ export async function createVariant(data: { productId: string; sku: string; name
         productId: data.productId,
         sku: data.sku,
         name: data.name,
-        price: data.price,
+        price: decimalPrice,
         stock: 0, // Akan diisi via ledger
         reservedStock: 0
+      },
+      include: {
+        product: {
+          include: { variants: true }
+        }
       }
     });
 
@@ -52,6 +59,14 @@ export async function createVariant(data: { productId: string; sku: string; name
       });
     }
 
+    // Jika produk belum punya harga atau ini varian satu-satunya, sinkronkan ke produk
+    if (newVariant.product.variants.length === 1 || newVariant.product.price.isZero()) {
+      await prisma.product.update({
+        where: { id: data.productId },
+        data: { price: decimalPrice }
+      });
+    }
+
     await prisma.auditLog.create({
       data: {
         action: "CREATE",
@@ -63,7 +78,13 @@ export async function createVariant(data: { productId: string; sku: string; name
       }
     });
 
+    revalidatePath("/admin");
     revalidatePath(`/admin/products/${data.productId}/variants`);
+    revalidatePath("/katalog");
+    revalidatePath("/ready-stock");
+    revalidatePath(`/katalog/${newVariant.product.slug}`);
+    revalidatePath(`/produk/${newVariant.product.slug}`);
+    revalidatePath("/");
     return { success: true, data: newVariant };
   } catch (error: any) {
     console.error(error);
@@ -74,15 +95,28 @@ export async function createVariant(data: { productId: string; sku: string; name
 export async function updateVariant(id: string, data: { sku: string; name: string; price: string | number }) {
   const session = await requireAdmin();
   try {
+    const decimalPrice = money.toDecimal(data.price);
     const updated = await prisma.productVariant.update({
       where: { id },
       data: {
         sku: data.sku,
         name: data.name,
-        price: data.price,
-        // Dilarang keras update 'stock' secara langsung dari CRUD form
+        price: decimalPrice,
+      },
+      include: {
+        product: {
+          include: { variants: true }
+        }
       }
     });
+
+    // Jika ini adalah varian satu-satunya, sinkronkan juga harga produk
+    if (updated.product.variants.length === 1) {
+      await prisma.product.update({
+        where: { id: updated.productId },
+        data: { price: decimalPrice }
+      });
+    }
 
     await prisma.auditLog.create({
       data: {
@@ -95,7 +129,13 @@ export async function updateVariant(id: string, data: { sku: string; name: strin
       }
     });
 
-    revalidatePath(`/admin/products`);
+    revalidatePath("/admin");
+    revalidatePath(`/admin/products/${updated.productId}/variants`);
+    revalidatePath("/katalog");
+    revalidatePath("/ready-stock");
+    revalidatePath(`/katalog/${updated.product.slug}`);
+    revalidatePath(`/produk/${updated.product.slug}`);
+    revalidatePath("/");
     return { success: true, data: updated };
   } catch (error: any) {
     return { success: false, error: error.message };

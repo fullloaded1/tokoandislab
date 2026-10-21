@@ -63,15 +63,15 @@ export default function Navbar() {
   return (
     <>
       {/* Top Utility & Promo Strip - Corporate Milenian 2026 Style */}
-      {pathname !== "/promo/milenian" && (
+      {pathname !== "/promo-milenial" && (
         <div className="fixed top-0 left-0 right-0 z-[51] bg-slate-950 text-white border-b border-cyan-500/30 shadow-xs">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between py-1.5 text-[11px] font-semibold tracking-wide">
             <Link
-              href="/promo/milenian"
+              href="/promo-milenial"
               className="flex items-center gap-2 hover:text-cyan-300 transition-colors truncate"
             >
               <span className="shrink-0 flex h-4 w-4 items-center justify-center rounded-sm bg-cyan-500/20 text-[10px] border border-cyan-400/30 text-cyan-300">⚡</span>
-              <span className="truncate font-bold">Promo Milenian 2026 — Diskon 5–15%, Bundling Gratis &amp; Star Points ×2</span>
+              <span className="truncate font-bold">Promo Milenial 2026 — Diskon hingga 20% & Bundling Gratis</span>
               <span className="hidden md:inline font-bold text-cyan-400 underline decoration-cyan-400/60 shrink-0 ml-1">Lihat Detail Promo &rarr;</span>
             </Link>
             <div className="hidden xl:flex items-center gap-4 text-slate-300 font-medium shrink-0">
@@ -505,6 +505,17 @@ export default function Navbar() {
               }`}
             >
               Promo Kemerdekaan -17%
+            </Link>
+            <Link
+              href="/promo-milenial"
+              onClick={() => setMobileMenuOpen(false)}
+              className={`flex items-center min-h-[44px] rounded-2xl px-4 text-sm font-black transition-all active:scale-[0.98] mt-2 ${
+                pathname === "/promo-milenial"
+                  ? "text-indigo-700 bg-indigo-50 border border-indigo-200 shadow-sm"
+                  : "text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100"
+              }`}
+            >
+              Promo Milenial 2026
             </Link>
             <button
               type="button"
