@@ -25,6 +25,8 @@ const cspReportOnly = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
+  productionBrowserSourceMaps: false,
   // productionBrowserSourceMaps dimatikan: Vercel menyajikan file .map kosong
   // (SyntaxError di Lighthouse) sehingga fitur ini hanya menambah noise audit.
   experimental: {

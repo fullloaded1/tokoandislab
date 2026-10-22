@@ -58,8 +58,17 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // --- 2. Rate limiting for public API routes ---
+  // --- 2. Rate limiting & anti-abuse for public API routes ---
   if (pathname === "/api/chat" || pathname === "/api/rfq") {
+    // Reject cross-site automated scraping/invocations
+    const secFetchSite = request.headers.get("sec-fetch-site");
+    if (secFetchSite === "cross-site") {
+      return NextResponse.json(
+        { error: "Akses ditolak (permintaan lintas domain)." },
+        { status: 403 }
+      );
+    }
+
     const ip = getClientIP(request);
     const windowMs = 60 * 1000; // 1 minute window
 
