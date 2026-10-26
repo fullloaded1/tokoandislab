@@ -72,10 +72,12 @@ export default function Footer() {
             <ul className="space-y-1.5 text-xs">
               {[
                 { href: "/pemerintah", label: "Pengadaan Pemerintah" },
-                { href: "/artikel", label: "Artikel &amp; Panduan Lab" },
+                { href: "/solusi/paket-pengadaan", label: "Paket Pengadaan Turnkey" },
+                { href: "/solusi/alternatif-alat-lab", label: "Alternatif Cerdas Alat Lab" },
+                { href: "/kalkulator-lab", label: "Kalkulator Lab Online" },
+                { href: "/artikel", label: "Artikel & Panduan Lab" },
                 { href: "/solusi/farmasi", label: "Solusi Farmasi" },
                 { href: "/solusi/manufaktur", label: "Solusi Manufaktur" },
-                { href: "/solusi/pendidikan", label: "Solusi Pendidikan" },
                 { href: "/solusi/pengolahan-air", label: "Solusi Pengolahan Air" },
                 { href: "/tentang", label: "Tentang Kami" },
               ].map((link) => (

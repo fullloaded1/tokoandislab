@@ -30,6 +30,10 @@
 
 - [Katalog Produk](https://www.andislab.com/katalog): Daftar lengkap 2.000+ produk alat laboratorium dengan filter kategori dan brand.
 - [Ready Stock Anti-Indent](https://www.andislab.com/ready-stock): Katalog instrumen ready stock dengan klasifikasi Tier A/B/C/D siap kirim cepat.
+- [Kalkulator Lab Online](https://www.andislab.com/kalkulator-lab): Alat interaktif perhitungan rumus pengenceran larutan (C1V1 = C2V2), molaritas massa, dan estimasi kapasitas autoclave.
+- [Panduan Alternatif Alat Lab](https://www.andislab.com/solusi/alternatif-alat-lab): Benchmarking TCO dan komparasi instrumen presisi bebas indent (Daihan vs Memmert, Aczet vs Mettler, Lovibond vs Hach).
+- [Paket Pengadaan Turnkey](https://www.andislab.com/solusi/paket-pengadaan): Bundling alat lab siap pakai untuk QC farmasi/F&B, WWTP air limbah, dan praktikum kampus lengkap free kalibrasi KAN.
+- [Layanan Wilayah Kawasan Industri](https://www.andislab.com/wilayah/cikarang-bekasi): Distribusi cepat alat lab kawasan industri Jababeka, MM2100, EJIP, Karawang KIIC, dan Cilegon.
 - [Pengadaan Pemerintah & e-Katalog](https://www.andislab.com/pemerintah): Panduan pengadaan resmi instansi pemerintah, HPS, dan kelengkapan SPJ.
 - [Permintaan Penawaran Resmi (RFQ)](https://www.andislab.com/inquiry): Formulir pengajuan penawaran harga resmi B2B.
 - [Promo Milenial 2026](https://www.andislab.com/promo-milenial): Paket instrumen lab hemat anggaran untuk laboratorium modern.

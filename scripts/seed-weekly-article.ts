@@ -77,7 +77,7 @@ Pastikan saat Anda membeli autoclave baru untuk laboratorium, distributor menyer
       category: "panduan-alat",
       authorName: "Tim Redaksi AndisLab",
       pillar: ContentPillar.SEARCH,
-      funnelStage: FunnelStage.EVALUATION,
+      funnelStage: FunnelStage.SELECTION,
     },
     create: {
       slug: "panduan-kalibrasi-validasi-autoclave-laboratorium",
@@ -150,7 +150,7 @@ Pastikan saat Anda membeli autoclave baru untuk laboratorium, distributor menyer
       category: "panduan-alat",
       authorName: "Tim Redaksi AndisLab",
       pillar: ContentPillar.SEARCH,
-      funnelStage: FunnelStage.EVALUATION,
+      funnelStage: FunnelStage.SELECTION,
     }
   });
 
