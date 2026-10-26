@@ -2,7 +2,7 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useWhatsAppLeadStore } from "@/store/useWhatsAppLeadStore";
-import { X, Send, Phone, User, Building, Loader2, ArrowRight, MessageCircle } from "lucide-react";
+import { X, Send, Phone, User, Building, Loader2, ArrowRight, MessageCircle, ShieldCheck } from "lucide-react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { waMeUrl } from "@/lib/contact";
 
@@ -167,11 +167,11 @@ function WhatsAppLeadModalInner() {
             )}
           </div>
 
-          <h2 className="text-xl font-bold">Mulai Konsultasi Sales</h2>
+          <h2 className="text-xl font-bold">Minta Penawaran Resmi &amp; Cek Stok</h2>
           <p className="text-xs text-blue-100 mt-1 leading-relaxed">
             {isOnline
-              ? "Bantu kami melayani Anda lebih cepat dengan mengisi identitas singkat di bawah ini."
-              : `Tim kami melayani Selasa–Jumat 09.00–15.00 WIB. Isi identitas Anda di bawah agar permintaan langsung disiapkan prioritas: ${businessStatus?.nextOpeningText || "hari kerja berikutnya"}.`}
+              ? "Dapatkan surat penawaran harga resmi (RFQ) ber-PPN dan kepastian stok dalam < 2 jam kerja langsung via WhatsApp."
+              : `Tim kami melayani Selasa–Jumat 09.00–15.00 WIB. Isi identitas singkat Anda agar penawaran resmi diproses paling pertama saat jam kerja buka: ${businessStatus?.nextOpeningText || "hari kerja berikutnya"}.`}
           </p>
         </div>
 
@@ -243,18 +243,24 @@ function WhatsAppLeadModalInner() {
               className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-500/25 transition-all disabled:opacity-75 cursor-pointer text-sm"
             >
               {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-              Lanjutkan ke WhatsApp
+              Dapatkan Penawaran via WhatsApp →
             </button>
 
             <button
               type="button"
               onClick={handleSkip}
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-1.5 text-xs text-slate-400 hover:text-slate-600 font-semibold py-2.5 transition-colors cursor-pointer"
+              className="w-full flex items-center justify-center gap-1.5 text-xs text-slate-400 hover:text-slate-600 font-semibold py-2 transition-colors cursor-pointer"
             >
               Lompati &amp; Hubungi Langsung
               <ArrowRight className="h-3.5 w-3.5" />
             </button>
+
+            {/* Micro Trust Signals */}
+            <div className="pt-2 border-t border-slate-100 flex items-center justify-center gap-1.5 text-[11px] text-slate-400 font-medium text-center">
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+              <span>Surat penawaran resmi ber-PPN • Bebas spam &amp; data terlindungi</span>
+            </div>
           </div>
 
         </form>

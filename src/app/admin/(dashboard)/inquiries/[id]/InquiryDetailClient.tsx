@@ -38,22 +38,39 @@ export default function InquiryDetailClient({ initialData }: { initialData: any 
   const generatePDF = async () => {
     const doc = new jsPDF();
     
-    // Header
-    doc.setFontSize(20);
+    // Kop Surat Resmi
+    doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
-    doc.text("SURAT PENAWARAN HARGA", 105, 20, { align: "center" });
+    doc.setTextColor(15, 23, 42); // slate-900
+    doc.text("PT ANDIS SENTRAL LABORATORIUM", 14, 18);
     
-    doc.setFontSize(10);
+    doc.setFontSize(8.5);
     doc.setFont("helvetica", "normal");
-    doc.text(`No: ${initialData.inquiryNo}-QUOTE`, 14, 35);
-    doc.text(`Tanggal: ${new Date().toLocaleDateString("id-ID")}`, 14, 40);
+    doc.setTextColor(71, 85, 105); // slate-600
+    doc.text("Distributor Resmi Alat Laboratorium, Instrumen Analitik & Perlengkapan Ilmiah", 14, 23);
+    doc.text("Jl. Raya Mayor Oking Jaya Atmaja No.112, Cibinong, Bogor 16918 | Telp: 021-38740154 | WA: 0819-9157-5096", 14, 27);
     
-    doc.text(`Kepada Yth.`, 14, 55);
+    doc.setDrawColor(203, 213, 225); // slate-300
+    doc.setLineWidth(0.5);
+    doc.line(14, 30, 196, 30);
+
+    // Title
+    doc.setFontSize(16);
     doc.setFont("helvetica", "bold");
-    doc.text(`${initialData.institution.name}`, 14, 60);
+    doc.setTextColor(15, 23, 42);
+    doc.text("SURAT PENAWARAN HARGA", 105, 38, { align: "center" });
+    
+    doc.setFontSize(9);
     doc.setFont("helvetica", "normal");
-    doc.text(`Attn: ${initialData.institution.contacts[0]?.name || "Purchasing"}`, 14, 65);
-    doc.text(`${initialData.institution.address}`, 14, 70, { maxWidth: 80 });
+    doc.text(`No: ${initialData.inquiryNo}-QUOTE`, 14, 46);
+    doc.text(`Tanggal: ${new Date().toLocaleDateString("id-ID")}`, 14, 51);
+    
+    doc.text(`Kepada Yth.`, 14, 60);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${initialData.institution.name}`, 14, 65);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Attn: ${initialData.institution.contacts[0]?.name || "Tim Purchasing / Pengadaan"}`, 14, 70);
+    doc.text(`${initialData.institution.address}`, 14, 75, { maxWidth: 85 });
 
     const tableData = initialData.items.map((item: any, index: number) => [
       index + 1,
@@ -64,7 +81,7 @@ export default function InquiryDetailClient({ initialData }: { initialData: any 
     ]);
 
     autoTable(doc, {
-      startY: 90,
+      startY: 92,
       head: [['No', 'Deskripsi Barang', 'Qty', 'Harga Satuan', 'Total']],
       body: tableData,
       theme: 'grid',
@@ -77,21 +94,36 @@ export default function InquiryDetailClient({ initialData }: { initialData: any 
       }
     });
 
-    const finalY = (doc as any).lastAutoTable.finalY || 90;
+    const finalY = (doc as any).lastAutoTable.finalY || 92;
     
     doc.setFont("helvetica", "bold");
-    doc.text("Subtotal:", 130, finalY + 10);
-    doc.text(money.formatIDR(totalEst), 195, finalY + 10, { align: "right" });
+    doc.setFontSize(9);
+    doc.text("Subtotal:", 130, finalY + 8);
+    doc.text(money.formatIDR(totalEst), 195, finalY + 8, { align: "right" });
     
-    doc.text("PPN (11%):", 130, finalY + 16);
-    doc.text(money.formatIDR(ppn), 195, finalY + 16, { align: "right" });
+    doc.text("PPN (11%):", 130, finalY + 14);
+    doc.text(money.formatIDR(ppn), 195, finalY + 14, { align: "right" });
     
-    doc.text("Total:", 130, finalY + 22);
-    doc.text(money.formatIDR(grandTotal), 195, finalY + 22, { align: "right" });
+    doc.text("Total:", 130, finalY + 20);
+    doc.text(money.formatIDR(grandTotal), 195, finalY + 20, { align: "right" });
+
+    // Syarat & Ketentuan Penawaran
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(71, 85, 105);
+    doc.text("Catatan & Ketentuan Penawaran:", 14, finalY + 12);
+    doc.setFont("helvetica", "normal");
+    doc.text("1. Harga sudah termasuk PPN 11% dan faktur pajak elektronik resmi.", 14, finalY + 17);
+    doc.text("2. Masa berlaku penawaran: 14 (empat belas) hari kalender sejak diterbitkan.", 14, finalY + 22);
+    doc.text("3. Garansi resmi distributor & jaminan keaslian unit 100%.", 14, finalY + 27);
+    doc.text("4. Pembayaran via transfer resmi rekening PT Andis Sentral Laboratorium.", 14, finalY + 32);
 
     // Signature
-    doc.text("Hormat Kami,", 14, finalY + 40);
-    doc.text("PT. AndisLab Indonesia", 14, finalY + 65);
+    doc.setFontSize(9);
+    doc.setTextColor(15, 23, 42);
+    doc.text("Hormat Kami,", 140, finalY + 45);
+    doc.setFont("helvetica", "bold");
+    doc.text("PT Andis Sentral Laboratorium", 140, finalY + 70);
 
     doc.save(`Quotation_${initialData.inquiryNo}.pdf`);
 

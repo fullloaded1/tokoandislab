@@ -18,10 +18,24 @@ export default function InquiryPage() {
   const [sourceArticleId, setSourceArticleId] = useState<string | null>(null);
   const openWaModal = useWhatsAppLeadStore((s) => s.openModal);
 
+  const [instName, setInstName] = useState("");
+  const [contactName, setContactName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const urlParams = new URLSearchParams(window.location.search);
       setSourceArticleId(urlParams.get("src"));
+
+      const savedName = localStorage.getItem("lead_name") || "";
+      const savedInst = localStorage.getItem("lead_institution") || "";
+      const savedPhone = localStorage.getItem("lead_phone") || "";
+      const savedEmail = localStorage.getItem("lead_email") || "";
+      if (savedName) setContactName(savedName);
+      if (savedInst) setInstName(savedInst);
+      if (savedPhone) setPhone(savedPhone);
+      if (savedEmail) setEmail(savedEmail);
     }
   }, []);
 
@@ -88,6 +102,18 @@ export default function InquiryPage() {
     const formData = new FormData(e.currentTarget);
     formData.append("items", JSON.stringify(items));
 
+    // Save to localStorage for returning visits
+    if (typeof window !== "undefined") {
+      const inst = formData.get("institutionName")?.toString() || "";
+      const pic = formData.get("contactName")?.toString() || "";
+      const ph = formData.get("phone")?.toString() || "";
+      const em = formData.get("email")?.toString() || "";
+      if (inst) localStorage.setItem("lead_institution", inst);
+      if (pic) localStorage.setItem("lead_name", pic);
+      if (ph) localStorage.setItem("lead_phone", ph);
+      if (em) localStorage.setItem("lead_email", em);
+    }
+
     const res = await submitInquiry(formData);
     
     setIsLoading(false);
@@ -142,7 +168,7 @@ export default function InquiryPage() {
               <div className="grid sm:grid-cols-2 gap-5">
                 <div className="space-y-1.5">
                   <label className="text-sm font-bold text-slate-700">Nama Instansi *</label>
-                  <input required name="institutionName" type="text" className="w-full min-h-[48px] rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm font-semibold text-slate-900 focus:bg-white focus:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-600 outline-none transition-all shadow-2xs" placeholder="Contoh: RSUD Pasar Minggu" />
+                  <input required name="institutionName" type="text" value={instName} onChange={(e) => setInstName(e.target.value)} className="w-full min-h-[48px] rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm font-semibold text-slate-900 focus:bg-white focus:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-600 outline-none transition-all shadow-2xs" placeholder="Contoh: RSUD Pasar Minggu / PT Kimia Farma" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-sm font-bold text-slate-700">Jenis Instansi *</label>
@@ -180,7 +206,7 @@ export default function InquiryPage() {
 
               <div className="space-y-1.5">
                 <label className="text-sm font-bold text-slate-700">Nama Lengkap PIC *</label>
-                <input required name="contactName" type="text" className="w-full min-h-[48px] rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm font-semibold text-slate-900 focus:bg-white focus:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-600 outline-none transition-all shadow-2xs" placeholder="Nama lengkap penanggung jawab" />
+                <input required name="contactName" type="text" value={contactName} onChange={(e) => setContactName(e.target.value)} className="w-full min-h-[48px] rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm font-semibold text-slate-900 focus:bg-white focus:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-600 outline-none transition-all shadow-2xs" placeholder="Nama lengkap penanggung jawab" />
               </div>
 
               <div className="grid sm:grid-cols-2 gap-5">
@@ -188,7 +214,7 @@ export default function InquiryPage() {
                   <label className="text-sm font-bold text-slate-700">Nomor WhatsApp *</label>
                   <div className="relative">
                     <Phone className="absolute left-3.5 top-3.5 h-5 w-5 text-slate-400" />
-                    <input required name="phone" type="tel" className="w-full min-h-[48px] rounded-2xl border border-slate-200 bg-slate-50/80 pl-11 pr-4 py-3 text-sm font-semibold text-slate-900 focus:bg-white focus:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-600 outline-none transition-all shadow-2xs" placeholder="0812xxxx (Aktif)" />
+                    <input required name="phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full min-h-[48px] rounded-2xl border border-slate-200 bg-slate-50/80 pl-11 pr-4 py-3 text-sm font-semibold text-slate-900 focus:bg-white focus:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-600 outline-none transition-all shadow-2xs" placeholder="0812xxxx (Aktif)" />
                   </div>
                   <p className="text-[11px] text-slate-500 font-medium">Untuk konfirmasi cepat oleh tim sales kami.</p>
                 </div>
@@ -196,7 +222,7 @@ export default function InquiryPage() {
                   <label className="text-sm font-bold text-slate-700">Email Valid *</label>
                   <div className="relative">
                     <Mail className="absolute left-3.5 top-3.5 h-5 w-5 text-slate-400" />
-                    <input required name="email" type="email" className="w-full min-h-[48px] rounded-2xl border border-slate-200 bg-slate-50/80 pl-11 pr-4 py-3 text-sm font-semibold text-slate-900 focus:bg-white focus:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-600 outline-none transition-all shadow-2xs" placeholder="email@instansi.com" />
+                    <input required name="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full min-h-[48px] rounded-2xl border border-slate-200 bg-slate-50/80 pl-11 pr-4 py-3 text-sm font-semibold text-slate-900 focus:bg-white focus:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-600 outline-none transition-all shadow-2xs" placeholder="email@instansi.com" />
                   </div>
                   <p className="text-[11px] text-slate-500 font-medium">Surat penawaran resmi PDF akan dikirim ke email ini.</p>
                 </div>
@@ -210,11 +236,15 @@ export default function InquiryPage() {
               <div className="pt-6">
                 <button 
                   type="submit" 
-                  className="w-full flex min-h-[52px] items-center justify-center gap-2.5 bg-gradient-to-r from-emerald-600 via-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-black text-base py-4 rounded-2xl shadow-xl shadow-emerald-600/30 transition-all duration-200 ease-out focus-visible:outline-2 focus-visible:outline-emerald-600 active:scale-[0.98] hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                  className="w-full flex min-h-[52px] items-center justify-center gap-2.5 bg-gradient-to-r from-emerald-600 via-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-black text-base py-4 rounded-2xl shadow-xl shadow-emerald-600/30 transition-all duration-200 ease-out focus-visible:outline-2 focus-visible:outline-emerald-600 active:scale-[0.98] hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 cursor-pointer"
                 >
                   {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <FileText className="h-5 w-5" />}
                   <span>Kirim Permintaan Penawaran Resmi &rarr;</span>
                 </button>
+                <div className="mt-3 flex items-center justify-center gap-1.5 text-xs text-slate-500 font-medium text-center">
+                  <CheckCircle className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                  <span>Surat penawaran resmi ber-PPN 11% • Berkas SPJ Lengkap • Data Anda aman</span>
+                </div>
               </div>
             </form>
           </div>
@@ -254,7 +284,7 @@ export default function InquiryPage() {
               </div>
               <div className="flex justify-between items-center mt-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-2xl px-5 py-3.5 shadow-md shadow-blue-500/15">
                 <span className="text-sm font-bold">Harga Penawaran</span>
-                <span className="text-xs font-black bg-white/20 px-3 py-1 rounded-full">Resmi PDF (1x24 Jam)</span>
+                <span className="text-xs font-black bg-white/20 px-3 py-1 rounded-full">&lt; 2 Jam (Maks. 1x24 Jam)</span>
               </div>
             </div>
 
@@ -265,7 +295,7 @@ export default function InquiryPage() {
                 <span>Garansi Layanan & SPJ Resmi</span>
               </div>
               <ul className="text-xs text-slate-600 space-y-1.5 pl-5 list-disc leading-relaxed">
-                <li>Surat penawaran resmi PDF balasan maksimal <strong className="text-slate-800 font-bold">1x24 jam kerja</strong>.</li>
+                <li>Surat penawaran resmi PDF balasan maksimal <strong className="text-slate-800 font-bold">1x24 jam kerja</strong> (rata-rata respon teknis &lt; 2 jam kerja).</li>
                 <li>Lengkap dengan spesifikasi teknis, garansi pabrik, dan estimasi lead time PO.</li>
                 <li>Tersedia format khusus HPS / RAB sesuai standar kelengkapan dokumen SPJ instansi Anda.</li>
               </ul>

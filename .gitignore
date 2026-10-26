@@ -54,3 +54,6 @@ prisma/dev.db
 
 # IDE local files
 .continue/
+.claude/
+agent/
+
