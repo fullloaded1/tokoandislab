@@ -46,6 +46,6 @@ describe("ProductCard component tests (TDD & Accessibility)", () => {
 
   it("shows price indicator in compact mode so cards on slider / ready-stock are informative", () => {
     render(<ProductCard product={mockProduct} compact={true} />);
-    expect(screen.getAllByText(/Rp 249.700|249.700|Mulai/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Rp 250.000|250.000|Rp 249.700|249.700|Mulai/i).length).toBeGreaterThan(0);
   });
 });

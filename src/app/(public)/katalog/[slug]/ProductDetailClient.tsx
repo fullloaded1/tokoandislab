@@ -136,10 +136,7 @@ export default function ProductDetailClient({
   // Baris e-Katalog (7 model Daihan) — sumber harga tunggal untuk model ini.
   const ekatalogRow = getEkatalogRow(product.model, product.name);
 
-  // Helper: ubah akhiran harga display → .700 (ready stock) atau .900 (PO Andislab/Daihan)
-  const adjustPriceSuffix = (price: number, suffix: 700 | 900): number => {
-    return Math.floor(price / 1000) * 1000 + suffix - 1000;
-  };
+
 
   const isReadyToBuy = HIDE_PRICES_TEMPORARILY ? false : !!(!product.isRequestPricing && product.isReadyStock && selectedVariant && (selectedVariant.stock - selectedVariant.reservedStock > 0) && money.toDecimal(selectedVariant.price).toNumber() > 0);
   const readyStockPrice = isReadyToBuy ? money.toDecimal(selectedVariant.price).toNumber() : 0;
@@ -150,12 +147,10 @@ export default function ProductDetailClient({
     (product.category === "andislab-custom" || product.category === "daihan-labtech") &&
     money.toDecimal(product.price).toNumber() > 0;
 
-  // Satu produk = satu harga, tanpa coretan.
+  // Satu produk = satu harga akurat sesuai database & Master Inventory
   let finalPrice = readyStockPrice;
-  if (ekatalogRow) {
-    finalPrice = ekatalogRow.andislabValue;
-  } else if (isReadyToBuy) {
-    finalPrice = adjustPriceSuffix(readyStockPrice, 700);
+  if (isReadyToBuy) {
+    finalPrice = readyStockPrice;
   }
 
   const handleAdd = () => {
@@ -273,9 +268,9 @@ export default function ProductDetailClient({
                       Mulai dari {money.formatIDR(summary.minPrice)} · pilih varian
                     </span>
                   )}
-                  {/* Satu produk = satu harga, tanpa coretan. */}
+                  {/* Satu produk = satu harga akurat sesuai database */}
                   <span className="text-3xl font-black text-emerald-600 tracking-tight">
-                    {ekatalogRow ? ekatalogRow.andislab : money.formatIDR(finalPrice)}
+                    {money.formatIDR(finalPrice)}
                   </span>
                   {(() => {
                     const available = selectedVariant.stock - selectedVariant.reservedStock;
@@ -308,7 +303,7 @@ export default function ProductDetailClient({
               ) : isPOWithPrice900 ? (
                 <div className="flex flex-col items-start gap-2">
                   <span className="text-3xl font-black text-slate-800 tracking-tight">
-                    {money.formatIDR(adjustPriceSuffix(money.toDecimal(product.price).toNumber(), 900))}
+                    {money.formatIDR(money.toDecimal(product.price).toNumber())}
                   </span>
                   <span className="inline-flex items-center gap-2 rounded-2xl bg-amber-500 px-4 py-1.5 text-xs font-bold text-white shadow-md">
                     PO {product.leadTime || ''}
@@ -362,8 +357,7 @@ export default function ProductDetailClient({
                         <div className="block">{v.name}</div>
                         {product.isReadyStock && variantPrice > 0 && !HIDE_PRICES_TEMPORARILY && (
                           <div className={`text-xs mt-1 font-semibold ${isActive ? "text-emerald-700" : "text-slate-700"}`}>
-                            {/* TODO[T3.3]: apply Order.priceDisplayMode */}
-                            {money.formatIDR(adjustPriceSuffix(variantPrice, 700))}
+                            {money.formatIDR(variantPrice)}
                           </div>
                         )}
                         {product.isReadyStock && !HIDE_PRICES_TEMPORARILY && (
@@ -703,12 +697,10 @@ export default function ProductDetailClient({
           
           <div className="flex items-center justify-between sm:justify-end gap-6 flex-1 w-full sm:w-auto">
              <div className="flex flex-col items-start sm:items-end shrink-0">
-                {ekatalogRow ? (
-                  <span className="text-lg sm:text-xl font-black text-emerald-600">{ekatalogRow.andislab}</span>
-                ) : isReadyToBuy ? (
+                {isReadyToBuy ? (
                   <span className="text-lg sm:text-xl font-black text-emerald-600">{money.formatIDR(finalPrice)}</span>
                 ) : isPOWithPrice900 ? (
-                  <span className="text-lg sm:text-xl font-black text-slate-800">{money.formatIDR(adjustPriceSuffix(money.toDecimal(product.price).toNumber(), 900))}</span>
+                  <span className="text-lg sm:text-xl font-black text-slate-800">{money.formatIDR(money.toDecimal(product.price).toNumber())}</span>
                 ) : (
                   <span className="text-sm sm:text-base font-black text-slate-900">Hubungi Kami</span>
                 )}

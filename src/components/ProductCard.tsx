@@ -8,7 +8,7 @@ import { useRFQStore } from "@/store/useRFQStore";
 import { useState } from "react";
 import { money } from "@/lib/money";
 import { getReadyStockSummary } from "@/lib/readyStock";
-import { getEkatalogRow } from "@/lib/ekatalog";
+import { getEkatalogSavings } from "@/lib/ekatalog";
 import { useToast } from "@/components/Toast";
 import AntiIndentBadge from "@/components/AntiIndentBadge";
 
@@ -40,14 +40,8 @@ export default function ProductCard({ product, compact = false, showPromoMerdeka
   const isReadyToBuy = HIDE_PRICES_TEMPORARILY ? false : summary.state === "available";
   const isSoldOut = HIDE_PRICES_TEMPORARILY ? false : summary.state === "sold_out";
 
-  // Baris e-Katalog (7 model Daihan) — sumber harga & % hemat tunggal untuk model ini.
-  const ekatalogRow = getEkatalogRow(product.model, product.name);
-  const ekatalogSavings = ekatalogRow?.hemat ?? null;
-
-  // Helper: ubah akhiran harga display → .700 (ready stock) atau .900 (PO Andislab/Daihan)
-  const adjustPriceSuffix = (price: number, suffix: 700 | 900): number => {
-    return Math.floor(price / 1000) * 1000 + suffix - 1000;
-  };
+  // Baris e-Katalog (% hemat untuk model yang relevan)
+  const ekatalogSavings = getEkatalogSavings(product.model, product.name);
 
   // Cek apakah produk PO Andislab/Daihan dengan harga > 0
   const isPOWithPrice900 =
@@ -56,19 +50,16 @@ export default function ProductCard({ product, compact = false, showPromoMerdeka
     (product.category === "andislab-custom" || product.category === "daihan-labtech") &&
     Number(product.price) > 0;
 
-  // Satu produk = satu harga, tanpa coretan.
+  // Satu produk = satu harga akurat sesuai database & Master Inventory
   let priceDisplay: string = "Minta Penawaran";
-  if (ekatalogRow) {
-    priceDisplay = ekatalogRow.andislab;
-  } else if (isReadyToBuy) {
-    const adjustedMinPrice = adjustPriceSuffix(summary.minPrice, 700);
+  if (isReadyToBuy) {
     priceDisplay = summary.hasPriceRange
-      ? `Mulai ${money.formatIDR(adjustedMinPrice)}`
-      : money.formatIDR(adjustedMinPrice);
+      ? `Mulai ${money.formatIDR(summary.minPrice)}`
+      : money.formatIDR(summary.minPrice);
   } else if (isSoldOut) {
     priceDisplay = "Stok Habis";
   } else if (isPOWithPrice900) {
-    priceDisplay = money.formatIDR(adjustPriceSuffix(Number(product.price), 900));
+    priceDisplay = money.formatIDR(Number(product.price));
   }
 
   const availableVariant = summary.firstAvailable ?? product.variants?.find((v: any) => (v.stock - v.reservedStock) > 0) ?? null;
@@ -79,8 +70,7 @@ export default function ProductCard({ product, compact = false, showPromoMerdeka
     e.stopPropagation();
     
     if (isReadyToBuy && availableVariant) {
-      // Untuk 7 model Daihan, harga keranjang = harga e-Katalog (sumber tunggal) agar konsisten dgn tampilan.
-      const finalPrice = ekatalogRow ? ekatalogRow.andislabValue : money.toDecimal(availableVariant.price).toNumber();
+      const finalPrice = money.toDecimal(availableVariant.price).toNumber();
 
       // Masuk ke keranjang Direct Purchase
       const res = addItem({
