@@ -1,0 +1,72 @@
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 15mm 15mm 15mm 15mm;
+  }
+
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    width: 210mm;
+    height: 297mm;
+    font-family: var(--font-sans, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif) !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .a4-container {
+    padding: 0 !important;
+    background: #FFFFFF !important;
+  }
+
+  .a4-sheet {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    max-height: 267mm !important; /* 297mm - 30mm margin = 267mm */
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    gap: 3mm !important;
+    page-break-inside: avoid !important;
+    page-break-after: avoid !important;
+    transform: none !important;
+    justify-content: space-between !important;
+  }
+}
+
+/* Screen Preview Styling */
+body:has(.a4-sheet) {
+  background-color: #0B132B;
+}
+
+.a4-container {
+  min-height: 100vh;
+  background-color: #0B132B;
+  padding: 0 16px 60px 16px;
+}
+
+.a4-sheet {
+  width: 100%;
+  max-width: 1080px;
+  background-color: #FFFFFF;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 36px 42px;
+  border-radius: 16px;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: transform 0.2s ease;
+  font-family: var(--font-sans, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+}

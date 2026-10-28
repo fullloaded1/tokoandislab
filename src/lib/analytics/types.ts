@@ -4,7 +4,8 @@ export type AnalyticsEvent =
   | 'view_item_list' 
   | 'search' 
   | 'contact_us' 
-  | 'article_view';
+  | 'article_view'
+  | 'promo_whatsapp_click';
 
 export interface AnalyticsPayload {
   generate_lead: {
@@ -41,5 +42,14 @@ export interface AnalyticsPayload {
   article_view: {
     article_title: string;
     article_category: string;
+  };
+  promo_whatsapp_click: {
+    product_name?: string;
+    product_model?: string;
+    catalog_id?: string;
+    catalog_name?: string;
+    promo_phase: string;
+    placement: string;
+    wa_url: string;
   };
 }

@@ -1,0 +1,70 @@
+/* Promo Akhir Tahun 2026 - Styles & Themes */
+
+/* Base transitions */
+.promo-transition {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Catalog 1: Blue Amber (Cepat, Praktis, Enerjik) */
+.theme-katalog-1 {
+  --cat-primary: #2563EB;
+  --cat-primary-dark: #1D4ED8;
+  --cat-secondary: #F59E0B;
+  --cat-secondary-light: #FEF3C7;
+  --cat-accent: #0284C7;
+  --cat-border: #BFDBFE;
+  --cat-bg-light: #F0F9FF;
+  --cat-gradient: linear-gradient(135deg, #1E3A8A 0%, #2563EB 50%, #0284C7 100%);
+}
+
+/* Catalog 2: Navy Teal (Presisi, Klinis, Terpercaya) */
+.theme-katalog-2 {
+  --cat-primary: #0F172A;
+  --cat-primary-dark: #020617;
+  --cat-secondary: #0D9488;
+  --cat-secondary-light: #CCFBF1;
+  --cat-accent: #14B8A6;
+  --cat-border: #99F6E4;
+  --cat-bg-light: #F0FDFA;
+  --cat-gradient: linear-gradient(135deg, #0F172A 0%, #134E4A 60%, #0D9488 100%);
+}
+
+/* Catalog 3: Dark Slate / Electric Blue / Gold (High-End, Eksklusif) */
+.theme-katalog-3 {
+  --cat-primary: #0F172A;
+  --cat-primary-dark: #020617;
+  --cat-secondary: #D97706;
+  --cat-secondary-light: #FEF3C7;
+  --cat-accent: #6366F1;
+  --cat-border: #E0E7FF;
+  --cat-bg-light: #F8FAFC;
+  --cat-gradient: linear-gradient(135deg, #090D16 0%, #1E1B4B 50%, #0F172A 100%);
+}
+
+/* Print specific rules for A4 sheet */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 8mm 8mm 8mm 8mm;
+  }
+  
+  html, body {
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-sheet-page {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 280mm !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+    overflow: hidden !important;
+  }
+}

@@ -62,17 +62,17 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Top Utility & Promo Strip - Corporate Milenian 2026 Style */}
-      {pathname !== "/promo-milenial" && (
-        <div className="fixed top-0 left-0 right-0 z-[51] bg-slate-950 text-white border-b border-cyan-500/30 shadow-xs">
+      {/* Top Utility & Promo Strip - Corporate Year-End Promo 2026 */}
+      {pathname !== "/promo-akhir-tahun" && (
+        <div className="fixed top-0 left-0 right-0 z-[51] bg-slate-950 text-white border-b border-blue-500/30 shadow-xs">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between py-1.5 text-[11px] font-semibold tracking-wide">
             <Link
-              href="/promo-milenial"
+              href="/promo-akhir-tahun"
               className="flex items-center gap-2 hover:text-cyan-300 transition-colors truncate"
             >
-              <span className="shrink-0 flex h-4 w-4 items-center justify-center rounded-sm bg-cyan-500/20 text-[10px] border border-cyan-400/30 text-cyan-300">⚡</span>
-              <span className="truncate font-bold">Promo Milenial 2026 — Diskon hingga 20% & Bundling Gratis</span>
-              <span className="hidden md:inline font-bold text-cyan-400 underline decoration-cyan-400/60 shrink-0 ml-1">Lihat Detail Promo &rarr;</span>
+              <span className="shrink-0 flex h-4 w-4 items-center justify-center rounded-sm bg-blue-500/20 text-[10px] border border-blue-400/30 text-cyan-300">🔥</span>
+              <span className="truncate font-bold">Promo Akhir Tahun 2026 — Tutup 2026, Buka Lab Impian (Unit Ready Stock)</span>
+              <span className="hidden md:inline font-bold text-cyan-400 underline decoration-cyan-400/60 shrink-0 ml-1">Lihat Promo &rarr;</span>
             </Link>
             <div className="hidden xl:flex items-center gap-4 text-slate-300 font-medium shrink-0">
               <span className="flex items-center gap-1.5 border-l border-slate-800 pl-4">
@@ -85,10 +85,9 @@ export default function Navbar() {
       )}
 
       {/* Main Header - SaaS Floating Glass Pill (N5 / N1b) */}
-      {/* Main Header - SaaS Floating Glass Pill (N5 / N1b) */}
       <header
         className="fixed left-0 right-0 z-50 transition-all duration-300 ease-[var(--ease-out)] max-w-7xl mx-auto px-2 sm:px-4 lg:px-6"
-        style={{ top: pathname !== "/promo-merdeka" ? "42px" : "12px" }}
+        style={{ top: pathname !== "/promo-akhir-tahun" ? "42px" : "12px" }}
       >
         <div
           className={`w-full transition-all duration-300 ease-[var(--ease-out)] ${
@@ -495,6 +494,18 @@ export default function Navbar() {
                 Artikel & Edukasi Lab
               </Link>
             </div>
+            <Link
+              href="/promo-akhir-tahun"
+              onClick={() => setMobileMenuOpen(false)}
+              className={`flex items-center justify-between min-h-[44px] rounded-2xl px-4 text-sm font-black transition-all active:scale-[0.98] mt-2 ${
+                pathname === "/promo-akhir-tahun"
+                  ? "text-blue-700 bg-blue-50 border border-blue-200 shadow-sm"
+                  : "text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-100"
+              }`}
+            >
+              <span>Promo Akhir Tahun 2026</span>
+              <span className="rounded bg-blue-600 px-2 py-0.5 text-[10px] font-extrabold text-white">Ready</span>
+            </Link>
             <Link
               href="/promo-merdeka"
               onClick={() => setMobileMenuOpen(false)}

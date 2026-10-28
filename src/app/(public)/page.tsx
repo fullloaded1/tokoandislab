@@ -5,6 +5,7 @@ import CategoryGrid from "@/components/CategoryGrid";
 import BrandLogos from "@/components/BrandLogos";
 import ClientLogos from "@/components/ClientLogos";
 import WaLinkCTA from "@/components/WaLinkCTA";
+import PromoAkhirTahunBanner from "@/components/PromoAkhirTahunBanner";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, BookOpen, FileText, CheckCircle, ShieldCheck, Factory, FlaskConical, Building2 } from "lucide-react";
@@ -142,14 +143,10 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <HeroSection
-        featuredProducts={featuredSliderProducts}
-        promoBanner={{
-          image: "/images/promo-milenian-2026.jpg",
-          href: "/promo/milenian",
-          alt: "Promo Milenian 2026 — Lab Lebih Produktif. Budget Tetap Terjaga.",
-        }}
-      />
+      {/* Promo Akhir Tahun 2026 Banner */}
+      <PromoAkhirTahunBanner />
+
+      <HeroSection />
       <BrandLogos />
       
 
