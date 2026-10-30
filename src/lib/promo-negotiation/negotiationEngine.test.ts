@@ -83,6 +83,8 @@ describe("negotiationEngine test suite", () => {
     // Case 4: Customer bids 28,000,000 (Below cost 30,000,000) => OVERCOST
     const resOvercost = simulateCustomerBid(items, 28000000);
     expect(resOvercost.zone).toBe("overcost");
+    expect(resOvercost.statusHeadline).not.toContain("Modal");
+    expect(resTarget.statusHeadline).not.toContain("25%");
   });
 
   it("should maximize budget without exceeding target limit", () => {

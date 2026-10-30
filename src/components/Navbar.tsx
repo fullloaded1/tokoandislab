@@ -506,28 +506,6 @@ export default function Navbar() {
               <span>Promo Akhir Tahun 2026</span>
               <span className="rounded bg-blue-600 px-2 py-0.5 text-[10px] font-extrabold text-white">Ready</span>
             </Link>
-            <Link
-              href="/promo-merdeka"
-              onClick={() => setMobileMenuOpen(false)}
-              className={`flex items-center min-h-[44px] rounded-2xl px-4 text-sm font-black transition-all active:scale-[0.98] ${
-                pathname === "/promo-merdeka"
-                  ? "text-red-700 bg-red-50 border border-red-200 shadow-sm"
-                  : "text-red-700 bg-red-50 hover:bg-red-100 border border-red-100"
-              }`}
-            >
-              Promo Kemerdekaan -17%
-            </Link>
-            <Link
-              href="/promo-milenial"
-              onClick={() => setMobileMenuOpen(false)}
-              className={`flex items-center min-h-[44px] rounded-2xl px-4 text-sm font-black transition-all active:scale-[0.98] mt-2 ${
-                pathname === "/promo-milenial"
-                  ? "text-indigo-700 bg-indigo-50 border border-indigo-200 shadow-sm"
-                  : "text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100"
-              }`}
-            >
-              Promo Milenial 2026
-            </Link>
             <button
               type="button"
               onClick={(e) => {
@@ -556,7 +534,7 @@ export default function Navbar() {
       </header>
 
       {/* Spacer for fixed navbar + top bar */}
-      <div style={{ height: pathname !== "/promo-merdeka" ? "128px" : "96px" }} />
+      <div style={{ height: "128px" }} />
 
       {/* RFQ Cart Drawer */}
       <RFQCartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />

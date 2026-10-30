@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { catalogs } from "@/data/promo-akhir-tahun";
 import { getPromoState } from "@/lib/promo-akhir-tahun";
 import PromoHero from "./PromoHero";
-import CatalogSection from "./CatalogSection";
+import PromoCatalogsWithPayment from "./PromoCatalogsWithPayment";
 import PromoExtras from "./PromoExtras";
 import MobileStickyCta from "./MobileStickyCta";
 import "./promo-akhir-tahun.css";
@@ -48,21 +48,16 @@ export default function PromoAkhirTahunPage() {
       {/* 1. Hero Section */}
       <PromoHero promoState={promoState} />
 
-      {/* 2. 3 Catalogs Sections */}
-      <div className="space-y-0">
-        {catalogs.map((catalog) => (
-          <CatalogSection
-            key={catalog.id}
-            catalog={catalog}
-            promoPhase={promoState.phaseId}
-          />
-        ))}
-      </div>
+      {/* 2. Payment Scheme Selector & 3 Catalogs Sections */}
+      <PromoCatalogsWithPayment
+        catalogs={catalogs}
+        promoPhase={promoState.phaseId}
+      />
 
-      {/* 4. Additional Sections (Why 30 Dec, Trust, FAQ, Terms, Closing CTA) */}
+      {/* 3. Additional Sections (Why 30 Dec, Trust, FAQ, Terms, Closing CTA) */}
       <PromoExtras promoState={promoState} />
 
-      {/* 5. Mobile Sticky CTA */}
+      {/* 4. Mobile Sticky CTA */}
       <MobileStickyCta promoPhase={promoState.phaseId} />
     </main>
   );

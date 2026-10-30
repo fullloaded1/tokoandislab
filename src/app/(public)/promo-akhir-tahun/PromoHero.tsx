@@ -4,7 +4,8 @@ import { catalogs } from "@/data/promo-akhir-tahun";
 import { PromoState, HERO_SPH_MESSAGE } from "@/lib/promo-akhir-tahun";
 import PromoCountdown from "./PromoCountdown";
 import PromoWaLink from "./PromoWaLink";
-import { MessageSquare, ArrowDown, ShieldCheck, Sparkles, Clock, Calendar, Calculator, FileDown, CheckCircle2 } from "lucide-react";
+import PromoPdfButton from "./PromoPdfButton";
+import { MessageSquare, ArrowDown, ShieldCheck, Sparkles, Calendar, Calculator, CheckCircle2, Star } from "lucide-react";
 
 interface PromoHeroProps {
   promoState: PromoState;
@@ -30,7 +31,7 @@ export default function PromoHero({ promoState }: PromoHeroProps) {
           </span>
           <span className="inline-flex items-center gap-1.5 rounded-full bg-cyan-500/20 border border-cyan-400/40 px-3 py-1 text-xs font-bold text-cyan-300 backdrop-blur-md">
             <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-            100% Aman Audit SPJ &amp; BAST
+            Dokumen SPJ &amp; BAST Lengkap
           </span>
         </div>
 
@@ -60,7 +61,11 @@ export default function PromoHero({ promoState }: PromoHeroProps) {
         {/* Countdown & Main CTA Row */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 pt-2">
           {/* Countdown */}
-          <PromoCountdown targetDate={promoState.targetDate} mode={promoState.mode} />
+          <PromoCountdown
+            targetDate={promoState.targetDate}
+            mode={promoState.mode}
+            phaseName={promoState.phaseName}
+          />
 
           {/* Primary CTA Buttons Row */}
           <div className="flex flex-col sm:flex-row items-center gap-3">
@@ -80,29 +85,47 @@ export default function PromoHero({ promoState }: PromoHeroProps) {
             </div>
 
             <div className="flex flex-col items-center sm:items-start gap-1">
-              <a
-                href="/downloads/Katalog-Promo-Akhir-Tahun-AndisLab-2026.pdf"
-                download="Katalog-Promo-Akhir-Tahun-AndisLab-2026.pdf"
-                className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white px-6 py-3.5 sm:py-4 text-sm sm:text-base font-bold border border-slate-600/80 transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] shadow-lg backdrop-blur-md"
-              >
-                <FileDown className="w-5 h-5 text-cyan-400 shrink-0 transition-transform group-hover:scale-110" />
-                <span>Unduh Katalog PDF (A4)</span>
-              </a>
+              <PromoPdfButton promoPhase={promoState.phaseId} />
               <span className="text-[11px] text-slate-400 font-medium">
                 *Format siap cetak resmi A4
+              </span>
+            </div>
+
+            <div className="flex flex-col items-center sm:items-start gap-1">
+              <a
+                href="#skema-diskon"
+                className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 hover:text-white px-5 py-3.5 sm:py-4 text-sm sm:text-base font-bold border border-rose-400/40 transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] shadow-lg backdrop-blur-md"
+              >
+                <Sparkles className="w-5 h-5 text-rose-400 shrink-0 transition-transform group-hover:scale-110" />
+                <span>Pilih Cara Bayar &amp; Diskon</span>
+              </a>
+              <span className="text-[11px] text-slate-400 font-medium">
+                *Tunai (-8%), DP 50% (-5%), DP 30% (-3%), Tempo 30 Hari
               </span>
             </div>
           </div>
         </div>
 
-        {/* Hormozi Grand Slam Offer - Bureaucratic Hassle-Free Stack */}
+        {/* Institutional Social Proof Bar */}
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 pt-1 text-xs font-semibold text-slate-300">
+          <span className="inline-flex items-center gap-1.5">
+            <Star className="w-4 h-4 fill-amber-400 text-amber-400 shrink-0" />
+            <span>Rating <strong className="text-white">4.9/5.0</strong> (520+ Ulasan Pengadaan)</span>
+          </span>
+          <span className="hidden sm:inline text-slate-600">•</span>
+          <span>Dipercaya <strong className="text-white">500+ Lab Instansi, Kampus &amp; Industri</strong> Sejak 2010</span>
+          <span className="hidden sm:inline text-slate-600">•</span>
+          <span>Jangkauan Pengiriman <strong className="text-white">34 Provinsi</strong></span>
+        </div>
+
+        {/* Bureaucratic Hassle-Free Stack */}
         <div className="max-w-3xl mx-auto rounded-2xl bg-gradient-to-r from-blue-950/70 via-slate-900/80 to-teal-950/70 border border-cyan-500/30 p-4 sm:p-5 backdrop-blur-md shadow-xl text-left">
           <div className="flex items-center gap-2 mb-2.5">
             <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-400/30">
               <Sparkles className="w-3.5 h-3.5 text-cyan-300" />
             </span>
             <span className="text-xs font-black uppercase tracking-wider text-cyan-300">
-              Paket Pengadaan Bebas Repot (Effort &amp; Sacrifice = 0)
+              Paket Pengadaan Terima Beres (100% Siap Audit SPJ &amp; BAST)
             </span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-200">

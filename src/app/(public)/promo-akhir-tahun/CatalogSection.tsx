@@ -1,18 +1,25 @@
 import React from "react";
 import Link from "next/link";
-import { PromoCatalog } from "@/data/promo-akhir-tahun";
-import { sortProductsByPrice, buildPromoWaUrl } from "@/lib/promo-akhir-tahun";
+import { PromoCatalog, PromoPaymentMethodId } from "@/data/promo-akhir-tahun";
+import { sortProductsByPrice } from "@/lib/promo-akhir-tahun";
 import PromoProductCard from "./PromoProductCard";
 import BonusHighlight from "./BonusHighlight";
 import PromoWaLink from "./PromoWaLink";
-import { Printer, Users, ArrowRight, MessageSquare, CheckCircle } from "lucide-react";
+import { Printer, Users, ArrowRight, MessageSquare } from "lucide-react";
 
 interface CatalogSectionProps {
   catalog: PromoCatalog;
   promoPhase?: string;
+  selectedPaymentId?: PromoPaymentMethodId;
+  onSelectPayment?: (id: PromoPaymentMethodId) => void;
 }
 
-export default function CatalogSection({ catalog, promoPhase = "active" }: CatalogSectionProps) {
+export default function CatalogSection({
+  catalog,
+  promoPhase = "active",
+  selectedPaymentId,
+  onSelectPayment,
+}: CatalogSectionProps) {
   const sortedProducts = sortProductsByPrice(catalog.products);
 
   const themeConfig = {
@@ -105,6 +112,8 @@ export default function CatalogSection({ catalog, promoPhase = "active" }: Catal
             catalogBonus={catalog.bonus}
             theme={catalog.theme}
             promoPhase={promoPhase}
+            selectedPaymentId={selectedPaymentId}
+            onSelectPayment={onSelectPayment}
           />
         ))}
       </div>

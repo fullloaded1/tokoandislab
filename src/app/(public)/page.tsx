@@ -185,20 +185,20 @@ export default async function HomePage() {
 
       <CategoryGrid />
 
-      {/* Promo Milenian × Ready Stock Section */}
+      {/* Promo Akhir Tahun × Ready Stock Section */}
       {readyStockProducts.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 mb-10" id="ready-stock">
-          {/* Promo Milenian Header Banner */}
+          {/* Promo Akhir Tahun Header Banner */}
           <div
             className="rounded-2xl overflow-hidden mb-6"
-            style={{ background: "linear-gradient(135deg, #0d1b3e 0%, #0e2a5c 60%, #134e4a 100%)" }}
+            style={{ background: "linear-gradient(135deg, #0b1e3b 0%, #0f3460 60%, #164e63 100%)" }}
           >
             <div className="relative px-6 sm:px-10 py-8 sm:py-10">
-              {/* Teal accent glow */}
+              {/* Blue/Cyan accent glow */}
               <div
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  background: "radial-gradient(ellipse at top right, rgba(20,184,166,0.18) 0%, transparent 60%)"
+                  background: "radial-gradient(ellipse at top right, rgba(56,189,248,0.18) 0%, transparent 60%)"
                 }}
               />
               <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
@@ -207,52 +207,51 @@ export default async function HomePage() {
                   <div className="flex flex-wrap items-center gap-2">
                     <span
                       className="inline-flex items-center gap-1.5 text-[0.65rem] font-black uppercase tracking-widest text-white px-3 py-1.5 rounded-full"
-                      style={{ background: "linear-gradient(90deg, #14b8a6, #0ea5e9)" }}
+                      style={{ background: "linear-gradient(90deg, #2563eb, #06b6d4)" }}
                     >
-                      📢 Penawaran Eksklusif
+                      🔥 Promo Akhir Tahun 2026
                     </span>
                     <span className="inline-flex items-center gap-1.5 bg-white/10 border border-white/20 text-slate-200 text-xs font-semibold px-3 py-1 rounded-full">
-                      🗓️ 22 Sep – 28 Okt 2026
+                      🗓️ 30 Okt – 30 Des 2026
                     </span>
                   </div>
                   <div>
                     <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
-                      Promo Milenian <span style={{ color: "#5eead4" }}>2026</span>
+                      Promo Akhir Tahun <span style={{ color: "#38bdf8" }}>2026</span>
                     </h2>
-                    <p className="text-sm font-semibold mt-1" style={{ color: "#a5f3fc", fontStyle: "italic" }}>
-                      Lab Lebih Produktif. Budget Tetap Terjaga.
+                    <p className="text-sm font-semibold mt-1" style={{ color: "#bae6fd" }}>
+                      Tutup 2026, Buka Lab Impian. Serap Anggaran Cepat &amp; Tepat Guna.
                     </p>
                   </div>
                   {/* 3 offer pills */}
                   <div className="flex flex-wrap gap-2 pt-1">
-                    <span className="inline-flex items-center gap-1.5 bg-teal-500/20 border border-teal-400/40 text-teal-200 text-xs font-bold px-3 py-1.5 rounded-full">
-                      🏷️ Diskon 5–15%
+                    <span className="inline-flex items-center gap-1.5 bg-cyan-500/20 border border-cyan-400/40 text-cyan-200 text-xs font-bold px-3 py-1.5 rounded-full">
+                      📦 35 Unit Ready Stock Gudang
                     </span>
                     <span className="inline-flex items-center gap-1.5 bg-blue-500/20 border border-blue-400/40 text-blue-200 text-xs font-bold px-3 py-1.5 rounded-full">
-                      🎁 Bundling Gratis Aksesoris
+                      📑 Dokumen SPJ &amp; BAST Lengkap
                     </span>
-                    <span className="inline-flex items-center gap-1.5 bg-amber-500/20 border border-amber-400/40 text-amber-200 text-xs font-bold px-3 py-1.5 rounded-full">
-                      ⭐ Star Points ×2
+                    <span className="inline-flex items-center gap-1.5 bg-emerald-500/20 border border-emerald-400/40 text-emerald-200 text-xs font-bold px-3 py-1.5 rounded-full">
+                      ⚡ SPH Resmi 1x24 Jam
                     </span>
                   </div>
                 </div>
                 {/* Right: CTAs */}
                 <div className="flex flex-wrap items-center gap-3 shrink-0">
                   <a
-                    href="/api/ready-stock-pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href="/downloads/katalog-promo-akhir-tahun-m3.pdf"
+                    download="katalog-promo-akhir-tahun-m3.pdf"
                     className="inline-flex items-center gap-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 px-4 py-2.5 text-sm font-semibold text-white transition-colors duration-200"
                   >
-                    <FileText className="h-4 w-4" />
+                    <FileText className="h-4 w-4 text-cyan-300" />
                     Unduh Katalog PDF
                   </a>
                   <Link
-                    href="/promo/milenian"
+                    href="/promo-akhir-tahun"
                     className="inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-bold text-white transition-all duration-200 hover:-translate-y-0.5 shadow-lg"
-                    style={{ background: "linear-gradient(90deg, #14b8a6, #0ea5e9)" }}
+                    style={{ background: "linear-gradient(90deg, #2563eb, #0284c7)" }}
                   >
-                    Detail Promo
+                    Lihat Promo Akhir Tahun
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>

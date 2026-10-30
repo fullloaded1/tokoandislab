@@ -48,6 +48,29 @@ export default async function PromoMilenialPage() {
 
   return (
     <main className="min-h-screen bg-slate-900 text-white font-sans overflow-hidden">
+      {/* ===== EXPIRED PROMO BANNER ===== */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-2 relative z-20">
+        <div className="rounded-2xl bg-amber-500/10 border-2 border-amber-500/40 p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left shadow-lg backdrop-blur-md">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">⚠️</span>
+            <div>
+              <p className="font-extrabold text-amber-200 text-sm sm:text-base">
+                PROMO INI SUDAH BERAKHIR
+              </p>
+              <p className="text-xs sm:text-sm text-slate-300">
+                Promo Milenial telah berakhir. Silakan jelajahi Promo Akhir Tahun 2026 yang sedang berlangsung.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/promo-akhir-tahun"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs sm:text-sm font-bold text-white shadow-md hover:bg-blue-700 transition-all shrink-0"
+          >
+            Lihat Promo Akhir Tahun 2026 →
+          </Link>
+        </div>
+      </div>
+
       {/* ===== HERO ===== */}
       <section className="relative px-6 pt-24 pb-20 lg:px-8 lg:pt-32 lg:pb-28 text-center">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/40 via-slate-900 to-emerald-900/20 -z-10" />

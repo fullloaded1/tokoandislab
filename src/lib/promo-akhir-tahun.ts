@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import {
   PROMO_START,
   PROMO_END,
@@ -87,8 +88,12 @@ export function getPromoState(referenceTime: Date = new Date()): PromoState {
   }
 
   // 3. Fase Aktif
-  const earlyBirdEndMs = new Date("2026-11-20T23:59:59+07:00").getTime();
-  const serapanEndMs = new Date("2026-12-15T23:59:59+07:00").getTime();
+  const earlyBirdEndIso = "2026-11-20T23:59:59+07:00";
+  const serapanEndIso = "2026-12-15T23:59:59+07:00";
+  const cutoffJawaIso = `${PO_CUTOFF_JAWA}T23:59:59+07:00`;
+
+  const earlyBirdEndMs = new Date(earlyBirdEndIso).getTime();
+  const serapanEndMs = new Date(serapanEndIso).getTime();
 
   if (nowMs <= earlyBirdEndMs) {
     const msg = "Kunci stok dan harga sekarang selagi unit masih lengkap. SPH bisa terbit segera untuk pengajuan anggaran.";
@@ -99,7 +104,7 @@ export function getPromoState(referenceTime: Date = new Date()): PromoState {
       message: msg,
       bannerText: `Fase 1 Early Bird: ${msg}`,
       isCutoffPassed: false,
-      targetDate: PROMO_END,
+      targetDate: earlyBirdEndIso,
       cutoffJawaLabel,
       cutoffLuarJawaLabel,
     };
@@ -114,7 +119,7 @@ export function getPromoState(referenceTime: Date = new Date()): PromoState {
       message: msg,
       bannerText: `Fase 2 Serapan Anggaran: ${msg}`,
       isCutoffPassed: false,
-      targetDate: PROMO_END,
+      targetDate: serapanEndIso,
       cutoffJawaLabel,
       cutoffLuarJawaLabel,
     };
@@ -144,9 +149,54 @@ export function getPromoState(referenceTime: Date = new Date()): PromoState {
     message: msg,
     bannerText: `Fase 3 Last Call: ${msg}`,
     isCutoffPassed: false,
-    targetDate: PROMO_END,
+    targetDate: cutoffJawaIso,
     cutoffJawaLabel,
     cutoffLuarJawaLabel,
+  };
+}
+
+/**
+ * Menghitung harga promo dan penghematan berdasarkan persentase diskon cara pembayaran
+ * menggunakan Prisma.Decimal (tetap masuk aturan keuntungan di atas modal).
+ */
+export function calculatePromoPriceByPayment(
+  normalPrice: number | string,
+  discountPercent: number = 8
+): {
+  normalPrice: string;
+  discountedPrice: string;
+  savingAmount: string;
+  discountPercent: number;
+} {
+  const priceDec = new Prisma.Decimal(normalPrice || 0);
+  const pctDec = new Prisma.Decimal(discountPercent || 0).dividedBy(new Prisma.Decimal(100));
+  const savingDec = priceDec
+    .times(pctDec)
+    .toDecimalPlaces(0, Prisma.Decimal.ROUND_FLOOR);
+  const discountedDec = priceDec.minus(savingDec);
+
+  return {
+    normalPrice: priceDec.toString(),
+    discountedPrice: discountedDec.toString(),
+    savingAmount: savingDec.toString(),
+    discountPercent,
+  };
+}
+
+/**
+ * Menghitung estimasi penghematan maksimal (Diskon Tunai/Cash 8%) dengan Prisma.Decimal.
+ */
+export function calculateMaxTermSaving(
+  normalPrice: number | string,
+  discountPercent: number = 8
+): {
+  savingAmount: string;
+  discountedPrice: string;
+} {
+  const res = calculatePromoPriceByPayment(normalPrice, discountPercent);
+  return {
+    savingAmount: res.savingAmount,
+    discountedPrice: res.discountedPrice,
   };
 }
 
@@ -188,7 +238,15 @@ export function getStockLabel(stock: number): string {
 /**
  * Membuat pesan WhatsApp untuk tombol Minta SPH produk individual.
  */
-export function buildProductSphMessage(name: string, model: string): string {
+export function buildProductSphMessage(
+  name: string,
+  model: string,
+  paymentTermsLabel?: string,
+  discountedPriceFormatted?: string
+): string {
+  if (paymentTermsLabel && discountedPriceFormatted) {
+    return `Halo AndisLab, saya mau minta SPH untuk ${name} ${model} (Promo Akhir Tahun - Skema ${paymentTermsLabel}: ${discountedPriceFormatted}).`;
+  }
   return `Halo AndisLab, saya mau minta SPH untuk ${name} ${model} (Promo Akhir Tahun).`;
 }
 

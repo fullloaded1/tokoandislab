@@ -115,6 +115,26 @@ export default function PromoMilenianPage() {
   return (
     <main className="bg-slate-50 min-h-screen">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+        {/* ===== EXPIRED PROMO BANNER ===== */}
+        <div className="rounded-2xl bg-amber-500/10 border-2 border-amber-500/40 p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left shadow-lg backdrop-blur-sm">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">⚠️</span>
+            <div>
+              <p className="font-extrabold text-amber-950 text-sm sm:text-base">
+                PROMO INI SUDAH BERAKHIR
+              </p>
+              <p className="text-xs sm:text-sm text-amber-900/80">
+                Promo Milenian telah berakhir pada 28 Oktober 2026. Silakan jelajahi Promo Akhir Tahun 2026 yang sedang berlangsung.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/promo-akhir-tahun"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs sm:text-sm font-bold text-white shadow-md hover:bg-blue-700 transition-all shrink-0"
+          >
+            Lihat Promo Akhir Tahun 2026 →
+          </Link>
+        </div>
 
         {/* ── HERO ─────────────────────────────────────────────────────── */}
         <section className="pm-hero" aria-label="Hero Promo Milenian 2026">

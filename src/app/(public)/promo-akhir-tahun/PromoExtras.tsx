@@ -1,6 +1,7 @@
-import { terms, promoPaymentTiers, WA_NUMBER } from "@/data/promo-akhir-tahun";
+import { terms, promoPaymentTiers } from "@/data/promo-akhir-tahun";
 import { PromoState, HERO_SPH_MESSAGE } from "@/lib/promo-akhir-tahun";
 import PromoWaLink from "./PromoWaLink";
+import ClientTestimonial from "@/components/ClientTestimonial";
 import {
   ShieldCheck,
   PackageCheck,
@@ -10,10 +11,8 @@ import {
   Clock,
   ArrowRight,
   MessageSquare,
-  Building,
   CheckCircle2,
   Coins,
-  Percent,
 } from "lucide-react";
 
 interface PromoExtrasProps {
@@ -142,6 +141,9 @@ export default function PromoExtras({ promoState }: PromoExtrasProps) {
           </div>
         </div>
       </section>
+
+      {/* 2b. Testimoni Instansi & Industri */}
+      <ClientTestimonial />
 
       {/* 3. FAQ 5 Pertanyaan */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

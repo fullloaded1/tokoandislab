@@ -6,9 +6,10 @@ import { PromoMode } from "@/lib/promo-akhir-tahun";
 interface PromoCountdownProps {
   targetDate: string;
   mode: PromoMode;
+  phaseName?: string;
 }
 
-export default function PromoCountdown({ targetDate, mode }: PromoCountdownProps) {
+export default function PromoCountdown({ targetDate, mode, phaseName }: PromoCountdownProps) {
   const [mounted, setMounted] = useState(false);
   const [timeLeft, setTimeLeft] = useState<{
     days: number;
@@ -59,7 +60,12 @@ export default function PromoCountdown({ targetDate, mode }: PromoCountdownProps
     );
   }
 
-  const label = mode === "upcoming" ? "Promo Dimulai Dalam:" : "Order Ditutup Dalam:";
+  const label =
+    mode === "upcoming"
+      ? "Promo Dimulai Dalam:"
+      : phaseName
+      ? `Kuota Fase ${phaseName} Berakhir:`
+      : "Order Ditutup Dalam:";
 
   return (
     <div className="flex flex-col items-center sm:items-start gap-2">

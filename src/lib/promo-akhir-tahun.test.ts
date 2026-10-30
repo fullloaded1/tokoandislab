@@ -8,9 +8,11 @@ import {
   buildProductSphMessage,
   buildPromoWaUrl,
   getCatalogByNumber,
+  calculateMaxTermSaving,
+  calculatePromoPriceByPayment,
   HERO_SPH_MESSAGE,
 } from "./promo-akhir-tahun";
-import { catalogs, PO_CUTOFF_JAWA, PO_CUTOFF_LUAR_JAWA, WA_NUMBER } from "@/data/promo-akhir-tahun";
+import { catalogs, promoPaymentTiers, PO_CUTOFF_JAWA, PO_CUTOFF_LUAR_JAWA, WA_NUMBER } from "@/data/promo-akhir-tahun";
 
 describe("promo-akhir-tahun logic tests", () => {
   it("formats cutoff dates accurately in Indonesian format", () => {
@@ -32,17 +34,20 @@ describe("promo-akhir-tahun logic tests", () => {
       expect(state.mode).toBe("active");
       expect(state.phaseId).toBe("early-bird");
       expect(state.phaseName).toBe("Early Bird");
+      expect(state.targetDate).toBe("2026-11-20T23:59:59+07:00");
       expect(state.message).toContain("Kunci stok dan harga sekarang");
     });
 
     it("returns 'early-bird' on 20 Nov 2026 23:59:59 WIB", () => {
       const state = getPromoState(new Date("2026-11-20T23:59:59+07:00"));
       expect(state.phaseId).toBe("early-bird");
+      expect(state.targetDate).toBe("2026-11-20T23:59:59+07:00");
     });
 
     it("returns 'serapan' on 21 Nov 2026 00:00:00 WIB", () => {
       const state = getPromoState(new Date("2026-11-21T00:00:00+07:00"));
       expect(state.phaseId).toBe("serapan");
+      expect(state.targetDate).toBe("2026-12-15T23:59:59+07:00");
       expect(state.message).toContain("Kejar PO akhir tahun");
     });
 
@@ -50,6 +55,7 @@ describe("promo-akhir-tahun logic tests", () => {
       const state = getPromoState(new Date("2026-12-16T00:00:00+07:00"));
       expect(state.phaseId).toBe("last-call");
       expect(state.isCutoffPassed).toBe(false);
+      expect(state.targetDate).toBe("2026-12-22T23:59:59+07:00");
       expect(state.message).toContain("22 Des (Jawa) atau 15 Des (luar Jawa)");
     });
 
@@ -70,9 +76,9 @@ describe("promo-akhir-tahun logic tests", () => {
 
   describe("Product sorting and formatting", () => {
     it("sorts products by price descending across all catalogs", () => {
-      expect(catalogs[0].products.length).toBe(14);
+      expect(catalogs[0].products.length).toBe(13);
       expect(catalogs[1].products.length).toBe(8);
-      expect(catalogs[2].products.length).toBe(28);
+      expect(catalogs[2].products.length).toBe(14);
 
       const cat1 = catalogs[0];
       const sorted = sortProductsByPrice(cat1.products);
@@ -110,6 +116,39 @@ describe("promo-akhir-tahun logic tests", () => {
       expect(getCatalogByNumber("2")?.id).toBe("katalog-2");
       expect(getCatalogByNumber(3)?.id).toBe("katalog-3");
       expect(getCatalogByNumber(4)).toBeUndefined();
+    });
+
+    it("calculates payment-based promo discounts (8%, 5%, 3%, 0%) using Decimal while maintaining profit above cost", () => {
+      const cashSaving = calculateMaxTermSaving(12500000);
+      expect(cashSaving.savingAmount).toBe("1000000");
+      expect(cashSaving.discountedPrice).toBe("11500000");
+
+      const dp50 = calculatePromoPriceByPayment(12500000, 5);
+      expect(dp50.savingAmount).toBe("625000");
+      expect(dp50.discountedPrice).toBe("11875000");
+
+      const dp30 = calculatePromoPriceByPayment(12500000, 3);
+      expect(dp30.savingAmount).toBe("375000");
+      expect(dp30.discountedPrice).toBe("12125000");
+
+      const tempo30 = calculatePromoPriceByPayment(12500000, 0);
+      expect(tempo30.savingAmount).toBe("0");
+      expect(tempo30.discountedPrice).toBe("12500000");
+
+      expect(promoPaymentTiers.map((t) => t.discountPercent)).toEqual([8, 5, 3, 0]);
+
+      for (const cat of catalogs) {
+        for (const p of cat.products) {
+          expect(p.brand).not.toContain("[ISI");
+          expect(p.model).not.toContain("[ISI");
+          expect(p.image).not.toBe("/images/promo/placeholder.svg");
+          expect(p.promoPrice).not.toBeNull();
+          expect(p.promoPrice!).toBeLessThan(p.normalPrice);
+          // Profit guard: cost is 80% of normalPrice; promoPrice must stay well above cost
+          const cost = Math.round(p.normalPrice * 0.8);
+          expect(p.promoPrice!).toBeGreaterThan(cost);
+        }
+      }
     });
   });
 });

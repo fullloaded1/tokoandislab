@@ -69,13 +69,13 @@ const FLAGSHIP_SLIDES: FlagshipSlide[] = [
       className: "bg-blue-500/20 text-cyan-300 border-blue-400/40",
     },
     headline: "Tutup 2026, Buka Lab Impian.",
-    highlight: "Serap Anggaran Cepat. 100% Aman Audit SPJ.",
+    highlight: "Serap Anggaran Cepat. Dokumen SPJ Lengkap.",
     description:
-      "35 instrumen analitik & laboratorium ready stock gudang siap kirim sebelum tutup buku. Diskon s/d 15%, SPH resmi 1x24 jam ber-KOP, unit fisik siap inspeksi, dan draft dokumen SPJ disiapkan.",
+      "35 instrumen analitik & laboratorium ready stock gudang siap kirim sebelum tutup buku. SPH resmi 1x24 jam ber-KOP, unit fisik siap inspeksi, dan draft dokumen SPJ disiapkan.",
     pills: [
       { text: "100% Ready Stock Gudang", icon: PackageCheck, className: "bg-emerald-500/20 text-emerald-300 border-emerald-400/30" },
       { text: "Draft SPJ & BAST Lengkap", icon: CheckCircle2, className: "bg-teal-500/20 text-teal-300 border-teal-400/30" },
-      { text: "Diskon Resmi s/d 15%", icon: Award, className: "bg-amber-500/20 text-amber-300 border-amber-400/30" },
+      { text: "Ready Stock Akhir Tahun", icon: Award, className: "bg-blue-500/20 text-cyan-300 border-blue-400/30" },
     ],
     primaryCta: {
       text: "Buka Katalog Promo Akhir Tahun",
@@ -95,9 +95,9 @@ const FLAGSHIP_SLIDES: FlagshipSlide[] = [
     image: "/images/promo/featured/cat2-autoclave.png",
     imageAlt: "Instrumen Promo Akhir Tahun 2026 AndisLab",
     floatingCard: {
-      title: "100% Aman Audit BPK",
+      title: "Dokumen SPJ Lengkap",
       subtitle: "Barang Fisik Ada Sebelum BAST",
-      badge: "Legal & Bersih",
+      badge: "Siap Audit",
     },
   },
 
@@ -151,7 +151,7 @@ const FLAGSHIP_SLIDES: FlagshipSlide[] = [
       className: "bg-amber-500/20 text-amber-300 border-amber-400/40",
     },
     headline: "Mitra Resmi e-Katalog INAPROC.",
-    highlight: "Bebas Masalah Pemeriksaan. Transparan & Legal.",
+    highlight: "Dokumen SPJ & Faktur Pajak Lengkap. Transparan & Legal.",
     description:
       "Solusi pengadaan alat laboratorium terpercaya untuk Universitas Negeri, RSUD, Balai Riset, dan Instansi Pemerintah. Dokumen BAST, e-Faktur Pajak, dan kelengkapan SPJ terbit cepat tanpa repot.",
     pills: [
@@ -176,7 +176,7 @@ const FLAGSHIP_SLIDES: FlagshipSlide[] = [
     image: "/images/promo/featured/cat3-bsc.png",
     imageAlt: "Biosafety Cabinet Pengadaan Resmi AndisLab",
     floatingCard: {
-      title: "Sesuai Regulasi LKPP",
+      title: "Mitra Resmi e-Katalog",
       subtitle: "Dokumen Lengkap Siap Audit",
       badge: "Terverifikasi",
     },

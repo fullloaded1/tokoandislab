@@ -2,14 +2,19 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { PromoProduct } from "@/data/promo-akhir-tahun";
+import {
+  PromoProduct,
+  PromoPaymentMethodId,
+  promoPaymentTiers,
+} from "@/data/promo-akhir-tahun";
 import {
   formatPromoRupiah,
   getStockLabel,
   buildProductSphMessage,
+  calculatePromoPriceByPayment,
 } from "@/lib/promo-akhir-tahun";
 import PromoWaLink from "./PromoWaLink";
-import { Check, ShieldCheck, Sparkles, MessageSquare } from "lucide-react";
+import { Check, Sparkles, MessageSquare, Tag } from "lucide-react";
 
 interface PromoProductCardProps {
   product: PromoProduct;
@@ -18,6 +23,8 @@ interface PromoProductCardProps {
   catalogBonus: string[];
   theme: "blue-amber" | "navy-teal" | "slate-gold";
   promoPhase?: string;
+  selectedPaymentId?: PromoPaymentMethodId;
+  onSelectPayment?: (id: PromoPaymentMethodId) => void;
 }
 
 export default function PromoProductCard({
@@ -27,13 +34,42 @@ export default function PromoProductCard({
   catalogBonus,
   theme,
   promoPhase = "active",
+  selectedPaymentId,
+  onSelectPayment,
 }: PromoProductCardProps) {
   const [imgSrc, setImgSrc] = useState<string>(
     product.image || `/images/promo/${product.slug}.jpg`
   );
+  const [localPaymentId, setLocalPaymentId] = useState<PromoPaymentMethodId>("cash");
+
+  const activePaymentId = selectedPaymentId ?? localPaymentId;
+  const activeTier =
+    promoPaymentTiers.find((t) => t.id === activePaymentId) || promoPaymentTiers[0];
+
+  const handlePaymentSelect = (id: PromoPaymentMethodId) => {
+    if (onSelectPayment) {
+      onSelectPayment(id);
+    } else {
+      setLocalPaymentId(id);
+    }
+  };
+
+  const priceCalc = calculatePromoPriceByPayment(
+    product.normalPrice,
+    activeTier.discountPercent
+  );
+  const discountedPriceNum = Number(priceCalc.discountedPrice);
+  const savingAmountNum = Number(priceCalc.savingAmount);
+  const maxCashCalc = calculatePromoPriceByPayment(product.normalPrice, 8);
+
   const stockLabel = getStockLabel(product.stock);
   const isLastUnit = product.stock === 1;
-  const sphMessage = buildProductSphMessage(product.name, product.model);
+  const sphMessage = buildProductSphMessage(
+    product.name,
+    product.model,
+    activeTier.shortLabel,
+    formatPromoRupiah(discountedPriceNum)
+  );
 
   // Maksimal 3 chip bonus di kartu
   const topChips = catalogBonus.slice(0, 3);
@@ -84,6 +120,16 @@ export default function PromoProductCard({
           onError={() => setImgSrc("/images/promo/placeholder.svg")}
           loading="lazy"
         />
+
+        {/* Floating Discount Indicator on Image Bottom-Left */}
+        {activeTier.discountPercent > 0 && (
+          <div className="absolute bottom-3 left-3 z-10 pointer-events-none">
+            <span className="inline-flex items-center gap-1 rounded-lg bg-rose-600 text-white px-2.5 py-1 text-[11px] font-black uppercase tracking-wide shadow-md">
+              <Tag className="w-3 h-3 shrink-0" />
+              <span>Diskon Promo -{activeTier.discountPercent}%</span>
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Product Info */}
@@ -125,22 +171,90 @@ export default function PromoProductCard({
           </div>
         )}
 
-        {/* Price & Ready Stock indicator */}
+        {/* Price & Payment Discount Indicator */}
         <div className="mt-auto pt-4">
-          <div className="flex flex-col mb-1">
-            {product.promoPrice !== null ? (
+          {/* Payment Method Mini Selector */}
+          <div className="mb-3 rounded-xl bg-slate-50 p-2 border border-slate-200/80">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1.5 flex items-center justify-between">
+              <span>Pilih Cara Bayar (Diskon Otomatis):</span>
+            </div>
+            <div className="grid grid-cols-4 gap-1">
+              {promoPaymentTiers.map((tier) => {
+                const isSelected = tier.id === activePaymentId;
+                return (
+                  <button
+                    key={tier.id}
+                    type="button"
+                    onClick={() => handlePaymentSelect(tier.id)}
+                    className={`px-1.5 py-1 rounded-lg text-[10px] font-bold transition-all text-center leading-tight ${
+                      isSelected
+                        ? "bg-rose-600 text-white shadow-xs"
+                        : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200/80"
+                    }`}
+                  >
+                    <div>
+                      {tier.id === "cash"
+                        ? "Tunai"
+                        : tier.id === "dp50"
+                        ? "DP 50%"
+                        : tier.id === "dp30"
+                        ? "DP 30%"
+                        : "Tempo"}
+                    </div>
+                    <div
+                      className={`text-[9px] font-extrabold ${
+                        isSelected ? "text-rose-100" : "text-rose-600"
+                      }`}
+                    >
+                      {tier.discountPercent > 0 ? `-${tier.discountPercent}%` : "Normal"}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Strikethrough Normal Price & Discounted Promo Price */}
+          <div className="flex flex-col mb-2">
+            {activeTier.discountPercent > 0 ? (
               <>
-                <span className="text-xs text-slate-400 line-through font-medium">
-                  {formatPromoRupiah(product.normalPrice)}
+                <div className="flex items-center gap-2 mb-0.5">
+                  <span className="inline-flex items-center rounded-md bg-rose-100 border border-rose-200 px-1.5 py-0.5 text-[11px] font-black text-rose-700">
+                    -{activeTier.discountPercent}%
+                  </span>
+                  <span className="text-xs sm:text-sm text-slate-400 line-through font-semibold">
+                    {formatPromoRupiah(product.normalPrice)}
+                  </span>
+                </div>
+                <span className="text-xl sm:text-2xl font-black text-rose-600 tracking-tight">
+                  {formatPromoRupiah(discountedPriceNum)}
                 </span>
-                <span className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                  {formatPromoRupiah(product.promoPrice)}
+                <span className="mt-1 inline-flex items-center gap-1 self-start rounded-md bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 text-[11px] font-bold text-emerald-800">
+                  <Sparkles className="w-3 h-3 text-emerald-600 shrink-0" />
+                  <span>
+                    Hemat {formatPromoRupiah(savingAmountNum)} ({activeTier.shortLabel})
+                  </span>
                 </span>
               </>
             ) : (
-              <span className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                {formatPromoRupiah(product.normalPrice)}
-              </span>
+              <>
+                <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+                  Harga Katalog Normal (Tempo 30 Hari)
+                </span>
+                <span className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                  {formatPromoRupiah(product.normalPrice)}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => handlePaymentSelect("cash")}
+                  className="mt-1 inline-flex items-center gap-1 self-start rounded-md bg-amber-50 hover:bg-amber-100 border border-amber-200/80 px-2 py-0.5 text-[11px] font-bold text-amber-800 transition-colors cursor-pointer"
+                >
+                  <Sparkles className="w-3 h-3 text-amber-600 shrink-0" />
+                  <span>
+                    Klik Tunai untuk hemat {formatPromoRupiah(Number(maxCashCalc.savingAmount))} (-8%)
+                  </span>
+                </button>
+              </>
             )}
           </div>
 
@@ -164,7 +278,9 @@ export default function PromoProductCard({
             className={`w-full inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-xs sm:text-sm font-bold shadow-md transition-all duration-200 active:scale-[0.98] ${themeBtnStyles}`}
           >
             <MessageSquare className="w-4 h-4 shrink-0" />
-            <span>Minta SPH</span>
+            <span>
+              Minta SPH ({activeTier.discountPercent > 0 ? `Diskon ${activeTier.discountPercent}%` : "Tempo 30 Hr"})
+            </span>
           </PromoWaLink>
         </div>
       </div>

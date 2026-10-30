@@ -29,6 +29,7 @@ import {
 } from "@/lib/promo-negotiation/negotiationEngine";
 import { PromoCalculatorProduct, SelectedItem } from "@/lib/promo-negotiation/types";
 import { WA_NUMBER } from "@/data/promo-akhir-tahun";
+import { trackEvent } from "@/lib/analytics";
 
 type ActiveTab = "negotiation" | "maximizer" | "terms";
 
@@ -543,11 +544,11 @@ export default function PromoNegotiationCalculator() {
                     {simulation.recommendation}
                   </p>
 
-                  {/* Counter offer recommendation if under 25% target */}
+                  {/* Recommended instant-approval offer if under target */}
                   {simulation.zone !== "target" && simulation.suggestedCounterBid && (
                     <div className="mt-3 pt-3 border-t border-slate-700/60 flex items-center justify-between text-xs">
                       <span className="text-slate-400 font-semibold">
-                        Counter-Offer Target 25%:
+                        Rekomendasi SPH Disetujui Langsung:
                       </span>
                       <strong className="text-amber-300 font-black text-sm">
                         Rp{" "}
@@ -617,10 +618,28 @@ export default function PromoNegotiationCalculator() {
                     href={generateWhatsAppLink()}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => {
+                      try {
+                        const waUrl = generateWhatsAppLink();
+                        trackEvent("promo_whatsapp_click", {
+                          placement: "negotiation_calculator",
+                          catalog_name: `Simulator Paket (${selectedItems.length} SKU)`,
+                          promo_phase: "active",
+                          wa_url: waUrl,
+                        });
+                        trackEvent("generate_lead", {
+                          item_id: "promo-negotiation-calculator",
+                          item_name: `Simulator Paket Promo (${selectedItems.length} item)`,
+                          lead_source: "product_cta",
+                        });
+                      } catch {
+                        // ignore analytics errors
+                      }
+                    }}
                     className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 px-5 py-3.5 text-sm font-black text-white shadow-xl shadow-emerald-600/30 hover:shadow-emerald-600/50 hover:-translate-y-0.5 active:scale-[0.99] transition-all"
                   >
                     <Send className="w-4 h-4" />
-                    <span>Ajukan Nego Ini ke WhatsApp Sales</span>
+                    <span>Ajukan Paket &amp; Minta SPH Resmi via WhatsApp</span>
                   </a>
 
                   <p className="text-[11px] text-center text-slate-400 font-medium">

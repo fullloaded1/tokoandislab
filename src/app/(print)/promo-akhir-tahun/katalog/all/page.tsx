@@ -112,7 +112,6 @@ export default function AllCatalogPrintPage() {
                     </div>
 
                     <div className="relative aspect-[4/3] w-full bg-slate-50/80 rounded-lg flex items-center justify-center p-2 overflow-hidden border border-slate-100 my-1 print:h-20 print:p-1 print:my-0.5">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={item.image}
                         alt={item.title}
@@ -226,7 +225,7 @@ export default function AllCatalogPrintPage() {
                   {catalog.ctaSub}
                 </div>
                 <div className="text-[10px] font-mono text-slate-700 font-semibold print:text-[6pt]">
-                  WhatsApp: [ISI: +62 819-9157-5096]
+                  WhatsApp: 0819-9157-5096
                 </div>
               </div>
             </section>
@@ -235,9 +234,9 @@ export default function AllCatalogPrintPage() {
             <footer className="border-t border-slate-300 pt-2 flex flex-col gap-1 text-[10px] text-slate-600 print:pt-1 print:text-[5.8pt] print:gap-0.5">
               <div className="flex flex-wrap items-center justify-between gap-2 font-semibold text-slate-700 print:text-[6pt]">
                 <span>PT Andis Sentral Laboratorium</span>
-                <span>WA: <strong className="font-mono text-slate-900">[ISI: +62 819-9157-5096]</strong></span>
-                <span>Email: <strong className="font-mono text-slate-900">[ISI: sales@andislab.com]</strong></span>
-                <span>Telp: <strong className="font-mono text-slate-900">[ISI: No. Telepon Kantor]</strong></span>
+                <span>WA: <strong className="font-mono text-slate-900">0819-9157-5096</strong></span>
+                <span>Email: <strong className="font-mono text-slate-900">cs@andislab.com</strong></span>
+                <span>Telp: <strong className="font-mono text-slate-900">021-38740154</strong></span>
                 <span>Web: <strong className="text-blue-700 font-mono">www.andislab.com</strong></span>
                 <span className="font-bold text-slate-900">Lembar {catalog.number} dari 4</span>
               </div>
@@ -369,7 +368,7 @@ export default function AllCatalogPrintPage() {
                 {guide.contacts.whatsapp}
               </div>
               <div className="text-[9px] text-slate-500 print:text-[5.5pt]">
-                Respon Cepat Jam Kerja (08.00–17.00 WIB)
+                Layanan Aktif: Selasa–Jumat 09.00–15.00 WIB
               </div>
             </div>
           </div>
@@ -378,9 +377,9 @@ export default function AllCatalogPrintPage() {
         <footer className="border-t border-slate-300 pt-2 flex flex-col gap-1 text-[10px] text-slate-600 print:pt-1 print:text-[5.8pt] print:gap-0.5">
           <div className="flex flex-wrap items-center justify-between gap-2 font-semibold text-slate-700 print:text-[6pt]">
             <span>PT Andis Sentral Laboratorium</span>
-            <span>WA: <strong className="font-mono text-slate-900">[ISI: +62 819-9157-5096]</strong></span>
-            <span>Email: <strong className="font-mono text-slate-900">[ISI: sales@andislab.com]</strong></span>
-            <span>Telp: <strong className="font-mono text-slate-900">[ISI: No. Telepon Kantor]</strong></span>
+            <span>WA: <strong className="font-mono text-slate-900">{guide.contacts.whatsapp}</strong></span>
+            <span>Email: <strong className="font-mono text-slate-900">{guide.contacts.email}</strong></span>
+            <span>Telp: <strong className="font-mono text-slate-900">{guide.contacts.phone}</strong></span>
             <span>Web: <strong className="text-blue-700 font-mono">www.andislab.com</strong></span>
             <span className="font-bold text-slate-900">Lembar 4 dari 4</span>
           </div>

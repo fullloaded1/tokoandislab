@@ -87,38 +87,38 @@ export function simulateCustomerBid(
 
   switch (zone) {
     case "target":
-      statusHeadline = "Tawaran Disetujui (Margin Sehat ≥ 25%)";
+      statusHeadline = "Pengajuan Disetujui Otomatis (Prioritas SPH)";
       recommendation =
-        "Tawaran klien masuk zona optimal perusahaan. Anda dapat langsung menerbitkan SPH resmi dan mengunci alokasi unit ready stock.";
+        "Nilai anggaran Anda sesuai dengan skema penawaran resmi. Tim kami dapat langsung menerbitkan SPH ber-KOP surat dan mengunci alokasi unit ready stock.";
       suggestedTerms = "Termin fleksibel: DP 30% atau Kredit Standar Instansi 30 Hari.";
       break;
 
     case "win_mode":
-      statusHeadline = "Tawaran Bersyarat (Posisikan Menang Deal)";
+      statusHeadline = "Disetujui Bersyarat (Komitmen Termin Pembayaran)";
       recommendation =
-        "Tawaran berada di zona Mode Menang (15%–24.9%). Agar profit tetap sehat dan cashflow aman, kunci kesepakatan dengan syarat pembayaran DP 50% atau pelunasan di muka.";
+        "Diskon khusus akhir tahun ini dapat langsung disetujui dengan syarat komitmen pembayaran DP 50% atau pelunasan di muka (Cash) sebelum pengiriman.";
       suggestedTerms = "Wajib komitmen DP 50% di awal atau Cash Keras.";
       break;
 
     case "attention":
-      statusHeadline = "Margin Terlalu Tipis (< 15%)";
+      statusHeadline = "Perlu Review Khusus / Penyesuaian Pagu";
       recommendation =
-        "Tawaran klien memotong margin terlalu dalam. Berikan counter-offer cerdas di batas target Rp " +
+        "Nilai pengajuan melampaui kuota diskon reguler. Gunakan rekomendasi SPH disetujui langsung di angka Rp " +
         (suggestedCounterBid ? new Intl.NumberFormat("id-ID").format(Number(suggestedCounterBid)) : "-") +
-        " dengan tambahan bonus gratis ongkir & glassware pendukung.";
-      suggestedTerms = "Wajib DP 50% + Negosiasi ulang ke batas counter-offer.";
+        " lengkap dengan gratis ongkir & bonus glassware pendukung.";
+      suggestedTerms = "Wajib DP 50% + Penyesuaian ke Rekomendasi SPH Optimal.";
       break;
 
     case "overcost":
-      statusHeadline = "DILARANG LEPAS: Nilai Tawaran Di Bawah Modal!";
+      statusHeadline = "Melewati Batas Subsidi Kuota Promo Akhir Tahun";
       recommendation =
-        "Nilai tawaran lebih kecil dari modal pengadaan barang. Tawaran ini akan menyebabkan kerugian perusahaan. Tawarkan alternatif instrumen setara atau sesuaikan kuantiti.";
-      suggestedTerms = "Tolak tawaran ini atau alihkan ke produk tier yang lebih ekonomis.";
+        "Nilai pengajuan berada di bawah batas alokasi subsidi unit ready stock. Silakan sesuaikan nilai pagu ke rekomendasi SPH atau gunakan tab Habiskan Sisa Anggaran (Auto-Pack).";
+      suggestedTerms = "Sesuaikan nilai pagu atau alihkan ke instrumen tier yang sesuai plafon.";
       break;
 
     case "missing_cost":
     default:
-      statusHeadline = "Data Modal Belum Lengkap";
+      statusHeadline = "Pilih Instrumen Ready Stock";
       recommendation = "Lengkapi daftar item untuk memulai kalkulasi simulasi penawaran.";
       suggestedTerms = "Termin standar.";
       break;

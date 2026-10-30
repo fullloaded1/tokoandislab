@@ -35,8 +35,8 @@ export default function PrintToolbar({ currentCatalogNumber }: PrintToolbarProps
 
   const tabs = [
     { num: 1, label: "Lembar 1: Tier A (Rp 1–30 Jt)" },
-    { num: 2, label: "Lembar 2: Tier B (>30–70 Jt)" },
-    { num: 3, label: "Lembar 3: Tier C (>70–200 Jt)" },
+    { num: 2, label: "Lembar 2: Tier B (Rp 30–70 Jt)" },
+    { num: 3, label: "Lembar 3: Tier C (Rp 70–200 Jt)" },
     { num: 4, label: "Lembar 4: Cara Pesan & Syarat" },
   ];
 

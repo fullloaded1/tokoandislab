@@ -62,7 +62,6 @@ export default function KatalogClient({ initialProducts = [], children }: { init
   const [activeCategory, setActiveCategory] = useState<Category | "semua">("semua");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showOnlyReadyStock, setShowOnlyReadyStock] = useState(false);
-  const [showPromoMerdekaOnly, setShowPromoMerdekaOnly] = useState(false);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>([]);
   const [activePriceTier, setActivePriceTier] = useState<string>("all");
@@ -95,11 +94,10 @@ export default function KatalogClient({ initialProducts = [], children }: { init
       }
 
       const matchesReadyStock = !showOnlyReadyStock || p.isReadyStock;
-      const matchesPromoMerdeka = !showPromoMerdekaOnly || p.isReadyStock;
       const matchesBrand = selectedBrands.length === 0 || (p.brand && selectedBrands.includes(p.brand));
       const matchesSubcategory = selectedSubcategories.length === 0 || (p.subcategory && selectedSubcategories.includes(p.subcategory));
 
-      return matchesCategory && matchesSearch && matchesReadyStock && matchesPromoMerdeka && matchesBrand && matchesSubcategory;
+      return matchesCategory && matchesSearch && matchesReadyStock && matchesBrand && matchesSubcategory;
     });
 
     let minP: number | null = null;
@@ -129,7 +127,6 @@ export default function KatalogClient({ initialProducts = [], children }: { init
     activeCategory,
     searchQuery,
     showOnlyReadyStock,
-    showPromoMerdekaOnly,
     selectedBrands,
     selectedSubcategories,
     activePriceTier,
@@ -556,10 +553,9 @@ export default function KatalogClient({ initialProducts = [], children }: { init
               <button
                 onClick={() => {
                   setShowOnlyReadyStock(false);
-                  setShowPromoMerdekaOnly(false);
                 }}
                 className={`px-5 py-2 text-sm font-bold rounded-xl transition-all ${
-                  !showOnlyReadyStock && !showPromoMerdekaOnly
+                  !showOnlyReadyStock
                     ? "bg-white text-slate-800 shadow-sm"
                     : "text-slate-500 hover:text-slate-700"
                 }`}
@@ -569,28 +565,14 @@ export default function KatalogClient({ initialProducts = [], children }: { init
               <button
                 onClick={() => {
                   setShowOnlyReadyStock(true);
-                  setShowPromoMerdekaOnly(false);
                 }}
                 className={`px-5 py-2 text-sm font-bold rounded-xl transition-all flex items-center gap-2 ${
-                  showOnlyReadyStock && !showPromoMerdekaOnly
+                  showOnlyReadyStock
                     ? "bg-emerald-100 text-emerald-800 shadow-sm ring-1 ring-emerald-200"
                     : "text-slate-500 hover:text-emerald-700"
                 }`}
               >
                 🔥 Ready Stock
-              </button>
-              <button
-                onClick={() => {
-                  setShowOnlyReadyStock(false);
-                  setShowPromoMerdekaOnly(true);
-                }}
-                className={`px-5 py-2 text-sm font-bold rounded-xl transition-all flex items-center gap-2 ${
-                  showPromoMerdekaOnly
-                    ? "bg-red-600 text-white shadow-md shadow-red-500/20"
-                    : "text-red-600 hover:bg-red-50"
-                }`}
-              >
-                🇮🇩 Promo MERDEKA (-17%)
               </button>
             </div>
             
@@ -694,39 +676,6 @@ export default function KatalogClient({ initialProducts = [], children }: { init
               >
                 Reset Semua Filter
               </button>
-            </div>
-          )}
-
-          {showPromoMerdekaOnly && (
-            <div className="mb-6 rounded-3xl bg-gradient-to-r from-red-600 via-red-700 to-red-800 p-6 text-white shadow-xl relative overflow-hidden border border-red-500/30">
-              <div className="absolute right-0 top-0 -mt-10 -mr-10 w-48 h-48 rounded-full bg-white/10 blur-2xl pointer-events-none" />
-              <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div>
-                  <span className="inline-flex items-center gap-2 rounded-full bg-yellow-400/20 border border-yellow-300/40 px-3.5 py-1 text-xs font-extrabold text-yellow-300 uppercase tracking-wider mb-3">
-                    🇮🇩 HUT RI ke-81 • Periode 13 Juli – 14 Agustus 2026
-                  </span>
-                  <h2 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight mb-2">
-                    Katalog Promo MERDEKA AndisLab 2026
-                  </h2>
-                  <p className="text-sm text-red-100 max-w-xl leading-relaxed">
-                    Semua produk ready stock di bawah Rp 20 Juta mendapatkan potongan langsung 17%. Produk di atas Rp 20 Juta mendapatkan bundling gratis consumables. Harga langsung terkunci saat PO ditandatangani!
-                  </p>
-                </div>
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
-                  <a
-                    href="/api/promo-merdeka-pdf"
-                    className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3 text-xs font-bold text-red-700 shadow-md hover:bg-red-50 transition-all"
-                  >
-                    📄 Unduh Katalog PDF
-                  </a>
-                  <a
-                    href="/promo-merdeka"
-                    className="inline-flex items-center justify-center gap-2 rounded-2xl bg-red-900/80 border border-white/30 px-5 py-3 text-xs font-bold text-white hover:bg-red-900 transition-all"
-                  >
-                    Halaman Spesial →
-                  </a>
-                </div>
-              </div>
             </div>
           )}
 
