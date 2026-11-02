@@ -19,6 +19,35 @@ export interface PrintTableRow {
   stock: string;
 }
 
+/**
+ * Menghitung harga diskon Promo Akhir Tahun (-8% Tunai) untuk katalog cetak PDF.
+ */
+export function calcPromoPrice(priceStr: string, discountPct: number = 8): {
+  normalPrice: string;
+  promoPrice: string;
+  savingStr: string;
+  discountBadge: string;
+} {
+  const cleanNum = parseInt(priceStr.replace(/[^0-9]/g, ""), 10);
+  if (isNaN(cleanNum) || cleanNum <= 0) {
+    return {
+      normalPrice: priceStr,
+      promoPrice: priceStr,
+      savingStr: "",
+      discountBadge: "",
+    };
+  }
+  const saving = Math.floor(cleanNum * (discountPct / 100));
+  const promo = cleanNum - saving;
+  const fmt = (n: number) => `Rp ${n.toLocaleString("id-ID")}`;
+  return {
+    normalPrice: fmt(cleanNum),
+    promoPrice: fmt(promo),
+    savingStr: fmt(saving),
+    discountBadge: `-${discountPct}%`,
+  };
+}
+
 export interface PrintTierSheet {
   number: 1 | 2 | 3;
   tierCode: "Tier A" | "Tier B" | "Tier C";

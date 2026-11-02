@@ -93,16 +93,29 @@ function buildTableRows(products: any[], globalOffset: number = 0): string[][] {
           0
         )
       : 0;
-    const priceStr = p.isRequestPricing
+    const priceNum = money.toDecimal(p.price).toNumber();
+    const isPromoEligible =
+      !p.isRequestPricing &&
+      p.category !== "lovibond" &&
+      p.category !== "pyrex" &&
+      priceNum > 0;
+
+    const normalPriceStr = p.isRequestPricing
       ? "Hubungi Sales"
-      : money.formatIDR(p.price);
+      : money.formatIDR(priceNum);
+
+    const promoPriceStr = isPromoEligible
+      ? `${money.formatIDR(Math.floor(priceNum * 0.92))} (-8%)`
+      : normalPriceStr;
+
     const stockStr = totalStock > 0 ? `${totalStock} (Ready)` : "Indent";
     return [
       String(globalOffset + i + 1),
       p.name,
       p.model || "-",
       p.brand || "-",
-      priceStr,
+      normalPriceStr,
+      promoPriceStr,
       stockStr,
     ];
   });
@@ -207,7 +220,7 @@ function drawTierSection(
     startY: startY + 24,
     margin: { left: MARGIN, right: MARGIN },
     tableWidth: TABLE_W,
-    head: [["No", "Nama Alat", "Model", "Brand", "Harga", "Stok"]],
+    head: [["No", "Nama Alat", "Model", "Brand", "Harga Normal", "Promo Tunai (-8%)", "Stok"]],
     body: rows,
     headStyles: {
       fillColor: tier.headerRgb,
@@ -215,14 +228,15 @@ function drawTierSection(
       fontStyle: "bold",
       fontSize: 8,
     },
-    styles: { fontSize: 7.5, overflow: "linebreak", cellPadding: 3.5 },
+    styles: { fontSize: 7, overflow: "linebreak", cellPadding: 3 },
     columnStyles: {
-      0: { cellWidth: 22, halign: "center" },
-      1: { cellWidth: 165 },
-      2: { cellWidth: 88 },
-      3: { cellWidth: 72 },
-      4: { cellWidth: 95, halign: "right" },
-      5: { cellWidth: 73, halign: "center" },
+      0: { cellWidth: 20, halign: "center" },
+      1: { cellWidth: 145 },
+      2: { cellWidth: 75 },
+      3: { cellWidth: 65 },
+      4: { cellWidth: 78, halign: "right" },
+      5: { cellWidth: 90, halign: "right" },
+      6: { cellWidth: 50, halign: "center" },
     },
     alternateRowStyles: { fillColor: tier.altRowRgb },
   });

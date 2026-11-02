@@ -5,6 +5,7 @@ import {
   PRINT_TIER_CATALOGS,
   ORDER_GUIDE_SHEET,
   COMMON_PRINT_FOOTER,
+  calcPromoPrice,
 } from "@/data/promo-print-catalog";
 import PrintToolbar from "../[n]/PrintToolbar";
 import "../[n]/print-sheet.css";
@@ -132,14 +133,27 @@ export default function AllCatalogPrintPage() {
                     </p>
                   </div>
 
-                  <div className="bg-slate-50 rounded-lg px-2.5 py-1.5 flex items-center justify-between text-xs border border-slate-200 mt-2 print:p-1 print:mt-1 print:rounded-md">
-                    <span className="text-slate-600 font-medium text-[11px] shrink-0 print:text-[6.2pt]">
-                      {item.priceLabel}
-                    </span>
-                    <span className="font-black text-rose-700 text-sm sm:text-base font-mono whitespace-nowrap print:text-[8.5pt]">
-                      {item.price}
-                    </span>
-                  </div>
+                  {(() => {
+                    const promo = calcPromoPrice(item.price);
+                    return (
+                      <div className="bg-slate-50 rounded-lg px-2.5 py-1.5 flex items-center justify-between text-xs border border-slate-200 mt-2 print:p-1 print:mt-1 print:rounded-md">
+                        <div className="flex flex-col text-left">
+                          <span className="text-[10px] font-bold text-rose-600 uppercase flex items-center gap-1 print:text-[5.5pt]">
+                            <span className="bg-rose-600 text-white px-1 py-0.2 rounded font-black text-[9px] print:text-[5pt]">-8%</span> Promo
+                          </span>
+                          <span className="text-[10px] text-slate-400 line-through font-mono print:text-[5.5pt]">
+                            {item.price}
+                          </span>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-[9px] text-slate-500 font-medium block print:text-[5pt]">Harga Promo Tunai:</span>
+                          <span className="font-black text-rose-700 text-sm sm:text-base font-mono whitespace-nowrap print:text-[8.5pt]">
+                            {promo.promoPrice}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })()}
                 </div>
               ))}
             </section>
@@ -159,12 +173,13 @@ export default function AllCatalogPrintPage() {
                 <table className="w-full border-collapse text-xs leading-normal print:text-[6.5pt] print:leading-tight">
                   <thead>
                     <tr className="bg-[#0B1E3B] text-white">
-                      <th className="py-1.5 px-2 text-center font-bold w-16 border-r border-slate-700 print:py-0.5 print:px-1 print:w-12">Kode</th>
+                      <th className="py-1.5 px-2 text-center font-bold w-14 border-r border-slate-700 print:py-0.5 print:px-1 print:w-10">Kode</th>
                       <th className="py-1.5 px-3 text-left font-bold border-r border-slate-700 print:py-0.5 print:px-1.5">Produk</th>
-                      <th className="py-1.5 px-3 text-left font-bold w-40 border-r border-slate-700 print:py-0.5 print:px-1.5 print:w-28">Model</th>
-                      <th className="py-1.5 px-2 text-left font-bold w-28 border-r border-slate-700 print:py-0.5 print:px-1 print:w-20">Brand</th>
-                      <th className="py-1.5 px-3 text-right font-bold w-36 border-r border-slate-700 print:py-0.5 print:px-1.5 print:w-24">Harga</th>
-                      <th className="py-1.5 px-2 text-center font-bold w-24 print:py-0.5 print:px-1 print:w-16">Stok</th>
+                      <th className="py-1.5 px-2 text-left font-bold w-32 border-r border-slate-700 print:py-0.5 print:px-1 print:w-22">Model</th>
+                      <th className="py-1.5 px-2 text-left font-bold w-24 border-r border-slate-700 print:py-0.5 print:px-1 print:w-16">Brand</th>
+                      <th className="py-1.5 px-2 text-right font-bold w-28 border-r border-slate-700 print:py-0.5 print:px-1 print:w-20">Harga Normal</th>
+                      <th className="py-1.5 px-2 text-right font-bold w-32 border-r border-slate-700 bg-rose-900/60 print:py-0.5 print:px-1 print:w-24">Promo Tunai (-8%)</th>
+                      <th className="py-1.5 px-2 text-center font-bold w-20 print:py-0.5 print:px-1 print:w-14">Stok</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -194,9 +209,19 @@ export default function AllCatalogPrintPage() {
                         <td className="py-1 px-2 font-semibold text-slate-700 border-r border-slate-200 truncate print:py-0.5 print:px-1">
                           {row.brand}
                         </td>
-                        <td className="py-1 px-3 text-right font-mono font-black text-slate-950 border-r border-slate-200 whitespace-nowrap print:py-0.5 print:px-1.5">
-                          {row.price}
-                        </td>
+                        {(() => {
+                          const promo = calcPromoPrice(row.price);
+                          return (
+                            <>
+                              <td className="py-1 px-2 text-right font-mono text-slate-400 line-through border-r border-slate-200 whitespace-nowrap print:py-0.5 print:px-1 text-[11px] print:text-[6pt]">
+                                {promo.normalPrice}
+                              </td>
+                              <td className="py-1 px-2 text-right font-mono font-black text-rose-700 bg-rose-50/50 border-r border-slate-200 whitespace-nowrap print:py-0.5 print:px-1 text-[11px] print:text-[6.5pt]">
+                                {promo.promoPrice}
+                              </td>
+                            </>
+                          );
+                        })()}
                         <td className="py-1 px-2 text-center font-bold text-slate-800 whitespace-nowrap print:py-0.5 print:px-1">
                           {row.stock}
                         </td>
@@ -208,7 +233,7 @@ export default function AllCatalogPrintPage() {
 
               <div className="mt-1 text-[10px] font-medium text-slate-500 flex items-center justify-between print:text-[6pt] print:mt-0.5">
                 <span><strong className="text-amber-600">★</strong> = Produk unggulan ready stock prioritas pengiriman.</span>
-                <span>Seluruh unit melewati uji fungsi sebelum serah terima.</span>
+                <span>* Harga Promo Akhir Tahun (-8%) berlaku untuk skema pembayaran tunai & percepatan SPJ sebelum 30 Des 2026.</span>
               </div>
             </section>
 
