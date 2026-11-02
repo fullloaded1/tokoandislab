@@ -93,6 +93,7 @@ function buildTableRows(products: any[], globalOffset: number = 0): string[][] {
           0
         )
       : 0;
+
     const priceNum = money.toDecimal(p.price).toNumber();
     const isPromoEligible =
       !p.isRequestPricing &&
@@ -100,15 +101,19 @@ function buildTableRows(products: any[], globalOffset: number = 0): string[][] {
       p.category !== "pyrex" &&
       priceNum > 0;
 
-    const normalPriceStr = p.isRequestPricing
-      ? "Hubungi Sales"
-      : money.formatIDR(priceNum);
+    let normalPriceStr = "Hubungi Sales";
+    if (!p.isRequestPricing) {
+      normalPriceStr = money.formatIDR(priceNum);
+    }
 
-    const promoPriceStr = isPromoEligible
-      ? `${money.formatIDR(Math.floor(priceNum * 0.92))} (-8%)`
-      : normalPriceStr;
+    let promoPriceStr = normalPriceStr;
+    if (isPromoEligible) {
+      const discountedVal = Math.floor(priceNum * 0.92);
+      promoPriceStr = `${money.formatIDR(discountedVal)} (-8%)`;
+    }
 
     const stockStr = totalStock > 0 ? `${totalStock} (Ready)` : "Indent";
+
     return [
       String(globalOffset + i + 1),
       p.name,
