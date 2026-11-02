@@ -51,10 +51,11 @@ export default function ProductCard({
   // Baris e-Katalog (% hemat untuk model yang relevan)
   const ekatalogSavings = getEkatalogSavings(product.model, product.name);
 
-  // Cek apakah produk PO dengan harga > 0
+  // Cek apakah produk PO Andislab/Daihan dengan harga > 0 (Lovibond & Pyrex selalu Minta Penawaran)
   const isPOWithPrice =
     !isReadyToBuy &&
     !isSoldOut &&
+    (product.category === "andislab-custom" || product.category === "daihan-labtech") &&
     Number(product.price) > 0;
 
   // Satu produk = satu harga akurat sesuai database & Master Inventory
@@ -70,9 +71,12 @@ export default function ProductCard({
   }
 
   // Promo Akhir Tahun 2026 (Diskon Tunai / Cash 8%)
+  // Lovibond & Pyrex WAJIB murni Minta Penawaran (tidak mengarang harga / diskon)
   const isPromoEligible =
     showPromoAkhirTahun &&
     !isSoldOut &&
+    product.category !== "lovibond" &&
+    product.category !== "pyrex" &&
     ((isReadyToBuy && (summary.minPrice > 0 || Number(product.price) > 0)) ||
       (isPOWithPrice && Number(product.price) > 0));
 
