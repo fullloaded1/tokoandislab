@@ -17,6 +17,7 @@ import {
   Eye,
   X,
   ShoppingBag,
+  Tag,
 } from "lucide-react";
 import { useWhatsAppLeadStore } from "@/store/useWhatsAppLeadStore";
 import ProductCard from "@/components/ProductCard";
@@ -25,6 +26,7 @@ import { type Product } from "@/lib/products";
 import { trackWhatsApp } from "@/lib/track";
 import { waMeUrl } from "@/lib/contact";
 import { getEkatalogRow } from "@/lib/ekatalog";
+import { calculatePromoPriceByPayment } from "@/lib/promo-akhir-tahun";
 
 interface ProductVariant {
   id: string;
@@ -153,6 +155,29 @@ export default function ProductDetailClient({
     finalPrice = readyStockPrice;
   }
 
+  // Promo Akhir Tahun 2026 (Diskon Tunai / Cash 8%)
+  // Lovibond & Pyrex WAJIB murni Minta Penawaran (tanpa mengarang harga/diskon)
+  const isPromoEligible =
+    !product.isRequestPricing &&
+    product.category !== "lovibond" &&
+    product.category !== "pyrex" &&
+    ((isReadyToBuy && finalPrice > 0) ||
+      (isPOWithPrice900 && money.toDecimal(product.price).toNumber() > 0));
+
+  const currentNormalPrice = isReadyToBuy
+    ? finalPrice
+    : isPOWithPrice900
+      ? money.toDecimal(product.price).toNumber()
+      : 0;
+
+  const promoCalc =
+    isPromoEligible && currentNormalPrice > 0
+      ? calculatePromoPriceByPayment(currentNormalPrice, 8)
+      : null;
+
+  const promoDiscountedPrice = promoCalc ? Number(promoCalc.discountedPrice) : currentNormalPrice;
+  const promoSavingAmount = promoCalc ? Number(promoCalc.savingAmount) : 0;
+
   const handleAdd = () => {
     if (isReadyToBuy && selectedVariant) {
       const res = addItem({
@@ -269,9 +294,29 @@ export default function ProductDetailClient({
                     </span>
                   )}
                   {/* Satu produk = satu harga akurat sesuai database */}
-                  <span className="text-3xl font-black text-emerald-600 tracking-tight">
-                    {money.formatIDR(finalPrice)}
-                  </span>
+                  {promoCalc ? (
+                    <div className="flex flex-col gap-1.5 mb-2">
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-700 rounded-full text-xs font-bold w-fit">
+                        <Tag className="w-3.5 h-3.5 text-amber-600" />
+                        🔥 Promo Akhir Tahun -8% Tunai / SPJ Cepat
+                      </div>
+                      <div className="flex items-baseline gap-3">
+                        <span className="text-3xl sm:text-4xl font-black text-emerald-600 tracking-tight">
+                          {money.formatIDR(promoDiscountedPrice)}
+                        </span>
+                        <span className="text-base sm:text-lg font-bold text-slate-400 line-through">
+                          {money.formatIDR(finalPrice)}
+                        </span>
+                      </div>
+                      <span className="text-xs font-semibold text-emerald-700">
+                        Hemat {money.formatIDR(promoSavingAmount)} · Khusus Pembayaran Tunai Promo Akhir Tahun
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="text-3xl font-black text-emerald-600 tracking-tight">
+                      {money.formatIDR(finalPrice)}
+                    </span>
+                  )}
                   {(() => {
                     const available = selectedVariant.stock - selectedVariant.reservedStock;
                     return available > 0 && available <= 3 ? (
@@ -302,9 +347,29 @@ export default function ProductDetailClient({
                 </div>
               ) : isPOWithPrice900 ? (
                 <div className="flex flex-col items-start gap-2">
-                  <span className="text-3xl font-black text-slate-800 tracking-tight">
-                    {money.formatIDR(money.toDecimal(product.price).toNumber())}
-                  </span>
+                  {promoCalc ? (
+                    <div className="flex flex-col gap-1.5 mb-1">
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-700 rounded-full text-xs font-bold w-fit">
+                        <Tag className="w-3.5 h-3.5 text-amber-600" />
+                        🔥 Promo Akhir Tahun -8% Tunai
+                      </div>
+                      <div className="flex items-baseline gap-3">
+                        <span className="text-3xl font-black text-slate-800 tracking-tight">
+                          {money.formatIDR(promoDiscountedPrice)}
+                        </span>
+                        <span className="text-base sm:text-lg font-bold text-slate-400 line-through">
+                          {money.formatIDR(money.toDecimal(product.price).toNumber())}
+                        </span>
+                      </div>
+                      <span className="text-xs font-semibold text-emerald-700">
+                        Hemat {money.formatIDR(promoSavingAmount)} · Skema Tunai Promo Akhir Tahun
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="text-3xl font-black text-slate-800 tracking-tight">
+                      {money.formatIDR(money.toDecimal(product.price).toNumber())}
+                    </span>
+                  )}
                   <span className="inline-flex items-center gap-2 rounded-2xl bg-amber-500 px-4 py-1.5 text-xs font-bold text-white shadow-md">
                     PO {product.leadTime || ''}
                   </span>
@@ -676,7 +741,7 @@ export default function ProductDetailClient({
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children">
             {relatedProducts.map((rp) => (
-              <ProductCard key={rp.id} product={rp} />
+              <ProductCard key={rp.id} product={rp} showPromoAkhirTahun={true} />
             ))}
           </div>
         </section>
@@ -697,7 +762,16 @@ export default function ProductDetailClient({
           
           <div className="flex items-center justify-between sm:justify-end gap-6 flex-1 w-full sm:w-auto">
              <div className="flex flex-col items-start sm:items-end shrink-0">
-                {isReadyToBuy ? (
+                {promoCalc ? (
+                  <div className="flex flex-col items-start sm:items-end">
+                    <span className="text-xs font-bold text-slate-400 line-through">
+                      {money.formatIDR(currentNormalPrice)}
+                    </span>
+                    <span className="text-lg sm:text-xl font-black text-emerald-600">
+                      {money.formatIDR(promoDiscountedPrice)}
+                    </span>
+                  </div>
+                ) : isReadyToBuy ? (
                   <span className="text-lg sm:text-xl font-black text-emerald-600">{money.formatIDR(finalPrice)}</span>
                 ) : isPOWithPrice900 ? (
                   <span className="text-lg sm:text-xl font-black text-slate-800">{money.formatIDR(money.toDecimal(product.price).toNumber())}</span>
@@ -757,7 +831,7 @@ export default function ProductDetailClient({
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 stagger-children">
               {otherRecent.slice(0, 4).map((rp) => (
-                <ProductCard key={rp.id} product={rp as any} />
+                <ProductCard key={rp.id} product={rp as any} showPromoAkhirTahun={true} />
               ))}
             </div>
           </section>

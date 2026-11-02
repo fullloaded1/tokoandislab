@@ -4,6 +4,7 @@ export default function BrandLogos() {
   const brands = [
     { name: "Lovibond", src: "/images/lovibond-logo.png" },
     { name: "Pyrex", src: "/images/pyrexlogo.PNG" },
+    { name: "Infitek", src: "/images/infitek-logo.png" },
     { name: "Daihan LabTech", src: "/images/daihanlabtechlogo.png" },
     { name: "Merck", src: "/images/Logo_Merck_KGaA_2015.svg.png" },
     // { name: "Yuasa Battery", src: "/images/logos/yuasa_battery_cropped.jpg" },
