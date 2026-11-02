@@ -48,4 +48,29 @@ describe("ProductCard component tests (TDD & Accessibility)", () => {
     render(<ProductCard product={mockProduct} compact={true} />);
     expect(screen.getAllByText(/Rp 250.000|250.000|Rp 249.700|249.700|Mulai/i).length).toBeGreaterThan(0);
   });
+
+  it("renders Promo Akhir Tahun badge, strikethrough price, and 8% discounted price when showPromoAkhirTahun is true", () => {
+    render(<ProductCard product={mockProduct} compact={false} showPromoAkhirTahun={true} />);
+    
+    // Check for Promo Akhir Tahun badge
+    expect(screen.getByText(/Promo Akhir Tahun -8%/i)).toBeDefined();
+    expect(screen.getByText(/Diskon 8%/i)).toBeDefined();
+
+    // Normal price struck through: Rp 250.000
+    expect(screen.getByText(/Rp 250.000/i)).toBeDefined();
+
+    // Discounted price (250,000 - 8% = 230,000)
+    expect(screen.getByText(/Rp 230.000/i)).toBeDefined();
+
+    // Savings indicator
+    expect(screen.getByText(/Hemat Rp 20.000/i)).toBeDefined();
+  });
+
+  it("renders Promo Akhir Tahun badge and discounted price in compact mode", () => {
+    render(<ProductCard product={mockProduct} compact={true} showPromoAkhirTahun={true} />);
+    
+    expect(screen.getByText(/Promo -8%/i)).toBeDefined();
+    expect(screen.getByText(/Rp 250.000/i)).toBeDefined();
+    expect(screen.getByText(/Rp 230.000/i)).toBeDefined();
+  });
 });

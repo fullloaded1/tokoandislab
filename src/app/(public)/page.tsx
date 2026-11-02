@@ -259,27 +259,44 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* Ready Stock Products Grid */}
+          {/* Ready Stock Products Grid - Promo Akhir Tahun */}
           <div className="bg-white p-6 sm:p-8 border border-slate-200 rounded-2xl shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
               <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Stok Tersedia • Siap Kirim</p>
-                <h2 className="text-xl font-bold text-slate-900 mt-0.5">
-                  Produk Ready Stock
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1 rounded-sm bg-rose-50 text-rose-700 border border-rose-200 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider">
+                    🔥 Diskon Promo Akhir Tahun
+                  </span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-500">• Siap Kirim 1×24 Jam</span>
+                </div>
+                <h2 className="text-xl sm:text-2xl font-black text-slate-900 mt-1">
+                  Produk Ready Stock Promo Akhir Tahun
                 </h2>
+                <p className="text-xs sm:text-sm text-slate-600 mt-0.5">
+                  Semua unit fisik di gudang mendapat potongan harga promo s/d 8% (skema tunai/DP) &amp; siap terbit SPH resmi.
+                </p>
               </div>
-              <Link
-                href="/ready-stock"
-                className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition-colors"
-              >
-                Lihat Semua
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+              <div className="flex items-center gap-2 self-start sm:self-center shrink-0">
+                <Link
+                  href="/promo-akhir-tahun"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-rose-200 bg-rose-50 px-4 py-2 text-xs font-bold text-rose-700 hover:bg-rose-100 transition-colors shadow-xs"
+                >
+                  Katalog Promo Lengkap
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+                <Link
+                  href="/ready-stock"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors"
+                >
+                  Semua Ready Stock
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {readyStockProducts.slice(0, 8).map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product.id} product={product} showPromoAkhirTahun={true} />
               ))}
             </div>
 

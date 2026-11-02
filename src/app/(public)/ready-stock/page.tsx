@@ -152,6 +152,13 @@ export default async function ReadyStockPage() {
               <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
               🔥 Pengiriman Instan &amp; PO
             </span>
+            <Link
+              href="/promo-akhir-tahun"
+              className="inline-flex items-center gap-2 rounded-2xl bg-rose-500/20 hover:bg-rose-500/30 px-4 py-1.5 text-xs font-black text-rose-300 border border-rose-400/30 transition-colors shadow-inner"
+            >
+              <span className="flex h-2 w-2 rounded-full bg-rose-400 animate-pulse"></span>
+              🔥 Promo Akhir Tahun: Diskon s/d 8%
+            </Link>
             <span className="inline-flex items-center gap-1.5 rounded-2xl bg-white/10 px-4 py-1.5 text-xs font-bold text-slate-200 border border-white/10 backdrop-blur-md">
               📦 Garansi Resmi Principal 1 Tahun
             </span>
@@ -253,7 +260,7 @@ export default async function ReadyStockPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 stagger-children">
                   {tierProducts.map((product) => (
-                    <ProductCard key={product.id} product={product} headingLevel="h3" />
+                    <ProductCard key={product.id} product={product} headingLevel="h3" showPromoAkhirTahun={true} />
                   ))}
                 </div>
               </div>
@@ -285,7 +292,7 @@ export default async function ReadyStockPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children">
                 {tierDProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} headingLevel="h3" />
+                  <ProductCard key={product.id} product={product} headingLevel="h3" showPromoAkhirTahun={true} />
                 ))}
               </div>
             </div>
@@ -303,7 +310,7 @@ export default async function ReadyStockPage() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 stagger-children">
                 {uncategorized.map((product) => (
-                  <ProductCard key={product.id} product={product} headingLevel="h3" />
+                  <ProductCard key={product.id} product={product} headingLevel="h3" showPromoAkhirTahun={true} />
                 ))}
               </div>
             </div>

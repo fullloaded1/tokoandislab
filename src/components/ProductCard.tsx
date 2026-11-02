@@ -3,24 +3,32 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCart, Check, AlertCircle, ArrowRight, FileText } from "lucide-react";
+import { ShoppingCart, Check, AlertCircle, ArrowRight, FileText, Tag } from "lucide-react";
 import { useRFQStore } from "@/store/useRFQStore";
 import { useState } from "react";
 import { money } from "@/lib/money";
 import { getReadyStockSummary } from "@/lib/readyStock";
 import { getEkatalogSavings } from "@/lib/ekatalog";
 import { useToast } from "@/components/Toast";
+import { calculatePromoPriceByPayment } from "@/lib/promo-akhir-tahun";
 import AntiIndentBadge from "@/components/AntiIndentBadge";
 
 interface ProductCardProps {
   product: any;
   compact?: boolean;
   showPromoMerdeka?: boolean;
+  showPromoAkhirTahun?: boolean;
   /** Heading level for the product name. Adjust per-page to keep H1→H2→H3 hierarchy. */
   headingLevel?: "h2" | "h3" | "h4";
 }
 
-export default function ProductCard({ product, compact = false, showPromoMerdeka = false, headingLevel = "h3" }: ProductCardProps) {
+export default function ProductCard({
+  product,
+  compact = false,
+  showPromoMerdeka = false,
+  showPromoAkhirTahun = false,
+  headingLevel = "h3",
+}: ProductCardProps) {
   // Dynamic heading tag to maintain proper heading hierarchy per page context
   const Heading = headingLevel;
   const compactHeadingMap = { h2: "h3" as const, h3: "h4" as const, h4: "h5" as const };
@@ -62,6 +70,26 @@ export default function ProductCard({ product, compact = false, showPromoMerdeka
     priceDisplay = money.formatIDR(Number(product.price));
   }
 
+  // Promo Akhir Tahun 2026 (Diskon Tunai / Cash 8%)
+  const isPromoEligible =
+    showPromoAkhirTahun &&
+    ((isReadyToBuy && (summary.minPrice > 0 || Number(product.price) > 0)) ||
+      (isPOWithPrice900 && Number(product.price) > 0));
+
+  const basePriceNum = isReadyToBuy
+    ? summary.minPrice > 0
+      ? summary.minPrice
+      : Number(product.price) || 0
+    : Number(product.price) || 0;
+
+  const promoCalc =
+    isPromoEligible && basePriceNum > 0
+      ? calculatePromoPriceByPayment(basePriceNum, 8)
+      : null;
+
+  const promoDiscountedPriceNum = promoCalc ? Number(promoCalc.discountedPrice) : basePriceNum;
+  const promoSavingAmountNum = promoCalc ? Number(promoCalc.savingAmount) : 0;
+
   const availableVariant = summary.firstAvailable ?? product.variants?.find((v: any) => (v.stock - v.reservedStock) > 0) ?? null;
   const availableStockCount = availableVariant ? Math.max(0, availableVariant.stock - availableVariant.reservedStock) : 0;
 
@@ -70,7 +98,11 @@ export default function ProductCard({ product, compact = false, showPromoMerdeka
     e.stopPropagation();
     
     if (isReadyToBuy && availableVariant) {
-      const finalPrice = money.toDecimal(availableVariant.price).toNumber();
+      let finalPrice = money.toDecimal(availableVariant.price).toNumber();
+      if (isPromoEligible) {
+        const promoCalc = calculatePromoPriceByPayment(finalPrice, 8);
+        finalPrice = Number(promoCalc.discountedPrice);
+      }
 
       // Masuk ke keranjang Direct Purchase
       const res = addItem({
@@ -78,7 +110,9 @@ export default function ProductCard({ product, compact = false, showPromoMerdeka
         productId: product.id,
         variantId: availableVariant.id,
         slug: product.slug,
-        name: `${displayName} (${availableVariant.name ?? "Default"})`,
+        name: isPromoEligible
+          ? `${displayName} (${availableVariant.name ?? "Default"}) - Promo Akhir Tahun`
+          : `${displayName} (${availableVariant.name ?? "Default"})`,
         image: product.image,
         category: product.categoryLabel,
         price: finalPrice,
@@ -90,15 +124,21 @@ export default function ProductCard({ product, compact = false, showPromoMerdeka
         return;
       }
     } else {
+      let rfqPrice = money.toDecimal(product.price).toNumber();
+      if (isPromoEligible && rfqPrice > 0) {
+        const promoCalc = calculatePromoPriceByPayment(rfqPrice, 8);
+        rfqPrice = Number(promoCalc.discountedPrice);
+      }
+
       // Masuk ke keranjang RFQ
       const res = addItem({
         id: product.id,
         productId: product.id,
         slug: product.slug,
-        name: displayName,
+        name: isPromoEligible ? `${displayName} - Promo Akhir Tahun` : displayName,
         image: product.image,
         category: product.categoryLabel,
-        price: money.toDecimal(product.price).toNumber(),
+        price: rfqPrice,
         type: "RFQ"
       });
 
@@ -142,6 +182,11 @@ export default function ProductCard({ product, compact = false, showPromoMerdeka
                 Stok habis
               </span>
             )}
+            {isPromoEligible && (
+              <span className="inline-flex items-center rounded-sm bg-rose-600 text-white px-1.5 py-0.5 text-[9px] font-bold">
+                Promo -8%
+              </span>
+            )}
           </div>
         </div>
         <div className="flex flex-col flex-1 px-4 py-3">
@@ -151,10 +196,21 @@ export default function ProductCard({ product, compact = false, showPromoMerdeka
           <CompactHeading className="text-sm font-semibold text-slate-900 line-clamp-2 leading-snug group-hover/card:text-blue-700 transition-colors">
             {displayName}
           </CompactHeading>
-          <div className="mt-auto pt-3 flex items-center justify-between border-t border-slate-100 mt-3">
-            <span className="text-xs font-bold text-slate-900 truncate">
-              {priceDisplay}
-            </span>
+          <div className="mt-auto pt-3 flex items-center justify-between border-t border-slate-100">
+            {isPromoEligible ? (
+              <div className="truncate">
+                <span className="text-[10px] text-slate-400 line-through block leading-none">
+                  {summary.hasPriceRange ? `Mulai ${money.formatIDR(basePriceNum)}` : money.formatIDR(basePriceNum)}
+                </span>
+                <span className="text-xs font-bold text-rose-700 truncate">
+                  {summary.hasPriceRange ? `Mulai ${money.formatIDR(promoDiscountedPriceNum)}` : money.formatIDR(promoDiscountedPriceNum)}
+                </span>
+              </div>
+            ) : (
+              <span className="text-xs font-bold text-slate-900 truncate">
+                {priceDisplay}
+              </span>
+            )}
             <span className="text-[11px] font-semibold text-blue-600 inline-flex items-center gap-1">
               Detail <ArrowRight className="w-3 h-3" />
             </span>
@@ -205,6 +261,16 @@ export default function ProductCard({ product, compact = false, showPromoMerdeka
           )}
         </div>
 
+        {/* Floating Promo Akhir Tahun Badge */}
+        {isPromoEligible && (
+          <div className="absolute bottom-3 left-3 z-10">
+            <span className="inline-flex items-center gap-1 rounded-md bg-rose-600 px-2.5 py-1 text-[11px] font-black uppercase tracking-wide text-white shadow-md">
+              <Tag className="h-3 w-3" />
+              Promo Akhir Tahun -8%
+            </span>
+          </div>
+        )}
+
         {showPromoMerdeka && product.isReadyStock && availableStockCount > 0 && Number(product.price) < 20000000 && Number(product.price) > 0 && (
           <div className="absolute bottom-3 right-3 z-10">
             <span className="inline-flex items-center rounded-sm bg-red-700 px-2 py-1 text-[10px] font-bold text-white shadow-sm">
@@ -225,7 +291,7 @@ export default function ProductCard({ product, compact = false, showPromoMerdeka
            </Heading>
         </div>
         
-        {/* Specs List (Optional: Can inject specs if available, currently static text placeholder) */}
+        {/* Specs List */}
         <div className="text-xs text-slate-600 mb-4 line-clamp-2 leading-relaxed">
           {product.description ? (
             <span dangerouslySetInnerHTML={{ __html: product.description.substring(0, 100) + "..." }} />
@@ -237,7 +303,29 @@ export default function ProductCard({ product, compact = false, showPromoMerdeka
         {/* Price and CTA */}
         <div className="mt-auto flex flex-col gap-4 pt-4 border-t border-slate-100">
           <div>
-             {showPromoMerdeka && isReadyToBuy && Number(product.price) > 0 ? (
+             {isPromoEligible ? (
+               <div>
+                 <div className="flex items-center gap-2 mb-0.5">
+                   <span className="text-xs font-semibold text-slate-400 line-through">
+                     {summary.hasPriceRange ? `Mulai ${money.formatIDR(basePriceNum)}` : money.formatIDR(basePriceNum)}
+                   </span>
+                   <span className="inline-flex items-center rounded bg-rose-100 text-rose-700 text-[10px] font-black px-1.5 py-0.5">
+                     Diskon 8%
+                   </span>
+                 </div>
+                 <div className="text-xl font-black text-slate-900 tracking-tight">
+                   {summary.hasPriceRange ? `Mulai ${money.formatIDR(promoDiscountedPriceNum)}` : money.formatIDR(promoDiscountedPriceNum)}
+                 </div>
+                 <span className="mt-1 block text-xs font-semibold text-rose-600">
+                   Hemat {money.formatIDR(promoSavingAmountNum)} (Skema Tunai Akhir Tahun)
+                 </span>
+                 {ekatalogSavings !== null && (
+                   <span className="mt-0.5 block text-[11px] font-medium text-blue-700">
+                     Lebih hemat {ekatalogSavings}% dari e-Katalog
+                   </span>
+                 )}
+               </div>
+             ) : showPromoMerdeka && isReadyToBuy && Number(product.price) > 0 ? (
                <>
                  <span className="text-xs font-medium text-slate-400 line-through block">
                    {priceDisplay}
@@ -288,4 +376,3 @@ export default function ProductCard({ product, compact = false, showPromoMerdeka
     </Link>
   );
 }
-
