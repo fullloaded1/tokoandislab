@@ -325,6 +325,9 @@ export default async function HomePage() {
                 <div className="relative h-6 w-20">
                   <Image src={group.logo} alt={group.label} fill sizes="80px" className="object-contain object-left grayscale opacity-80" />
                 </div>
+                <span className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 bg-rose-50 border border-rose-200 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                  🔥 Diskon Akhir Tahun s/d 8%
+                </span>
               </div>
               <h2 className="text-2xl font-bold text-slate-900">
                 Produk {group.label}
@@ -341,7 +344,7 @@ export default async function HomePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {group.products.slice(0, 8).map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} product={product} showPromoAkhirTahun={true} />
             ))}
           </div>
         </section>
