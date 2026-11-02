@@ -101,15 +101,15 @@ function buildTableRows(products: any[], globalOffset: number = 0): string[][] {
       p.category !== "pyrex" &&
       priceNum > 0;
 
-    let normalPriceStr = "Hubungi Sales";
+    let itemNormalPrice = "Hubungi Sales";
     if (!p.isRequestPricing) {
-      normalPriceStr = money.formatIDR(priceNum);
+      itemNormalPrice = money.formatIDR(priceNum);
     }
 
-    let promoPriceStr = normalPriceStr;
+    let itemPromoPrice = itemNormalPrice;
     if (isPromoEligible) {
       const discountedVal = Math.floor(priceNum * 0.92);
-      promoPriceStr = `${money.formatIDR(discountedVal)} (-8%)`;
+      itemPromoPrice = `${money.formatIDR(discountedVal)} (-8%)`;
     }
 
     const stockStr = totalStock > 0 ? `${totalStock} (Ready)` : "Indent";
@@ -119,8 +119,8 @@ function buildTableRows(products: any[], globalOffset: number = 0): string[][] {
       p.name,
       p.model || "-",
       p.brand || "-",
-      normalPriceStr,
-      promoPriceStr,
+      itemNormalPrice,
+      itemPromoPrice,
       stockStr,
     ];
   });
