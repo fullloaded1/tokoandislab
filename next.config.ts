@@ -110,6 +110,12 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       // 301 Redirects untuk URL 404 dari produk yang sudah dihapus/pindah
+      // Redirect URL pendek artikel penyerapan anggaran ke slug resmi
+      {
+        source: '/artikel/penyerapan-anggaran-alat-lab-akhir-tahun',
+        destination: '/artikel/strategi-penyerapan-anggaran-alat-laboratorium-akhir-tahun',
+        permanent: true,
+      },
       {
         source: '/katalog/andislab-anti-vibration-table',
         destination: '/katalog',
