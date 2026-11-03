@@ -1,4 +1,14 @@
 /* Hallmark · page: OrderStatusPage · genre: modern-minimal · macrostructure: High-Density Form · design-system: design.md */
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Status Pesanan | AndisLab",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
 import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
 import { money } from "@/lib/money";

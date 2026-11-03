@@ -10,8 +10,24 @@ export const revalidate = 60;
 
 export const metadata = {
   title: "Supplier Alat Laboratorium Medan & Sumatera Utara | AndisLab",
-  description:
-    "Supplier alat laboratorium Medan untuk industri sawit, karet, PDAM, dan instansi pemerintah Sumatera Utara. Pengiriman ke seluruh Sumatra, garansi resmi, dokumen lengkap.",
+  description: "Supplier alat laboratorium Medan untuk industri sawit, karet, PDAM, dan instansi pemerintah Sumatera Utara. Pengiriman ke seluruh Sumatra, garansi resmi, dokumen lengkap.",
+  alternates: {
+    canonical: "/wilayah/medan",
+  },
+  openGraph: {
+    title: "Supplier Alat Laboratorium Medan & Sumatera Utara | AndisLab",
+    description: "Supplier alat laboratorium Medan untuk industri sawit, karet, PDAM, dan instansi pemerintah Sumatera Utara. Pengiriman ke seluruh Sumatra, garansi resmi, dokumen lengkap.",
+    url: "https://www.andislab.com/wilayah/medan",
+    type: "website",
+    siteName: "AndisLab",
+    images: [{ url: "/logo.png", width: 1200, height: 630, alt: "AndisLab Medan & Sumatera Utara" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Supplier Alat Laboratorium Medan & Sumatera Utara | AndisLab",
+    description: "Supplier alat laboratorium Medan untuk industri sawit, karet, PDAM, dan instansi pemerintah Sumatera Utara. Pengiriman ke seluruh Sumatra, garansi resmi, dokumen lengkap.",
+    images: ["/logo.png"],
+  },
 };
 
 export default async function WilayahMedanPage() {
@@ -43,6 +59,19 @@ export default async function WilayahMedanPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "https://www.andislab.com" },
+              { "@type": "ListItem", "position": 2, "name": "Distributor Lab Medan & Sumatera Utara", "item": "https://www.andislab.com/wilayah/medan" }
+            ]
+          })
+        }}
+      />
       {/* Hero Section */}
       <section className="bg-slate-900 pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden relative">
         <div className="absolute inset-0 opacity-10">

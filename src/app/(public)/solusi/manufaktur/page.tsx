@@ -11,8 +11,24 @@ export const revalidate = 60;
 
 export const metadata = {
   title: "Solusi Alat Lab QC Pabrik & Manufaktur | AndisLab",
-  description:
-    "Distributor alat laboratorium Quality Control (QC) & R&D untuk pabrik dan industri manufaktur. Tersedia dokumen SPJ lengkap, harga e-Katalog, dan instalasi alat.",
+  description: "Distributor alat laboratorium Quality Control (QC) & R&D untuk pabrik dan industri manufaktur. Tersedia dokumen SPJ lengkap, harga e-Katalog, dan instalasi alat.",
+  alternates: {
+    canonical: "/solusi/manufaktur",
+  },
+  openGraph: {
+    title: "Solusi Alat Lab QC Pabrik & Manufaktur | AndisLab",
+    description: "Distributor alat laboratorium Quality Control (QC) & R&D untuk pabrik dan industri manufaktur. Tersedia dokumen SPJ lengkap, harga e-Katalog, dan instalasi alat.",
+    url: "https://www.andislab.com/solusi/manufaktur",
+    type: "website",
+    siteName: "AndisLab",
+    images: [{ url: "/logo.png", width: 1200, height: 630, alt: "AndisLab Solusi Lab QC Pabrik & Manufaktur" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Solusi Alat Lab QC Pabrik & Manufaktur | AndisLab",
+    description: "Distributor alat laboratorium Quality Control (QC) & R&D untuk pabrik dan industri manufaktur. Tersedia dokumen SPJ lengkap, harga e-Katalog, dan instalasi alat.",
+    images: ["/logo.png"],
+  },
 };
 
 export default async function SolusiManufakturPage() {
@@ -47,6 +63,19 @@ export default async function SolusiManufakturPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "https://www.andislab.com" },
+              { "@type": "ListItem", "position": 2, "name": "Solusi Lab QC Pabrik & Manufaktur", "item": "https://www.andislab.com/solusi/manufaktur" }
+            ]
+          })
+        }}
+      />
       {/* Hero Section */}
       <section className="relative bg-slate-900 pt-24 pb-20 lg:pt-32 lg:pb-28 overflow-hidden">
         <div className="absolute inset-0 opacity-20">

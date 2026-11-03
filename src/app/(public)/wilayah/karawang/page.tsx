@@ -10,8 +10,24 @@ export const revalidate = 60;
 
 export const metadata = {
   title: "Distributor Alat Lab Karawang: Kawasan Industri KIIC & Suryacipta | AndisLab",
-  description:
-    "Distributor resmi alat laboratorium dan instrumen QC untuk industri otomotif, farmasi, dan makanan di KIIC, Suryacipta, dan KIM Karawang. Ready stock & dokumen SPJ lengkap.",
+  description: "Distributor resmi alat laboratorium dan instrumen QC untuk industri otomotif, farmasi, dan makanan di KIIC, Suryacipta, dan KIM Karawang. Ready stock & dokumen SPJ lengkap.",
+  alternates: {
+    canonical: "/wilayah/karawang",
+  },
+  openGraph: {
+    title: "Distributor Alat Lab Karawang: Kawasan Industri KIIC & Suryacipta | AndisLab",
+    description: "Distributor resmi alat laboratorium dan instrumen QC untuk industri otomotif, farmasi, dan makanan di KIIC, Suryacipta, dan KIM Karawang. Ready stock & dokumen SPJ lengkap.",
+    url: "https://www.andislab.com/wilayah/karawang",
+    type: "website",
+    siteName: "AndisLab",
+    images: [{ url: "/logo.png", width: 1200, height: 630, alt: "AndisLab Karawang" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Distributor Alat Lab Karawang: Kawasan Industri KIIC & Suryacipta | AndisLab",
+    description: "Distributor resmi alat laboratorium dan instrumen QC untuk industri otomotif, farmasi, dan makanan di KIIC, Suryacipta, dan KIM Karawang. Ready stock & dokumen SPJ lengkap.",
+    images: ["/logo.png"],
+  },
 };
 
 export default async function WilayahKarawangPage() {
@@ -43,6 +59,19 @@ export default async function WilayahKarawangPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "https://www.andislab.com" },
+              { "@type": "ListItem", "position": 2, "name": "Distributor Lab Karawang", "item": "https://www.andislab.com/wilayah/karawang" }
+            ]
+          })
+        }}
+      />
       {/* Hero Section */}
       <section className="bg-slate-900 pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden relative">
         <div className="absolute inset-0 opacity-10">

@@ -11,8 +11,24 @@ export const revalidate = 60;
 
 export const metadata = {
   title: "Solusi Alat Lab Industri Farmasi & Medis | AndisLab",
-  description:
-    "Penyedia alat laboratorium standar CPOB/CPKB untuk industri farmasi, kosmetik, dan medis. Dilengkapi dokumen SPJ, instalasi, dan sertifikasi kalibrasi.",
+  description: "Penyedia alat laboratorium standar CPOB/CPKB untuk industri farmasi, kosmetik, dan medis. Dilengkapi dokumen SPJ, instalasi, dan sertifikasi kalibrasi.",
+  alternates: {
+    canonical: "/solusi/farmasi",
+  },
+  openGraph: {
+    title: "Solusi Alat Lab Industri Farmasi & Medis | AndisLab",
+    description: "Penyedia alat laboratorium standar CPOB/CPKB untuk industri farmasi, kosmetik, dan medis. Dilengkapi dokumen SPJ, instalasi, dan sertifikasi kalibrasi.",
+    url: "https://www.andislab.com/solusi/farmasi",
+    type: "website",
+    siteName: "AndisLab",
+    images: [{ url: "/logo.png", width: 1200, height: 630, alt: "AndisLab Solusi Lab Industri Farmasi & Medis" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Solusi Alat Lab Industri Farmasi & Medis | AndisLab",
+    description: "Penyedia alat laboratorium standar CPOB/CPKB untuk industri farmasi, kosmetik, dan medis. Dilengkapi dokumen SPJ, instalasi, dan sertifikasi kalibrasi.",
+    images: ["/logo.png"],
+  },
 };
 
 export default async function SolusiFarmasiPage() {
@@ -47,6 +63,19 @@ export default async function SolusiFarmasiPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "https://www.andislab.com" },
+              { "@type": "ListItem", "position": 2, "name": "Solusi Lab Industri Farmasi & Medis", "item": "https://www.andislab.com/solusi/farmasi" }
+            ]
+          })
+        }}
+      />
       {/* Hero Section */}
       <section className="relative bg-emerald-950 pt-24 pb-20 lg:pt-32 lg:pb-28 overflow-hidden">
         <div className="absolute inset-0 opacity-20">

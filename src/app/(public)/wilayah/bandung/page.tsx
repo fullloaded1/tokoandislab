@@ -10,8 +10,24 @@ export const revalidate = 60;
 
 export const metadata = {
   title: "Distributor Alat Lab Bandung & Jawa Barat | AndisLab",
-  description:
-    "Distributor alat laboratorium Bandung untuk industri farmasi, tekstil QC, dan riset universitas. Bio Farma, Kimia Farma, ITB, Unpad — penawaran resmi 1 hari kerja.",
+  description: "Distributor alat laboratorium Bandung untuk industri farmasi, tekstil QC, dan riset universitas. Bio Farma, Kimia Farma, ITB, Unpad — penawaran resmi 1 hari kerja.",
+  alternates: {
+    canonical: "/wilayah/bandung",
+  },
+  openGraph: {
+    title: "Distributor Alat Lab Bandung & Jawa Barat | AndisLab",
+    description: "Distributor alat laboratorium Bandung untuk industri farmasi, tekstil QC, dan riset universitas. Bio Farma, Kimia Farma, ITB, Unpad — penawaran resmi 1 hari kerja.",
+    url: "https://www.andislab.com/wilayah/bandung",
+    type: "website",
+    siteName: "AndisLab",
+    images: [{ url: "/logo.png", width: 1200, height: 630, alt: "AndisLab Bandung & Jawa Barat" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Distributor Alat Lab Bandung & Jawa Barat | AndisLab",
+    description: "Distributor alat laboratorium Bandung untuk industri farmasi, tekstil QC, dan riset universitas. Bio Farma, Kimia Farma, ITB, Unpad — penawaran resmi 1 hari kerja.",
+    images: ["/logo.png"],
+  },
 };
 
 export default async function WilayahBandungPage() {
@@ -43,6 +59,19 @@ export default async function WilayahBandungPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "https://www.andislab.com" },
+              { "@type": "ListItem", "position": 2, "name": "Distributor Lab Bandung & Jawa Barat", "item": "https://www.andislab.com/wilayah/bandung" }
+            ]
+          })
+        }}
+      />
       {/* Hero Section */}
       <section className="bg-slate-900 pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden relative">
         <div className="absolute inset-0 opacity-10">

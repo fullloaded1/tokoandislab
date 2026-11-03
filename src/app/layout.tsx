@@ -8,7 +8,7 @@ import WhatsAppLeadModalWrapper from "@/components/WhatsAppLeadModalWrapper";
 import LeadMagnetModalWrapper from "@/components/LeadMagnetModalWrapper";
 import { WA_NUMBER } from "@/lib/contact";
 import { COMPANY_FACTS } from "@/lib/companyFacts";
-import { getOrganizationSchema } from "@/services/seo";
+import { getOrganizationSchema, getWebSiteSchema } from "@/services/seo";
 import { GA_TRACKING_ID } from "@/lib/analytics";
 
 const inter = Inter({
@@ -42,9 +42,6 @@ export const metadata: Metadata = {
     "andislab",
     "andis lab"
   ],
-  alternates: {
-    canonical: "https://www.andislab.com",
-  },
   openGraph: {
     title: "AndisLab — Distributor Alat Laboratorium, Bahan Kimia & Furniture Lab",
     description:
@@ -74,6 +71,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const organizationSchema = getOrganizationSchema();
+  const webSiteSchema = getWebSiteSchema();
   
   // Extend organizationSchema with more specific data from COMPANY_FACTS if needed
   Object.assign(organizationSchema, {
@@ -118,7 +116,7 @@ export default function RootLayout({
         </Script>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify([organizationSchema, webSiteSchema]) }}
         />
         <ToastProvider>
           {children}

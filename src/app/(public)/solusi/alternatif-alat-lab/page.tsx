@@ -10,8 +10,24 @@ export const revalidate = 60;
 
 export const metadata = {
   title: "Panduan Alternatif Alat Laboratorium Cerdas: Efisiensi Biaya & Tanpa Indent | AndisLab",
-  description:
-    "Bandingkan alternatif alat lab berkualitas tinggi (Daihan vs Memmert, Aczet vs Mettler, Lovibond vs Hach). Hemat anggaran belanja modal (CAPEX) hingga 40% dengan unit ready stock dan garansi resmi.",
+  description: "Bandingkan alternatif alat lab berkualitas tinggi (Daihan vs Memmert, Aczet vs Mettler, Lovibond vs Hach). Hemat anggaran belanja modal (CAPEX) hingga 40% dengan unit ready stock dan garansi resmi.",
+  alternates: {
+    canonical: "/solusi/alternatif-alat-lab",
+  },
+  openGraph: {
+    title: "Panduan Alternatif Alat Laboratorium Cerdas: Efisiensi Biaya & Tanpa Indent | AndisLab",
+    description: "Bandingkan alternatif alat lab berkualitas tinggi (Daihan vs Memmert, Aczet vs Mettler, Lovibond vs Hach). Hemat anggaran belanja modal (CAPEX) hingga 40% dengan unit ready stock dan garansi resmi.",
+    url: "https://www.andislab.com/solusi/alternatif-alat-lab",
+    type: "website",
+    siteName: "AndisLab",
+    images: [{ url: "/logo.png", width: 1200, height: 630, alt: "AndisLab Alternatif Alat Lab Cerdas" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Panduan Alternatif Alat Laboratorium Cerdas: Efisiensi Biaya & Tanpa Indent | AndisLab",
+    description: "Bandingkan alternatif alat lab berkualitas tinggi (Daihan vs Memmert, Aczet vs Mettler, Lovibond vs Hach). Hemat anggaran belanja modal (CAPEX) hingga 40% dengan unit ready stock dan garansi resmi.",
+    images: ["/logo.png"],
+  },
 };
 
 export default async function AlternatifAlatLabPage() {
@@ -74,6 +90,19 @@ export default async function AlternatifAlatLabPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "https://www.andislab.com" },
+              { "@type": "ListItem", "position": 2, "name": "Alternatif Alat Lab Cerdas", "item": "https://www.andislab.com/solusi/alternatif-alat-lab" }
+            ]
+          })
+        }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}

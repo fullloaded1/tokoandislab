@@ -10,8 +10,24 @@ export const revalidate = 60;
 
 export const metadata = {
   title: "Distributor & Supplier Alat Laboratorium Semarang | AndisLab",
-  description:
-    "Distributor resmi alat laboratorium di Semarang & Jawa Tengah. Melayani kawasan industri Candi, Kendal, RS, universitas, dan dinas pemerintah — garansi resmi, penawaran 1 hari kerja.",
+  description: "Distributor resmi alat laboratorium di Semarang & Jawa Tengah. Melayani kawasan industri Candi, Kendal, RS, universitas, dan dinas pemerintah — garansi resmi, penawaran 1 hari kerja.",
+  alternates: {
+    canonical: "/wilayah/semarang",
+  },
+  openGraph: {
+    title: "Distributor & Supplier Alat Laboratorium Semarang | AndisLab",
+    description: "Distributor resmi alat laboratorium di Semarang & Jawa Tengah. Melayani kawasan industri Candi, Kendal, RS, universitas, dan dinas pemerintah — garansi resmi, penawaran 1 hari kerja.",
+    url: "https://www.andislab.com/wilayah/semarang",
+    type: "website",
+    siteName: "AndisLab",
+    images: [{ url: "/logo.png", width: 1200, height: 630, alt: "AndisLab Semarang & Jawa Tengah" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Distributor & Supplier Alat Laboratorium Semarang | AndisLab",
+    description: "Distributor resmi alat laboratorium di Semarang & Jawa Tengah. Melayani kawasan industri Candi, Kendal, RS, universitas, dan dinas pemerintah — garansi resmi, penawaran 1 hari kerja.",
+    images: ["/logo.png"],
+  },
 };
 
 export default async function WilayahSemarangPage() {
@@ -43,6 +59,19 @@ export default async function WilayahSemarangPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "https://www.andislab.com" },
+              { "@type": "ListItem", "position": 2, "name": "Distributor Lab Semarang & Jawa Tengah", "item": "https://www.andislab.com/wilayah/semarang" }
+            ]
+          })
+        }}
+      />
       {/* Hero Section */}
       <section className="bg-slate-900 pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden relative">
         <div className="absolute inset-0 opacity-10">

@@ -9,6 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const products = await prisma.product.findMany({
     select: {
       slug: true,
+      image: true,
       updatedAt: true,
     },
   });
@@ -18,6 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     where: { published: true },
     select: {
       slug: true,
+      image: true,
       updatedAt: true,
     },
   });
@@ -27,6 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: product.updatedAt,
     changeFrequency: 'weekly',
     priority: 0.8,
+    images: product.image ? [product.image.startsWith('http') ? product.image : `${BASE_URL}${product.image}`] : undefined,
   }));
 
   const articleUrls: MetadataRoute.Sitemap = articles.map((article: any) => ({
@@ -34,6 +37,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: article.updatedAt,
     changeFrequency: 'weekly',
     priority: 0.7,
+    images: article.image ? [article.image.startsWith('http') ? article.image : `${BASE_URL}${article.image}`] : undefined,
   }));
 
   const staticUrls: MetadataRoute.Sitemap = [
@@ -228,6 +232,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/pengetahuan`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/syarat-ketentuan`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.4,
+    },
+    {
+      url: `${BASE_URL}/kebijakan-privasi`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.4,
     },
   ];
 

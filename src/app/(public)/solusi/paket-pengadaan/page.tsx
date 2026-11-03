@@ -5,8 +5,24 @@ import { Check, ShieldCheck, ArrowRight, Package, Sparkles, Building2, Droplets,
 
 export const metadata = {
   title: "Paket Pengadaan Alat Lab Turnkey: Bebas Ribet, Free Kalibrasi & SPJ Lengkap | AndisLab",
-  description:
-    "Solusi bundling alat laboratorium turnkey untuk industri farmasi, IPAL/WWTP lingkungan, dan kampus riset. Sudah termasuk free kalibrasi KAN, garansi 12 bulan, dan kelengkapan dokumen pengadaan resmi.",
+  description: "Solusi bundling alat laboratorium turnkey untuk industri farmasi, IPAL/WWTP lingkungan, dan kampus riset. Sudah termasuk free kalibrasi KAN, garansi 12 bulan, dan kelengkapan dokumen pengadaan resmi.",
+  alternates: {
+    canonical: "/solusi/paket-pengadaan",
+  },
+  openGraph: {
+    title: "Paket Pengadaan Alat Lab Turnkey: Bebas Ribet, Free Kalibrasi & SPJ Lengkap | AndisLab",
+    description: "Solusi bundling alat laboratorium turnkey untuk industri farmasi, IPAL/WWTP lingkungan, dan kampus riset. Sudah termasuk free kalibrasi KAN, garansi 12 bulan, dan kelengkapan dokumen pengadaan resmi.",
+    url: "https://www.andislab.com/solusi/paket-pengadaan",
+    type: "website",
+    siteName: "AndisLab",
+    images: [{ url: "/logo.png", width: 1200, height: 630, alt: "AndisLab Paket Pengadaan Alat Lab Turnkey" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Paket Pengadaan Alat Lab Turnkey: Bebas Ribet, Free Kalibrasi & SPJ Lengkap | AndisLab",
+    description: "Solusi bundling alat laboratorium turnkey untuk industri farmasi, IPAL/WWTP lingkungan, dan kampus riset. Sudah termasuk free kalibrasi KAN, garansi 12 bulan, dan kelengkapan dokumen pengadaan resmi.",
+    images: ["/logo.png"],
+  },
 };
 
 export default function PaketPengadaanPage() {
@@ -95,6 +111,19 @@ export default function PaketPengadaanPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "https://www.andislab.com" },
+              { "@type": "ListItem", "position": 2, "name": "Paket Pengadaan Alat Lab Turnkey", "item": "https://www.andislab.com/solusi/paket-pengadaan" }
+            ]
+          })
+        }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(offerCatalogSchema) }}

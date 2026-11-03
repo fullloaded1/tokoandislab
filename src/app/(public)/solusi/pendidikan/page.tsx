@@ -11,9 +11,24 @@ export const revalidate = 60;
 
 export const metadata = {
   title: "Alat Laboratorium Pendidikan, Kampus & Sekolah | AndisLab",
-  description:
-    "Distributor alat laboratorium pendidikan untuk universitas, sekolah vokasi, dan puskesmas. Alat dasar lab, mikroskop, glassware Pyrex lengkap dengan SPJ e-Katalog.",
-  alternates: { canonical: "/solusi/pendidikan" },
+  description: "Distributor alat laboratorium pendidikan untuk universitas, sekolah vokasi, dan puskesmas. Alat dasar lab, mikroskop, glassware Pyrex lengkap dengan SPJ e-Katalog.",
+  alternates: {
+    canonical: "/solusi/pendidikan",
+  },
+  openGraph: {
+    title: "Alat Laboratorium Pendidikan, Kampus & Sekolah | AndisLab",
+    description: "Distributor alat laboratorium pendidikan untuk universitas, sekolah vokasi, dan puskesmas. Alat dasar lab, mikroskop, glassware Pyrex lengkap dengan SPJ e-Katalog.",
+    url: "https://www.andislab.com/solusi/pendidikan",
+    type: "website",
+    siteName: "AndisLab",
+    images: [{ url: "/logo.png", width: 1200, height: 630, alt: "AndisLab Alat Lab Pendidikan & Kampus" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Alat Laboratorium Pendidikan, Kampus & Sekolah | AndisLab",
+    description: "Distributor alat laboratorium pendidikan untuk universitas, sekolah vokasi, dan puskesmas. Alat dasar lab, mikroskop, glassware Pyrex lengkap dengan SPJ e-Katalog.",
+    images: ["/logo.png"],
+  },
 };
 
 export default async function SolusiPendidikanPage() {
@@ -71,6 +86,19 @@ export default async function SolusiPendidikanPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "https://www.andislab.com" },
+              { "@type": "ListItem", "position": 2, "name": "Alat Lab Pendidikan & Kampus", "item": "https://www.andislab.com/solusi/pendidikan" }
+            ]
+          })
+        }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}

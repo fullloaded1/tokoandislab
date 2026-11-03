@@ -10,6 +10,8 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           '/admin/',
           '/api/',
+          '/checkout/',
+          '/order-status/',
           '/inquiry/success',
           '/*?wa=*',
           '/*?wa-*',
@@ -23,5 +25,5 @@ export default function robots(): MetadataRoute.Robots {
       }
     ],
     sitemap: `${SEO_CONSTANTS.siteUrl}/sitemap.xml`,
-  }
+  };
 }

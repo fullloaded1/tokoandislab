@@ -10,8 +10,24 @@ export const revalidate = 60;
 
 export const metadata = {
   title: "Distributor Alat Lab Cikarang & Kawasan Industri Bekasi | AndisLab",
-  description:
-    "Distributor resmi alat laboratorium dan instrumen QC untuk kawasan industri Jababeka, EJIP, MM2100, Delta Silicon di Cikarang dan Bekasi. Ready stock & dokumen SPJ lengkap.",
+  description: "Distributor resmi alat laboratorium dan instrumen QC untuk kawasan industri Jababeka, EJIP, MM2100, Delta Silicon di Cikarang dan Bekasi. Ready stock & dokumen SPJ lengkap.",
+  alternates: {
+    canonical: "/wilayah/cikarang-bekasi",
+  },
+  openGraph: {
+    title: "Distributor Alat Lab Cikarang & Kawasan Industri Bekasi | AndisLab",
+    description: "Distributor resmi alat laboratorium dan instrumen QC untuk kawasan industri Jababeka, EJIP, MM2100, Delta Silicon di Cikarang dan Bekasi. Ready stock & dokumen SPJ lengkap.",
+    url: "https://www.andislab.com/wilayah/cikarang-bekasi",
+    type: "website",
+    siteName: "AndisLab",
+    images: [{ url: "/logo.png", width: 1200, height: 630, alt: "AndisLab Cikarang & Kawasan Industri Bekasi" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Distributor Alat Lab Cikarang & Kawasan Industri Bekasi | AndisLab",
+    description: "Distributor resmi alat laboratorium dan instrumen QC untuk kawasan industri Jababeka, EJIP, MM2100, Delta Silicon di Cikarang dan Bekasi. Ready stock & dokumen SPJ lengkap.",
+    images: ["/logo.png"],
+  },
 };
 
 export default async function WilayahCikarangPage() {
@@ -43,6 +59,19 @@ export default async function WilayahCikarangPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "https://www.andislab.com" },
+              { "@type": "ListItem", "position": 2, "name": "Distributor Lab Cikarang & Kawasan Industri Bekasi", "item": "https://www.andislab.com/wilayah/cikarang-bekasi" }
+            ]
+          })
+        }}
+      />
       {/* Hero Section */}
       <section className="bg-slate-900 pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden relative">
         <div className="absolute inset-0 opacity-10">

@@ -10,8 +10,24 @@ export const revalidate = 60;
 
 export const metadata = {
   title: "Distributor Alat Laboratorium Tangerang & BSD Banten | AndisLab",
-  description:
-    "Distributor alat laboratorium resmi di Tangerang, Tangerang Selatan (BSD), dan Banten. Melayani industri farmasi, kimia, makanan, dan lab pengujian — pengiriman sameday/next day.",
+  description: "Distributor alat laboratorium resmi di Tangerang, Tangerang Selatan (BSD), dan Banten. Melayani industri farmasi, kimia, makanan, dan lab pengujian — pengiriman sameday/next day.",
+  alternates: {
+    canonical: "/wilayah/tangerang",
+  },
+  openGraph: {
+    title: "Distributor Alat Laboratorium Tangerang & BSD Banten | AndisLab",
+    description: "Distributor alat laboratorium resmi di Tangerang, Tangerang Selatan (BSD), dan Banten. Melayani industri farmasi, kimia, makanan, dan lab pengujian — pengiriman sameday/next day.",
+    url: "https://www.andislab.com/wilayah/tangerang",
+    type: "website",
+    siteName: "AndisLab",
+    images: [{ url: "/logo.png", width: 1200, height: 630, alt: "AndisLab Tangerang & BSD Banten" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Distributor Alat Laboratorium Tangerang & BSD Banten | AndisLab",
+    description: "Distributor alat laboratorium resmi di Tangerang, Tangerang Selatan (BSD), dan Banten. Melayani industri farmasi, kimia, makanan, dan lab pengujian — pengiriman sameday/next day.",
+    images: ["/logo.png"],
+  },
 };
 
 export default async function WilayahTangerangPage() {
@@ -43,6 +59,19 @@ export default async function WilayahTangerangPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "https://www.andislab.com" },
+              { "@type": "ListItem", "position": 2, "name": "Distributor Lab Tangerang & BSD Banten", "item": "https://www.andislab.com/wilayah/tangerang" }
+            ]
+          })
+        }}
+      />
       {/* Hero Section */}
       <section className="bg-slate-900 pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden relative">
         <div className="absolute inset-0 opacity-10">

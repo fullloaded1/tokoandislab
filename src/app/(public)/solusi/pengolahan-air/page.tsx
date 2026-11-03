@@ -10,9 +10,24 @@ export const revalidate = 60;
 
 export const metadata = {
   title: "Alat Laboratorium Air, PDAM & IPAL | AndisLab",
-  description:
-    "Distributor alat uji kualitas air untuk laboratorium QC PDAM dan IPAL. Solusi pengujian parameter air dengan instrumen Lovibond & Milwaukee ready stock.",
-  alternates: { canonical: "/solusi/pengolahan-air" },
+  description: "Distributor alat uji kualitas air untuk laboratorium QC PDAM dan IPAL. Solusi pengujian parameter air dengan instrumen Lovibond & Milwaukee ready stock.",
+  alternates: {
+    canonical: "/solusi/pengolahan-air",
+  },
+  openGraph: {
+    title: "Alat Laboratorium Air, PDAM & IPAL | AndisLab",
+    description: "Distributor alat uji kualitas air untuk laboratorium QC PDAM dan IPAL. Solusi pengujian parameter air dengan instrumen Lovibond & Milwaukee ready stock.",
+    url: "https://www.andislab.com/solusi/pengolahan-air",
+    type: "website",
+    siteName: "AndisLab",
+    images: [{ url: "/logo.png", width: 1200, height: 630, alt: "AndisLab Alat Uji Kualitas Air & IPAL" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Alat Laboratorium Air, PDAM & IPAL | AndisLab",
+    description: "Distributor alat uji kualitas air untuk laboratorium QC PDAM dan IPAL. Solusi pengujian parameter air dengan instrumen Lovibond & Milwaukee ready stock.",
+    images: ["/logo.png"],
+  },
 };
 
 export default async function SolusiPengolahanAirPage() {
@@ -70,6 +85,19 @@ export default async function SolusiPengolahanAirPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "https://www.andislab.com" },
+              { "@type": "ListItem", "position": 2, "name": "Alat Uji Kualitas Air & IPAL", "item": "https://www.andislab.com/solusi/pengolahan-air" }
+            ]
+          })
+        }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}

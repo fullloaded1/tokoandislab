@@ -10,8 +10,24 @@ export const revalidate = 60;
 
 export const metadata = {
   title: "Distributor Alat Laboratorium Yogyakarta (Jogja) | AndisLab",
-  description:
-    "Distributor resmi peralatan laboratorium di Yogyakarta & DIY. Melayani riset universitas (UGM, UNY, UII), laboratorium RS, dan balai pengujian — penawaran 1 hari kerja, garansi resmi.",
+  description: "Distributor resmi peralatan laboratorium di Yogyakarta & DIY. Melayani riset universitas (UGM, UNY, UII), laboratorium RS, dan balai pengujian — penawaran 1 hari kerja, garansi resmi.",
+  alternates: {
+    canonical: "/wilayah/yogyakarta",
+  },
+  openGraph: {
+    title: "Distributor Alat Laboratorium Yogyakarta (Jogja) | AndisLab",
+    description: "Distributor resmi peralatan laboratorium di Yogyakarta & DIY. Melayani riset universitas (UGM, UNY, UII), laboratorium RS, dan balai pengujian — penawaran 1 hari kerja, garansi resmi.",
+    url: "https://www.andislab.com/wilayah/yogyakarta",
+    type: "website",
+    siteName: "AndisLab",
+    images: [{ url: "/logo.png", width: 1200, height: 630, alt: "AndisLab Yogyakarta (Jogja)" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Distributor Alat Laboratorium Yogyakarta (Jogja) | AndisLab",
+    description: "Distributor resmi peralatan laboratorium di Yogyakarta & DIY. Melayani riset universitas (UGM, UNY, UII), laboratorium RS, dan balai pengujian — penawaran 1 hari kerja, garansi resmi.",
+    images: ["/logo.png"],
+  },
 };
 
 export default async function WilayahYogyakartaPage() {
@@ -43,6 +59,19 @@ export default async function WilayahYogyakartaPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "https://www.andislab.com" },
+              { "@type": "ListItem", "position": 2, "name": "Distributor Lab Yogyakarta (Jogja)", "item": "https://www.andislab.com/wilayah/yogyakarta" }
+            ]
+          })
+        }}
+      />
       {/* Hero Section */}
       <section className="bg-slate-900 pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden relative">
         <div className="absolute inset-0 opacity-10">

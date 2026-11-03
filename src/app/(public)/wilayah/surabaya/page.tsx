@@ -10,8 +10,24 @@ export const revalidate = 60;
 
 export const metadata = {
   title: "Supplier Alat Laboratorium Surabaya & Jawa Timur | AndisLab",
-  description:
-    "Supplier alat laboratorium terpercaya di Surabaya dan Jawa Timur. Melayani industri farmasi, makanan, pemerintah, dan kampus — garansi resmi, dokumen e-Katalog tersedia.",
+  description: "Supplier alat laboratorium terpercaya di Surabaya dan Jawa Timur. Melayani industri farmasi, makanan, pemerintah, dan kampus — garansi resmi, dokumen e-Katalog tersedia.",
+  alternates: {
+    canonical: "/wilayah/surabaya",
+  },
+  openGraph: {
+    title: "Supplier Alat Laboratorium Surabaya & Jawa Timur | AndisLab",
+    description: "Supplier alat laboratorium terpercaya di Surabaya dan Jawa Timur. Melayani industri farmasi, makanan, pemerintah, dan kampus — garansi resmi, dokumen e-Katalog tersedia.",
+    url: "https://www.andislab.com/wilayah/surabaya",
+    type: "website",
+    siteName: "AndisLab",
+    images: [{ url: "/logo.png", width: 1200, height: 630, alt: "AndisLab Surabaya & Jawa Timur" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Supplier Alat Laboratorium Surabaya & Jawa Timur | AndisLab",
+    description: "Supplier alat laboratorium terpercaya di Surabaya dan Jawa Timur. Melayani industri farmasi, makanan, pemerintah, dan kampus — garansi resmi, dokumen e-Katalog tersedia.",
+    images: ["/logo.png"],
+  },
 };
 
 export default async function WilayahSurabayaPage() {
@@ -43,6 +59,19 @@ export default async function WilayahSurabayaPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "https://www.andislab.com" },
+              { "@type": "ListItem", "position": 2, "name": "Distributor Lab Surabaya & Jawa Timur", "item": "https://www.andislab.com/wilayah/surabaya" }
+            ]
+          })
+        }}
+      />
       {/* Hero Section */}
       <section className="bg-slate-900 pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden relative">
         <div className="absolute inset-0 opacity-10">

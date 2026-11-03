@@ -11,8 +11,24 @@ export const revalidate = 60;
 
 export const metadata = {
   title: "Distributor Alat Lab Cilegon & Kawasan Industri Banten | AndisLab",
-  description:
-    "Suplier alat laboratorium dan instrumen ukur terpercaya untuk pabrik, kawasan industri, dan instansi di Cilegon, Serang, dan Banten. Dokumen SPJ lengkap.",
+  description: "Suplier alat laboratorium dan instrumen ukur terpercaya untuk pabrik, kawasan industri, dan instansi di Cilegon, Serang, dan Banten. Dokumen SPJ lengkap.",
+  alternates: {
+    canonical: "/wilayah/cilegon-banten",
+  },
+  openGraph: {
+    title: "Distributor Alat Lab Cilegon & Kawasan Industri Banten | AndisLab",
+    description: "Suplier alat laboratorium dan instrumen ukur terpercaya untuk pabrik, kawasan industri, dan instansi di Cilegon, Serang, dan Banten. Dokumen SPJ lengkap.",
+    url: "https://www.andislab.com/wilayah/cilegon-banten",
+    type: "website",
+    siteName: "AndisLab",
+    images: [{ url: "/logo.png", width: 1200, height: 630, alt: "AndisLab Cilegon & Banten" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Distributor Alat Lab Cilegon & Kawasan Industri Banten | AndisLab",
+    description: "Suplier alat laboratorium dan instrumen ukur terpercaya untuk pabrik, kawasan industri, dan instansi di Cilegon, Serang, dan Banten. Dokumen SPJ lengkap.",
+    images: ["/logo.png"],
+  },
 };
 
 export default async function WilayahCilegonPage() {
@@ -45,6 +61,19 @@ export default async function WilayahCilegonPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "https://www.andislab.com" },
+              { "@type": "ListItem", "position": 2, "name": "Distributor Lab Cilegon & Banten", "item": "https://www.andislab.com/wilayah/cilegon-banten" }
+            ]
+          })
+        }}
+      />
       {/* Hero Section */}
       <section className="bg-slate-900 pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden relative">
         <div className="absolute inset-0 opacity-10">

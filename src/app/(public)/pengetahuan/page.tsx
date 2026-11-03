@@ -1,47 +1,81 @@
 import { Building2, Search, ArrowRight, Activity, Beaker } from "lucide-react";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
-import { ContentPillar } from "@prisma/client";
+import type { Metadata } from "next";
+import { getBreadcrumbListSchema } from "@/services/seo";
+
+export const metadata: Metadata = {
+  title: "Pusat Pengetahuan & Panduan Pengadaan Lab | AndisLab",
+  description:
+    "Hub edukasi laboratorium terlengkap: panduan metode uji ISO/SNI, pemilihan spesifikasi alat lab, solusi kendala pengujian QC, dan direktori instrumen ready stock.",
+  alternates: {
+    canonical: "/pengetahuan",
+  },
+  openGraph: {
+    title: "Pusat Pengetahuan & Panduan Pengadaan Lab | AndisLab",
+    description:
+      "Hub edukasi laboratorium terlengkap: panduan metode uji ISO/SNI, pemilihan spesifikasi alat lab, dan solusi pengujian QC.",
+    url: "https://www.andislab.com/pengetahuan",
+    type: "website",
+    siteName: "AndisLab",
+    images: [{ url: "/logo.png", width: 1200, height: 630, alt: "Pusat Pengetahuan AndisLab" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Pusat Pengetahuan & Panduan Pengadaan Lab | AndisLab",
+    description: "Hub edukasi laboratorium terlengkap: panduan spesifikasi dan metode uji standar.",
+    images: ["/logo.png"],
+  },
+};
 
 export default async function PengetahuanHubPage() {
   const articlesCount = await prisma.article.count({ where: { published: true } });
-  
+
+  const breadcrumbs = getBreadcrumbListSchema([
+    { name: "Beranda", url: "/" },
+    { name: "Pusat Pengetahuan", url: "/pengetahuan" },
+  ]);
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
+      />
       <div className="text-center max-w-3xl mx-auto mb-16">
         <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-6">
           Laboratory Knowledge & Procurement Hub
         </h1>
         <p className="text-lg text-slate-600 leading-relaxed">
-          Temukan solusi untuk masalah laboratorium Anda, pelajari metode uji terbaru, panduan memilih spesifikasi alat, hingga direktori alat ready stock.
+          Temukan solusi untuk masalah laboratorium Anda, pelajari metode uji terbaru, panduan memilih spesifikasi alat, hingga direktori alat ready stock bergaransi resmi.
         </p>
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
         <HubCard 
           title="Masalah & Solusi"
-          desc="Identifikasi masalah pada proses QC lab Anda dan temukan solusinya."
+          desc="Identifikasi masalah pada proses QC lab Anda dan temukan solusinya dengan instrumen alternatif."
           icon={<Activity className="w-8 h-8 text-rose-500" />}
-          href="/masalah"
+          href="/solusi/alternatif-alat-lab"
           color="bg-rose-50 border-rose-100"
         />
         <HubCard 
-          title="Metode Uji"
-          desc="Prinsip dasar, standar ISO/SNI, dan alat yang dibutuhkan untuk setiap parameter uji."
+          title="Metode & Panduan Alat"
+          desc="Prinsip kerja, standar ISO/SNI/CPOB, dan panduan kalibrasi untuk setiap instrumen pengujian."
           icon={<Beaker className="w-8 h-8 text-blue-500" />}
-          href="/metode-uji"
+          href="/artikel"
           color="bg-blue-50 border-blue-100"
         />
         <HubCard 
           title="Panduan Memilih"
-          desc="Checklist spesifikasi, perbandingan brand, dan estimasi budget."
+          desc="Checklist spesifikasi, perbandingan brand, dan direktori lengkap alat laboratorium."
           icon={<Search className="w-8 h-8 text-amber-500" />}
-          href="/panduan-memilih"
+          href="/katalog"
           color="bg-amber-50 border-amber-100"
         />
         <HubCard 
           title="Artikel & Edukasi"
-          desc={`Kumpulan ${articlesCount} artikel edukasi, regulasi terbaru, dan berita lab.`}
+          desc={`Kumpulan ${articlesCount} artikel edukasi pengadaan SPJ, regulasi terbaru, dan berita lab.`}
           icon={<Building2 className="w-8 h-8 text-emerald-500" />}
           href="/artikel"
           color="bg-emerald-50 border-emerald-100"

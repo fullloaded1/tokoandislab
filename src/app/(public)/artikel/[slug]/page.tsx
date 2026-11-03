@@ -41,6 +41,11 @@ const getArticle = cache(async (slug: string) => {
 
 // Override SEO title & meta description per slug (di luar excerpt DB).
 const ARTICLE_SEO: Record<string, { title: string; description: string }> = {
+  "strategi-penyerapan-anggaran-alat-laboratorium-akhir-tahun": {
+    title: "Strategi Penyerapan Sisa Anggaran Alat Laboratorium Akhir Tahun 2026",
+    description:
+      "Panduan taktis PPK dan pengelola lab menyerap sisa anggaran akhir tahun: pilihan alat lab ready stock, SPJ siap audit, diskon pembayaran, dan bebas risiko SiLPA.",
+  },
   "panduan-cold-chain-penyimpanan-sampel-laboratorium": {
     title: "ULT Freezer -86°C & Kulkas Vaksin Lab: Panduan + Harga 2026",
     description:

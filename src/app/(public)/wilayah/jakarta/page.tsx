@@ -10,8 +10,24 @@ export const revalidate = 60;
 
 export const metadata = {
   title: "Distributor Alat Laboratorium Jakarta Terpercaya | AndisLab",
-  description:
-    "Distributor resmi alat laboratorium di Jakarta. Melayani instansi pemerintah, rumah sakit, universitas, dan industri farmasi — penawaran 1 hari kerja, dokumen lengkap.",
+  description: "Distributor resmi alat laboratorium di Jakarta. Melayani instansi pemerintah, rumah sakit, universitas, dan industri farmasi — penawaran 1 hari kerja, dokumen lengkap.",
+  alternates: {
+    canonical: "/wilayah/jakarta",
+  },
+  openGraph: {
+    title: "Distributor Alat Laboratorium Jakarta Terpercaya | AndisLab",
+    description: "Distributor resmi alat laboratorium di Jakarta. Melayani instansi pemerintah, rumah sakit, universitas, dan industri farmasi — penawaran 1 hari kerja, dokumen lengkap.",
+    url: "https://www.andislab.com/wilayah/jakarta",
+    type: "website",
+    siteName: "AndisLab",
+    images: [{ url: "/logo.png", width: 1200, height: 630, alt: "AndisLab Jakarta & Jabodetabek" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Distributor Alat Laboratorium Jakarta Terpercaya | AndisLab",
+    description: "Distributor resmi alat laboratorium di Jakarta. Melayani instansi pemerintah, rumah sakit, universitas, dan industri farmasi — penawaran 1 hari kerja, dokumen lengkap.",
+    images: ["/logo.png"],
+  },
 };
 
 export default async function WilayahJakartaPage() {
@@ -43,6 +59,19 @@ export default async function WilayahJakartaPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "https://www.andislab.com" },
+              { "@type": "ListItem", "position": 2, "name": "Distributor Lab Jakarta & Jabodetabek", "item": "https://www.andislab.com/wilayah/jakarta" }
+            ]
+          })
+        }}
+      />
       {/* Hero Section */}
       <section className="bg-slate-900 pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden relative">
         <div className="absolute inset-0 opacity-10">
